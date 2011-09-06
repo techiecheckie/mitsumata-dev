@@ -1,0 +1,57 @@
+<journals>
+  <journal id="1">
+    <image>
+      <normal>journal_char1_normal.png</normal>
+      <hover>journal_char1_hover.png</hover>
+      <press>journal_char1_normal.png</press>
+    </image>
+    <entries>
+      <entry id="1">
+        <title>001 char1's first entry</title>
+        <content>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas semper dignissim ante, at volutpat purus pretium eu. Vestibulum facilisis, tortor sed gravida malesuada, leo mi luctus elit, volutpat ultrices mi massa in enim. Nam id tortor sed quam varius sollicitudin. Etiam risus eros, ultrices vel consectetur sit amet, lobortis at massa. Suspendisse mauris dui, placerat vitae ullamcorper in, fringilla a sapien. Nunc eu felis eu ligula molestie egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce convallis commodo quam, et malesuada elit porta aliquam. Nunc ut nunc vel enim sagittis egestas. Ut erat purus, gravida non fringilla tincidunt, congue nec nisi. Nulla bibendum arcu ut risus sodales a aliquet massa porttitor.</content>
+      </entry>
+      <entry id="2">
+        <title>002 char1's second entry</title>
+        <content>Vestibulum erat ipsum, aliquam quis consequat nec, condimentum ut nisi. Ut nec dui urna, gravida interdum enim. Quisque libero ante, pharetra nec faucibus eget, tempus iaculis risus. Phasellus vehicula lorem ac quam semper ut vestibulum augue egestas. Cras pharetra luctus dolor in pulvinar. Quisque in sollicitudin est. Phasellus et iaculis metus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi vel nulla ut odio bibendum ornare. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse sed facilisis elit. Proin eleifend ante eget ipsum mattis rhoncus. Duis eu enim ut leo aliquet egestas. Proin est lectus, pulvinar tempor cursus vehicula, varius vitae nisi. Suspendisse fringilla elit eros, ac sagittis eros. Morbi et risus non sapien dapibus consectetur. </content>
+      </entry>
+      <entry id="3">
+        <title>003 char1's third entry</title>
+        <content>Nullam vitae auctor odio. Curabitur ut odio ante, sed rhoncus magna. Pellentesque sollicitudin varius consequat. Cras mi sapien, consequat ac aliquam tincidunt, aliquam vitae lorem. Praesent condimentum hendrerit volutpat. Sed varius dignissim molestie. Sed ultricies aliquam quam, ut cursus neque aliquet nec. Ut sit amet nisi iaculis felis adipiscing pulvinar. Donec porta convallis faucibus. Quisque sit amet elit risus. Fusce interdum consequat fermentum. Nulla nec ligula ut nisi iaculis fringilla. Aliquam erat volutpat. In hac habitasse platea dictumst. </content>
+      </entry>
+    </entries>
+  </journal>
+  <journal id="2">
+    <image>
+      <normal>journal_char2_normal.png</normal>
+      <hover>journal_char2_hover.png</hover>
+      <press>journal_char2_normal.png</press>
+    </image>
+    <entries>
+      <entry id="1">
+        <title>001 char2's first entry</title>
+        <content>Suspendisse mollis nisl nec nunc condimentum porta. In hac habitasse platea dictumst. Etiam ligula nisl, aliquet eu ornare id, interdum non dolor. Sed gravida, justo non sollicitudin ultrices, nisi lorem feugiat tortor, in sodales diam augue sit amet justo. Vestibulum facilisis justo quis erat tincidunt sit amet ultrices massa fringilla. Pellentesque rutrum scelerisque arcu vel accumsan. Morbi nec mauris eu justo lacinia placerat id quis nisl. Sed urna dolor, faucibus faucibus imperdiet euismod, mattis sed mauris. </content>
+      </entry>
+    </entries>
+  </journal>
+  <journal id="3">
+    <image>
+      <normal>journal_char1_normal.png</normal>
+      <hover>journal_char1_hover.png</hover>
+      <press>journal_char1_normal.png</press>
+    </image>
+    <entries>
+      <entry id="1">
+        <title>001 char3's first entry</title>
+        <content>Nulla vitae lacus eros, at porta mi. Maecenas et lorem a nulla dignissim tempor. Donec blandit, quam viverra sodales commodo, purus elit sollicitudin leo, ut laoreet lacus libero tempor tellus. Morbi et metus lorem, dictum scelerisque lorem. Praesent viverra arcu ut lorem dapibus euismod. Suspendisse potenti. Mauris vitae ipsum enim. </content>
+      </entry>
+      <entry id="2">
+        <title>002 char3's second entry</title>
+        <content>Aliquam sit amet lacus id massa luctus suscipit. Maecenas accumsan tincidunt lectus pharetra commodo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras at felis nec nunc rutrum cursus. Vivamus malesuada, nibh ac rutrum tempor, dui purus rutrum diam, in varius elit quam at purus. Nunc molestie adipiscing est in aliquam. Integer vel metus ut nulla vehicula auctor sed lacinia purus. Donec ultrices tortor sed ante tristique ornare. Nulla facilisi. Aenean quis mauris ac est cursus dignissim. Nunc imperdiet, nibh sed ultricies malesuada, arcu velit convallis metus, ac gravida diam ligula ut diam. Nam arcu risus, mollis eleifend ullamcorper eu, rutrum id tellus. Quisque semper tortor at diam tempor pharetra. Integer id urna nec augue aliquet euismod. Phasellus lacus urna, auctor congue accumsan vel, volutpat a nibh. Vestibulum interdum egestas pharetra. </content>
+      </entry>
+      <entry id="3">
+        <title>003 char3's third entry</title>
+        <content>Curabitur hendrerit facilisis arcu quis pharetra. Phasellus elit enim, ornare eget egestas vel, tincidunt id eros. Vivamus nulla ligula, vulputate nec porta vel, congue a lorem. Maecenas ligula lectus, consectetur sit amet dignissim sed, faucibus at ipsum. Donec erat neque, cursus eu facilisis a, semper quis elit. Nullam aliquam metus eget dui ultrices pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc laoreet tempor libero. </content>
+      </entry>
+    </entries>
+  </journal>
+</journals>
