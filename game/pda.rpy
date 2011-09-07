@@ -3,13 +3,9 @@ init python:
   from mitsugame.inventory import Inventory
   from mitsugame.journal_manager import Journal_manager
   from mitsugame.persistent_manager import Persistent_manager
-  
-  inventory = Inventory()
-  journal_manager = Journal_manager()
-  pm = Persistent_manager(inventory, journal_manager)
 
   button = ""
-  value = ""
+  button_value = ""
 
   # Item/journal icon/contents positions (TODO, etc.)
   icon_x = 270
@@ -82,16 +78,16 @@ init python:
         else:        
           ui.imagebutton("gfx/items/generic_item.png", 
                          "gfx/items/generic_item_hover.png", 
-                         clicked=ui.returns(("item", item.get_name())))
+                         clicked=ui.returns(("item", item.get_id())))
       ui.close()
     elif button == "item":
-      item = inventory.get_item(value)
-      if item != None:
-        ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
-        ui.image("gfx/items/generic_item.png")
+      item = inventory.get_item(button_value)
+
+      ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
+      ui.image("gfx/items/generic_item.png")
       
-        ui.frame(xpos=content_x, ypos=content_y, xpadding=0, ypadding=0, xmaximum=550, xminimum=550)
-        ui.text(item.get_description())
+      ui.frame(xpos=content_x, ypos=content_y, xpadding=0, ypadding=0, xmaximum=550, xminimum=550)
+      ui.text(item.get_description())
       
       
   # Displays the journal manager. Just like the inventory part, this one uses 
@@ -116,7 +112,7 @@ init python:
       
     # Display the journal's titles 
     elif button == "journal":
-      journal = journal_manager.get_journal(value)
+      journal = journal_manager.get_journal(button_value)
       if journal != None:
         ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
         ui.image("gfx/buttons/journal_char.png")
@@ -133,13 +129,13 @@ init python:
     # Display the entry's contents
     elif button == "entry":
       journal = journal_manager.get_selected_journal()
-      entry = journal.get_entry(value)
-      if entry != None:
-        ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
-        ui.image("gfx/buttons/journal_char.png")
+      entry = journal.get_entry(button_value)
       
-        ui.frame(xpos=content_x, ypos=content_y, xpadding=0, ypadding=0, xmaximum=520, xminimum=520)
-        ui.text(entry.get_text())
+      ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
+      ui.image("gfx/buttons/journal_char.png")
+      
+      ui.frame(xpos=content_x, ypos=content_y, xpadding=0, ypadding=0, xmaximum=520, xminimum=520)
+      ui.text(entry.get_text())
 
         
 image background_pda = "gfx/backgrounds/palm_pilot_bg.png"        
@@ -168,5 +164,5 @@ label pda_loop:
       $show_journal_manager()
     
     #$print "waiting for input..."
-    $button, value = ui.interact()
-    $print "", button, ":", value
+    $button, button_value = ui.interact()
+    #$print "", button, ":", button_value

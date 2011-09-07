@@ -23,6 +23,20 @@
 
 init python:
   import renpygame as pygame
+  
+  print "\n\n\n\n#### init\n"
+  
+  pm = Persistent_manager()
+  inventory = Inventory(pm)
+  journal_manager = Journal_manager(pm)
+  
+  # These are the values that will be used when a new game starts. Everything 
+  # defined inside this init block will have its state written somewhere when
+  # Renpy creates a new/rewrites an old save game, so it's not actually necessary 
+  # to store these in any external file because already Renpy remembers all the 
+  # variables' states automatically. Which is nice.
+  hp = 10
+  mp = 10
       
   def button_save():
     ui.frame(xpos=108,ypos=641, xpadding=0, ypadding=0)
@@ -475,20 +489,21 @@ define na = Character('Naomi', color="#c8ffc8", show_two_window=True )
 #     hide text with dissolve
 
 #     return
-
-
-
     
 #--------------------------------
 # GAME STARTS HURR
 #--------------------------------
 
 label start:
-    # Call the init method (line 35) that initializes the pygame stuff (palm pilot and such)
-    # Calling this once when the game starts should be enough. We'll have to see
-    # how this should be done when loading a game.
-    #$init()
+    # For the console, just ignore for now.
+    $print "\n#### start \n"
     
+    #$inventory.unlock_item("1")
+    
+    #$journal_manager.unlock_entry("2", "2")
+    
+    # To show the PDA screen. Use this if you want to jump to the PDA screen
+    # without having to press the ui button.
     #call pda_loop
 
     show blackscr with dissolve
@@ -497,7 +512,7 @@ label start:
     #show cg 1 with dissolve
     "Once upon a time, there was a prince who was not in any way different from other fairy tale princes."
     "He was rich, handsome, popular, destined to marry a princess, spoiled---"
-
+    
     "Bored already."
 
     "I’ve barely said a single sentence."

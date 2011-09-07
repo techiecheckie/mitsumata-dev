@@ -1,18 +1,17 @@
-#import sys
-#import pygame
-#from pygame.locals import *
-import renpygame as pygame
-
-from item import Item
+from mitsugame.item import Item
 import xml.etree.ElementTree as xml
 import renpy
 
 class Inventory():
-  def __init__(self):
+  def __init__(self, persistent_manager):
+    self.persistent_manager = persistent_manager
     self.items = []
     self.enabled = False
     
-    # populates the items list, using the items defined in "items.xml"
+    # Debug counter
+    unlock_count = 0
+    
+    # Populates the items list, using the items defined in "items.xml"
     items_xml = xml.parse(renpy.loader.transfn("../items.xml"))
     item_elements = items_xml.findall("item")
     for item_element in item_elements:
@@ -21,40 +20,44 @@ class Inventory():
       description = item_element.find("description")
       
       item = Item(id, name.text, description.text)
+      
+      if persistent_manager.has_item(id):
+        item.unlock()
+        unlock_count += 1
+        
       self.items.append(item)
       
-    print "  Inventory initialized,", len(self.items), "items read into memory"
+    print "Inventory initialized,", len(self.items), "items read into memory (%d items unlocked)" % unlock_count
   
-  # Checks whether the inventory contains an item with the given name.
-  def has_item(self, item_name):
+  def has_item(self, id):
     for item in self.items:
-      if item.get_name() == item_name:
+      if item.get_id() == item_id:
         return True
     return False
 
-  # Returns the item that matches the given name.
-  def get_item(self, item_name):
+  def get_item(self, id):
     for item in self.items:
-      if item.get_name() == item_name:
+      if item.get_id() == id:
         return item
     return None
     
-  def get_size(self):
-    return len(self.items)
+  def unlock_item(self, id):
+    for item in self.items:
+      if item.get_id() == id:
+        item.unlock()
+        self.persistent_manager.add_item(id)
+        return
+    print "[WARN] Could not unlock item, no such id found (id: %s)" % id
   
   def get_items(self):
     return self.items
   
-  # Changes the inventory's state, setting it visible if it has previously been
-  # hidden, and vice versa. The enabled variable tells whether the inventory
-  # screen should be drawn or not.
   def change_state(self):
     self.enabled = not self.enabled
   
-  # Disable (hide) the inventory
   def disable(self):
     self.enabled = False
   
-  # Returns the status of inventory's visibility
   def is_enabled(self):
     return self.enabled
+    
