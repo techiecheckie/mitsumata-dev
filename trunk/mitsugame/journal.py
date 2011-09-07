@@ -1,15 +1,10 @@
-from journal_entry import Journal_entry
-import xml.etree.ElementTree as xml
-
 class Journal():
   def __init__(self, id): 
     self.id = id
     self.entries = []
     self.locked = True
   
-  # Adds an entry to the journal's entries list.
-  def add_entry(self, entry_element):
-    entry = Journal_entry(entry_element)
+  def add_entry(self, entry):
     self.entries.append(entry)
 
   def get_entries(self):
