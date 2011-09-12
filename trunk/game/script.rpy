@@ -22,8 +22,6 @@
 #***********************************
 
 init python:
-  import renpygame as pygame
-  
   print "\n\n\n\n#### init\n"
   
   pm = Persistent_manager()
@@ -35,40 +33,18 @@ init python:
   # Renpy creates a new/rewrites an old save game, so it's not actually necessary 
   # to store these in any external file because already Renpy remembers all the 
   # variables' states automatically. Which is nice.
-  hp = 10
-  mp = 10
-      
-  def button_save():
-    ui.frame(xpos=108,ypos=641, xpadding=0, ypadding=0)
-    ui.imagebutton("gfx/buttons/button_save.png", 
-                   "gfx/buttons/button_save_hover.png", 
-                   clicked=renpy.curried_call_in_new_context("_game_menu_save"))
-                   
-  def button_load():
-    ui.frame(xpos=45,ypos=683, xpadding=0, ypadding=0)
-    ui.imagebutton("gfx/buttons/button_load.png", 
-                   "gfx/buttons/button_load_hover.png", 
-                   clicked=renpy.curried_call_in_new_context("_game_menu_load"))
-                   
-  def button_options():
-    ui.frame(xpos=109,ypos=729, xpadding=0, ypadding=0)
-    ui.imagebutton("gfx/buttons/button_options.png", 
-                   "gfx/buttons/button_options_hover.png", 
-                   clicked=renpy.curried_call_in_new_context("_game_menu_preferences"))
-    
-  def button_palm_pilot():
-    ui.frame(xpos=853,ypos=663, xpadding=0, ypadding=0)
-    ui.imagebutton("gfx/buttons/button_palm_pilot.png", 
-                   "gfx/buttons/button_palm_pilot_hover.png", 
-                   # TODO: change the "clicked" event. Now it works only once
-                   clicked=renpy.curried_call_in_new_context("pda_loop"))
-    
-  config.window_overlay_functions.append(button_save)
-  config.window_overlay_functions.append(button_load)
-  config.window_overlay_functions.append(button_options)
-  config.window_overlay_functions.append(button_palm_pilot)
-
-
+  hp = 0
+  mp = 0
+  
+  # HP/MP bar positions. Just testing these out, so the values may wary
+  ppp = 3 # "pixels per point"
+  
+  hp_initial_x = 27
+  hp_x = hp_initial_x + ppp * hp
+  
+  mp_initial_x = 460
+  mp_x = mp_initial_x + ppp * mp
+  
 #---------------------
 #KONAMI CODE
 #---------------------
@@ -295,7 +271,6 @@ init python:
 #----------------------------------
 # eg. image eileen happy = "eileen_happy.png"
 
-image ui = "gfx/backgrounds/ui.png"
 image bg shrfr = "shrinefront.png"
 image bg hall1 = "gfx/backgrounds/hallway1.jpg"
 #image bg hall2 = ""
@@ -494,12 +469,12 @@ define na = Character('Naomi', color="#c8ffc8", show_two_window=True )
 # GAME STARTS HURR
 #--------------------------------
 
+
 label start:
     # For the console, just ignore for now.
     $print "\n#### start \n"
     
     #$inventory.unlock_item("1")
-    
     #$journal_manager.unlock_entry("2", "2")
     
     # To show the PDA screen. Use this if you want to jump to the PDA screen
@@ -507,7 +482,7 @@ label start:
     #call pda_loop
 
     show blackscr with dissolve
-    show ui with dissolve
+    call show_ui
     play music "music/mitsumata1.mp3"
     #show cg 1 with dissolve
     "Once upon a time, there was a prince who was not in any way different from other fairy tale princes."
@@ -515,6 +490,11 @@ label start:
     
     "Bored already."
 
+    # testing ui (mp/hp bar) updates
+    $hp = 50
+    $mp = 30
+    call update_ui
+    
     "I’ve barely said a single sentence."
 
     "And it was the boringest sentence I’ve ever heard in my entire life!"
@@ -5987,7 +5967,3 @@ label Scene53:
     #  -Go to Kazu branch
     #Visit Roman
       #-Got to Canon branch
-
-
-
-
