@@ -59,7 +59,6 @@ init python:
     #ui.imagebutton("gfx/buttons/button_bonus.png", 
     #               "gfx/buttons/button_bonus_hover.png", 
     #               clicked=ui.returns(("bonus", "")))
-
     
   # Displays the inventory. The content (an item grid or a screen showing more 
   # specific item information) is based on what button was previously pressed. 
