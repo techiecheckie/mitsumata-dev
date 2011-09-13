@@ -18,13 +18,13 @@ init python:
     ui.frame(xpos=68,ypos=133, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/button_inventory.png", 
                    "gfx/buttons/button_inventory_hover.png", 
-                   clicked=ui.returns(("inventory", "")))
+                   clicked=ui.returns(("inventory", "change state")))
     
     # journal button
     ui.frame(xpos=67,ypos=246, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/button_journal.png", 
                    "gfx/buttons/button_journal_hover.png", 
-                   clicked=ui.returns(("journal manager", "")))
+                   clicked=ui.returns(("journal manager", "change state")))
                    
     # power button
     ui.frame(xpos=43,ypos=49, xpadding=0, ypadding=0, background=None)
@@ -83,7 +83,9 @@ init python:
       item = inventory.get_item(button_value)
 
       ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
-      ui.image("gfx/items/generic_item.png")
+      ui.imagebutton("gfx/items/generic_item.png",
+                     "gfx/items/generic_item_hover.png",
+                     clicked=ui.returns(("inventory", "")))
       
       ui.frame(xpos=content_x, ypos=content_y, xpadding=0, ypadding=0, xmaximum=550, xminimum=550)
       ui.text(item.get_description())
@@ -104,7 +106,7 @@ init python:
         if journal.is_locked():
           ui.image("gfx/buttons/journal_char.png")
         else:
-          ui.imagebutton("gfx/buttons/journal_char.png", 
+          ui.imagebutton("gfx/buttons/journal_char" + journal.get_id() + ".png", 
                          "gfx/buttons/journal_char_hover.png", 
                          clicked=ui.returns(("journal", journal.get_id())))
       ui.close()
@@ -114,7 +116,9 @@ init python:
       journal = journal_manager.get_journal(button_value)
       if journal != None:
         ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
-        ui.image("gfx/buttons/journal_char.png")
+        ui.imagebutton("gfx/buttons/journal_char" + journal.get_id() + ".png",
+                       "gfx/buttons/journal_char_hover.png",
+                       clicked=ui.returns(("journal manager", "")))
       
         entries = journal.get_entries()
         
@@ -131,7 +135,9 @@ init python:
       entry = journal.get_entry(button_value)
       
       ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
-      ui.image("gfx/buttons/journal_char.png")
+      ui.imagebutton("gfx/buttons/journal_char" + journal.get_id() + ".png",
+                     "gfx/buttons/journal_char_hover.png",
+                     clicked=ui.returns(("journal", journal.get_id())))
       
       ui.frame(xpos=content_x, ypos=content_y, xpadding=0, ypadding=0, xmaximum=520, xminimum=520)
       ui.text(entry.get_text())
@@ -150,11 +156,13 @@ label pda_loop:
     if button == "exit":
       return
     elif button == "inventory":
-      $inventory.change_state()
-      $journal_manager.disable()
+      if button_value == "change state":
+        $inventory.change_state()
+        $journal_manager.disable()
     elif button == "journal manager":
-      $journal_manager.change_state()
-      $inventory.disable()
+      if button_value == "change state":
+        $journal_manager.change_state()
+        $inventory.disable()
     
     # Do display stuff
     if inventory.is_enabled():
