@@ -21,13 +21,7 @@ init python:
     ui.frame(xpos=842,ypos=651, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/button_palm_pilot.png", 
                    "gfx/buttons/button_palm_pilot_hover.png", 
-                   # TODO: change the "clicked" event. Now it works only once
                    clicked=renpy.curried_call_in_new_context("pda_loop"))
-    
-  config.window_overlay_functions.append(button_save)
-  config.window_overlay_functions.append(button_load)
-  config.window_overlay_functions.append(button_options)
-  config.window_overlay_functions.append(button_palm_pilot)
 
 image ui = "gfx/ui.png"
 image hp_bar = "gfx/hp-bar.png"
@@ -45,6 +39,11 @@ label show_ui:
     show ui
     
     with dissolve
+    
+    $config.window_overlay_functions.append(button_save)
+    $config.window_overlay_functions.append(button_load)
+    $config.window_overlay_functions.append(button_options)
+    $config.window_overlay_functions.append(button_palm_pilot)
 
     return
     
@@ -54,5 +53,21 @@ label update_ui:
     show hp_bar at Position(xpos=hp_x, ypos=581)
     show mp_bar at Position(xpos=mp_x, ypos=580)
     with MoveTransition(1.0)
+    
+    return
+    
+label hide_ui:
+    hide mp_background
+    hide mp_bar
+    hide hp_background
+    hide hp_bar
+    hide ui
+    
+    with dissolve
+    
+    $config.window_overlay_functions.remove(button_save)
+    $config.window_overlay_functions.remove(button_load)
+    $config.window_overlay_functions.remove(button_options)
+    $config.window_overlay_functions.remove(button_palm_pilot)
     
     return

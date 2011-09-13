@@ -17,7 +17,7 @@ init python:
     # inventory button
     ui.frame(xpos=68,ypos=133, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/button_inventory.png", 
-                   "gfx/buttons/button_inventory_hover.png", 
+                   "gfx/buttons/button_inventory_hover.png",
                    clicked=ui.returns(("inventory", "change state")))
     
     # journal button
@@ -34,10 +34,11 @@ init python:
     
     # training button
     ui.frame(xpos=66,ypos=502, xpadding=0, ypadding=0, background=None)
-    ui.image("gfx/buttons/button_train_disabled.png")
-    #ui.imagebutton("gfx/buttons/button_train.png", 
-    #               "gfx/buttons/button_train_hover.png", 
-    #               clicked=ui.returns(("train", "")))
+    #ui.image("gfx/buttons/button_train_disabled.png")
+    ui.imagebutton("gfx/buttons/button_train.png", 
+                   "gfx/buttons/button_train_hover.png", 
+                   #clicked=ui.returns(("train", "")))
+                   clicked=renpy.curried_call_in_new_context("minigame"))
                    
     # bonus button
     ui.frame(xpos=68,ypos=622, xpadding=0, ypadding=0, background=None)
@@ -141,19 +142,23 @@ init python:
       
       ui.frame(xpos=content_x, ypos=content_y, xpadding=0, ypadding=0, xmaximum=520, xminimum=520)
       ui.text(entry.get_text())
-
         
 image background_pda = "gfx/backgrounds/palm_pilot_bg.png"        
 
 
 # PDA loop label. 
 label pda_loop:
-  show background_pda
+  call hide_ui
+  show background_pda with dissolve
+  
+  $button = ""
+  $button_value = ""
+  
   while (True):
-    $enable_main_buttons()
-
     # Do button stuff
     if button == "exit":
+      hide background_pda with dissolve
+      call show_ui
       return
     elif button == "inventory":
       if button_value == "change state":
@@ -169,6 +174,8 @@ label pda_loop:
       $show_inventory()
     elif journal_manager.is_enabled():
       $show_journal_manager()
+    
+    $enable_main_buttons()
     
     #$print "waiting for input..."
     $button, button_value = ui.interact()
