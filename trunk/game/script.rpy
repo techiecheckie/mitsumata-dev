@@ -2,10 +2,11 @@
 #NOTES TO PROGRAMMERS FROM SEIRA
 #****************************************************
 
-#9/3/11
-#Currently at line 4063, going back and editing funny sounding lines prior to that.
-#Must continue editing at 4423.
+#9/7/11
+#Currently at line 4956 out of 5920, going back and editing funny sounding lines prior to that.
 #Added Kazutaka's route for basic scripting.
+#Line 4484 contains a puzzle minigame. 
+#Don't forget Roman's "lock" minigame.
 
 #**********************
 # SCRIPTING TIPS
@@ -22,29 +23,39 @@
 #***********************************
 
 init python:
-  print "\n\n\n\n#### init\n"
-  
-  pm = Persistent_manager()
-  inventory = Inventory(pm)
-  journal_manager = Journal_manager(pm)
-  
-  # These are the values that will be used when a new game starts. Everything 
-  # defined inside this init block will have its state written somewhere when
-  # Renpy creates a new/rewrites an old save game, so it's not actually necessary 
-  # to store these in any external file because already Renpy remembers all the 
-  # variables' states automatically. Which is nice.
-  hp = 0
-  mp = 0
-  
-  # HP/MP bar positions. Just testing these out, so the values may wary
-  ppp = 3 # "pixels per point"
-  
-  hp_initial_x = 27
-  hp_x = hp_initial_x + ppp * hp
-  
-  mp_initial_x = 460
-  mp_x = mp_initial_x + ppp * mp
-  
+  import renpygame as pygame
+      
+  def button_save():
+    ui.frame(xpos=108,ypos=641, xpadding=0, ypadding=0)
+    ui.imagebutton("gfx/buttons/button_save.png", 
+                   "gfx/buttons/button_save_hover.png", 
+                   clicked=renpy.curried_call_in_new_context("_game_menu_save"))
+                   
+  def button_load():
+    ui.frame(xpos=45,ypos=683, xpadding=0, ypadding=0)
+    ui.imagebutton("gfx/buttons/button_load.png", 
+                   "gfx/buttons/button_load_hover.png", 
+                   clicked=renpy.curried_call_in_new_context("_game_menu_load"))
+                   
+  def button_options():
+    ui.frame(xpos=109,ypos=729, xpadding=0, ypadding=0)
+    ui.imagebutton("gfx/buttons/button_options.png", 
+                   "gfx/buttons/button_options_hover.png", 
+                   clicked=renpy.curried_call_in_new_context("_game_menu_preferences"))
+    
+  def button_palm_pilot():
+    ui.frame(xpos=853,ypos=663, xpadding=0, ypadding=0)
+    ui.imagebutton("gfx/buttons/button_palm_pilot.png", 
+                   "gfx/buttons/button_palm_pilot_hover.png", 
+                   # TODO: change the "clicked" event. Now it works only once
+                   clicked=renpy.curried_call_in_new_context("pda_loop"))
+    
+  config.window_overlay_functions.append(button_save)
+  config.window_overlay_functions.append(button_load)
+  config.window_overlay_functions.append(button_options)
+  config.window_overlay_functions.append(button_palm_pilot)
+
+
 #---------------------
 #KONAMI CODE
 #---------------------
@@ -271,6 +282,7 @@ init python:
 #----------------------------------
 # eg. image eileen happy = "eileen_happy.png"
 
+image ui = "gfx/backgrounds/ui.png"
 image bg shrfr = "shrinefront.png"
 image bg hall1 = "gfx/backgrounds/hallway1.jpg"
 #image bg hall2 = ""
@@ -464,37 +476,31 @@ define na = Character('Naomi', color="#c8ffc8", show_two_window=True )
 #     hide text with dissolve
 
 #     return
+
+
+
     
 #--------------------------------
 # GAME STARTS HURR
 #--------------------------------
 
-
 label start:
-    # For the console, just ignore for now.
-    $print "\n#### start \n"
+    # Call the init method (line 35) that initializes the pygame stuff (palm pilot and such)
+    # Calling this once when the game starts should be enough. We'll have to see
+    # how this should be done when loading a game.
+    #$init()
     
-    #$inventory.unlock_item("1")
-    #$journal_manager.unlock_entry("2", "2")
-    
-    # To show the PDA screen. Use this if you want to jump to the PDA screen
-    # without having to press the ui button.
     #call pda_loop
 
     show blackscr with dissolve
-    call show_ui
+    show ui with dissolve
     play music "music/mitsumata1.mp3"
     #show cg 1 with dissolve
     "Once upon a time, there was a prince who was not in any way different from other fairy tale princes."
     "He was rich, handsome, popular, destined to marry a princess, spoiled---"
-    
+
     "Bored already."
 
-    # testing ui (mp/hp bar) updates
-    $hp = 50
-    $mp = 30
-    call update_ui
-    
     "I’ve barely said a single sentence."
 
     "And it was the boringest sentence I’ve ever heard in my entire life!"
@@ -4275,9 +4281,12 @@ label Scene40a:
 
     "Hmm...it might be a good idea to go train a little bit. Dunno what the hell she has in store for me, but a little extra preparation couldn’t hurt."
 
+#label minigame daychal
     #OPTION:
-    #-I need a bit more training (go to the training grounds)
-    #-I’m ready now (continue)
+    #-I need a bit more training
+    #This option takes you to the palm pilot screen where you can do training.
+    #-I’m ready now
+    #You immediately start the next challenge.
 
     #r  "All right, I think I’m ready."
 
@@ -4287,71 +4296,27 @@ label Scene40a:
 
     #su  "Cocky. As always. That’s fine with me; it’ll just be more enjoyable when you fail."
 
-    #-Put in minigame here; perhaps “Level 2” versions of all the previous minigames (i.e. channeling, projection, etc)-
+    #Put the Day challenge minigame here.
 
-    #Fail:  Bad End 5
+    #Fail
+    #su "Prepare to clean like you have never cleaned before...
+    
+    #OPTION:
+    #Wait, one more chance...
+    
+    #su "Fine, you're lucky I'm in a good mood. Ready...GO!"
+    
+    #Awwww man...
+    
+    #r "Just great..."
 
     #Succeed –
 
     #r  "YES! Wooo! A bit trickier than I guessed, but at least I passed, right?"
 
-    #su  "Heh heh. The first part."
+    #su "Feh. I guess you did. Barely."
 
-    #r  "Sorry, didn’t quite hear that."
-
-    #su  "Yeah, you passed, sprog. The first part. The easy part."
-
-    #r  "Uh, so there’s another part?"
-
-    #su  "Oh Roman~?"
-
-    #ro  "Yes, Miss Susa?"
-
-    #su  "Please, do me a favor and knock this kid unconscious."
-
-    #r  "You want me to fight Roman?!"
-
-    #su  "Look, the people you’d be fighting out there are at least as powerful as Roman. If you can’t defeat him, I’d just be sending you to your fucking death."
-
-    #r  "..."
-
-    #su  "And if I’m going to have your blood on my hands, I’d prefer it if it was literal blood."
-
-    #ro "-chuckle-"
-
-    #s  "-giggles-"
-
-    #"Why am I the only one who doesn’t find this shit funny? I don’t want to fight Roman—he’s been here like two years longer than me."
-
-    #ro  "Ready, Riku? I assure you I will not be going easy on you."
-
-    #r  "Great. If you ever did want to go easy on me, though, this would be a pretty good time to do it."
-
-    #su  "If he goes easy on you, I’ll notice. And you’ll both be on toilet duty for the next month."
-
-    #ro  "Sorry, Riku. While I am rather fond of you, I am far more fond of not scrubbing toilets."
-
-    #"Can’t say I blame him. I feel the same way, honestly."
-
-    #r  "All right Roman, I guess I’m ready."
-
-    #ro "-ice sword animation- En garde!"
-
-    #Fail:  Bad End 5
-
-    #Succeed –
-
-    #ro  "Nngh. Ah. Congratulations, Riku. I yield."
-
-    #r  "Huff...that was the most challenging sparing match I think I’ve ever had."
-
-    #ro  "I appreciate the accolades. Still, I am rather embarrassed at being defeated by someone 80 years my junior."
-
-    #s  "You were marvelous, Roman! No need to be embarrassed; you were at a significant disadvantage considering your power type!"
-
-    #ro " Ah. Yes, well...thank you Soume. That means a lot coming from you."
-
-    #r  "So, I guess that means I’m ready for missions now, huh Susa?"
+    #r  "I guess that means I’m ready for missions now, huh Susa?"
 
     #su  "..."
 
@@ -4362,55 +4327,28 @@ label Scene40a:
     #su  "..."
 
     #r  "Ahem. Soooooooo...my mission. When should we-"
+    
+    #su "Hn. I'll think about it."
 
-    #su  "GODDAMN IT YOU STUPID UNPREDICTABLE PUP!"
-
-    #r  "Eh. Heh heh. Funny joke, Susa."
-
-    #su  "You were supposed to fucking LOSE. You aren’t fucking ready yet—fuck what I said."
-
-    #"Susa abruptly turns around and walks off quickly. I stare over at Soume, who is wearing a fucking ridiculous smile on his face and jumping up and down like he just saw a goddamn spider."
-
-    #s  "Congratuations, Riku~!"
-
-    #r  "Uh...yeah. Not sure it matters though. Did ya hear Susa?"
-
-    #s  "Oh, Miss Susa will come around!"
-
-    #su  "OH NO I FUCKING WON’T. THAT BRAT ISN’T LEAVING!"
-
-    #s  "Don’t worry, I’ll talk to her! Everything will be taken care of shortly~!"
-
-    #ro  "Trust us. She’s just nervous. She gets like that sometimes. She doesn’t want anything bad to happen to you."
-
-    #r  "She has a weird way of showing it."
-
-    #ro  "Well, she does have her quirks. I think it is rather sweet, how much she worries about all of us."
-
-    #s  "You should be more excited, Riku! You just passed your final training! "
-
-    #r  "Yeah, I guess."
-
-    #"Kind of hard to get too excited when I still don’t fucking know if Susa is going to let me go out or not. Soume and Roman seem proud though, so that’s at least something."
+    #r "H-hey! That's not fair! Awwwww..."
 
 #[Scene 41]
 label Scene41:
 
-    k  "Honestly, I don’t know how I can make this any more clear to you you need to hold still, or I will not be able to collect the blood sample I need."
+    k  "Honestly, I don’t know how I can make this any more clear that need to hold still, or I will not be able to collect the blood sample I need."
 
-    "I try to stop my face from twisting into a scowl, but I can’t fucking help it. This asshole has been stabbing the same needle into my arm for about five goddamn minutes now and can’t seem to hit the fucking vein."
+    "{size=17}I try to stop my face from twisting into a scowl, but I can’t fucking help it. 
+    This asshole has been stabbing the same needle into my arm for about five goddamn minutes now and can’t seem to hit the fucking vein.{/size}"
 
-    r  "I don’t know how this is my fault, Kazu. Just hurry up so I can get out of here."
+    r  "I don’t know how this is my fault, Mr. Osamu. Just hurry up so I can get out of here."
 
-    "Kazu mumbles something at me but I can’t make it out. Sounds like a growl or something, but he’s gritting his teeth too hard for me to make it out."
-
-    k  "Doctor. DOCTOR. Refer to me as doctor, you disrespectful pup! ...There!"
+    k  "Doctor. DOCTOR. Refer to me as doctor, you disrespectful peon! ...There!"
 
     "He finally hits the vein. He seems pleased with himself, nodding his head and smiling. I try not to actually watch my blood being drawn. That shit always makes me woozy."
 
-    r  "Fine, doctor. Jeez."
+    r  "Right, right, doc---whooa..."
 
-    "I fucking hate calling him that. Feels like he wants me to know I’m inferior to him. But for now I need him to clear me to go out into the field, so I decide to play nice."
+    "How the heck did this guy even become a doctor? Maybe a witch doctor!"
 
     r  "What is with this whole “doctor” thing, anyway?"
 
@@ -4418,43 +4356,59 @@ label Scene41:
 
     "He doesn’t look up from what he’s doing.  He’s putting my blood into some sort of machine and messing around with a bunch of dials and shit."
 
-    r "I said what’s with the whole doctor thing? Why do you get all pissy if I call you Kazu? It’s your name, isn’t it?"
+    r "It was just a mistake...you don't have to get so mad about something like that."
 
-    "He lets out this drawn out sigh and actually stops messing with the machine for a second. He rubs his eyes, and the way he talks to me I get the fucking impression that this is the way he’d explain something to a brain-damaged brick."
+    "{size=17}He lets out this drawn out sigh and actually stops messing with the machine for a second. He rubs his eyes, and the way he talks to me I get the fucking 
+    impression that this is the way he’d explain something to a brain-damaged brick.{/size}"
 
     k  "Because I’ve earned it, you understand?"
 
-    r  "No, not really. ‘s why I asked."
+    r  "Earned it?"
 
-    k  "Most Majin have an IQ of 87.The average IQ for others like us is 87. Eighty-seven, Riku. Did you know that?"
+    k  "The average IQ for Majin is 87 on the human scale. Eighty-seven, Riku. Did you know that?"
 
-    r  "No. That bad?"
+    r  "No. Issat bad?"
 
-    "Again he sighs. He’s back to messing with the machine again, but I get the feeling he just doesn’t want to look at me."
+    #Kazu sighs.
+    "He’s back to messing with the machine again, but I get the feeling he just doesn’t want to look at me."
 
-    k  "Of course you didn’t know that. I put that in some of the material I gave to you, but you didn’t read it, did you? Nobody ever does. No one wants to better themselves."
+    k  "Of course you didn’t know that. It's in the information I gave you the first day, but you didn’t read it, did you? Nobody ever does. No one wants to better themselves." 
+    k "No one wants to learn WHY our side keeps losing, why we have to hide out and be forced to do things...terrible things..."
 
-    "I feel like I’m being scolded or something. I fucking hate it; I just want to leave but I can’t until this asshole lets me."
+    "I don't say anything. I have a feeling I'll know what going on soon enough."
 
     k  "Most Majin are just fine to go through life, completely ignorant of the world around them. They fight, they eat, and they fornicate. And that’s it. That is all they do."
 
     "He laughs. Sneers back at me."
 
-    k  "That’s why they see us as food, you know. Why they think we’re animals. Because we act like it. If we go out there and pretend we’re pigs, well, then how can we blame the humans for mistaking us for them."
+    k  "That’s why they see us as food, you know. As slaves. As whores. Why they think we’re animals. We act like animals." 
+    k "If we quack and walk and swim like ducks, why should they treat us any differently from a duck?"
 
-    "I really want to fucking hit this guy. I don’t do it, but damn would it feel good to."
+    "If I punched him through the skull, would anyone blame me?"
 
-    k  "Not me, though. I’ve actually gone through my studies, worked at something, and now I’m the first officially recognized Majin doctor. Only one too, I think."
+    k  "I'm not like you, though."
+    k "I’ve gone through my studies, worked at trying to survive in this world, and I became the first recognized Majin doctor. The ONLY accepted Majin doctor." 
+    k "None of you little pigs, while you were rabidly sexing on human streets, thought that there may be merit to learning your own biology."
 
-    r  "Congrats. Doctor."
+    r  "Congrats, Doctor."
+    
+    k  "Right. Doctor. You see? You see what we can do?" 
+    k "We’re not just food, or lab rats to be tested on and discarded." 
+    k "Doctors, scientists, philosophers; there are so many thing we could do if we just tried. We aren’t food or slaves or breeding toys."
+    
+    r "That sounds great and all, but maybe we are just supposed to be what we're supposed to be." 
+    r "Why do we have to do what humans do to live, when we aren't made for it?"
+    r "Seems to me like you should stop hating yourself and aiming for what humans think is good and like what you are." 
+    
+    k "..."
 
-    "I roll my eyes. Big deal. He might be a doctor, but that doesn’t make him better than me. Than Soume or Roman."
+    "Is he speechless?"
+    
+    k "Kch! You don't understand anything, you churlish little paramecium!"
+    
+    "Yeah, right."
 
-    k  "Right. Doctor. You see? You see what we can do? We’re not just food, or lab rats to be tested on and discarded. Doctors, scientists, philosophers; there are so many thing we could do if we just tried. We aren’t food. We’re not."
-
-    "Dunno who he’s arguing with. I’m not disagreeing with him."
-
-    r  "Right. Well, right now I’d like to go out and help Susa rescue some other Majin, but I can’t until you give her the okay. So,we about done here, or what?"
+    r  "Whatever! I’d like to go out and help Susa rescue some other Majin, but I can’t until you give her the okay. Can I go or what?"
 
     k  "Let me see, I’ll just need to-"
 
@@ -4464,51 +4418,51 @@ label Scene41:
 
     r  "Didn’t you build it?"
 
-    k  "Yes, but I didn’t build it to break! A flaw of the machinery, I assure you. My design is perfect."
+    k  "Of course I built it, but it can't possibly break with my calculations. A flaw of the machinery, I assure you. My design is perfect."
 
     r  "Riiiiiight, doctor. So can I go, or what?"
 
-    k  "Well, you can. But I’m not letting you go out on any missions until I get the results back. Which isn’t going to happen until I get this machine fixed."
+    k  "You may, but I can't parse the results until this machine is fixed, I'm afraid."
 
     r  "Oh c’mon, man! Look at me, I’m fine!"
 
-    k  "Sorry. Wish there was some way around this. I really do."
+    k  "I'm sorry, but this is simply how things must be done. You could have a bruised valve somewhere and I need my machine to catch it."
+    k "Unless you prefer to die..."
 
-    "He smiles at me and laughs a little bit. I think he honestly enjoys watching me suffer. Must be why he and Susa get along so well."
+    "He smiles at me. Bastard enjoys watching me suffer. I bet that's why he and Susa get along so well."
 
     r  "Well, how long is this going to take?"
 
-    k  "Depends. Maybe an hour, maybe a week. I need to locate all the replacement parts first.  Hmm...now where did I put them?"
+    k  "Oh...I don't know...perhaps an hour, maybe a week. I need to assemble the replacement parts..."
 
-    "He looks around his lab for a bit, before looking at me. He stares for a second, then his face suddenly changes and he starts scrawling something on a piece of paper furiously."
+    "He looks around his lab for a bit, gathering what looks like several bits of scrap metal."
 
-    k  "Here, take this!"
+    k  "Here, take these!"
 
-    "He hands me a list with a bunch of items on it."
+    r  "What the heck am I supposed to do with this?"
 
-    r  "What the heck is this?"
+    k  "I always keep the spare parts around just in case of emergencies like this, but they get rather large if they're completely assembled, so I break them up."
 
-    k  "Those are the items I need. They are somewhere around the lab, I am absolutely certain of it.  I always keep the spare parts around just in case of emergencies like this  Better to be overcautious than to be caught off guard, don’t you agree?"
-
-    r  "Sure. But what do you want me to do with this?"
-
-    k " Well, go find them, obviously! Sometimes I worry that you were born without deductive reasoning skills."
+    r  "...lemme guess, you expect me to put them back together."
+    
+    k "Indeed. We'll see if your mind is ready for a mission, and then we'll return to your physical condition."
 
     "He goes back to fiddling with his instruments and messing around with the big screen in front of him."
 
     r  "No, I’m not doing this. I’ve got other stuff to be doin’. I don’t have time for your chores, Doc."
 
-    k  "Fine. I’m not in any rush to have you sent out on your first mission. Glad to see you aren’t, either.  Dangerous stuff out there, you know? Better to be here, where Susa can have you clean and help me around the lab."
+    k  "It's just as well. I’m not in any rush to have you sent out on your first mission." 
+    k "In fact, I'm relieved that you aren't either. Dangerous things lurk out there, you know? Better to be here, where Miss Susa can have you clean and help me around the lab."
 
-    "Well shit. This asshole isn’t going to clear me until I find all this garbage."
+    #Riku frowns.
+    r  "FINE."
 
-    r  "Ugh. Fine. I’ll find your stupid replacement parts."
+    k  "Oh, what an excellent attitude! I knew I could count on you." 
+    k "The quicker you fix everything, the faster I can clear you and the sooner you can go out and get yourself killed."
 
-    k  "Oh, what an excellent attitude! I knew I could count on you. Now, the quicker you find everything, the faster I can clear you and the sooner you can go out and get yourself killed. Win-win situation, I think. So hurry! I don’t have all day to waste waiting around for you."
+    #Put a few levels of a puzzle game here. Riku needs to assemble the parts correctly!
 
-    #-Put Hidden object game here?  Have Riku find all the objects Kazu needs to repair his machinery.  Possibly have Riku put it together as well as part of a little puzzle-
-
-#[Scene 42]
+#Success in the puzzle game.
 label Scene42:
     r  "There. The stupid thing is working again. Thanks to me."
 
@@ -4516,33 +4470,36 @@ label Scene42:
 
     k  "Ah! Yes! Excellent, this is truly excellent."
 
-    "A “thank you” would have been nice. Or a “good job kid.” Hell, I would have even taken a fucking grunt in my direction from this guy. I get nothing though, and he just stares at a bunch of numbers that are scrolling across the screen. Don’t mean anything to me, but apparently he understands this shit, as he’s taking all sorts of notes."
+    "A 'thank you' would have been nice. Or a 'good job'. Hell, I would have even taken a fucking grunt in my direction from this guy."
+    "Too busy fiddling on his machines, but if I get to go on missions, it's worth it."
+    "Sorta."
 
-    r  "So...uh, what’s it say? Am I good to go, or what?"
+    r  "So...what’s it say? Am I good to go, or what?"
 
     k  "Hrm? Oh yes, I almost forgot about you."
 
-    r  "Yeah, me. The guy who just fixed your stupid machine. That guy. So, does it clear me, or what?"
+    r  "Yeah, me. The guy who just fixed your dumb machine. That guy. So, does it clear me, or what?"
 
     k  "Oh, this wasn’t going to clear you."
 
     r  "Excuse me?"
 
-    k  "No, no, no. You have misinterpreted the situation. This was for something else entirely. Call it professional curiosity. I had heard about your power, you see."
+    k  "No, no, no. You have misinterpreted the situation. This was for something else entirely. Call it professional curiosity. I had heard about your power..."
 
-    r  "What do you mean this isn’t going to clear me? Why the hell did I just fix the stupid thing then?"
+    r  "W-what do you mean this isn’t going to clear me? Why the hell did I hafta fix it for?"
 
-    "Kazu continues like he didn’t even hear my question. He’s talking faster and faster now, and I can barely understand the jumble of words coming out of his mouth."
+    "Doctor Osamu continues like he didn’t even hear my question. I can barely understand the jumble of words coming out of his mouth."
 
-    k  "You are quite unique, you know. Dark flames and all that, strong enough to ward of Mamoru.  Remarkable, really. Did you know...I’ve never heard of powers being manifested in that way. Before you, I had never encountered anyone that has that kind of power."
+    k  "You are quite unique, even amongst Majin. Dark flames and all that, strong enough to ward off one of the most...troublesome...of our enemies."
+    k "Remarkable, really. I've never seen that sort of manifestation in any Majin. I haven't even heard of it."
 
-    "He’s laughing to himself, pushing the glasses back up his nose. I can tell he’s excited and all, but I resent being treated like a fucking guinea pig. He should at least tell me what he’s fucking doing."
+    r "I'm not your guinea pig! What the hell're you talkin' about?"
 
-    k  "Imagine that? I have never heard of it before. Me! Ooooh, to feel ignorant about something, I mean truly ignorant; it is such a marvelous feeling!"
+    k  "Imagine that? I have never heard of it before. Me! Ooooh, to feel ignorant about something, I mean truly ignorant; it "
 
     r  "Yeah, that’s great Doc, but what I’m interested in-"
 
-    k  "I had almost forgotten what this feels like. The thrill of the unknown, the tension one feels during the chase of the answer, the satisfying climax of discovering something new, I-"
+    k  "I had almost forgotten what this feels like. The thrill of the unknown, the tension one feels during the chase of the answer, the satisfying climax of discovering something new, I--"
 
     r  "Hey, Doc! Yo, I’m still here. You need to clear me."
 
@@ -4550,33 +4507,34 @@ label Scene42:
 
     "He looks me up and down quickly."
 
-    k  "You’re in fine shape. Tell Susa I say you’re cleared to go."
+    k  "You’re in fine shape. Tell Miss Susa I say you’re cleared to go."
 
     "He turns right back around to his monitor and begins writing something else down."
 
     r  "Wait, are you freakin’ kidding me? That’s it?"
 
-    k  "I can make it more invasive, if you’d prefer. I haven’t performed a rectal cavity search in years, but if that’s what you want-"
+    k  "I can make it more invasive, if you’d prefer. I haven’t performed a rectal cavity search in years, but I'm sure for you..."
 
-    r  "No, no! That’s fine! I’m good. Was just expecting something, uh, more I guess. Not complaining, though."
+    r  "No, no! That’s fine! I’m good. Was just expecting something, uh, more I guess. Not complaining!"
 
     k  "Well, get out of my lab then. Your ignorance is fogging up my machinery."
 
     r  "Yeah, great to see you too, Doc. I have to go talk to Soume anyway so-"
 
-    "Kazu has finally turned around from his data, and for the first time since I’ve been down here he seems like he’s actually paying attention to me."
+    "Doctor Osamu has finally turned around from his data, and for the first time since I’ve been down here he seems like he’s actually paying attention to me."
 
     k  "You haven’t noticed anything peculiar about Soume recently, have you?"
 
-    "He’s staring at me from behind his glasses now. He’s doesn’t break eye contact once, and he sits unmoving, waiting for my response. If I had to describe it, I’d say it’s really fucking unnerving."
+    "He’s staring at me from behind his glasses now. He’s doesn’t break eye contact once, and he sits unmoving, waiting for my response."
+    "It’s really unnerving."
 
     r "Uh, well...he talks to plants. That’s pretty weird."
 
-    "Kazu waves his hand at me."
+    "He waves his hand at me."
 
-    k  "No, he always does that. I mean unusual for him. Anything at all, Riku? Think."
+    k  "No, he always does that. I mean unusual for him.Think, difficult as that may be."
 
-    "I make the face I always used to make in class, when I wanted to fake like an answer was on the tip of my tongue. I had no clue what Kazu was talking about here."
+    "I make the face I always used to make in class, when I wanted to pretend I was paying attention."
 
     r  "Um. No, not really. Seems normal to me."
 
@@ -4588,175 +4546,160 @@ label Scene42:
 
     k  "No."
 
-    "His voice is shaking now."
+    k  "I’m sure he’s up to something. He doesn't let me examine him."
 
-    k  "No, I’m sure he’s up to something. He doesn’t make eye contact with me and he won’t let me test on him."
+    "If that's the only requirement for being 'up to something', then lock me up now. Who would WANT to get examined by him?"
 
-    "If those are the two requirements for being crazy, then lock my ass up. I’m staying as far away from Kazu and his crazy experiments as I can from now on."
+    k  "Something needs to be done about him. I told Miss Susa---Talk to him if you can. See if you can’t figure something out."
 
-    k  "Something needs to be done about him, Riku. I don’t trust him. He’s strange. Talk to him for me, won’t you? See if you can’t figure something out."
+    r  "S-sure thing. Look, I got to get going. Thanks for all your, uh, help."
 
-    r  "Yeah. Sure thing. Look, I got to get going. Thanks for all your, uh, help."
-
-    k  "Riku, listen to me. I can feel something. Soume is trouble; he’s dangerous. He is a threat to everything I’ve worked for and-"
+    k  "Riku, listen to me. I am a sensory Majin, and I'm sure--Soume is trouble; he’s dangerous. He is a threat to everything I’ve worked for and--"
  
-    "He pauses. He looks at me and I think he notices I’m uncomfortable, because his demeanor suddenly changes."
+    "He pauses. I think he notices I’m uncomfortable, because his demeanor suddenly changes."
 
-    k  "Ahem. You’re right...I’m just overreacting. You’re free to go."
+    k  "Ahem. You’re right...I’m overreacting. You’re free to go."
 
-    "He wheels back to his desk and goes back to his work. There’s definitely something strange about this situation, but I’m not sure it’s Soume."
+    "He wheels back to his desk and goes back to his work." 
+    "There’s definitely something strange about this situation, but I’m not sure it’s Soume."
+    
+    r  "Thanks again, Doctor Osamu."
 
-    "What did he mean that Soume’s threatening his work, and why did he stop so suddenly? I want to know what the fuck is going on here, but I decide to talk to Soume about this first. Better him than Kazu."
-
-    r  "Thanks again, Doc."
-
-    "I walk out of the lab and head back upstairs. I could swear I heard Kazu mumble something, but I have to be wrong. It sounded like a threat."
+    "I walk out of the lab and head back upstairs. I don't really wanna mess with that guy."
 
 #[Scene 43]
 label Scene43:
-    ro  "So, Riku, what was Doctor Kazutaka’s verdict? Will you be accompanying us during our next rescue?"
+    ro  "Ah, Riku, what was Doctor Osamu’s verdict? Will you be able to come for our next mission?"
 
-    "Roman was waiting for me just outside Kazu’s lab. After Susa had reluctantly given me the okay, he seemed almost as excited as I was. Dunno why, but he practically dragged me off to the Doc’s lab."
+    r  "Looks like it...long as Miss Susa doesn't change her mind suddenly."
 
-    r  "Yeah. Think so at least, so long as Susa doesn’t change her mind again."
+    #Roman chuckles.
+    ro "Oh, she’ll be fine. This is excellent news. We can always use more help out in the field."
 
-    ro "-chuckle- Oh, she’ll be fine! This is excellent news, Riku! We can always use more help out in the field."
+    r "Yeah."
 
-    r  "Mm hmm."
+    "I can't seem to get excited. I'm still thinking about what the doctor said, I think."
 
-    "I just sort of nod in Roman’s direction. He’s smiling, but for some reason I can’t get excited. All that stuff Kazu was talking about is still sort of bothering me."
+    ro  "Great timing, too. Soume says he's approved a new Majin rescue with Miss Susa."
+    $renpy.pause (3.0)
 
-    ro  "Great timing, too. Soume just mentioned to me that Susa recently received word of another Majin in need of rescue."
+    r  " Hey Roman, you’re close to Soume, right?"
 
-    "I feel like I should be asking him more about the mission, but I can’t get my mind off of what Kazu said. He seemed paranoid for sure, but it would still be nice to learn a bit more about Soume."
-
-    r  "Roman, you’re close to Soume, right?"
-
-    ro  "E-excuse me? I’m afraid I don’t quite know what you’re getting at."
+    ro  "Eh? What's with that so suddenly? I'm---I'm not that close to him--we're not like---erm---"
 
     r  "Well, like he talks to you, right?"
 
-    ro "-chuckle- Oh, that’s what you mean!"
+    #Roman gives a huge sigh of relief.
+    ro "O-oh, that’s what you mean!"
 
     r  "Uh, yeah. What else would I be talking about?"
 
-    ro  "Nothing! Ahem. No, nothing. Soume and I talk a fair bit, that is true. He talks to you too, though. I’ve seen him frequently!"
+    ro  "Nothing! Ahem. Nothing. Soume and I talk a fair bit, yes. Don't you talk with him all the time as well?"
 
-    r  "Well...yeah, that’s true. Sort of, I guess."
+    r  "That’s true. Sort of, I guess."
 
-    ro  "What do you mean, Riku? How do you “sort of” talk to someone?"
+    ro  "Sort of?"
 
-    r  "Well, I dunno. Kinda hard to explain. But, I mean, he talks to me, all right. But it’s always about training, or plants, or something small. I don’t really know anything about him."
+    r  "Well, I dunno. S'kinda hard to explain. He talks to me, but it's all about training, or plants, or things like that. I realize I don’t really know anything about him."
 
-    ro  "Oh, I see."
+    ro  "Oh, hm."
 
-    "It looks like Roman finally got what I was trying to say. He furrows his brow a bit, and is silent for a little while."
+    "It seems like he finally got what I was aiming at."
 
-    ro  "Well, it is true that Soume is a bit introverted. He doesn’t talk about his past or himself all that often."
+    ro  "Soume can be a bit introverted. He doesn’t talk about his past or himself all that often."
 
     r  "Do you know why?"
 
-    ro  "I can only guess. I mean, not many of us like to talk about our past, Riku. Not all of us were lucky enough to grow up with a nice family like you."
+    ro  "I erm..."
+    ro "Not many of us talk about our pasts. Most of us haven't been as lucky as you."
 
-    r  "Yeah. True."
+    r  "Yeah. I guess I was pretty lucky."
 
-    "I thought back to what Roman told me about himself. If Soume’s past was half as bad as his, I suppose I could understand him keeping quiet about it."
+    "I thought back to what Roman told me about himself. If Soume’s past was half as bad as his, it makes sense that he'd keep quiet about it."
 
-    r  "Do you know anything about his past?"
+    r  "Do you know anything?"
 
-    ro  "Well, he has told me a bit. I’m not sure if it’s my place to speak about it though."
+    ro  "I--well, I'm not sure it's my place to say..."
 
-    "Roman breaks eye contact with me and bites his lip. He seems suddenly uncomfortable, but finally looks back toward me."
+    "Roman breaks eye contact with me and bites his lip."
 
-    ro  "All I really know is that he was a slave for some human family for quite some time until Susa saved him."
+    ro  "All I really know is that he was a slave for some human family for quite some time until Miss Susa launched a full scale attack and rescued many of the Majin there."
 
-    r  "Susa saved him? Herself?"
+    r  "Miss Susa saved him?"
 
-    ro  "Yes. She used to go out alone on missions quite frequently, apparently. What is this all about, anyway?"
+    ro  "Yes. She used to lead groups of Majin to do attacks on known hunter strongholds. Many of the older people still here were saved back then."
+    ro "Of course...some died in the line of duty...saving others."
 
-    r  "Huh?"
+    #Riku's voice is breathy.
+    r  "Whoa..."
 
     ro  "Why are you so curious about Soume all of a sudden?"
 
-    "I’m not sure if I should tell him what Kazu told me. But Roman has always been honest with me, and I feel like I can trust him."
+    "I'm not sure if it's right to say...but Roman has always been open and honest with me."
 
-    r  "Uh...well, it’s nothing really. Kazu just...well, he seems like he doesn’t trust Soume for some reason."
+    r  "The doctor just...mentioned something. He doesn’t trust Soume...for some reason."
 
-    ro  "Doctor Kazutaka? I see."
+    ro  "Doctor Osamu? Ah well. Serves him right."
 
     "He gets quiet suddenly and starts walking faster."
 
-    r  "Whoa whoa, Roman. Where are you running off to? Something about Kazu I should know?"
+    r  "Whoa whoa, Roman. Where are you running off to? Something I need to know? I mean, I trust Soume!"
 
-    ro  "Again, Riku, I’m not sure I should be talking about any of this. It really amounts to just a bunch of gossip. All I can say is I know the feeling of mistrust is mutual."
+    ro  "It really amounts to just a bunch of gossip, but I know the feeling of mistrust is mutual."
 
     r  "Mutual? Why? What happened between them?"
 
-    ro  "Really, all I know is only second-hand information. If you’re that curious I’d suggest talking to Soume."
+    ro  "I shouldn't say anymore. You should ask Soume yourself."
 
     "Damn. Roman always gets quiet once he gets to the good stuff. I’ll make sure I talk to Soume when I get the chance."
 
-    r  "It’s just that, well, Kazu said that Soume won’t let him test on him."
+    r  "Well, I don't like the Doctor, so I'll tell you what he said. Soume doesn't want to get examinations."
 
-    ro  "Well, I can’t say I’d blame him for that. The Doctor really is a genius, but I myself worry about his...enthusiasm at times."
+    #Roman gives a bit of a short, scoffing laugh.
+    ro  "I can’t say I’d blame him for that. He may be a fine doctor, but I myself worry about his enthusiasm at times."
 
-    "That was a fair point, I guess. I wasn’t in any hurry to get back to Kazu’s lab anytime soon."
+    r "Yeah, he's really into his work, isn't he?"
 
-    ro  "He actually tried to get me to give him some blood during one of my routine visits. I don’t know how silly he thinks I am to go along with that."
+    ro  "He tried to get me to give him some blood during one of my routine visits. He must've thought I was silly."
 
-    "I could feel my face getting hot and red. I tried to act casual."
+    "The little hairs on the back of my neck are at attention now."
 
-    r  "Is there any reason not to give him your blood? He is a doctor, right?"
+    #Riku coughs.
+    r  "Is there any reason not to give him your blood? He is a doctor, right? That's what they do?"
 
-    "I should have asked for some damn credentials when I went in there. I just assume guys in white coats are doctors."
+    "I should have asked for some damn credentials when I went in there."
 
-    ro  "Well, he is a doctor—that part is true. But he is a sensory demon as well, so I’m just a bit wary, you know?"
+    ro  "Well, he is a doctor—that part is true. But he is a sensory demon as well, so I’m just a bit wary of giving him genetic material."
 
     r  "Uh...yeah. Wait, no. What do you mean?"
 
-    "Roman sighs and looks around, probably making sure that no one else is within earshot."
+    ro  "Sensory demons are a bit of a specific type. They have very good clairvoyance, they can sense danger and which paths to take to avoid it."
+    ro "But they aren't infallible."
+    ro  "They can tell if danger is incoming, but not exactly who or what it is. They can tell what paths to take, but don’t know what is on the other paths."
 
-    ro  "Again, this might just be more superstition than anything else. So don’t go repeating this to everyone."
+    r  "I...think I don't get it."
 
-    r  "Fine, fine. Just get on with it already."
+    ro  "Well, I've heard that sensory abilities are enhanced by genetic material."
 
-    "I really needed to know what Roman was going on about. Kazu took some of my blood, so if there’s some reason to worry, I should hear it."
+    "I know my face has gone pale."
+    
+    r  "...what?"
 
-    ro  "Well, as I said, he’s a sensory demon. So he can sense things like paths to take or imminent danger. He is quite good at it too; I don’t think we’ve ever been ambushed when he accompanies us."
-
-    r  "So?"
-
-    ro  "Well, he really only gets flashes of what’s going on. He knows if danger is incoming, but not exactly who or what it is. He can tell what paths to take, but doesn’t know what’s on the other paths."
-
-    r  "...uh, I still don’t get it."
-
-    ro  "Well, this is where I rely more on rumors than anything else. But I’ve heard that his powers are enhanced if he, uh, well..."
-
-    r  "If he what, Roman?"
-
-    ro  "Well, if he samples your blood."
+    ro  "If he sampled your blood..."
 
     "Roman’s face flushes suddenly. Sort of looks like one of my mom’s tomatoes now."
 
-    ro  "That’s just something I heard though. I’ve never really asked him if it were true or not."
+    r  "..."
 
-    r  "Right. But what exactly do you mean by “samples”?"
+    ro  "Well, I mean if he...ahem..."
+    ro  "...ingests it."
 
-    ro  "Well, I mean he...ahem..."
-
-    "He looks around quickly again. The next part he whispers so quietly I can barely hear him."
-
-    ro  "...drinks it."
-
+    #Riku yells.
     r  "He drank my blood!?"
 
     ro  "SSSSHHHHHH!"
 
     "Roman clasps his hand over my mouth while looking around again."
-
-    ro  "Remember, I don’t know that for sure. That’s just something I heard."
-
-    "He finally releases my mouth. I feel like yelling again, but I think better of it."
 
     r  "Why the hell would he do that? Does it make him stronger?"
 
@@ -4765,68 +4708,64 @@ label Scene43:
     r  "...what?"
 
     ro  "Well, it allows him to...sense better. Or so I hear."
+    ro "Sensory demons are very weak physically, and who knows what Doctor Osamu was in before now...he's a bit paranoid."
 
-    r  "Right. So what does that mean?"
-
-    ro  "I said before he only gets flashes of things. Well, apparently, if he samples a bit of someone’s blood, he can determine where they are at all times. He can sense them coming and going, where they are and what they’re doing."
+    ro  "Ingesting a bit of what he needs to sense allows him to determine where they are. He can get a clearer picture of them and those with similar genetic material."
+    ro "It's actually helped us find some families."
 
     r  "How does he do that?"
 
-    ro  "I’m not sure. I don’t even know if it’s true or not, remember? It really is just a rumor; I feel a bit silly repeating it."
+    ro "I couldn't begin to tell you. I'm not a sensory demon after all."
+    
+    r  "Uuuuuuugh, gross gross gross."
 
-    r  "...yeah."
+    "That was the most I could muster. Rumor or not, I wish Roman would have told me this earlier." 
+    "I also kinna wish I could get my blood back."
 
-    "That was the most I could muster. Rumor or not, I wish Roman would have told me this earlier. I also wish I could go and get my blood back, but it’s already too late for that."
+    ro  "Anyway! You should get some rest! Your first mission might be soon."
 
-    ro  "Anyway though, I think I’ve spread enough rumors for one day. You should get some rest! We might be departing on our first mission tomorrow!"
+    "Roman slaps me on the back and smiles at me. Carefree jerk."
 
-    "Roman slapped me on the back and smiled at me. I tried to respond with a smile of my own, but it was kind of hard considering there might be someone spying on me right now."
-
-    r  "Sure. Uh, thanks, Roman."
-
-    "Roman made his way down the hallway. I gotta learn to stop asking questions I really don’t want the answer to."
+    "I gotta learn to stop asking questions I don’t want the answer to."
 
 #[Scene 44]
 label Scene44:
     su  "Now the point of extraction is...Oi! You listening, sprog?"
-
-    "Susa kept on interrupting herself to make sure I was paying attention. I dunno why—I haven’t nodded off once during her whole lecture, which is something of a miracle for me."
-
-    r  "Yeah, yeah. I’m listening."
+    
+    r  "I'm LISTENIN'! Sheesh!"
 
     su  "Soume, if he slows you down or forgets the plan, you have my permission to kill him."
 
-    s  "-giggles- Oh Susa, I hardly believe that will be necessary."
+    #Soume giggles.
+    s  "Miss Susa, I hardly believe that will be necessary."
 
     r  "I told you, I’ve been paying attention. I’m not gonna screw this up."
-
-    su  "I still don’t think ya ready yet, kid. I mean, he’s just a pup!"
-
-    ro  "Oh Susa, he’ll be fine. Trust us. He’s ready."
-
-    "Susa started grumbling something under her breath. I can’t hear her, but I doubt I’d want to even if I could."
-
-    su  "Well, let’s get on with this then. Now, here is where you’ll be waiting for the target."
+    
+    su  "We'll see about that, won't we. Here is where you'll be waiting for the target."
 
     r  "What’s her name?"
+    
+    ro "Oh dear--"
 
-    su  "See, that’s just what I mean. I already told you this! Her name is Akiko! Remember that, ya brat. You can’t just show up and be like “hey kid, come with me.” She’ll run off, won’t she!"
+    su  "I already told you this! Her name is Akiko! Shit, sprog. You can't just walk up to someone and kidnap 'em. You think she's gonna listen if you do that?"
 
-    r  "Right, sorry. Akiko. Akiko  Akiko."
+    r  "Right, sorry. Akiko. Akiko."
 
-    "I keep on repeating the name to myself in my head. Can’t forget this again, or Susa isn’t going to let me go along."
+    su  "After meeting her, escort her back over here, to the safe zone."
 
-    su  "After meeting her, escort her back here, to the safe zone."
+    k  "Which is where I’ll be waiting. I will check her out and if she checks out, we'll return to the shrine."
+    
+    su  "I’m not expecting any resistance, but know that there is always a risk of hunter activity. I can't bring that back here."
 
-    k  "Which is where I’ll be waiting."
+    #Kazutaka grumbles.
+    k  "As if I would like to be in the line of danger."
+    
+    su "Something to say?"
+    
+    k "Nothing, ma'am."
 
-    "Kazu was coming along for some reason. Found out about it when I showed up today, and I wasn’t particularly happy about it  By his looks, neither was he."
-
-    su  "Yes. While I’m not expecting any resistance, you never really know. This area is far enough away that, even if there is a skirmish, you’ll be safe."
-
-    k  "Excellent. I like the sound of that."
-
-    su  "And you’ll still be on scene to heal any injuries if need be. Now, first escort Doctor Kazutaka to the safe zone, then head over to where you will be waiting for the target. The Doctor can use his abilities to see to determine if we should be expecting any problems once you get there."
+    su  "First, you'll escort Kazutaka to the safe zone, and go over the plan one more time."
+    su "Then head over to where you will be waiting for the target. "
 
     "Soume and Roman both nod. Kazu frowns, and looks off. Susa turns to me."
 
@@ -4834,27 +4773,27 @@ label Scene44:
 
     r  "I got it."
 
-    su  "Listen to what Soume tells you. He’ll be in charge once you leave the Shrine. If I hear anything from him-"
+    su  "Listen to what Soume tells you. He’ll be in charge once you leave the Shrine. If I hear anything from him--"
 
     r  "You won’t! I swear."
 
-    su  "Well, if I do, you’ll be in training for at least a decade before I let you back out."
+    su  "If I do, you'll be training here until you're actually an adult. Which is 80 years from now."
 
     "Susa turns to leave, and Kazu and Soume follow her out."
 
     ro  "Ready, Riku?"
 
-    r  "I think so. Don’t tell Susa, but I am a little nervous, you know?"
+    r  "I think so. I am a little nervous, you know?"
 
-    ro  "-chuckle- Completely natural. There is nothing to worry about though, Riku. Both Soume and I will be there in case things become complicated."
+    ro  "Completely natural. There is nothing to worry about. Soume is a beast in battle."
 
-    r  "Yeah, I know, I’m just...I dunno. I don’t want to screw this up when someone else is depending on me."
+    r  "Heh. I guess it'd be cool to watch that when I'm not worried about peeing my pants."
 
-    "Roman smiles and pats me on the back."
+    #Roman laughs.
 
-    ro  "I can’t think of anyone else I’d rather have out there with us. You’ll be excellent!"
+    ro  "You’ll be excellent!"
 
-    "That cheers me up a bit, at least. Still feel like I might be sick, though."
+    "Then why do I still feel like I could puke?"
 
     ro  "Oh! I almost forgot."
 
@@ -4866,25 +4805,30 @@ label Scene44:
 
     r  "Uh...thanks. Did Soume ask you to give this to me?"
 
-    ro "-chuckle- No, I grew this little guy myself."
+    ro "No, I grew this little guy myself. Soume taught me a little gardening."
 
     r  "Really?"
 
-    "It is a bit scrawny, compared to Soume’s usual offerings, but it was pretty impressive for the guy’s first try.  And it wasn’t covered in fangs or claws, so I sort of prefer this one anyway."
+    "It is a bit scrawny, compared to Soume’s usual offerings, but pretty impressive for the guy’s first try."
+    "And it wasn’t covered in fangs or claws."
 
-    r  "You want me to have this."
+    r  "You're...givin' it to me?"
 
-    ro  "Yes. Consider it a gift in celebration of your first successful mission! Or perhaps a good luck charm."
+    ro  "Yeah. A present for your first successful mission. Or a good luck charm."
 
-    r  "Either way, thanks Roman. What’s this guy’s name, anyway?"
+    r  "Wow...thanks. Does it have a name?"
 
-    ro  "Uhh...Svetlana."
+    ro  "Yes...Svetlana."
 
     r  "Svetlana?"
+    
+    s "He's a boy plant~"
+    
+    r "..."
 
     ro  "...ahem. Well, put him somewhere safe and then come join us at the entrance."
 
-    #-play sound footsteps-
+    #play sound footsteps
 
     r  "Svetlana, huh?"
 
@@ -4892,15 +4836,14 @@ label Scene44:
 label Scene45:
     r  "We there yet?"
 
-    k  "Patience, child."
+    k  "Patience, whelp."
 
-    "I know I had promised to behave, but this shit was starting to get boring. We had been out for over two hours now. Been on foot for the last 30 minutes or so, but things are going even slower now that we have to follow Kazu."
+    "I know I'm supposed to listen, but I've never felt anxiety like this."
+    "We've been out for over two hours, and we're slowing down now that we have to follow the doctor."
 
     k  "All right, it seems safe. We can proceed."
-
-    "We finally began walking again. Kazu stopped us every couple of minutes or so to scan the area. I guess he’s probably sensing for danger or whatever, but we’ve been in the middle of nowhere for a while now. Only threat is being bored to death."
-
-    s  "We are getting close to the safe zone, Riku."
+    
+    s  "We are getting close to the safe zone. Prepare yourself, Riku."
 
     r  "‘Bout time. I was beginning to think the Doc here was getting us lost."
 
@@ -4910,27 +4853,29 @@ label Scene45:
 
     "Kazu turns slightly to his right, and we all follow. Soume is bringing up the rear, and he is surprisingly solemn. I’ve never seen him so serious. He catches me looking at him."
 
-    s  "Riku, it is important to stay alert. Don’t let your focus wander."
+    s  "Stay alert. Don’t let your focus wander."
 
     r  "Right."
+    "Sorry to say, Soume, but my focus is on which one of these trees is going to jump out and kill me."
 
-    "I turn back around, and I find us approaching the area Kazu was just describing. He walks over to the stump and sits on top of it. Soume walks into the clearing as well, and as soon as he does he begins slowly turning in a circle. Plants rise up wherever he points."
+    "We finally reach a clearing. This must be the safe zone."
+    "Soume lifts his hand, blowing pollen into the air. A small grove of plants sprout up."
 
-    s  "For protection."
+    s  "For extra protection."
 
     "He doesn’t stop until there is a complete circle of flowers around us. They’re giving off this pollen that’s making my nose itch."
 
     k  "Don’t you have something a bit less...pungent?"
 
-    s "-giggle- Less pungent than this and you won’t be shielded, Doctor! Are we safe to continue?"
-
-    "Kazu wipes his nose and bows his head slightly."
+    s "Less pungent is less protective."
+    
+    "There is something odd happening here. Soume looks...concerned. And the doctor..."
 
     k  "Hmm...I can’t..."
 
-    "He looks like he is struggling now. I see some sweat on his face, and he appears to be in a bit of pain."
+    "He seems to be struggling. Sweat drips down his forehead."
 
-    r  "Doc?"
+    ro  "Is it alright?"
 
     k  "Ah. No, I was mistaken. Everything looks clear ahead."
 
@@ -4938,69 +4883,75 @@ label Scene45:
 
     k  "Of course."
 
-    "Kazu shakes his head like this was a silly thing to have said. Soume turns to Roman and myself."
+    "Doctor Osamu shakes his head and sits amongst the plants. Soume turns to Roman and myself."
 
     s  "All right. We’re less than a mile away now. Riku, stay close behind Roman and myself."
 
-    k  "-yawning- Trust me, there is no danger. Let Riku lead the way if he wants."
+    #Kazutaka yawns.
+    k  "There is no danger. Let Riku lead the way if he wants. I'll be here taking a nap."
 
     s  "I don’t think that would be wise."
 
     r  "Uh, yeah. Me neither. I’ll just stick behind you, if that’s all right. I’m kinda fond of all my limbs."
 
-    ro "-chuckle- Riku, I doubt it’ll be that serious."
+    ro "I doubt it’ll be that serious, we have a clear road to the target."
 
-    s  "Follow me. And please be quiet from this point forward. I get an ominous feeling from these woods."
+    s  "Follow me. And please be quiet from this point forward. Plants are overly chatty creatures."
 
-    k  "Hmph. Stick to your plants, Soume."
+    k  "Hmph. I bet."
 
-    "We leave the safe zone and head deeper into the forest. According to Susa, there is a small hut deeper in the woods where a girl a little older than me is living. We just need to find her and get back to the safe zone. Job done. Easy, I think, for my first mission."
+    "We leave the safe zone and head deeper into the forest." 
+    "According to Susa, there is a small hut deeper in the woods where a girl a little older than me is living alone, having trouble getting herself food and water." 
+    "The thought of it...not being able to eat or go outside at all..."
+    "We just need to find her and get back to the safe zone. Job done. Easy."
+    "I hope."
 
-    "Roman and I follow Soume as he leads us past a river and around a fairly steep cliff. I feel like we should be getting close when Soume motions for us to stop, before slowly peering around the edge of the cliff."
+    "Roman and I follow Soume as he leads us past a river and around a fairly steep cliff." 
+    "Soume motions for us to stop, before closing his eyes."
 
-    "Soume turns back quickly."
+    #play sound windrustle
 
-    s  "-whispering- Demons."
+    #Soume whispers.
+    s  "Hunters."
 
-    r  "What?"
+    r  "What? Wait...WHAT?"
 
     ro  "Are you sure, Soume?"
 
-    "Roman peers around the corner as well. He looks back and doesn’t say anything, but the expression on his face pretty much tells me Soume was right."
+    "Roman peers around the corner as well. He looks back and doesn’t say anything, but the expression on his face makes it obvious."
 
-    r  "I thought the Doc said this area was safe?"
+    r  "I thought this area was safe?"
 
-    s  "These are somewhat minor demons. Maybe Doctor Kazutaka couldn’t detect them?"
+    s  "No science is perfect, but these are minor annoyances. Low rank."
 
     ro  "Are they Mamoru’s minions?"
 
-    s  "I can’t tell. It is certainly possible, though."
+    s  "Not likely. Mamoru would not be given hunters of this level."
 
     r  "What are we going to do?"
 
     s  "Riku, I want you to wait here. Let Roman and I clear out the area quickly, then we can head out together."
 
-    "I pause for a second. I know I should probably listen to Soume, but for some reason I think about Kazu. He really seemed to think there wasn’t any danger this way."
+    r  "...what about the doctor?"
 
-    r  "...what about Kazu?"
-
-    s  "Doctor Kazutaka?"
+    s  "What about him?"
 
     r  "Yeah, what if the demons show up back at the safe zone? Will he be safe? Can he fight?"
 
-    s  "Riku, the Doctor will be fine. Well, probably at least. It is sort of hard to tell in these situations. I’m sure he’s at least alert. As long as he didn’t fall asleep..."
+    s  "He'll be just fine. My plant barrier is far superior to this riffraff."
+    
+    r "But...he can't defend himself, right?"
 
-    ro  "He did look like he was ready to doze off."
+    s  "Hrm. Well, Riku, I leave it up to your judgement. Wait here as I asked or go warn Doctor Osamu. I leave the decision to you."
 
-    s  "Hrm. Well, Riku, I leave it up to your judgement. Either wait here or go warn Doctor Kazutaka. I leave the decision to you."
-
+#label dec11
     #DECISION:
     #Stay with Soume and Roman
-      #-Continue
+      #Continue
     #Head back to Doctor Kazutaka
-      #-Skip to Scene 45 after
-      #-r  I suppose I should go warn the Doc. Even if he is kind of a dick, I’d rather he not get eaten.
-      #-s  -giggle- Fair enough, Riku. Hurry though! You don’t want to get there too late.
+      #Skip to Scene 45 after
+      #r  I suppose I should go warn the Doc. Even if he is kind of a dick, I’d rather he not get eaten.
+      #s  Fair enough. Move quickly.
 
     "I take off through the forest. As I leave, I hear the start of the battle between them and the demons. Lucky bastards."
 
@@ -5967,3 +5918,7 @@ label Scene53:
     #  -Go to Kazu branch
     #Visit Roman
       #-Got to Canon branch
+
+
+
+
