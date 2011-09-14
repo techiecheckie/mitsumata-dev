@@ -46,7 +46,7 @@ label minigame:
   $button_value = ""
   
   $ui.frame(xpos=60,ypos=100, xpadding=0, ypadding=0, background=None)
-  $ui.text("Nothing here yet")
+  $ui.text("Click on game menu to test\n things out. \n(right-click exits the game)\n\nSee console for debug \nmessages")
   
   while (True):
     if button == "exit":

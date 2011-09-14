@@ -20,9 +20,9 @@ init python:
   def button_palm_pilot():
     ui.frame(xpos=842,ypos=651, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/button_palm_pilot.png", 
-                   "gfx/buttons/button_palm_pilot_hover.png", 
+                   "gfx/buttons/button_palm_pilot_hover.png",
                    clicked=renpy.curried_call_in_new_context("pda_loop"))
-
+                   
 image ui = "gfx/ui.png"
 image hp_bar = "gfx/hp-bar.png"
 image hp_background = "gfx/hp-background.png"
