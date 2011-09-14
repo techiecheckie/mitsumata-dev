@@ -470,15 +470,14 @@ define na = Character('Naomi', color="#c8ffc8", show_two_window=True )
 #--------------------------------
 
 label start:
-    # Call the init method (line 35) that initializes the pygame stuff (palm pilot and such)
-    # Calling this once when the game starts should be enough. We'll have to see
-    # how this should be done when loading a game.
-    #$init()
-    
-    #call pda_loop
-
     show blackscr with dissolve
-    show ui with dissolve
+    
+    # Note: use "call show_ui" instead of "show ui with dissolve". The label 
+    # called "show_ui" (in ui.rpy) already does that and a few other things, too
+    
+    #show ui with dissolve
+    call show_ui
+    
     play music "music/mitsumata1.mp3"
     #show cg 1 with dissolve
     "Once upon a time, there was a prince who was not in any way different from other fairy tale princes."
