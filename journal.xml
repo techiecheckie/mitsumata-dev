@@ -1,10 +1,5 @@
 <journals>
   <journal id="1">
-    <image>
-      <normal>journal_char1_normal.png</normal>
-      <hover>journal_char1_hover.png</hover>
-      <press>journal_char1_normal.png</press>
-    </image>
     <entries>
       <entry id="1">
         <title>001 char1's first entry</title>
@@ -21,11 +16,6 @@
     </entries>
   </journal>
   <journal id="2">
-    <image>
-      <normal>journal_char2_normal.png</normal>
-      <hover>journal_char2_hover.png</hover>
-      <press>journal_char2_normal.png</press>
-    </image>
     <entries>
       <entry id="1">
         <title>001 char2's first entry</title>
@@ -34,11 +24,6 @@
     </entries>
   </journal>
   <journal id="3">
-    <image>
-      <normal>journal_char1_normal.png</normal>
-      <hover>journal_char1_hover.png</hover>
-      <press>journal_char1_normal.png</press>
-    </image>
     <entries>
       <entry id="1">
         <title>001 char3's first entry</title>
