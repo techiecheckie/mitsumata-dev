@@ -96,7 +96,7 @@ init -1 python hide:
     ## are the size of the left/right and top/bottom borders,
     ## respectively.
 
-    style.window.background = Frame("gfx/backgrounds/textbox_bg.png", 1, 1)
+    style.window.background = Frame("gfx/transparent.png", 1, 1)
     style.default.color = "#000000"
 
     ## Margin is space surrounding the window, where the background
