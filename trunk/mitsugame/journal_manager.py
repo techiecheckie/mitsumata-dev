@@ -13,6 +13,8 @@ class Journal_manager():
     # Debug counter
     unlock_count = 0
     
+    print "Initializing journals..."
+    
     # Journal creation, simple xml parsing
     journals_xml = xml.parse(renpy.loader.transfn("../journal.xml"))
     journal_elements = journals_xml.findall("journal")
@@ -36,10 +38,11 @@ class Journal_manager():
           journal.unlock()
           entry.unlock()
           unlock_count += 1
+          print "  Unlocked journal", journal.get_id(), "entry", entry.get_id()
       
       self.journals.append(journal)
       
-    print "Journal initialized,", len(self.journals), "journals read into memory (%d entries unlocked)" % unlock_count
+    print "  Done,", len(self.journals), "journals read into memory (%d entries unlocked)" % unlock_count
 
   def change_state(self):
     if self.enabled:
