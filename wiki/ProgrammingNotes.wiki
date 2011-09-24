@@ -2,7 +2,7 @@
 
 <wiki:toc max_depth="3" />
 
-  ===== [Status] =====
+  ===== Status =====
   <ul>
   <li><font color="red"><b>Not done</b></font>: thing 1</li>
   <li><font color="orange"><b>Partly done</b></font>: thing 2</li>
@@ -27,7 +27,7 @@ The game runs through a basic VN layout that includes a textbox, buttons for sav
 
   The Options menu will allow you to change the volume of the music, SFX, voices and change the text between JP and EN.
 
-  ===== [Status] =====
+  ===== Status =====
   <ul>
   <li><font color="red"><b>Not done</b></font>: next button; Renpy doesn't support this, but it should be possible to make it a roll forward button instead of a dismiss (triggers the next line) button</li>
   <li><font color="red"><b>Not done</b></font>: changing text between JP and EN</li>
@@ -52,7 +52,7 @@ The game runs through a basic VN layout that includes a textbox, buttons for sav
 
   Return to game will return you back to wherever you were in the game.
 
-  ===== [Status] =====
+  ===== Status =====
   <ul>
   <li><font color="red"><b>Not done</b></font>: button press effects</li>
   <li><font color="orange"><b>Partly done</b></font>: inventory screen; the mechanics pretty much work already, so this one is waiting for the proper icons/grid layout/transition effects to make it pretty</li>
@@ -69,7 +69,7 @@ Nightly options are a small set of options that pop up during the script. There 
 
   The Rest option merely fades the screen to black and lets you know that Riku slept. Sleeping allows Riku or Roman to rest, and the restful sleep allows them to get a training boost each time they do it. The game will require you to pick, in some cases, between getting a new scene and giving your main character training, so the player needs to play close attention to that.
 
-  ===== [Status] =====
+  ===== Status =====
 
   <font color="red"><b>Unimplemented</b></font>
 
@@ -83,7 +83,7 @@ Nightly options are a small set of options that pop up during the script. There 
 
   Not all items can be found during every nightly option, which is why they are labelled and numbered. Some items only appear on certain nights. Some items appear every night, but move positions. If possible, I'd like them to move positions at random.
 
-  ===== [Status] =====
+  ===== Status =====
 
   <ul>
   <li><font color="red"><b>Not done</b></font>: event triggering</li>
@@ -101,7 +101,7 @@ Nightly options are a small set of options that pop up during the script. There 
 
   Choosing research will bring up the library image and an image of Kazutaka. It may trigger events, or you may receive a journal entry, which will go into your palm pilot inventory.
 
-  ===== [Status] =====
+  ===== Status =====
 
   <font color="red"><b>Unimplemented</b></font>
 
@@ -109,7 +109,7 @@ Nightly options are a small set of options that pop up during the script. There 
 
   Shop is self-explanatory and works much like research. You're taken to the store, where Riku will be allowed to have any one item. You don't need to worry about money...it's assumed that Riku has it. The shop may also trigger extra shop events.
 
-  ===== [Status] =====
+  ===== Status =====
   
   <font color="red"><b>Unimplemented</b></font>
 
@@ -127,7 +127,7 @@ Each magic attack takes away a certain amount of MP. Depending on your score in 
 
 Defense is also important. Each monster attack will take away a certain amount of HP, but depending on your score in minigames, each attack will take away less HP.
 
-  ===== [Status] =====
+  ===== Status =====
   
   <font color="red"><b>Unimplemented</b></font>
 
@@ -140,7 +140,7 @@ Minigames all have the same basic layout. The game portion takes place within th
 This is preliminary. A Training Grounds background should be used as the BG for all minigames. The only graphics that will differ are the specific ones for each minigame. Minigames affect your HP and MP depending on the score you reach or the level you reach. For example: if you beat level 1, then you get maybe +5 HP and +5 MP. If you beat level 2, you get more. Or, if you have a score of 10,000, you get +10 HP and +10 MP.
 
 
-  ===== [Status] =====
+  ===== Status =====
   <ul>
   <li><font color="orange"><b>Partly done</b></font>: minigame layout</li>
   </ul>
