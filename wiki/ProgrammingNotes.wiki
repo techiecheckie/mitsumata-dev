@@ -2,6 +2,13 @@
 
 <wiki:toc max_depth="3" />
 
+  ===== [Status] =====
+  <ul>
+  <li><font color="red"><b>Not done</b></font>: thing 1</li>
+  <li><font color="orange"><b>Partly done</b></font>: thing 2</li>
+  <li><font color="green"><b>Done</b></font>: thing 3</li>
+  </ul>
+
 ----
 
 == User Interface ==
@@ -20,6 +27,14 @@ The game runs through a basic VN layout that includes a textbox, buttons for sav
 
   The Options menu will allow you to change the volume of the music, SFX, voices and change the text between JP and EN.
 
+  ===== [Status] =====
+  <ul>
+  <li><font color="red"><b>Not done</b></font>: next button; Renpy doesn't support this, but it should be possible to make it a roll forward button instead of a dismiss (triggers the next line) button</li>
+  <li><font color="red"><b>Not done</b></font>: changing text between JP and EN</li>
+  <li><font color="orange"><b>Partly done</b></font>: back button; will have to modify it to work with the new next button</li>
+  <li><font color="green"><b>Done</b></font>: saving/loading/options (Renpy defaults)</li>
+  </ul>
+
 === The Palm Pilot ===
 
   This part of the UI has three major functions; storing your items gained, your journal entries gained, and allowing you to play minigames you have acquired. Clicking on the palm pilot icons will cause the palm pilot screen to come up, which will allow you to do a few things:
@@ -37,6 +52,13 @@ The game runs through a basic VN layout that includes a textbox, buttons for sav
 
   Return to game will return you back to wherever you were in the game.
 
+  ===== [Status] =====
+  <ul>
+  <li><font color="red"><b>Not done</b></font>: button press effects</li>
+  <li><font color="orange"><b>Partly done</b></font>: inventory screen; the mechanics pretty much work already, so this one is waiting for the proper icons/grid layout/transition effects to make it pretty</li>
+  <li><font color="orange"><b>Partly done</b></font>: journal screen; same as above</li>
+  </ul>
+
 ----
 
 == The Nightly Options ==
@@ -47,15 +69,31 @@ Nightly options are a small set of options that pop up during the script. There 
 
   The Rest option merely fades the screen to black and lets you know that Riku slept. Sleeping allows Riku or Roman to rest, and the restful sleep allows them to get a training boost each time they do it. The game will require you to pick, in some cases, between getting a new scene and giving your main character training, so the player needs to play close attention to that.
 
+  ===== [Status] =====
+
+  <font color="red"><b>Unimplemented</b></font>
+
 === Search ===
 
   Search brings up searchable screens. They allow people to click around to find items and read funny little ditties about various things in the game. The display will be a background, with the items that correspond to that background for the room chosen. Some backgrounds are reused, and just set up with different items, so that is important to keep in mind when setting them up. To make it easier, each room will have a single screen that is the set of “search spots” associated with it, and then hover versions as necessary.
 
   Search spots are spots that can be clicked on to get information or find items. They should be very lightly highlighted when scrolled over, and when clicked, a small box explaining what is happening there should pop up, as well as whether or not there is an item in that spot. Search spots are usually light figures, drawers, beds, anything that isn't the wall or the floor can become a search spot.
 
-  Night options are labelled in the programming so that the proper items will go into the correct room on the correct night. Upon clicking Search, a map of the entire shrine will pop up and you may click on the room you wish to search. It will bring you to that room, which may trigger an event. If not, then clicking on search spots will trigger information about what you clicked, or you may receive an item or journal entry, which will go into your palm pilot inventory.
+  Night options are labeled in the programming so that the proper items will go into the correct room on the correct night. Upon clicking Search, a map of the entire shrine will pop up and you may click on the room you wish to search. It will bring you to that room, which may trigger an event. If not, then clicking on search spots will trigger information about what you clicked, or you may receive an item or journal entry, which will go into your palm pilot inventory.
 
   Not all items can be found during every nightly option, which is why they are labelled and numbered. Some items only appear on certain nights. Some items appear every night, but move positions. If possible, I'd like them to move positions at random.
+
+  ===== [Status] =====
+
+  <ul>
+  <li><font color="red"><b>Not done</b></font>: event triggering</li>
+  <li><font color="red"><b>Not done</b></font>: hiding journal entries in stashes</li>
+  <li><font color="orange"><b>Partly one</b></font>: room selection (missing graphics and final transition effects)</li>
+  <li><font color="green"><b>Done</b></font>: item filtering based on night</li>
+  <li><font color="green"><b>Done</b></font>: item filtering based on room</li>
+  <li><font color="green"><b>Done</b></font>: item location randomization</li>
+  <li><font color="green"><b>Done</b></font>: items being removed from stashes once found and added to the inventory</li>
+  </ul>
 
 === Research ===
 
@@ -63,9 +101,17 @@ Nightly options are a small set of options that pop up during the script. There 
 
   Choosing research will bring up the library image and an image of Kazutaka. It may trigger events, or you may receive a journal entry, which will go into your palm pilot inventory.
 
+  ===== [Status] =====
+
+  <font color="red"><b>Unimplemented</b></font>
+
 === Shop ===
 
   Shop is self-explanatory and works much like research. You're taken to the store, where Riku will be allowed to have any one item. You don't need to worry about money...it's assumed that Riku has it. The shop may also trigger extra shop events.
+
+  ===== [Status] =====
+  
+  <font color="red"><b>Unimplemented</b></font>
 
 ----
 
@@ -81,6 +127,10 @@ Each magic attack takes away a certain amount of MP. Depending on your score in 
 
 Defense is also important. Each monster attack will take away a certain amount of HP, but depending on your score in minigames, each attack will take away less HP.
 
+  ===== [Status] =====
+  
+  <font color="red"><b>Unimplemented</b></font>
+
 ----
 
 == Minigames ==
@@ -88,6 +138,13 @@ Defense is also important. Each monster attack will take away a certain amount o
 Minigames all have the same basic layout. The game portion takes place within the larger right hand portion of the screen, while a slim portion on the left hand will type the instructions for the game, as well as provide the option to return to your regular game, or start the minigame. Upon selecting start, the minigame will do so and a button allowing you to quit the minigame while playing will become active.
 
 This is preliminary. A Training Grounds background should be used as the BG for all minigames. The only graphics that will differ are the specific ones for each minigame. Minigames affect your HP and MP depending on the score you reach or the level you reach. For example: if you beat level 1, then you get maybe +5 HP and +5 MP. If you beat level 2, you get more. Or, if you have a score of 10,000, you get +10 HP and +10 MP.
+
+
+  ===== [Status] =====
+  <ul>
+  <li><font color="orange"><b>Partly done</b></font>: minigame layout</li>
+  </ul>
+
 
 === Strength Game ===
 
@@ -107,7 +164,6 @@ This is preliminary. A Training Grounds background should be used as the BG for 
   * 2 part animation of guy being exhausted.
   * Meter.
 
-
 === Agility Game ===
 
   Simple Whack a mole game. The UI would provide 9 slots for moles.
@@ -124,7 +180,6 @@ This is preliminary. A Training Grounds background should be used as the BG for 
   * 1 hole for the moles to come out of (repeated 9 times).
   * 1 mole, perhaps a couple more for variety.
   * 2 part “whack” animation.
-
 
 === Stamina Game (Also known as Day Challenges) ===
 
