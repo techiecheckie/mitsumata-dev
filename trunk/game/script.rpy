@@ -22,8 +22,8 @@
 #***********************************
 
 init python:
-  print "\n\n\n\n#### init\n"
-  
+  print "\n"
+
   pm = Persistent_manager()
   inventory = Inventory(pm)
   journal_manager = Journal_manager(pm)
@@ -35,15 +35,6 @@ init python:
   # variables' states automatically. Which is nice.
   hp = 0
   mp = 0
-  
-  # HP/MP bar positions. Just testing these out, so the values may wary
-  ppp = 3 # "pixels per point"
-  
-  hp_initial_x = 27
-  hp_x = hp_initial_x + ppp * hp
-  
-  mp_initial_x = 460
-  mp_x = mp_initial_x + ppp * mp
   
 #---------------------
 #KONAMI CODE
@@ -291,7 +282,7 @@ image bg riroom = "gfx/backgrounds/riroom.jpg"
 #image bg store = ""
 #image bg backalley = ""
 #image bg cheapbar = ""
-image bg blackscr = "gfx/backgrounds/blackscr.jpg"
+image bg blackscr = "gfx/backgrounds/blackscr.png"
 image bg redscr = "gfx/backgrounds/redscr.jpg"
 
 #--------------------------------
@@ -481,6 +472,9 @@ label start:
     play music "music/mitsumata1.mp3"
     #show cg 1 with dissolve
     "Once upon a time, there was a prince who was not in any way different from other fairy tale princes."
+    
+    call nightly_search
+    
     "He was rich, handsome, popular, destined to marry a princess, spoiled---"
     
     "Bored already."

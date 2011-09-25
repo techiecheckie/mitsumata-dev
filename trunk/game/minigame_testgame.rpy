@@ -7,7 +7,7 @@ label testgame:
   # Run the minigame
   python:
     # Hide the mouse cursor
-    config.mouse = { 'default' : [('gfx/backgrounds/textbox_bg.png',0,0)] }
+    config.mouse = { 'default' : [('gfx/transparent.png',0,0)] }
     
     # Add our new displayable to the ui
     ui.add(Whack())

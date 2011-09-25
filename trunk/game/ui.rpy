@@ -1,19 +1,19 @@
 init python:
   def button_save():
     ui.frame(xpos=98,ypos=630, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/buttons/button_save.png", 
+    ui.imagebutton("gfx/buttons/ui_generic_button_hitbox.png", 
                    "gfx/buttons/button_save_hover.png", 
                    clicked=renpy.curried_call_in_new_context("_game_menu_save"))
                    
   def button_load():
     ui.frame(xpos=35,ypos=672, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/buttons/button_load.png", 
+    ui.imagebutton("gfx/buttons/ui_generic_button_hitbox.png", 
                    "gfx/buttons/button_load_hover.png", 
                    clicked=renpy.curried_call_in_new_context("_game_menu_load"))
                    
   def button_options():
     ui.frame(xpos=98,ypos=717, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/buttons/button_options.png", 
+    ui.imagebutton("gfx/buttons/ui_generic_button_hitbox.png", 
                    "gfx/buttons/button_options_hover.png", 
                    clicked=renpy.curried_call_in_new_context("_game_menu_preferences"))
     
@@ -23,6 +23,16 @@ init python:
                    "gfx/buttons/button_palm_pilot_hover.png",
                    clicked=renpy.curried_call_in_new_context("pda_loop"))
                    
+  # HP/MP bar positions. Just testing these out, so the values may wary
+  ppp = 3 # "pixels per point"
+  
+  hp_initial_x = 27
+  hp_x = hp_initial_x + ppp * hp
+  
+  mp_initial_x = 460
+  mp_x = mp_initial_x + ppp * mp                
+  
+  
 image ui = "gfx/ui.png"
 image hp_bar = "gfx/hp-bar.png"
 image hp_background = "gfx/hp-background.png"
@@ -40,10 +50,10 @@ label show_ui:
     
     with dissolve
     
-    $config.window_overlay_functions.append(button_save)
-    $config.window_overlay_functions.append(button_load)
-    $config.window_overlay_functions.append(button_options)
-    $config.window_overlay_functions.append(button_palm_pilot)
+    $config.overlay_functions.append(button_save)
+    $config.overlay_functions.append(button_load)
+    $config.overlay_functions.append(button_options)
+    $config.overlay_functions.append(button_palm_pilot)
 
     return
     
@@ -63,11 +73,11 @@ label hide_ui:
     hide hp_bar
     hide ui
     
-    with dissolve
+    $config.overlay_functions.remove(button_save)
+    $config.overlay_functions.remove(button_load)
+    $config.overlay_functions.remove(button_options)
+    $config.overlay_functions.remove(button_palm_pilot)
     
-    $config.window_overlay_functions.remove(button_save)
-    $config.window_overlay_functions.remove(button_load)
-    $config.window_overlay_functions.remove(button_options)
-    $config.window_overlay_functions.remove(button_palm_pilot)
+    with dissolve
     
     return
