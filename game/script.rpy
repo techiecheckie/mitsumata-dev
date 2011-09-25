@@ -2,10 +2,10 @@
 #NOTES TO PROGRAMMERS FROM SEIRA
 #****************************************************
 
-#9/3/11
-#Currently at line 4063, going back and editing funny sounding lines prior to that.
-#Must continue editing at 4423.
+#Currently at line 4594 out of 5946, going back and editing funny sounding lines prior to that.
 #Added Kazutaka's route for basic scripting.
+#Line 4484 contains a puzzle minigame. 
+#Don't forget Roman's "lock" minigame.
 
 #**********************
 # SCRIPTING TIPS
@@ -3763,13 +3763,13 @@ label Scene37:
     
     r "Are you okay?"
     
-    su "Hm? Fine."
+    su "Yeah. Fine."
     
-    "She isn’t even looking at me. It’s like I’m not even here. I mean, I’m happy to have not been used as her punching bag for once, but at least then I know what the hell she’s thinking."
+    "She isn’t even looking at me."
     
     Man "Excuse me, Miss Susa? There is a phone call for you."
     
-    "She was up and already past him before he finished the word “call.” For an old woman, she sure moves fast."
+    "She was up and already past him before he finished the word 'call.'"
     
     r "Um. Later...then?"
     
@@ -3793,7 +3793,6 @@ label dec8:
     
     su "YOU RUDE LITTLE TAINT I AM ON THE MOTHERFUCKING PHONE. DO NOT EMBARRASS ME."
     
-    "Meep. I’ll just run on back and lock my doors."
 
 label Scene37a:
     su "What the hell is going on?"
@@ -3849,7 +3848,7 @@ label Scene37a:
     
     k "Or, was something else happening out here, Riku?"
     
-    r "No, I…uh, I mean, Kazu-"
+    r "No, I…uh, I mean, Mist-"
     
     k "Doctor."
     
@@ -3882,14 +3881,14 @@ label Scene37a:
 label Scene38:
     #This is Naomi
     #Naomi chuckles.    
-    u  "Look at all these delectable little morsels. It’s like a holiday. But, are you sure he’s reliable? I don’t fancy getting myself all worked up for a meal that isn’t going to happen."
+    u  "Look at all these delectable little morsels. Still, are you sure he’s reliable? I don’t fancy getting myself all worked up for a meal that isn’t going to happen."
     
-    m  "You can trust him, Naomi"
+    m  "You can trust him, Naomi."
     
     #Naomi makes a resigned sigh.
-    na  "I want to go already. Prime meat like this isn't exactly running around freely."
+    na  "I want to eat already. Prime meat like this isn't exactly running around freely."
     
-    m  "Patience, Naomi. Your zealousness will find you in trouble some day."
+    m  "Patience. Your zealousness will find you in trouble some day."
     
     na  "Think about that before you put filet mignon in front of me after I haven't eaten in a while."
     
@@ -3901,17 +3900,10 @@ label Scene38:
     m  "Once, in a barnyard, there were two cats. Each day their master would bring them out a saucer of milk. Alas, the master was poor, so that was all they'd receive. 
     /nThe foolish cat, he would gulp down his milk, and spend the rest of his day hungry."
     
-    na "Don’t drink milk. Understood."
-    
-    m "I do dislike interruptions during a lesson."
-    
-    na "...okay...sorry."
-    
     m "The wise cat, he would only drink some of his milk. Each day, he would leave his saucer half full, bring it to the back of the barn, and then return after a nap."
-    
-    m "The foolish cat soon became curious, and followed his brother to the back of the barn. What do you think he saw?"
-    
-    m  "Mice. There were several mice drinking greedily from the bowl, as the wise cat just watched. 'Brother!' he yelled out, 'Why would you share your food with lesser creatures?'"
+        
+    m  "The foolish cat follow his brother to the barn and he saw many mice sharing in the milk." 
+    m "'Brother!' he yelled out, 'Why would you share your food with lesser creatures?'"
     
     m "'Food?' the wise cat laughed. 'My dear brother, what separates us is imagination. What you see only as food, I see as bait.'"
     
@@ -3921,9 +3913,11 @@ label Scene38:
     
     na "So, we’re not going to eat those there?"
     
-    m "We will, I'm loathe to let food to waste. But just remember: Do not become so focused on the crumbs that you lose sight of the feast."
+    m "We will, I'm loathe to let food to waste. Merely...do not become so focused on the crumbs that you lose sight of the feast."
+
+    na "Hm. I got it."
     
-    m "Go. Alert the other hunters. Prepare them to head out within the week."
+    m "It's been confirmed. Go. Alert the other hunters. Prepare them to head out within the week."
     
     na "Understood."
 
@@ -3933,16 +3927,16 @@ label Scene39:
     
     m "I have a present for you, Norah. For being such a good sister."
     
-    n "Presents?"
+    n "A gift? I love gifts."
     
     m "I do have a knack for knowing what you like."
     
-    n "What are we doing down in the dungeon, though? There’s nothing down here but-"
+    n "What are we doing down in the dungeon, though? Unless it's--"
     
     #show m smile with fade
     m "You have always been too clever for me. I cannot hide anything from you!"
     
-    n "Eeee! You brought dinner!"
+    n "You brought dinner!"
     
     m "It's the least I can do. You took such good care of me while I was will."
     
@@ -3958,13 +3952,7 @@ label Scene39:
     
     n "She looks tasty to me, and so precious!"
     
-    m "Pfffft. Looks, as they say, can be deceiving. That one I believe has a fondness for caffeinated beverages. Sodas, and what have you."
-    
-    n "But I looooooooooove sodas!"
-    
-    m "Well, sure, Norah. And honestly, there is no reason you shouldn’t. But when they drink them too much it gets into their fatty tissue, and the taste just isn’t appealing. Plus, it gives me the hiccups."
-    
-    n "You hiccup so violently. I’m always worried you’ll blow out the little vein in your forehead."
+    m "No no. I would never feed my little sister anything but the best. That one had quite the poor diet and I'd hate to have her bad habits passed to you."
     
     #Mamoru laughs.
     m "Sometimes I wonder how I put up with you, Norah."
@@ -3978,11 +3966,11 @@ label Scene39:
     #Boy groans in pain.
     Boy "Help…please…girl…get help…"
     
-    n "Mmm, you went out of your way, brother."
+    n "Mmm, you went out of your way to please me, brother."
     
     Boy "What do you want? Please, my parents are rich…"
     
-    n "‘What do I want?’ First, I think I’d like your eyes...they seem so chewy!"
+    n "‘What do I want?’ How about your eyes, just to start?"
     
     m "Norah, come now...you are too old to still be playing with your food."
     
@@ -4015,7 +4003,7 @@ label Scene39:
     
     Boy "…grgh…"
     
-    m "Swine. Worse than swine, really. At least swine can die with some dignity."
+    m "Swine. Worse, really. At least swine can die with some dignity."
     
     #play sound Eating sounds.
     
@@ -4031,6 +4019,8 @@ label Scene40:
 #Soume whispers. His voice sounds a bit harsh.
 
     s "Tch. They're more intelligent than I thought."
+    
+    "..."
     
     ro "…?"
     
@@ -4163,58 +4153,36 @@ label Scene40a:
 
     s  "And you would need to get clearance from Doctor Osamu first, as well."
 
-    r  "...Kazu?"
+    r  "...him?"
 
-    "Great. Susa and Kazu. The tag-team from hell. Yeah, I’m sure they’ll be really excited to let me go out and do something that doesn’t involve me cleaning the damn toilets."
+    "Great. Miss Susa and Doctor Osamu. The tag-team from hell. Yeah, I’m sure they’ll be really excited to let me go out and do something that doesn’t involve me cleaning the damn toilets."
 
     #Soume giggles.
     s  "I think you might be ready though! You certainly are the most capable of all the trainees."
 
-    r  "Yeah, but these kids are kind of pathetic, y’know?"
-
-    "Boy:  I can still hear you."
-
-    r  "Harold, can’t you go bleed somewhere else?"
-
-    "Boy:  Hmph."
-
-    s  "Riku, please, show a bit more respect for the others!"
-
-    "Soume is always going on about how I need to treat the others with “more respect” and “less condescension” and how I should “stop hanging the younger kids from their underwear.” Whatever."
-
-    "That last part is a joke, by the way. I haven’t done that for at least six months now. And that twit had it coming."
-
-    r  "Sorry, sorry. I was only joking, Harold!"
-
-    s  "You must remember, your fellow Majin are going to be here training with you, eating with you, and going out on missions with you for years to come. Decades. They are perhaps not the group you should be making enemies with!"
-
-    r  "Right, of course."
-
-    "Soume did have a point. I could act like a tosser every so often. Dunno why. I guess I could try being nicer to these kids. ...Except Harold, of course. That kid annoys the shit outta me."
-
+    r "Think?"
+    
+    s "Well...there are always...doubts..."
+    
     "I can see Susa walking over toward us. She looks like she has something important to talk about. This is probably the best time to talk to her."
 
     su  "Soume, I was wondering if-"
 
-    r  "Soume says you should start letting me go out on missions with them. Like, right away."
+    r  "Soume says you should start letting me go out on missions with them!"
 
     su  "..."
 
-    r  "Right, Soume? Didn’t you say Susa should let me come?"
+    r  "Right, Soume? Didn’t you say Miss Susa should let me come?"
 
     su  "Y’know, I’m not sure if I should knock some respect into you, or pity you because you’ve apparently suffered some sort of fuckin’ head trauma."
 
     r  "...scuze me?"
 
-    su  "You notice how everyone else around here calls me “Miss Susa,” you rude little bairn?"
+    su  "You heard me talking to Soume, and you just fucking barge in like some delirious bull?"
 
-    r " Well, yes but..."
+    r "Oh, I didn't, I mean er..."
 
-    su  "And you heard me talking to Soume right now? And then you just fucking barge in like some delirious bull?"
-
-    r "Well, true, but-"
-
-    su  "So I’m just ‘sposed to let you go the fuck out with Soume? This isn’t a goddamn game, kid, and you’re nowhere near ready."
+    su  "So I’m just s'posed to let you go the fuck out with Soume? This isn’t a goddamn game, kid, and you’re nowhere near ready."
 
     r  "I am though! Just ask Soume!"
 
@@ -4226,9 +4194,10 @@ label Scene40a:
 
     r  "I am! Look, maybe I’m not as powerful as Soume or as smart as Roman, but I want to help!"
 
-    "Susa slowly lets her gaze drift over toward Soume. He gives her a little nod, which I think is his way of vouching for me. I’d prefer if he put the same passion into it as he does for his damn plants, but at this point I’ll take what I can get."
+    "Susa slowly lets her gaze drift over toward Soume. He gives her a little nod, which I think is his way of vouching for me."
+    "I’d prefer if he put the same passion into it as he does for his damn plants, but at this point I’ll take what I can get."
 
-    r  "Please, Susa. Miss Susa, Madam Susa, whatever you want me to call you. There are a lot of Majin out there that I know need help, and all I’m asking is you give me a chance."
+    r  "Please. Miss Susa, whatever you want me to call you. There are a lot of Majin out there that I know need help, and all I’m asking is for a chance."
 
     su  "..."
 
@@ -4236,7 +4205,7 @@ label Scene40a:
 
     su  "One slip up, and I’ll be using your face to clean the bathrooms for a month."
 
-    "Is that an okay? That sure as hell sounded like an okay to me."
+    "Is that an okay?"
 
     r  "Deal; that’s totally fine. I’ll do whatever, I’m just so-"
 
@@ -4244,19 +4213,21 @@ label Scene40a:
 
     r  "Test?"
 
-    su  "Yeah, the 700 Day Challenge. Most likely too difficult for a baby like yourself, but don’t say I didn’t warn you when you spend the next week in the fucking clinic."
+    su  "Of course. We don't just let any baby out on rescue missions. You'll probaby fail, but in the .1% chance that you don't, you'll have my clearance. It's a 700 day challenge."
 
     r  "700 Day Challenge, eh? I’ll complete it in two!"
 
-    su  "It isn’t how long it takes to complete, you fuckin’ twat. How do you put up with this guy, Soume?"
+    su  "Soume, how do you put up with this idiot?"
 
-    s  "-giggles- Oh, he isn’t so bad, Miss Susa~!"
+    #Soume giggles.
+    s  "Oh, he isn’t so bad, Miss Susa!"
 
-    su  "Anyway, we usually give out this test after the trainees have been here for 700 days. You pass it now, I’ll let you go out on a mission. You fail, and I don’t have to hear shit about this again until you’ve actually been here for 700 fucking days. Got it?"
+    su  "Anyway, we usually give out this test after the trainees have been here for at least that long." 
+    "You pass it now, I’ll let you go out on a mission. You fail, and I don’t have to hear shit about this again until you turn 20."
 
     r  "Hrm...well, how about-"
 
-    su  "No, I’m not fucking here to negotiate this. It’s either a “yes” or “no.”"
+    su  "This isn't a negotiation. Take it or leave it, punk."
 
     r  "Ah. Fine. Fine, I’m ready."
 
@@ -4264,9 +4235,13 @@ label Scene40a:
 
     "Hmm...it might be a good idea to go train a little bit. Dunno what the hell she has in store for me, but a little extra preparation couldn’t hurt."
 
+    
+#label minigame daychal
     #OPTION:
-    #-I need a bit more training (go to the training grounds)
-    #-I’m ready now (continue)
+    #-I need a bit more training
+    #This option takes you to the palm pilot screen where you can do training.
+    #-I’m ready now
+    #You immediately start the next challenge.
 
     #r  "All right, I think I’m ready."
 
@@ -4276,71 +4251,27 @@ label Scene40a:
 
     #su  "Cocky. As always. That’s fine with me; it’ll just be more enjoyable when you fail."
 
-    #-Put in minigame here; perhaps “Level 2” versions of all the previous minigames (i.e. channeling, projection, etc)-
+    #Put the Day challenge minigame here.
 
-    #Fail:  Bad End 5
+    #Fail
+    #su "Prepare to clean like you have never cleaned before...
+    
+    #OPTION:
+    #Wait, one more chance...
+    
+    #su "Fine, you're lucky I'm in a good mood. Ready...GO!"
+    
+    #Awwww man...
+    
+    #r "Just great..."
 
     #Succeed –
 
     #r  "YES! Wooo! A bit trickier than I guessed, but at least I passed, right?"
 
-    #su  "Heh heh. The first part."
+    #su "Feh. I guess you did. Barely."
 
-    #r  "Sorry, didn’t quite hear that."
-
-    #su  "Yeah, you passed, sprog. The first part. The easy part."
-
-    #r  "Uh, so there’s another part?"
-
-    #su  "Oh Roman~?"
-
-    #ro  "Yes, Miss Susa?"
-
-    #su  "Please, do me a favor and knock this kid unconscious."
-
-    #r  "You want me to fight Roman?!"
-
-    #su  "Look, the people you’d be fighting out there are at least as powerful as Roman. If you can’t defeat him, I’d just be sending you to your fucking death."
-
-    #r  "..."
-
-    #su  "And if I’m going to have your blood on my hands, I’d prefer it if it was literal blood."
-
-    #ro "-chuckle-"
-
-    #s  "-giggles-"
-
-    #"Why am I the only one who doesn’t find this shit funny? I don’t want to fight Roman—he’s been here like two years longer than me."
-
-    #ro  "Ready, Riku? I assure you I will not be going easy on you."
-
-    #r  "Great. If you ever did want to go easy on me, though, this would be a pretty good time to do it."
-
-    #su  "If he goes easy on you, I’ll notice. And you’ll both be on toilet duty for the next month."
-
-    #ro  "Sorry, Riku. While I am rather fond of you, I am far more fond of not scrubbing toilets."
-
-    #"Can’t say I blame him. I feel the same way, honestly."
-
-    #r  "All right Roman, I guess I’m ready."
-
-    #ro "-ice sword animation- En garde!"
-
-    #Fail:  Bad End 5
-
-    #Succeed –
-
-    #ro  "Nngh. Ah. Congratulations, Riku. I yield."
-
-    #r  "Huff...that was the most challenging sparing match I think I’ve ever had."
-
-    #ro  "I appreciate the accolades. Still, I am rather embarrassed at being defeated by someone 80 years my junior."
-
-    #s  "You were marvelous, Roman! No need to be embarrassed; you were at a significant disadvantage considering your power type!"
-
-    #ro " Ah. Yes, well...thank you Soume. That means a lot coming from you."
-
-    #r  "So, I guess that means I’m ready for missions now, huh Susa?"
+    #r  "I guess that means I’m ready for missions now, huh Susa?"
 
     #su  "..."
 
@@ -4351,55 +4282,28 @@ label Scene40a:
     #su  "..."
 
     #r  "Ahem. Soooooooo...my mission. When should we-"
+    
+    #su "Hn. I'll think about it."
 
-    #su  "GODDAMN IT YOU STUPID UNPREDICTABLE PUP!"
-
-    #r  "Eh. Heh heh. Funny joke, Susa."
-
-    #su  "You were supposed to fucking LOSE. You aren’t fucking ready yet—fuck what I said."
-
-    #"Susa abruptly turns around and walks off quickly. I stare over at Soume, who is wearing a fucking ridiculous smile on his face and jumping up and down like he just saw a goddamn spider."
-
-    #s  "Congratuations, Riku~!"
-
-    #r  "Uh...yeah. Not sure it matters though. Did ya hear Susa?"
-
-    #s  "Oh, Miss Susa will come around!"
-
-    #su  "OH NO I FUCKING WON’T. THAT BRAT ISN’T LEAVING!"
-
-    #s  "Don’t worry, I’ll talk to her! Everything will be taken care of shortly~!"
-
-    #ro  "Trust us. She’s just nervous. She gets like that sometimes. She doesn’t want anything bad to happen to you."
-
-    #r  "She has a weird way of showing it."
-
-    #ro  "Well, she does have her quirks. I think it is rather sweet, how much she worries about all of us."
-
-    #s  "You should be more excited, Riku! You just passed your final training! "
-
-    #r  "Yeah, I guess."
-
-    #"Kind of hard to get too excited when I still don’t fucking know if Susa is going to let me go out or not. Soume and Roman seem proud though, so that’s at least something."
+    #r "H-hey! That's not fair! Awwwww..."
 
 #[Scene 41]
 label Scene41:
 
-    k  "Honestly, I don’t know how I can make this any more clear to you you need to hold still, or I will not be able to collect the blood sample I need."
+    k  "Honestly, I don’t know how I can make this any more clear that need to hold still, or I will not be able to collect the blood sample I need."
 
-    "I try to stop my face from twisting into a scowl, but I can’t fucking help it. This asshole has been stabbing the same needle into my arm for about five goddamn minutes now and can’t seem to hit the fucking vein."
+    "{size=17}I try to stop my face from twisting into a scowl, but I can’t fucking help it. 
+    This asshole has been stabbing the same needle into my arm for about five goddamn minutes now and can’t seem to hit the fucking vein.{/size}"
 
-    r  "I don’t know how this is my fault, Kazu. Just hurry up so I can get out of here."
+    r  "I don’t know how this is my fault, Mr. Osamu. Just hurry up so I can get out of here."
 
-    "Kazu mumbles something at me but I can’t make it out. Sounds like a growl or something, but he’s gritting his teeth too hard for me to make it out."
-
-    k  "Doctor. DOCTOR. Refer to me as doctor, you disrespectful pup! ...There!"
+    k  "Doctor. DOCTOR. Refer to me as doctor, you disrespectful peon! ...There!"
 
     "He finally hits the vein. He seems pleased with himself, nodding his head and smiling. I try not to actually watch my blood being drawn. That shit always makes me woozy."
 
-    r  "Fine, doctor. Jeez."
+    r  "Right, right, doc---whooa..."
 
-    "I fucking hate calling him that. Feels like he wants me to know I’m inferior to him. But for now I need him to clear me to go out into the field, so I decide to play nice."
+    "How the heck did this guy even become a doctor? Maybe a witch doctor!"
 
     r  "What is with this whole “doctor” thing, anyway?"
 
@@ -4407,43 +4311,59 @@ label Scene41:
 
     "He doesn’t look up from what he’s doing.  He’s putting my blood into some sort of machine and messing around with a bunch of dials and shit."
 
-    r "I said what’s with the whole doctor thing? Why do you get all pissy if I call you Kazu? It’s your name, isn’t it?"
+    r "It was just a mistake...you don't have to get so mad about something like that."
 
-    "He lets out this drawn out sigh and actually stops messing with the machine for a second. He rubs his eyes, and the way he talks to me I get the fucking impression that this is the way he’d explain something to a brain-damaged brick."
+    "{size=17}He lets out this drawn out sigh and actually stops messing with the machine for a second. He rubs his eyes, and the way he talks to me I get the fucking 
+    impression that this is the way he’d explain something to a brain-damaged brick.{/size}"
 
     k  "Because I’ve earned it, you understand?"
 
-    r  "No, not really. ‘s why I asked."
+    r  "Earned it?"
 
-    k  "Most Majin have an IQ of 87.The average IQ for others like us is 87. Eighty-seven, Riku. Did you know that?"
+    k  "The average IQ for Majin is 87 on the human scale. Eighty-seven, Riku. Did you know that?"
 
-    r  "No. That bad?"
+    r  "No. Issat bad?"
 
-    "Again he sighs. He’s back to messing with the machine again, but I get the feeling he just doesn’t want to look at me."
+    #Kazu sighs.
+    "He’s back to messing with the machine again, but I get the feeling he just doesn’t want to look at me."
 
-    k  "Of course you didn’t know that. I put that in some of the material I gave to you, but you didn’t read it, did you? Nobody ever does. No one wants to better themselves."
+    k  "Of course you didn’t know that. It's in the information I gave you the first day, but you didn’t read it, did you? Nobody ever does. No one wants to better themselves." 
+    k "No one wants to learn WHY our side keeps losing, why we have to hide out and be forced to do things...terrible things..."
 
-    "I feel like I’m being scolded or something. I fucking hate it; I just want to leave but I can’t until this asshole lets me."
+    "I don't say anything. I have a feeling I'll know what going on soon enough."
 
     k  "Most Majin are just fine to go through life, completely ignorant of the world around them. They fight, they eat, and they fornicate. And that’s it. That is all they do."
 
     "He laughs. Sneers back at me."
 
-    k  "That’s why they see us as food, you know. Why they think we’re animals. Because we act like it. If we go out there and pretend we’re pigs, well, then how can we blame the humans for mistaking us for them."
+    k  "That’s why they see us as food, you know. As slaves. As whores. Why they think we’re animals. We act like animals." 
+    k "If we quack and walk and swim like ducks, why should they treat us any differently from a duck?"
 
-    "I really want to fucking hit this guy. I don’t do it, but damn would it feel good to."
+    "If I punched him through the skull, would anyone blame me?"
 
-    k  "Not me, though. I’ve actually gone through my studies, worked at something, and now I’m the first officially recognized Majin doctor. Only one too, I think."
+    k  "I'm not like you, though."
+    k "I’ve gone through my studies, worked at trying to survive in this world, and I became the first recognized Majin doctor. The ONLY accepted Majin doctor." 
+    k "None of you little pigs, while you were rabidly sexing on human streets, thought that there may be merit to learning your own biology."
 
-    r  "Congrats. Doctor."
+    r  "Congrats, Doctor."
+    
+    k  "Right. Doctor. You see? You see what we can do?" 
+    k "We’re not just food, or lab rats to be tested on and discarded." 
+    k "Doctors, scientists, philosophers; there are so many thing we could do if we just tried. We aren’t food or slaves or breeding toys."
+    
+    r "That sounds great and all, but maybe we are just supposed to be what we're supposed to be." 
+    r "Why do we have to do what humans do to live, when we aren't made for it?"
+    r "Seems to me like you should stop hating yourself and aiming for what humans think is good and like what you are." 
+    
+    k "..."
 
-    "I roll my eyes. Big deal. He might be a doctor, but that doesn’t make him better than me. Than Soume or Roman."
+    "Is he speechless?"
+    
+    k "Kch! You don't understand anything, you churlish little paramecium!"
+    
+    "Yeah, right."
 
-    k  "Right. Doctor. You see? You see what we can do? We’re not just food, or lab rats to be tested on and discarded. Doctors, scientists, philosophers; there are so many thing we could do if we just tried. We aren’t food. We’re not."
-
-    "Dunno who he’s arguing with. I’m not disagreeing with him."
-
-    r  "Right. Well, right now I’d like to go out and help Susa rescue some other Majin, but I can’t until you give her the okay. So,we about done here, or what?"
+    r  "Whatever! I’d like to go out and help Susa rescue some other Majin, but I can’t until you give her the okay. Can I go or what?"
 
     k  "Let me see, I’ll just need to-"
 
@@ -4453,51 +4373,51 @@ label Scene41:
 
     r  "Didn’t you build it?"
 
-    k  "Yes, but I didn’t build it to break! A flaw of the machinery, I assure you. My design is perfect."
+    k  "Of course I built it, but it can't possibly break with my calculations. A flaw of the machinery, I assure you. My design is perfect."
 
     r  "Riiiiiight, doctor. So can I go, or what?"
 
-    k  "Well, you can. But I’m not letting you go out on any missions until I get the results back. Which isn’t going to happen until I get this machine fixed."
+    k  "You may, but I can't parse the results until this machine is fixed, I'm afraid."
 
     r  "Oh c’mon, man! Look at me, I’m fine!"
 
-    k  "Sorry. Wish there was some way around this. I really do."
+    k  "I'm sorry, but this is simply how things must be done. You could have a bruised valve somewhere and I need my machine to catch it."
+    k "Unless you prefer to die..."
 
-    "He smiles at me and laughs a little bit. I think he honestly enjoys watching me suffer. Must be why he and Susa get along so well."
+    "He smiles at me. Bastard enjoys watching me suffer. I bet that's why he and Susa get along so well."
 
     r  "Well, how long is this going to take?"
 
-    k  "Depends. Maybe an hour, maybe a week. I need to locate all the replacement parts first.  Hmm...now where did I put them?"
+    k  "Oh...I don't know...perhaps an hour, maybe a week. I need to assemble the replacement parts..."
 
-    "He looks around his lab for a bit, before looking at me. He stares for a second, then his face suddenly changes and he starts scrawling something on a piece of paper furiously."
+    "He looks around his lab for a bit, gathering what looks like several bits of scrap metal."
 
-    k  "Here, take this!"
+    k  "Here, take these!"
 
-    "He hands me a list with a bunch of items on it."
+    r  "What the heck am I supposed to do with this?"
 
-    r  "What the heck is this?"
+    k  "I always keep the spare parts around just in case of emergencies like this, but they get rather large if they're completely assembled, so I break them up."
 
-    k  "Those are the items I need. They are somewhere around the lab, I am absolutely certain of it.  I always keep the spare parts around just in case of emergencies like this  Better to be overcautious than to be caught off guard, don’t you agree?"
-
-    r  "Sure. But what do you want me to do with this?"
-
-    k " Well, go find them, obviously! Sometimes I worry that you were born without deductive reasoning skills."
+    r  "...lemme guess, you expect me to put them back together."
+    
+    k "Indeed. We'll see if your mind is ready for a mission, and then we'll return to your physical condition."
 
     "He goes back to fiddling with his instruments and messing around with the big screen in front of him."
 
     r  "No, I’m not doing this. I’ve got other stuff to be doin’. I don’t have time for your chores, Doc."
 
-    k  "Fine. I’m not in any rush to have you sent out on your first mission. Glad to see you aren’t, either.  Dangerous stuff out there, you know? Better to be here, where Susa can have you clean and help me around the lab."
+    k  "It's just as well. I’m not in any rush to have you sent out on your first mission." 
+    k "In fact, I'm relieved that you aren't either. Dangerous things lurk out there, you know? Better to be here, where Miss Susa can have you clean and help me around the lab."
 
-    "Well shit. This asshole isn’t going to clear me until I find all this garbage."
+    #Riku frowns.
+    r  "FINE."
 
-    r  "Ugh. Fine. I’ll find your stupid replacement parts."
+    k  "Oh, what an excellent attitude! I knew I could count on you." 
+    k "The quicker you fix everything, the faster I can clear you and the sooner you can go out and get yourself killed."
 
-    k  "Oh, what an excellent attitude! I knew I could count on you. Now, the quicker you find everything, the faster I can clear you and the sooner you can go out and get yourself killed. Win-win situation, I think. So hurry! I don’t have all day to waste waiting around for you."
+    #Put a few levels of a puzzle game here. Riku needs to assemble the parts correctly!
 
-    #-Put Hidden object game here?  Have Riku find all the objects Kazu needs to repair his machinery.  Possibly have Riku put it together as well as part of a little puzzle-
-
-#[Scene 42]
+#Success in the puzzle game.
 label Scene42:
     r  "There. The stupid thing is working again. Thanks to me."
 
@@ -4505,33 +4425,36 @@ label Scene42:
 
     k  "Ah! Yes! Excellent, this is truly excellent."
 
-    "A “thank you” would have been nice. Or a “good job kid.” Hell, I would have even taken a fucking grunt in my direction from this guy. I get nothing though, and he just stares at a bunch of numbers that are scrolling across the screen. Don’t mean anything to me, but apparently he understands this shit, as he’s taking all sorts of notes."
+    "A 'thank you' would have been nice. Or a 'good job'. Hell, I would have even taken a fucking grunt in my direction from this guy."
+    "Too busy fiddling on his machines, but if I get to go on missions, it's worth it."
+    "Sorta."
 
-    r  "So...uh, what’s it say? Am I good to go, or what?"
+    r  "So...what’s it say? Am I good to go, or what?"
 
     k  "Hrm? Oh yes, I almost forgot about you."
 
-    r  "Yeah, me. The guy who just fixed your stupid machine. That guy. So, does it clear me, or what?"
+    r  "Yeah, me. The guy who just fixed your dumb machine. That guy. So, does it clear me, or what?"
 
     k  "Oh, this wasn’t going to clear you."
 
     r  "Excuse me?"
 
-    k  "No, no, no. You have misinterpreted the situation. This was for something else entirely. Call it professional curiosity. I had heard about your power, you see."
+    k  "No, no, no. You have misinterpreted the situation. This was for something else entirely. Call it professional curiosity. I had heard about your power..."
 
-    r  "What do you mean this isn’t going to clear me? Why the hell did I just fix the stupid thing then?"
+    r  "W-what do you mean this isn’t going to clear me? Why the hell did I hafta fix it for?"
 
-    "Kazu continues like he didn’t even hear my question. He’s talking faster and faster now, and I can barely understand the jumble of words coming out of his mouth."
+    "Doctor Osamu continues like he didn’t even hear my question. I can barely understand the jumble of words coming out of his mouth."
 
-    k  "You are quite unique, you know. Dark flames and all that, strong enough to ward of Mamoru.  Remarkable, really. Did you know...I’ve never heard of powers being manifested in that way. Before you, I had never encountered anyone that has that kind of power."
+    k  "You are quite unique, even amongst Majin. Dark flames and all that, strong enough to ward off one of the most...troublesome...of our enemies."
+    k "Remarkable, really. I've never seen that sort of manifestation in any Majin. I haven't even heard of it."
 
-    "He’s laughing to himself, pushing the glasses back up his nose. I can tell he’s excited and all, but I resent being treated like a fucking guinea pig. He should at least tell me what he’s fucking doing."
+    r "I'm not your guinea pig! What the hell're you talkin' about?"
 
-    k  "Imagine that? I have never heard of it before. Me! Ooooh, to feel ignorant about something, I mean truly ignorant; it is such a marvelous feeling!"
+    k  "Imagine that? I have never heard of it before. Me! Ooooh, to feel ignorant about something, I mean truly ignorant; it "
 
     r  "Yeah, that’s great Doc, but what I’m interested in-"
 
-    k  "I had almost forgotten what this feels like. The thrill of the unknown, the tension one feels during the chase of the answer, the satisfying climax of discovering something new, I-"
+    k  "I had almost forgotten what this feels like. The thrill of the unknown, the tension one feels during the chase of the answer, the satisfying climax of discovering something new, I--"
 
     r  "Hey, Doc! Yo, I’m still here. You need to clear me."
 
@@ -4539,33 +4462,34 @@ label Scene42:
 
     "He looks me up and down quickly."
 
-    k  "You’re in fine shape. Tell Susa I say you’re cleared to go."
+    k  "You’re in fine shape. Tell Miss Susa I say you’re cleared to go."
 
     "He turns right back around to his monitor and begins writing something else down."
 
     r  "Wait, are you freakin’ kidding me? That’s it?"
 
-    k  "I can make it more invasive, if you’d prefer. I haven’t performed a rectal cavity search in years, but if that’s what you want-"
+    k  "I can make it more invasive, if you’d prefer. I haven’t performed a rectal cavity search in years, but I'm sure for you..."
 
-    r  "No, no! That’s fine! I’m good. Was just expecting something, uh, more I guess. Not complaining, though."
+    r  "No, no! That’s fine! I’m good. Was just expecting something, uh, more I guess. Not complaining!"
 
     k  "Well, get out of my lab then. Your ignorance is fogging up my machinery."
 
     r  "Yeah, great to see you too, Doc. I have to go talk to Soume anyway so-"
 
-    "Kazu has finally turned around from his data, and for the first time since I’ve been down here he seems like he’s actually paying attention to me."
+    "Doctor Osamu has finally turned around from his data, and for the first time since I’ve been down here he seems like he’s actually paying attention to me."
 
     k  "You haven’t noticed anything peculiar about Soume recently, have you?"
 
-    "He’s staring at me from behind his glasses now. He’s doesn’t break eye contact once, and he sits unmoving, waiting for my response. If I had to describe it, I’d say it’s really fucking unnerving."
+    "He’s staring at me from behind his glasses now. He’s doesn’t break eye contact once, and he sits unmoving, waiting for my response."
+    "It’s really unnerving."
 
     r "Uh, well...he talks to plants. That’s pretty weird."
 
-    "Kazu waves his hand at me."
+    "He waves his hand at me."
 
-    k  "No, he always does that. I mean unusual for him. Anything at all, Riku? Think."
+    k  "No, he always does that. I mean unusual for him.Think, difficult as that may be."
 
-    "I make the face I always used to make in class, when I wanted to fake like an answer was on the tip of my tongue. I had no clue what Kazu was talking about here."
+    "I make the face I always used to make in class, when I wanted to pretend I was paying attention."
 
     r  "Um. No, not really. Seems normal to me."
 
@@ -4577,29 +4501,25 @@ label Scene42:
 
     k  "No."
 
-    "His voice is shaking now."
+    k  "I’m sure he’s up to something. He doesn't let me examine him."
 
-    k  "No, I’m sure he’s up to something. He doesn’t make eye contact with me and he won’t let me test on him."
+    "If that's the only requirement for being 'up to something', then lock me up now. Who would WANT to get examined by him?"
 
-    "If those are the two requirements for being crazy, then lock my ass up. I’m staying as far away from Kazu and his crazy experiments as I can from now on."
+    k  "Something needs to be done about him. I told Miss Susa---Talk to him if you can. See if you can’t figure something out."
 
-    k  "Something needs to be done about him, Riku. I don’t trust him. He’s strange. Talk to him for me, won’t you? See if you can’t figure something out."
+    r  "S-sure thing. Look, I got to get going. Thanks for all your, uh, help."
 
-    r  "Yeah. Sure thing. Look, I got to get going. Thanks for all your, uh, help."
-
-    k  "Riku, listen to me. I can feel something. Soume is trouble; he’s dangerous. He is a threat to everything I’ve worked for and-"
+    k  "Riku, listen to me. I am a sensory Majin, and I'm sure--Soume is trouble; he’s dangerous. He is a threat to everything I’ve worked for and--"
  
-    "He pauses. He looks at me and I think he notices I’m uncomfortable, because his demeanor suddenly changes."
+    "He pauses. I think he notices I’m uncomfortable, because his demeanor suddenly changes."
 
-    k  "Ahem. You’re right...I’m just overreacting. You’re free to go."
+    k  "Ahem. You’re right...I’m overreacting. You’re free to go."
 
     "He wheels back to his desk and goes back to his work. There’s definitely something strange about this situation, but I’m not sure it’s Soume."
+    
+    r  "Thanks again, Doctor Osamu."
 
-    "What did he mean that Soume’s threatening his work, and why did he stop so suddenly? I want to know what the fuck is going on here, but I decide to talk to Soume about this first. Better him than Kazu."
-
-    r  "Thanks again, Doc."
-
-    "I walk out of the lab and head back upstairs. I could swear I heard Kazu mumble something, but I have to be wrong. It sounded like a threat."
+    "I walk out of the lab and head back upstairs. I don't really wanna mess with that guy."
 
 #[Scene 43]
 label Scene43:
@@ -5956,3 +5876,6 @@ label Scene53:
     #  -Go to Kazu branch
     #Visit Roman
       #-Got to Canon branch
+
+
+
