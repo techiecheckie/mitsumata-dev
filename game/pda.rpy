@@ -4,25 +4,22 @@ init python:
   from mitsugame.journal_manager import Journal_manager
   from mitsugame.persistent_manager import Persistent_manager
 
-  button = ""
-  button_value = ""
-
   # Item/journal icon/contents positions (TODO, etc.)
   icon_x = 270
   icon_y = 100
   content_x = 370
   content_y = 100
     
-  def enable_main_buttons():
+  def pda_buttons():
     # inventory button
     ui.frame(xpos=68,ypos=133, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/buttons/button_inventory.png", 
+    ui.imagebutton("gfx/buttons/button_pda_generic.png", 
                    "gfx/buttons/button_inventory_hover.png",
                    clicked=ui.returns(("inventory", "change state")))
     
     # journal button
     ui.frame(xpos=67,ypos=246, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/buttons/button_journal.png", 
+    ui.imagebutton("gfx/buttons/button_pda_generic.png", 
                    "gfx/buttons/button_journal_hover.png", 
                    clicked=ui.returns(("journal manager", "change state")))
                    
@@ -35,7 +32,7 @@ init python:
     # training button
     ui.frame(xpos=66,ypos=502, xpadding=0, ypadding=0, background=None)
     #ui.image("gfx/buttons/button_train_disabled.png")
-    ui.imagebutton("gfx/buttons/button_train.png", 
+    ui.imagebutton("gfx/buttons/button_pda_generic.png", 
                    "gfx/buttons/button_train_hover.png", 
                    #clicked=ui.returns(("train", "")))
                    clicked=renpy.curried_call_in_new_context("minigame"))
@@ -66,10 +63,10 @@ init python:
   #
   # TODO: proper grid and info placement, etc. Transitions, too. And proper item
   # icons.
-  def show_inventory():
+  def show_inventory(button, button_value):
     if button == "inventory":
       items = inventory.get_items()
-
+      
       ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
       ui.grid(cols=3, rows=1, xfill=False, yfill=False, transpose=False, xmaximum = 400)
       for item in items:
@@ -91,13 +88,11 @@ init python:
       ui.frame(xpos=content_x, ypos=content_y, xpadding=0, ypadding=0, xmaximum=550, xminimum=550)
       ui.text(item.get_description())
       
-      
   # Displays the journal manager. Just like the inventory part, this one uses 
   # the button to decide what should be displayed.
   #
   # TODO: proper placement, use proper journal icons
-  def show_journal_manager():
-    # Display the journal icons
+  def show_journal_manager(button, button_value):
     if button == "journal manager":
       journals = journal_manager.get_journals()
         
@@ -141,42 +136,50 @@ init python:
                      clicked=ui.returns(("journal", journal.get_id())))
       
       ui.frame(xpos=content_x, ypos=content_y, xpadding=0, ypadding=0, xmaximum=520, xminimum=520)
-      ui.text(entry.get_text())
+      ui.vbox()
+      ui.text(entry.get_title())
+      ui.text(entry.get_text())        
+      ui.close()
         
-image background_pda = "gfx/backgrounds/palm_pilot_bg.png"        
-
+image background_pda = "gfx/backgrounds/palm_pilot_bg.png"
 
 # PDA loop label. 
 label pda_loop:
   call hide_ui
-  show background_pda with dissolve
   
-  $button = ""
-  $button_value = ""
+  show background_pda
+  $config.overlay_functions.append(pda_buttons)
+  with dissolve
   
-  while (True):
-    # Do button stuff
-    if button == "exit":
-      hide background_pda with dissolve
-      call show_ui
-      return
-    elif button == "inventory":
-      if button_value == "change state":
-        $inventory.change_state()
-        $journal_manager.disable()
-    elif button == "journal manager":
-      if button_value == "change state":
-        $journal_manager.change_state()
-        $inventory.disable()
+  python:    
+    button = ""
+    button_value = ""
+  
+    while (True):
+      # Do button stuff
+      if button == "exit":
+        break
+      elif button == "inventory" and button_value == "change state":
+        inventory.change_state()
+        journal_manager.disable()
+      elif button == "journal manager" and button_value == "change state":
+        journal_manager.change_state()
+        inventory.disable()
+         
+      # Do display stuff
+      if inventory.is_enabled():
+        show_inventory(button, button_value)
+      elif journal_manager.is_enabled():
+        show_journal_manager(button, button_value)
     
-    # Do display stuff
-    if inventory.is_enabled():
-      $show_inventory()
-    elif journal_manager.is_enabled():
-      $show_journal_manager()
-    
-    $enable_main_buttons()
-    
-    #$print "waiting for input..."
-    $button, button_value = ui.interact()
-    #$print "", button, ":", button_value
+      #print "waiting for input..."
+      button, button_value = ui.interact()
+      #print "", button, ":", button_value
+      
+  hide background_pda 
+  $config.overlay_functions.remove(pda_buttons)
+  with dissolve
+  
+  call show_ui
+  
+  return

@@ -1,9 +1,10 @@
 class Item():
-  def __init__(self, id, name, description, decisions):
+  def __init__(self, id, name, description, locations):
     self.id = id
     self.name = name
     self.description = description
-    self.decisions = decisions.split(",")
+    self.locations = locations
+    self.current_stash = None
     
     self.locked = True
    
@@ -22,8 +23,20 @@ class Item():
   def is_locked(self):
     return self.locked
     
-  def has_decision(self, decision):
-    if "any" in self.decisions:
-      return True
-    else:
-      return decision in self.decisions
+  # <location decision="5" room="soume" stash="any" />
+  # <location decision="7" room="any" stash="any" />
+  #   -->
+  # self.locations[
+  #   ["5", "soume", "any"],
+  #   ["4", "any", "any"]
+  # ]
+  def is_available(self, decision, room):
+    for location in self.locations:
+      if location[0] == "any" or location[0] == decision:
+        if location[1] == "any" or location[1] == room:
+          self.current_stash = location[2]
+          return True
+    return False
+    
+  def get_current_stash(self):
+    return self.current_stash

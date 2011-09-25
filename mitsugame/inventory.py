@@ -18,11 +18,19 @@ class Inventory():
     item_elements = items_xml.findall("item")
     for item_element in item_elements:
       id          = item_element.get("id")
-      name        = item_element.find("name")
-      description = item_element.find("description")
-      decisions   = item_element.find("decisions")
+      name        = item_element.find("name").text
+      description = item_element.find("description").text
+      locations_list  = item_element.findall("location")
       
-      item = Item(id, name.text, description.text, decisions.text)
+      locations = []
+      
+      for location in locations_list:
+        decision = location.get("decision")
+        room     = location.get("room")
+        stash    = location.get("stash")
+        locations.append([decision, room, stash])
+        
+      item = Item(id, name, description, locations)
       
       if persistent_manager.has_item(id):
         item.unlock()
@@ -57,20 +65,21 @@ class Inventory():
   def get_items(self):
     return self.items
     
-  def get_locked_items(self, decision_id):
-    locked_items = []
-    
+  def get_available_items(self, decision, room):   
+    items = []
     for item in self.items:
-      if item.is_locked() and item.has_decision(decision_id):
-        locked_items.append(item)
-    
-    return locked_items
+      if item.is_locked() and item.is_available(decision, room):
+        items.append(item)
+    return items
   
   def change_state(self):
     self.enabled = not self.enabled
   
   def disable(self):
     self.enabled = False
+    
+  def enable(self):
+    self.enabled = True
   
   def is_enabled(self):
     return self.enabled

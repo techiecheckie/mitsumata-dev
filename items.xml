@@ -2,16 +2,20 @@
   <item id="1">
     <name>Item 1</name>
     <description>Item 1 description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas semper dignissim ante, at volutpat purus pretium eu. Vestibulum facilisis, tortor sed gravida malesuada, leo mi luctus elit, volutpat ultrices mi massa in enim. Nam id tortor sed quam varius sollicitudin. Etiam risus eros, ultrices vel consectetur sit amet, lobortis at massa. Suspendisse mauris dui, placerat vitae ullamcorper in, fringilla a sapien. Nunc eu felis eu ligula molestie egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce convallis commodo quam, et malesuada elit porta aliquam. Nunc ut nunc vel enim sagittis egestas. Ut erat purus, gravida non fringilla tincidunt, congue nec nisi. Nulla bibendum arcu ut risus sodales a aliquet massa porttitor.</description>
-    <decisions>any</decisions>
+    <location decision="any" room="any" stash="any" />
   </item>
   <item id="2">
     <name>Item 2</name>
-    <description>Item 2 description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas semper dignissim ante, at volutpat purus pretium eu. Vestibulum facilisis, tortor sed gravida malesuada, leo mi luctus elit, volutpat ultrices mi massa in enim. Nam id tortor sed quam varius sollicitudin. Etiam risus eros, ultrices vel consectetur sit amet, lobortis at massa. Suspendisse mauris dui, placerat vitae ullamcorper in, fringilla a sapien. Nunc eu felis eu ligula molestie egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce convallis commodo quam, et malesuada elit porta aliquam. Nunc ut nunc vel enim sagittis egestas. Ut erat purus, gravida non fringilla tincidunt, congue nec nisi. Nulla bibendum arcu ut risus sodales a aliquet massa porttitor.</description>
-    <decisions>1,3,5</decisions>
+    <description>Item 2 description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas semper dignissim ante, at volutpat purus pretium eu. Vestibulum facilisis, tortor sed gravida malesuada, leo mi luctus elit, volutpat ultrices mi massa in enim. Nam id tortor sed quam varius sollicitudin. Etiam risus eros, ultrices vel consectetur sit amet, lobortis at massa. Suspendisse mauris dui, placerat vitae ullamcorper in, fringilla a sapien. Nunc eu felis eu ligula molestie egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce convallis commodo quam, et malesuada elit porta aliquam. Nunc ut nunc vel enim sagittis egestas. Ut erat purus, gravida non fringilla tincidunt, congue nec nisi. Nulla bibendum arcu ut risus sodales a aliquet massa porttitor.</description>   
+    <location decision="1" room="riku"  stash="any" />
+    <location decision="3" room="riku" stash="cupboard" />
+    <location decision="5" room="soume" stash="any" />
+    <location decision="7" room="any"   stash="any" />
   </item>
   <item id="3">
     <name>Item 3</name>
     <description>Item 3 description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas semper dignissim ante, at volutpat purus pretium eu. Vestibulum facilisis, tortor sed gravida malesuada, leo mi luctus elit, volutpat ultrices mi massa in enim. Nam id tortor sed quam varius sollicitudin. Etiam risus eros, ultrices vel consectetur sit amet, lobortis at massa. Suspendisse mauris dui, placerat vitae ullamcorper in, fringilla a sapien. Nunc eu felis eu ligula molestie egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce convallis commodo quam, et malesuada elit porta aliquam. Nunc ut nunc vel enim sagittis egestas. Ut erat purus, gravida non fringilla tincidunt, congue nec nisi. Nulla bibendum arcu ut risus sodales a aliquet massa porttitor.</description>
-    <decisions>3,7</decisions>
+    <location decision="3" room="riku" stash="closet" />
+    <location decision="5" room="riku" stash="any" />
   </item>
 </items>

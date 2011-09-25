@@ -1,2 +1,2 @@
-items=1
-entries=1:2,1:3
+items=
+entries=2:1

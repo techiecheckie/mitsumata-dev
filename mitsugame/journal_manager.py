@@ -27,9 +27,11 @@ class Journal_manager():
       entry_elements = entries_element[0].findall("entry") 
       for entry_element in entry_elements:
         entry_id = entry_element.get("id")
-        title = (entry_element.find("title")).text
-        text = (entry_element.find("content")).text
-        entry = Journal_entry(entry_id, title, text)
+        title    = (entry_element.find("title")).text
+        text     = (entry_element.find("content")).text
+        rooms    = (entry_element.find("rooms")).text
+        
+        entry = Journal_entry(entry_id, title, text, rooms)
       
         journal.add_entry(entry)
         
@@ -81,3 +83,10 @@ class Journal_manager():
             self.persistent_manager.add_journal_entry(journal_id, entry_id)
             return
     print "[WARN] Could not unlock entry, no such id found (journal_id: %s, entry_id: %s)" % (journal_id, entry_id)
+    
+  def get_locked_entries(self, list, room_id):
+    for journal in self.journals:
+      entries = journal.get_entries()
+      for entry in entries:
+        if entry.is_locked() and entry.has_room(room_id):
+          list.append(entry)
