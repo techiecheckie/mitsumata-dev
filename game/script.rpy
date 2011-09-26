@@ -36,6 +36,8 @@ init python:
   hp = 0
   mp = 0
   
+  decision = "0"
+  
 #---------------------
 #KONAMI CODE
 #---------------------
@@ -473,7 +475,11 @@ label start:
     #show cg 1 with dissolve
     "Once upon a time, there was a prince who was not in any way different from other fairy tale princes."
     
+    $decision = "3"
+    
+    call hide_ui
     call nightly_search
+    call show_ui
     
     "He was rich, handsome, popular, destined to marry a princess, spoiled---"
     

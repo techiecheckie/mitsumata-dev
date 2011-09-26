@@ -115,8 +115,6 @@ init python:
 
 # The main label. Displays the room selection screen.
 label nightly_search:
-  call hide_ui
-
   # Show the room selection map
   show map with dissolve # at Position(xpos=0.5, ypos=0.5, xanchor=0.5, yanchor=0.5)
   
@@ -183,10 +181,14 @@ label nightly_search:
   $room = ui.interact()
   
   if room != "return":
+    hide map with dissolve
     call show_room(room)
+    if event_triggered == False:
+      jump nightly_search
+    else:
+      return
   
   hide map with dissolve
-  call show_ui
  
   return
   
@@ -194,21 +196,21 @@ label nightly_search:
 # items (read: locked & available during the night/decision) in random stashes 
 # all around the room, preparing everything for the recursive show_room label.
 label show_room(room):
-  python:
-    # This value actually comes from somewhere else
-    decision = "3"
+  $print "Entering room " + room + ", decision " + decision + "..."
+
+  call run_event(decision, room)
+  if event_triggered == True:
+    $print "  Triggered an event. Returning to main script..."
+    return
+  else:
+    $print "  No event triggered. Continuing..."
     
-    # Get the locked items (that match the decision and room) for hiding
-    print "Building a list of locked items and entries to hide (decision " + decision + ", room " + room + "...)"
-    hideables = inventory.get_available_items(decision, room)
-    #entries = journal_manager.get_locked_entries(hideables, room)
-    #print "  Found", len(items), "items and", len(entries), "entries."
-    print "  Found", len(hideables), "hideable items."
+  # Get the locked items (that match the decision and room)
+  $hideables = inventory.get_available_items(decision, room)
+  $print "    Hid", len(hideables), "items."
     
   # Stash items and activate the room specific overlays
   if room == "riku":
-    # TODO: launch an event (if any)
-    
     # Define the empty local stashes
     $stashes = {"closet": None, "cupboard": None, "carpet": None, "bed": None}
     # Populate the stashes
@@ -263,8 +265,8 @@ label show_room(room):
   #  $config.overlay_functions.remove(soume_overlays)
   #elif room == "susa":
   #  $config.overlay_functions.remove(susa_overlays)
-  elif room == "hallway1":
-    $config.overlay_functions.remove(hallway1_overlays)
+  #elif room == "hallway1":
+  #  $config.overlay_functions.remove(hallway1_overlays)
   #elif room == "hallway2":
   #  $config.overlay_functions.remove(hallway2_overlays)
   #elif room == "kitchen":
