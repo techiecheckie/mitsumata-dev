@@ -9,6 +9,9 @@
 
 init -1 python hide:
 
+    # location of log relative to game/ directory.
+    config.log = "%s/log.txt" % renpy.config.gamedir
+
     ## Should we enable the use of developer tools? This should be
     ## set to False before the game is released, so the user can't
     ## cheat using developer tools.

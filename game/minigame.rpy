@@ -58,7 +58,7 @@ label minigame:
       # The button to launch the testgame is called "game menu" until there's
       # some other way (like the minigame menu Seira mentioned earlier) to launch
       # these
-      call testgame
+      call mole_game
       
       # Would probably be a good idea to disable the menu buttons on the left 
       # before entering the minigame. --> TODO

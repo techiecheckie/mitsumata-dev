@@ -21,15 +21,15 @@
 
     # pixel position of the upper left corner for each mole in the 3x3 grid
     # relative to the upper left corner of the whack a mole background image.
-    CELL_POSITIONS = { (0,0) : (80, 72),
-                       (0,1) : (286, 74),
-                       (0,2) : (495, 72),
-                       (1,0) : (79, 227),
-                       (1,1) : (284, 235),
-                       (1,2) : (506, 244),
-                       (2,0) : (80, 421),
-                       (2,1) : (282, 424),
-                       (2,2) : (509, 424) }
+    CELL_POSITIONS = { (0,0) : (74, 83),
+                       (0,1) : (283, 82),
+                       (0,2) : (496, 82),
+                       (1,0) : (75, 237),
+                       (1,1) : (284, 248),
+                       (1,2) : (504, 256),
+                       (2,0) : (80, 441),
+                       (2,1) : (280, 438),
+                       (2,2) : (508, 443) }
 
     # different states the whack a mole game can be in.
     MOLE_STATE_BEGIN = "mole_begin"
@@ -45,7 +45,7 @@
     # messages displayed for each of the whack a mole game states.
     STATE_MESSAGES = { MOLE_STATE_BEGIN : "Click anywhere to begin!",
                        MOLE_STATE_PLAY  : "GO! Whack them moles!",
-                       MOLE_STATE_END   : "Game over!" }
+                       MOLE_STATE_END   : "Game over!\nClick quit to exit." }
 
     # stores info on a visible mole.
     class Mole( object ):
@@ -181,26 +181,32 @@
                                     Image( "gfx/animated/mole/mole_12.png" ) ]
             self.dirt           = self.mole_frames[0]
 
-            # ui assets.
-            self.quit_button = MinigameButton( Image( "gfx/quit_button.png" ),
-                                               0, 100, False )
-
             # get a render object so we can use ren'py to figure out the size
             # of each of art assets.
             background_render = renpy.render( self.background, 0, 0, 0, 0 )
             background_size   = background_render.get_size()
+            mole_render       = renpy.render( self.dirt, 0, 0, 0, 0 )
+            mole_size         = mole_render.get_size()
 
             # size and position constants.
             self.BACKGROUND_WIDTH  = background_size[0]
             self.BACKGROUND_HEIGHT = background_size[1]
-            self.BACKGROUND_LEFT   = 320
-            self.BACKGROUND_TOP    = 100
+            self.BACKGROUND_LEFT   = 370
+            self.BACKGROUND_TOP    = 115
 
-            self.MOLE_WIDTH  = 60
-            self.MOLE_HEIGHT = 60
+            self.MOLE_WIDTH  = mole_size[0]
+            self.MOLE_HEIGHT = mole_size[1]
 
             self.NUMBER_ROWS    = 3
             self.NUMBER_COLUMNS = 3
+
+            self.TEXT_LEFT = 60
+            self.TEXT_TOP  = 100
+
+            # ui assets.
+            self.quit_button = MinigameButton( Image( "gfx/quit_button.png" ),
+                                               self.TEXT_LEFT, self.TEXT_TOP + 100,
+                                               False )
 
         # boiler plate needed by Displayable class.  just returns all children
         # displayables.
@@ -223,7 +229,7 @@
                     self.last_time      = time.time()
                     self.mole_countdown = self.get_next_mole_countdown()
             elif self.state == MOLE_STATE_END:
-                # leave the game once the player hits the quit button.
+                # leave the game once the player clicks.
                 if e.type == pygame.MOUSEBUTTONUP and e.button == 1:
                     if self.quit_button.is_clicked( x, y ):
                         return self.score
@@ -328,26 +334,26 @@
             render = renpy.Render( width, height )
 
             # render the background.
-            background_render = renpy.render( self.background, 0, 0, st, at )
+            background_render = renpy.render( self.background, 1024, 768, st, at )
             render.blit( background_render, (self.BACKGROUND_LEFT, self.BACKGROUND_TOP) )
 
             # render the timer.
             timer_text   = Text( "Time Remaining: %d" % self.seconds_remaining )
             timer_render = renpy.render( timer_text, renpy.config.screen_width,
                                          renpy.config.screen_height, st, at )
-            render.blit( timer_render, (0, 0) )
+            render.blit( timer_render, (self.TEXT_LEFT, self.TEXT_TOP) )
 
             # render the score.
             score_text   = Text( "Score: %d" % self.score )
             score_render = renpy.render( score_text, renpy.config.screen_width,
                                          renpy.config.screen_height, st, at )
-            render.blit( score_render, (0, 24) )
+            render.blit( score_render, (self.TEXT_LEFT, self.TEXT_TOP + 24) )
 
             # render state-sensitive message.
             message_text   = Text( STATE_MESSAGES[self.state] )
             message_render = renpy.render( message_text, renpy.config.screen_width,
                                            renpy.config.screen_height, st, at )
-            render.blit( message_render, (0, 48) )
+            render.blit( message_render, (self.TEXT_LEFT, self.TEXT_TOP + 48) )
 
             # render the quit button if it's visible.
             if self.quit_button.visible:
@@ -374,14 +380,12 @@
 # Minigame starts here.  Change this label to start and the start label in
 # script.rpy to something else to test this out.
 label mole_game:
-    window hide None
-
     python:
+        p = Position(xpos=685, ypos=705)
+        renpy.log( "%s" % dir( p ) )
+        renpy.log( "%s" % p.__dict__ )
+
         whack = WhackAMole()
         ui.add( whack )
         result = ui.interact( suppress_overlay=True, suppress_underlay=True )
-
-    scene mole
-
-    window show None
     return
