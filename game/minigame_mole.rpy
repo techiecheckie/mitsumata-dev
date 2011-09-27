@@ -142,23 +142,128 @@
 
             return left <= mx <= right and top <= my <= bottom
 
+    # computes ranges for AutomatedRange based on the absolute extent of a
+    # parameter and the desired width and distance of the sliding window that
+    # will move over those values.
+    def compute_range( absolute_min, absolute_max, width_percentage, alpha ):
+        range_width  = (absolute_max - absolute_min) * width_percentage / 100.0
+        range_middle = absolute_min * (1.0 - alpha) + absolute_max * alpha
+        range_min    = range_middle - range_width / 2.0
+        range_max    = range_middle + range_width / 2.0
+
+        # make sure we don't fall outside the absolute min and max values.
+        return ( max( range_min, absolute_min ), min( range_max, absolute_max ) )
+
+    # automated range of parameter values.
+    class AutomatedRange( object ):
+        def __init__( self, name, initial_min, initial_max,
+                      final_min, final_max, duration ):
+            super( AutomatedRange, self ).__init__()
+            self.name         = name
+            self.initial_min  = initial_min
+            self.initial_max  = initial_max
+            self.min_distance = final_min - initial_min
+            self.max_distance = final_max - initial_max
+            self.range_min    = initial_min
+            self.range_max    = initial_max
+            self.duration     = duration
+            self.elapsed_time = 0
+
+            renpy.log( "INITIALIZING %s: (%.3f, %.3f) -> (%.3f, %.3f)" %
+                       (self.name, initial_min, initial_max, final_min, final_max) )
+
+        def update( self, delta_time ):
+            self.elapsed_time += delta_time
+            ratio              = self.elapsed_time / self.duration
+            self.range_min     = self.initial_min + self.min_distance * ratio
+            self.range_max     = self.initial_max + self.max_distance * ratio
+
+        def get_value( self ):
+            value = renpy.random.uniform( self.range_min, self.range_max )
+            renpy.log( "(%s) Value: %.3f   Elapsed: %s   Min: %.3f   Max: %.3f" %
+                       (self.name, value, self.elapsed_time,
+                        self.range_min, self.range_max) )
+            return value
+
     # displayable used for implementing the whack a mole minigame.
     class WhackAMole( renpy.Displayable ):
-        def __init__( self, **kwds ):
+        # idea is difficulty = 0 is the easiest, difficult = 1 is the hardest.
+        def __init__( self, initial_difficulty=0.5, final_difficulty=0.5, **kwds ):
             super( WhackAMole, self ).__init__( **kwds )
 
+            # how long the game will last in seconds.
+            GAME_DURATION = 30
+
             # game state.
-            self.seconds_remaining = 15
+            self.seconds_remaining = GAME_DURATION
             self.state             = MOLE_STATE_BEGIN
             self.score             = 0
             self.active_moles      = []
 
-            # difficulty controls.
-            self.MAX_ACTIVE_MOLES       = 3
-            self.MIN_MOLE_SPAWN_TIME    = 0.35
-            self.MAX_MOLE_SPAWN_TIME    = 0.75
-            self.MIN_MOLE_DURATION_TIME = 0.8
-            self.MAX_MOLE_DURATION_TIME = 1.6
+            # difficulty controls.  each control defines an absolute min value
+            # and an absolute max value.  this percentage controls how much
+            # the difficulty varies as a function of a fixed percent of the
+            # range of valid values for that control.
+            DIFFICULTY_VARIANCE = 30
+
+            # the maximum number of moles that can be on the game board at a time.
+            MAX_ACTIVE_MOLES_CONTROL_MIN = 1
+            MAX_ACTIVE_MOLES_CONTROL_MAX = 5
+
+            initial_range = compute_range( MAX_ACTIVE_MOLES_CONTROL_MIN,
+                                           MAX_ACTIVE_MOLES_CONTROL_MAX,
+                                           DIFFICULTY_VARIANCE,
+                                           initial_difficulty )
+            final_range   = compute_range( MAX_ACTIVE_MOLES_CONTROL_MIN,
+                                           MAX_ACTIVE_MOLES_CONTROL_MAX,
+                                           DIFFICULTY_VARIANCE,
+                                           final_difficulty )
+
+            self.max_active_moles = AutomatedRange( "max_active_moles",
+                                                    initial_range[0], initial_range[1],
+                                                    final_range[0], final_range[1],
+                                                    GAME_DURATION )
+
+            # the amount of time until the next mole appears on the board.
+            # because this range decreases as we get more difficult, use the
+            # inverse of the given difficulties.
+            MOLE_SPAWN_TIME_CONTROL_MIN  = 0.25
+            MOLE_SPAWN_TIME_CONTROL_MAX  = 0.75
+
+            initial_range = compute_range( MOLE_SPAWN_TIME_CONTROL_MIN,
+                                           MOLE_SPAWN_TIME_CONTROL_MAX,
+                                           DIFFICULTY_VARIANCE,
+                                           1 - initial_difficulty )
+            final_range   = compute_range( MOLE_SPAWN_TIME_CONTROL_MIN,
+                                           MOLE_SPAWN_TIME_CONTROL_MAX,
+                                           DIFFICULTY_VARIANCE,
+                                           1 - final_difficulty )
+
+            self.mole_spawn_time = AutomatedRange( "mole_spawn_time",
+                                                   initial_range[0], initial_range[1],
+                                                   final_range[0], final_range[1],
+                                                   GAME_DURATION )
+
+            # the amount of time a mole stays on the screen after it has fully
+            # finished its emerged animation.  because this range decreases as
+            # we get more difficult, use the inverse of the given
+            # difficulties.
+            MOLE_DURATION_TIME_CONTROL_MIN = 0.35
+            MOLE_DURATION_TIME_CONTROL_MAX = 1.6
+
+            initial_range = compute_range( MOLE_DURATION_TIME_CONTROL_MIN,
+                                           MOLE_DURATION_TIME_CONTROL_MAX,
+                                           DIFFICULTY_VARIANCE,
+                                           1 - initial_difficulty )
+            final_range   = compute_range( MOLE_DURATION_TIME_CONTROL_MIN,
+                                           MOLE_DURATION_TIME_CONTROL_MAX,
+                                           DIFFICULTY_VARIANCE,
+                                           1 - final_difficulty )
+
+            self.mole_duration_time = AutomatedRange( "mole_duration_time",
+                                                      initial_range[0], initial_range[1],
+                                                      final_range[0], final_range[1],
+                                                      GAME_DURATION )
 
             # timing state.
             self.last_time      = 0
@@ -181,7 +286,7 @@
                                     Image( "gfx/animated/mole/mole_12.png" ) ]
             self.dirt           = self.mole_frames[0]
 
-            # get a render object so we can use ren'py to figure out the size
+            # Get a render object so we can use ren'py to figure out the size
             # of each of art assets.
             background_render = renpy.render( self.background, 0, 0, 0, 0 )
             background_size   = background_render.get_size()
@@ -227,7 +332,7 @@
                 if e.type == pygame.MOUSEBUTTONUP and e.button == 1:
                     self.state          = MOLE_STATE_PLAY
                     self.last_time      = time.time()
-                    self.mole_countdown = self.get_next_mole_countdown()
+                    self.mole_countdown = self.mole_spawn_time.get_value()
             elif self.state == MOLE_STATE_END:
                 # leave the game once the player clicks.
                 if e.type == pygame.MOUSEBUTTONUP and e.button == 1:
@@ -241,6 +346,11 @@
                 self.seconds_remaining -= time_delta
                 self.mole_countdown    -= time_delta
 
+                # automate the difficulty parameters.
+                self.max_active_moles.update( time_delta )
+                self.mole_spawn_time.update( time_delta )
+                self.mole_duration_time.update( time_delta )
+
                 # list of moles to add and remove this frame.
                 moles_to_add    = []
                 moles_to_remove = []
@@ -248,12 +358,12 @@
                 # see if it's time to add another mole.
                 if self.mole_countdown <= 0 and self.seconds_remaining > 0:
                     # don't exceed the max we can have on the screen at a time.
-                    if len( self.active_moles ) != self.MAX_ACTIVE_MOLES:
+                    if len( self.active_moles ) + 1 < self.max_active_moles.get_value():
                         mole = self.create_mole()
                         moles_to_add.append( self.create_mole() )
 
                     # reset when we try to add another mole.
-                    self.mole_countdown = self.get_next_mole_countdown()
+                    self.mole_countdown = self.mole_spawn_time.get_value()
 
                 # update active moles and remove those that are buried.
                 for mole in self.active_moles:
@@ -291,19 +401,8 @@
             while self.is_cell_active( cell ):
                 cell = self.get_random_cell()
 
-            duration = self.get_random_mole_duration()
+            duration = self.mole_duration_time.get_value()
             return Mole( cell, duration )
-
-        # gets the time to wait before trying to add another mole.
-        def get_next_mole_countdown( self ):
-            return renpy.random.uniform( self.MIN_MOLE_SPAWN_TIME,
-                                         self.MAX_MOLE_SPAWN_TIME )
-
-        # get the amount of time a mole will stay full emerged before going
-        # back into the board.
-        def get_random_mole_duration( self ):
-            return renpy.random.uniform( self.MIN_MOLE_DURATION_TIME,
-                                         self.MAX_MOLE_DURATION_TIME )
 
         # gets a random cell in the game board as a (row, col) tuple.
         def get_random_cell( self ):
@@ -381,11 +480,10 @@
 # script.rpy to something else to test this out.
 label mole_game:
     python:
-        p = Position(xpos=685, ypos=705)
-        renpy.log( "%s" % dir( p ) )
-        renpy.log( "%s" % p.__dict__ )
-
-        whack = WhackAMole()
+        # the first parameter is the initial relative difficulty.  the second
+        # is the final relative difficulty.  for both values, 0 is the easiest,
+        # and 1 is the hardest.
+        whack = WhackAMole( 0.15, 0.95 )
         ui.add( whack )
         result = ui.interact( suppress_overlay=True, suppress_underlay=True )
     return
