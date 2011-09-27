@@ -199,6 +199,7 @@
             self.state             = MOLE_STATE_BEGIN
             self.score             = 0
             self.active_moles      = []
+            self.final_score       = 0
 
             # difficulty controls.  each control defines an absolute min value
             # and an absolute max value.  this percentage controls how much
@@ -335,9 +336,11 @@
                     self.mole_countdown = self.mole_spawn_time.get_value()
             elif self.state == MOLE_STATE_END:
                 # leave the game once the player clicks.
-                if e.type == pygame.MOUSEBUTTONUP and e.button == 1:
-                    if self.quit_button.is_clicked( x, y ):
-                        return self.score
+                #if e.type == pygame.MOUSEBUTTONUP and e.button == 1:
+                #    if self.quit_button.is_clicked( x, y ):
+                #        return self.score
+                self.final_score = self.score
+                return
             elif self.state == MOLE_STATE_PLAY:
                 # update the countdown timers.
                 current_time            = time.time()
@@ -455,8 +458,8 @@
             render.blit( message_render, (self.TEXT_LEFT, self.TEXT_TOP + 48) )
 
             # render the quit button if it's visible.
-            if self.quit_button.visible:
-                self.quit_button.draw( render, st, at )
+            #if self.quit_button.visible:
+            #    self.quit_button.draw( render, st, at )
 
             # render each dirt mound.
             dirt_render = renpy.render( self.dirt, 0, 0, st, at )
@@ -475,6 +478,9 @@
                 render.blit( mole_render, (x,y) )
 
             return render
+            
+        def get_final_score(self):
+          return self.final_score
 
 # Minigame starts here.  Change this label to start and the start label in
 # script.rpy to something else to test this out.
@@ -485,5 +491,10 @@ label mole_game:
         # and 1 is the hardest.
         whack = WhackAMole( 0.15, 0.95 )
         ui.add( whack )
-        result = ui.interact( suppress_overlay=True, suppress_underlay=True )
+        #result = ui.interact( suppress_overlay=True, suppress_underlay=True )
+        ui.interact()
+        # Could do update_stats(whack.get_final_score()) or something similar here
+        # to see if the user has finished the game (succesfully) and if the stats
+        # should be updated. For now this'll just print the final score.
+        print whack.get_final_score()
     return

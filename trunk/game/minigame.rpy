@@ -2,7 +2,7 @@ init python:
   button = ""
   button_value = ""
   
-  def enable_minigame_main_buttons():
+  def minigame_main_buttons():
     # save
     ui.frame(xpos=42,ypos=594, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/minigame_save.png", 
@@ -25,49 +25,48 @@ init python:
     ui.frame(xpos=170,ypos=679, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/minigame_menu.png", 
                    "gfx/buttons/minigame_menu_hover.png", 
-                   clicked=ui.returns(("testgame", "")))
-                   
+                   clicked=ui.returns("molegame"))
+               
+    ui.frame(xpos=60,ypos=100, xpadding=0, ypadding=0, background=None)
+    ui.text("(Add instructions here)")
+    
+  def minigame_exit_button():                   
     # exit
     ui.frame(xpos=42,ypos=709, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/minigame_exit.png", 
                    "gfx/buttons/minigame_exit_hover.png", 
-                   clicked=ui.returns(("exit", "")))
+                   clicked=ui.returns("exit"))
+
 
 image background_minigame = "gfx/backgrounds/minigame_bg.png"
                    
 label minigame:
-  # Should probably use a black screen mask for the transitions so that the new
-  # buttons don't pop in so suddenly. That, or replace the currently used normal
-  # (idle) images with fully transparent ones.
-  hide background_pda with dissolve
-  show background_minigame with dissolve
+  hide background_pda
+  $config.overlay_functions.remove(pda_buttons)
+  with dissolve
   
-  $button = ""
-  $button_value = ""
-  
-  $ui.frame(xpos=60,ypos=100, xpadding=0, ypadding=0, background=None)
-  $ui.text("Click on game menu to test\n things out. \n(right-click exits the game)\n\nSee console for debug \nmessages")
+  show background_minigame 
+  $config.overlay_functions.append(minigame_main_buttons)
+  $config.overlay_functions.append(minigame_exit_button)
+  with dissolve
   
   while (True):
+    $button = ui.interact()
     if button == "exit":
-      # Proper exit behaviour someday?
-      hide background_minigame with dissolve
-      show background_pda with dissolve
-      return
-    elif button == "testgame":
-      # The button to launch the testgame is called "game menu" until there's
-      # some other way (like the minigame menu Seira mentioned earlier) to launch
-      # these
-      call mole_game
+      hide background_minigame
+      $config.overlay_functions.remove(minigame_main_buttons)
+      $config.overlay_functions.remove(minigame_exit_button)
+      with dissolve
       
-      # Would probably be a good idea to disable the menu buttons on the left 
-      # before entering the minigame. --> TODO
-    
-    
-    # Renpy disables pretty much everything after an interaction, so these need
-    # to be re-enabled every time we click something
-    $enable_minigame_main_buttons()
-    
-    #$print "waiting for input..."
-    $button, button_value = ui.interact()
-    #$print "", button, ":", button_value
+      show background_pda 
+      $config.overlay_functions.append(pda_buttons)
+      with dissolve
+      
+      return
+      
+    elif button == "molegame":
+      $config.overlay_functions.remove(minigame_main_buttons)
+      call mole_game
+      $config.overlay_functions.append(minigame_main_buttons)
+      
+  
