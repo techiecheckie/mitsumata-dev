@@ -1,4 +1,4 @@
-image map = "gfx/backgrounds/map_new_1.jpg"
+image map = "gfx/backgrounds/map.png"
 image riku_room = "gfx/backgrounds/Hall1.jpg"
 image roman_room = "gfx/backgrounds/Hall1.jpg"
 image soume_room = "gfx/backgrounds/Hall1.jpg"
@@ -37,164 +37,135 @@ init python:
         item = hideables.pop()
         stashes[stash] = item
         print "    Placed", item.get_name(), "to", stash 
-        
-  def check_stash(stashes, stash_id):
-    if stashes[stash_id] != None:
-      item = stashes.get(stash_id)
+
+  def show_stash_info(stashes, stash_name):
+    if stashes[stash_name] != None:
+      item = stashes.get(stash_name)
       
       inventory.unlock_item(item.get_id())
       info = "You found item '" + item.get_name() + "'."  
       
       # Clear the hiding place
-      stashes[stash_id] = None
-      
+      stashes[stash_name] = None
     else:
       info = "You found nothing."
       
-    # Temporary confirmation dialog
-    ui.frame(xpos=0.5, ypos=0.5, xanchor=0.5, yanchor=0.5)
+    show_info_box(info + "\n\n (Click to hide)")    
+  
+  def show_tidbit_info(tidbit_name):
+    info = "(Default extra clickable. Nothing special here yet.) \n\n (Click to hide)"
+    
+    show_info_box(info)
+    
+  def show_info_box(info):
+    # Creates the info box    
+    ui.detached()
+    infobox = ui.frame(xpos=267, ypos=177, xmaximum=534, ymaximum=353, xpadding=40, ypadding=40, background="gfx/textbox.png")
     ui.vbox()
     ui.text(info)
-    ui.textbutton("Ok", clicked=ui.returns(""))
     ui.close()
     
-    ui.interact()
-          
-  def riku_overlays():
-    # Riku's bed
-    ui.frame(xpos=340, ypos=620, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/block.png",
-                   "gfx/block_hover.png",
-                   clicked=ui.returns("bed"))
+    # Creates a textbutton covering the whole infobox, sort of making the info box a clickable one 
+    ui.detached()
+    infobox_close = ui.frame(xpos=267, ypos=177, xmaximum=534, ymaximum=353, background=None)
+    ui.textbutton("", xfill=True, yfill=True, background=None, clicked=ui.returns("close"))
     
-    # Riku's closet
-    ui.frame(xpos=120, ypos=300, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/block.png",
-                   "gfx/block_hover.png",
-                   clicked=ui.returns("closet"))
+    # Add the elements to the ui stack, and wait for the user to click on the box to make it disappear
+    ui.add(infobox)
+    ui.add(infobox_close)
+    button = ""
+    while button != "close":
+      button = ui.interact(clear=False, suppress_overlay=True)
+    ui.remove(infobox)
+    ui.remove(infobox_close)
   
-    # Riku's carpet
-    ui.frame(xpos=520, ypos=500, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/block.png",
-                   "gfx/block_hover.png",
-                   clicked=ui.returns("carpet"))
   
-    # Riku's cupboard
-    ui.frame(xpos=720, ypos=200, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/block.png",
-                   "gfx/block_hover.png",
-                   clicked=ui.returns("cupboard"))
-                   
-  def hallway1_overlays():
-    # the table on the left
-    #ui.at(fadein(1.0))
-    ui.frame(xpos=240, ypos=620, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/block.png",
-                   "gfx/block_hover.png",
-                   clicked=ui.returns("asdf"))
-                    
-    # lamp 1
-    #ui.at(fadein(1.0))
-    ui.frame(xpos=520, ypos=100, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/block.png",
-                   "gfx/block_hover.png",
-                   clicked=ui.returns("qwer"))
-    
-    # lamp 2
-    #ui.at(fadein(1.0))
-    ui.frame(xpos=520, ypos=200, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/block.png",
-                   "gfx/block_hover.png",
-                   clicked=ui.returns("zxcv"))
-                   
-  def return_overlay():
-    # Temporary return button for all the screens
-    ui.frame(xpos=0.5, ypos=0.1, xanchor=0.5, yanchor=0.5)
-    ui.textbutton("return", clicked=ui.returns("return"))
   
-
 # The main label. Displays the room selection screen.
-label nightly_search:
-  # Show the room selection map
-  show map with dissolve # at Position(xpos=0.5, ypos=0.5, xanchor=0.5, yanchor=0.5)
+label nightly_search:  
+  show map
+
+  $overlays = []
   
-  # Clickable room icons
   python:
-    ui.frame(xpos=0.5, ypos=0.1, xanchor=0.5, yanchor=0.5)
+    # Return button
+    overlays.append(ui.frame(xpos=0.5, ypos=0.1, xanchor=0.5, yanchor=0.5))
     ui.textbutton("return", clicked=ui.returns("return"))
-    
+  
     # Riku's room
-    ui.frame(xpos=274, ypos=235, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/block.png", 
-                   "gfx/block_hover.png",
-                   clicked=ui.returns("riku"))
+    overlays.append(ui.frame(xpos=266, ypos=205, xmaximum=98, ymaximum=73, xpadding=0, ypadding=0, background=None))
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("riku"))
                    
     # Roman's room
-    ui.frame(xpos=452, ypos=234, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/block.png", 
-                   "gfx/block_hover.png",
-                   clicked=ui.returns("roman"))
+    overlays.append(ui.frame(xpos=449, ypos=204, xmaximum=85, ymaximum=85, xpadding=0, ypadding=0, background=None))
+    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("roman"))
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("roman"))
     
     # Soume's room    
-    ui.frame(xpos=282, ypos=353, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/block.png", 
-                   "gfx/block_hover.png",
-                   clicked=ui.returns("soume"))
+    overlays.append(ui.frame(xpos=265, ypos=328, xmaximum=93, ymaximum=95, xpadding=0, ypadding=0, background=None))
+    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("soume"))
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("soume"))
     
     # Susa's room
-    ui.frame(xpos=429, ypos=359, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/block.png", 
-                   "gfx/block_hover.png",
-                   clicked=ui.returns("susa"))
+    overlays.append(ui.frame(xpos=387, ypos=318, xmaximum=171, ymaximum=88, xpadding=0, ypadding=0, background=None))
+    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("susa"))
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("susa"))
     
     # Hallway 1
-    ui.frame(xpos=428, ypos=296, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/block.png", 
-                   "gfx/block_hover.png",
-                   clicked=ui.returns("hallway1"))
+    overlays.append(ui.frame(xpos=385, ypos=296, xmaximum=176, ymaximum=15, xpadding=0, ypadding=0, background=None))
+    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("hallway1"))
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("hallway1"))
     
     # Hallway 2
-    ui.frame(xpos=686, ypos=398, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/block.png", 
-                   "gfx/block_hover.png",
-                   clicked=ui.returns("hallway2"))
+    overlays.append(ui.frame(xpos=685, ypos=366, xmaximum=17, ymaximum=158, xpadding=0, ypadding=0, background=None))
+    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("hallway2"))
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("hallway2"))
     
     # Kitchen
-    ui.frame(xpos=604, ypos=442, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/block.png", 
-                   "gfx/block_hover.png",
-                   clicked=ui.returns("kitchen"))
+    overlays.append(ui.frame(xpos=464, ypos=437, xmaximum=77, ymaximum=83, xpadding=0, ypadding=0, background=None))
+    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("kitchen"))
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("kitchen"))
     
     # Bathroom
-    ui.frame(xpos=461, ypos=474, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/block.png", 
-                   "gfx/block_hover.png",
-                   clicked=ui.returns("bathroom"))
+    overlays.append(ui.frame(xpos=588, ypos=387, xmaximum=91, ymaximum=115, xpadding=0, ypadding=0, background=None))
+    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("bathroom"))
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("bathroom"))
     
     # Library    
-    ui.frame(xpos=642, ypos=561, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/block.png", 
-                   "gfx/block_hover.png",
-                   clicked=ui.returns("library"))
-     
-  # Wait for the input
+    overlays.append(ui.frame(xpos=549, ypos=542, xmaximum=233, ymaximum=64, xpadding=0, ypadding=0, background=None))
+    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("library"))
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("library"))
+  
+  with dissolve
+  
+  # Without this the buttons will disappear once the dissolve above has finished (le fu?)
+  # Guess how long it took to figure this out...
+  python:
+    for overlay in overlays:
+      ui.add(overlay)
+  
   $room = ui.interact()
   
   if room != "return":
-    hide map with dissolve
+    hide map 
+    $ui.clear()
+    with dissolve
+    
     call show_room(room)
+    
     if event_triggered == False:
       jump nightly_search
     else:
       return
   
-  hide map with dissolve
- 
-  return
+  hide map
+  $ui.clear()
+  with dissolve
   
-# Prepares a room for displaying. Basically this label places all the available
-# items (read: locked & available during the night/decision) in random stashes 
-# all around the room, preparing everything for the recursive show_room label.
+  return
+
+
+  
 label show_room(room):
   $print "Entering room " + room + ", decision " + decision + "..."
 
@@ -208,17 +179,42 @@ label show_room(room):
   # Get the locked items (that match the decision and room)
   $hideables = inventory.get_available_items(decision, room)
   $print "    Hid", len(hideables), "items."
-    
+  
+  $overlays = []
+
   # Stash items and activate the room specific overlays
   if room == "riku":
     # Define the empty local stashes
     $stashes = {"closet": None, "cupboard": None, "carpet": None, "bed": None}
+    
     # Populate the stashes
     $stash_items(stashes, hideables)
-    # Display background
+    
+    # Show the room
     show riku_room
-    # Add clickables as overlays
-    $config.overlay_functions.append(riku_overlays)
+    
+    python:
+      # Stashes
+      # Riku's bed
+      overlays.append(ui.frame(xpos=340, ypos=620, xpadding=0, ypadding=0, background=None))
+      ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns(("stash","bed")))
+    
+      # Riku's closet
+      overlays.append(ui.frame(xpos=120, ypos=300, xpadding=0, ypadding=0, background=None))
+      ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns(("stash","closet")))
+  
+      # Riku's carpet
+      overlays.append(ui.frame(xpos=520, ypos=500, xpadding=0, ypadding=0, background=None))
+      ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns(("stash","carpet")))
+  
+      # Riku's cupboard
+      overlays.append(ui.frame(xpos=720, ypos=200, xpadding=0, ypadding=0, background=None))
+      ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns(("stash","cupboard")))      
+      
+      # Static clickables
+      # Test clickable
+      overlays.append(ui.frame(xpos=320, ypos=200, xmaximum=50, ymaximum=200, xpadding=0, ypadding=0))
+      ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(("tidbit","")))
   elif room == "roman":
     #$stashes = {}
     #$stash_items(stashes, hideables)
@@ -246,39 +242,32 @@ label show_room(room):
     #$stash_items(4)
     show library
   
-  $config.overlay_functions.append(return_overlay)
+  # Return button
+  $overlays.append(ui.frame(xpos=0.5, ypos=0.1, xanchor=0.5, yanchor=0.5))
+  $ui.textbutton("return", clicked=ui.returns(("return", "")))
+  
+  # Show everything with a fade-in
   with dissolve
   
-  # First wait for user input, then do it in a loop  
-  $clicked = ui.interact()
-  while clicked != "return":
-    $check_stash(stashes, clicked)
-    $clicked = ui.interact()
+  python:
+    # Restore the overlays after the dissolve
+    for overlay in overlays:
+      ui.add(overlay)
   
-  # Most likely not the best way to remove the room's overlays, but what the hell,
-  # I don't know shite.
-  if room == "riku":
-    $config.overlay_functions.remove(riku_overlays)
-  #elif room == "roman":
-  #  $config.overlay_functions.remove(roman_overlays)
-  #elif room == "soume":
-  #  $config.overlay_functions.remove(soume_overlays)
-  #elif room == "susa":
-  #  $config.overlay_functions.remove(susa_overlays)
-  #elif room == "hallway1":
-  #  $config.overlay_functions.remove(hallway1_overlays)
-  #elif room == "hallway2":
-  #  $config.overlay_functions.remove(hallway2_overlays)
-  #elif room == "kitchen":
-  #  $config.overlay_functions.remove(kitchen_overlays)
-  #elif room == "bathroom":
-  #  $config.overlay_functions.remove(bathroom_overlays)
-  #elif room == "library":
-  #  $config.overlay_functions.remove(library_overlays)
+    # Wait for user input in a loop
+    clicked_type, clicked_name = ui.interact(clear=False)
+    while True:
+      if clicked_type == "return":
+        break
+      elif clicked_type == "stash":
+        show_stash_info(stashes, clicked_name)
+      else:
+        show_tidbit_info(clicked_name)
+      clicked_type, clicked_name = ui.interact(clear=False)
     
-  $config.overlay_functions.remove(return_overlay)
-
-  # Hide all the displayed images when done.
+    # When done with the loop, remove all the overlays by clearing the ui stack
+    ui.clear()
+  
   hide riku_room
   hide roman_room
   hide soume_room

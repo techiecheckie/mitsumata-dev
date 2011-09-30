@@ -12,19 +12,19 @@ label run_event(decision, room):
   return
   
 label riku_event(decision):
-  if decision == "1":
+  #if decision == "1":
     # add drama here
-    $event_triggered = True
-  elif decision == "3":
+  #  $event_triggered = True
+  #elif decision == "3":
     # moar drama here
-    $event_triggered = True
+  #  $event_triggered = True
     
   return
   
 label susa_event(decision):
-  if decision == "2":
-    $event_triggered = True
-  elif decision == "4":
-    $event_triggered = True
+  #if decision == "2":
+  #  $event_triggered = True
+  #elif decision == "4":
+  #  $event_triggered = True
     
   return
