@@ -24,7 +24,7 @@ init python:
                    clicked=renpy.curried_call_in_new_context("pda_loop"))
                    
   # HP/MP bar positions. Just testing these out, so the values may wary
-  ppp = 3 # "pixels per point"
+  ppp = 2 # "pixels per point"
   
   hp_initial_x = 27
   hp_x = hp_initial_x + ppp * hp

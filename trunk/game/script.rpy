@@ -475,20 +475,20 @@ label start:
     #show cg 1 with dissolve
     "Once upon a time, there was a prince who was not in any way different from other fairy tale princes."
     
-    $decision = "3"
+    #$decision = "3"
     
-    call hide_ui
-    call nightly_search
-    call show_ui
+    #call hide_ui
+    #call nightly_search
+    #call show_ui
     
     "He was rich, handsome, popular, destined to marry a princess, spoiled---"
     
     "Bored already."
 
     # testing ui (mp/hp bar) updates
-    $hp = 50
-    $mp = 30
-    call update_ui
+    #$hp = 50
+    #$mp = 30
+    #call update_ui
     
     "I’ve barely said a single sentence."
 
