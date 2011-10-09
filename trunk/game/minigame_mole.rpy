@@ -482,11 +482,10 @@
         def get_final_score(self):
           return self.final_score
 
-# Minigame starts here.  Change this label to start and the start label in
-# script.rpy to something else to test this out.
-label mole_game:
-    python:
-        # the first parameter is the initial relative difficulty.  the second
+    # Minigame starts here.  Change this label to start and the start label in
+    # script.rpy to something else to test this out.
+    def start_mole_game():
+      # the first parameter is the initial relative difficulty.  the second
         # is the final relative difficulty.  for both values, 0 is the easiest,
         # and 1 is the hardest.
         whack = WhackAMole( 0.15, 0.95 )
@@ -496,5 +495,5 @@ label mole_game:
         # Could do update_stats(whack.get_final_score()) or something similar here
         # to see if the user has finished the game (succesfully) and if the stats
         # should be updated. For now this'll just print the final score.
-        print whack.get_final_score()
-    return
+
+        return whack.get_final_score()

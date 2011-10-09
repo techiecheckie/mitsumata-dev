@@ -1,13 +1,12 @@
-image riroom = "gfx/backgrounds/riroom.jpg"
-image minigame_hp = "gfx/minigame_hp_bar.png"
-image minigame_hp_bg = "gfx/minigame_hp_bg.png"
-image minigame_mp = "gfx/minigame_mp_bar.png"
-image minigame_mp_bg = "gfx/minigame_mp_bg.png"
-
-label battle(player_name, player_hp, player_mp, mob_name, mob_count):
+label battle(player_name, mob_name, mob_count, background):
   call prepare_battle_animations
 
   python:
+    # Sprite zoom value
+    zoom = 2.0
+  
+    messages = []
+  
     class Fighter(object):
       def __init__(self, name, id, health, mana, damage_melee, damage_magic, x, y, zorder):
         self.name = name
@@ -48,26 +47,29 @@ label battle(player_name, player_hp, player_mp, mob_name, mob_count):
         self.mana -= amount
         
       def can_afford_magic(self):
-        some_value = 20
-        return self.mana >= some_value
+        some_test_value = 20
+        return self.mana >= some_test_value
         
-      def attack(self, target, damage, critical, attack_distance, messages):
+      def attack(self, target, action, damage, critical, attack_distance, messages):
         if critical:
           damage *= 2
           
         target.dec_health(damage)
       
-        # Drawing (slide into position, attack, slide back)
+        # The rest of this is drawing shite (slide into position, attack, slide back)
         renpy.show(self.id + " idle", at_list = [slide(0.5, target.get_x()-attack_distance, target.get_y())], zorder=self.zorder)
         renpy.pause(0.5)
       
         messages.append(target.get_name() + " is hit for " + str(damage) + " points.")
         if critical:
-          messages.append("Critical hit!")
+            messages.append("Critical hit!")
         
         renpy.show(self.id + " " + action, zorder=target.get_zorder())
         if target.get_health() > 0:
-          renpy.show(target.get_id() + " hit", zorder=target.get_zorder())
+          if critical:
+            renpy.show(target.get_id() + " hit_crit", zorder=target.get_zorder())
+          else:
+            renpy.show(target.get_id() + " hit", zorder=target.get_zorder())
           renpy.pause(animation_delays[self.name + " " + action])
           renpy.show(target.get_id() + " idle", zorder=target.get_zorder())
         else:
@@ -96,15 +98,15 @@ label battle(player_name, player_hp, player_mp, mob_name, mob_count):
         else:
           critical = False
           
-        Fighter.attack(self, target, damage, critical, -60, messages)
+        Fighter.attack(self, target, action, damage, critical, -60, messages)
        
        
     class Mob(Fighter):
       def __init__(self, name, id, health, mana, damage_melee, damage_magic, x, y, zorder):
         super(Mob, self).__init__(name, id, health, mana, damage_melee, damage_magic, x, y, zorder)
         
-      def attack(self, target, messages):       
-        # Recalculate attack if the mob has any mana
+      def attack(self, target, messages):
+        # Refactor this shite
         if self.mana > 0:
           # See if the attack should be melee or a magical one
           # "randomize two numbers, then multiply them with each other. If  the 
@@ -129,7 +131,7 @@ label battle(player_name, player_hp, player_mp, mob_name, mob_count):
         else:
           critical = False
           
-        Fighter.attack(self, target, damage, critical, 60, messages)
+        Fighter.attack(self, target, action, damage, critical, 60, messages)
         
         
     def create_mobs(mob_name, mob_count, mob_positions):
@@ -138,7 +140,7 @@ label battle(player_name, player_hp, player_mp, mob_name, mob_count):
       if mob_name == "Demon hunter":
         for i in range(0, mob_count):
           id = "DemonHunter_" + str(i)
-          health = 60
+          health = 50
           mana = 0
           damage_melee = 10
           damage_magic = 0
@@ -210,62 +212,26 @@ label battle(player_name, player_hp, player_mp, mob_name, mob_count):
       del messages[:]
       
       return
-      
-      
-    def update_bars(player, mini_hp_x, mini_hp_initial_x, mini_hp_area, mini_mp_x, mini_mp_initial_x, mini_mp_area):
-      if player.get_health() <= 0:
-        mini_hp_x = mini_hp_initial_x
-      else:
-        mini_hp_x = int(mini_hp_initial_x + (0.01 * player.get_health()) * mini_hp_area)
-        
-      if player.get_mana() <= 0:
-        mini_mp_x = mini_mp_initial_x
-      else:
-        mini_mp_x = int(mini_mp_initial_x + (0.01 * player.get_mana()) * mini_mp_area)
-      
-      renpy.transition(MoveTransition(1.0))
-      renpy.show("minigame_hp", at_list = [Position(xpos=mini_hp_x, ypos=16)])
-      renpy.show("minigame_mp", at_list = [Position(xpos=mini_mp_x, ypos=18)])
 
-      return
      
-
-    zoom = 2.0
+    # Create the combatants
+    player = Player(player_name, hp, mp)
     
-    player = Player(player_name, player_hp, player_mp)
-    
-    # HP bar can move a distance of 396 pixels
-    mini_hp_area = 396
-    mini_hp_initial_x = 112
-    mini_hp_x = int(mini_hp_initial_x + (0.01 * player.get_health()) * mini_hp_area)
-      
-    # MP bar can move a distance of 390 pixels
-    mini_mp_area = 390
-    mini_mp_initial_x = 585
-    mini_mp_x = int(mini_mp_initial_x + (0.01 * player.get_mana()) * mini_mp_area)
-    
-    # Create some mobs based on what values were given when entering this label
     mob_positions = [(420,420), (400,450), (450,480)]
     mobs = create_mobs(mob_name, mob_count, mob_positions)
     mobs_alive = len(mobs)
     
-    renpy.show("riroom")
-    renpy.show("minigame_mp_bg", at_list = [Position(xpos=579,       ypos=16), Transform(anchor=(0.0, 0.0))])
-    renpy.show("minigame_mp",    at_list = [Position(xpos=mini_mp_x, ypos=18), Transform(anchor=(1.0, 0.0))])
-    renpy.show("minigame_hp_bg", at_list = [Position(xpos=105,       ypos=16), Transform(anchor=(0.0, 0.0))])
-    renpy.show("minigame_hp",    at_list = [Position(xpos=mini_hp_x, ypos=16), Transform(anchor=(1.0, 0.0))])
-    renpy.show("background_minigame")
+    # Update the screen elements
+    hide_main_ui()
+    show_minigame_ui(background, player.get_health(), player.get_mana(), True)
     
     renpy.show(player.get_id() + " idle", at_list = [Position(xpos=player.get_x(), ypos=player.get_y()), Transform(zoom=zoom)], zorder=player.get_zorder())
     
     for i in range(0,len(mobs)):
       renpy.show(mobs[i].get_id() + " idle", at_list = [Position(xpos=mobs[i].get_x(), ypos=mobs[i].get_y()), Transform(zoom=zoom)], zorder=mobs[i].get_zorder())
-            
-    messages = []
   
-    # And the actual battle loop begins
+    # And start the actual battle loop
     while player.get_health() > 0 and mobs_alive > 0:
-      # Show target and action selection lists
       show_target_list(mobs)
       target = ui.interact()
       show_action_list(player, target)
@@ -274,7 +240,7 @@ label battle(player_name, player_hp, player_mp, mob_name, mob_count):
       if action != "cancel":
         player.attack(target, messages)
         
-        update_bars(player, mini_hp_x, mini_hp_initial_x, mini_hp_area, mini_mp_x, mini_mp_initial_x, mini_mp_area)
+        update_minigame_ui(player.get_health(), player.get_mana())
         show_battle_messages(messages)
         
         mobs_alive = 0
@@ -287,25 +253,27 @@ label battle(player_name, player_hp, player_mp, mob_name, mob_count):
               break
         
         if mobs_alive > 0:
-          update_bars(player, mini_hp_x, mini_hp_initial_x, mini_hp_area, mini_mp_x,  mini_mp_initial_x, mini_mp_area)
+          update_minigame_ui(player.get_health(), player.get_mana())
           show_battle_messages(messages)
 
     messages.append("Some post-battle message")
     show_battle_messages(messages)
           
-    # When done, hide all the images
+    # When done, hide all the images and clear other resources
     renpy.hide(player.get_id())
     for mob in mobs:
       renpy.hide(mob.get_id())
-      mob = None
-    renpy.hide("minigame_mp_bg")
-    renpy.hide("minigame_mp")
-    renpy.hide("minigame_hp_bg")
-    renpy.hide("minigame_hp")
-    renpy.hide("background_minigame")
-    renpy.hide("riroom")
+    
+    del mobs[:]
+ 
+    # Update main HP and MP so that the changes are visible outside the battle, too
+    hp = player.get_health()
+    mp = player.get_mana()
     
     player = None
+  
+    hide_minigame_ui(background, True)
+    show_main_ui(hp, mp)
   
   return
   
