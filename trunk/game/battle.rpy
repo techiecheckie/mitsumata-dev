@@ -1,215 +1,311 @@
 image riroom = "gfx/backgrounds/riroom.jpg"
+image minigame_hp = "gfx/minigame_hp_bar.png"
+image minigame_hp_bg = "gfx/minigame_hp_bg.png"
+image minigame_mp = "gfx/minigame_mp_bar.png"
+image minigame_mp_bg = "gfx/minigame_mp_bg.png"
 
-label battle:
+label battle(player_name, player_hp, player_mp, mob_name, mob_count):
+  call prepare_battle_animations
+
   python:
-    def show_battle_overlay():
-      ui.frame(xpos=100, ypos=100, xmaximum=200)
+    class Fighter(object):
+      def __init__(self, name, id, health, mana, damage_melee, damage_magic, x, y, zorder):
+        self.name = name
+        self.id = id
+        self.health = health
+        self.mana = mana
+        self.damage_melee = damage_melee
+        self.damage_magic = damage_magic
+        self.x = x
+        self.y = y
+        self.zorder = zorder
+        
+      def get_name(self):
+        return self.name
+        
+      def get_id(self):
+        return self.id
+        
+      def get_x(self):
+        return self.x
+        
+      def get_y(self):
+        return self.y
+        
+      def get_zorder(self):
+        return self.zorder
+       
+      def get_health(self):
+        return self.health
+        
+      def dec_health(self, amount):
+        self.health -= amount
+        
+      def get_mana(self):
+        return self.mana
+        
+      def dec_mana(self, amount):
+        self.mana -= amount
+        
+      def can_afford_magic(self):
+        some_value = 20
+        return self.mana >= some_value
+        
+      def attack(self, target, damage, critical, attack_distance, messages):
+        if critical:
+          damage *= 2
+          
+        target.dec_health(damage)
+      
+        # Drawing (slide into position, attack, slide back)
+        renpy.show(self.id + " idle", at_list = [slide(0.5, target.get_x()-attack_distance, target.get_y())], zorder=self.zorder)
+        renpy.pause(0.5)
+      
+        messages.append(target.get_name() + " is hit for " + str(damage) + " points.")
+        if critical:
+          messages.append("Critical hit!")
+        
+        renpy.show(self.id + " " + action, zorder=target.get_zorder())
+        if target.get_health() > 0:
+          renpy.show(target.get_id() + " hit", zorder=target.get_zorder())
+          renpy.pause(animation_delays[self.name + " " + action])
+          renpy.show(target.get_id() + " idle", zorder=target.get_zorder())
+        else:
+          messages.append(target.get_name() + " dies.")      
+          renpy.show(target.get_id() + " dead", zorder=target.get_zorder())
+          renpy.pause(animation_delays[self.name + " " + action])
+       
+        renpy.show(self.id + " idle", at_list = [slide(0.5, self.x, self.y)], zorder=self.zorder)
+        renpy.pause(0.5)
+       
+       
+    class Player(Fighter):
+      def __init__(self, id, health, mana):
+        super(Player, self).__init__(id, id, health, mana, 25, 50, 800, 480, 1)
+        
+      def attack(self, target, messages):
+        if action == "melee":
+          damage = self.damage_melee
+        elif action == "magic":
+          damage = self.damage_magic
+          self.mana -= 20
+        
+        # Player's crit chance may vary, using hard-coded values for now
+        if random.randint(1,20) == 20:
+          critical = True
+        else:
+          critical = False
+          
+        Fighter.attack(self, target, damage, critical, -60, messages)
+       
+       
+    class Mob(Fighter):
+      def __init__(self, name, id, health, mana, damage_melee, damage_magic, x, y, zorder):
+        super(Mob, self).__init__(name, id, health, mana, damage_melee, damage_magic, x, y, zorder)
+        
+      def attack(self, target, messages):       
+        # Recalculate attack if the mob has any mana
+        if self.mana > 0:
+          # See if the attack should be melee or a magical one
+          # "randomize two numbers, then multiply them with each other. If  the 
+          # number comes out to be odd, it' a magic attack. Even, it's a regular 
+          # attack"
+          value1 = random.randint(1,10)
+          value2 = random.randint(1,10)
+          value3 = value1 * value2
+          if value3 % 2 == 0:
+            action = "magic"
+            damage = self.damage_magic
+          else:
+            action = "melee"
+            damage = self.damage_melee
+        else:
+          action = "melee"
+          damage = self.damage_melee
+          
+        # Mobs have a 5% critical hit chance 
+        if random.randint(1,20) == 20:
+          critical = True
+        else:
+          critical = False
+          
+        Fighter.attack(self, target, damage, critical, 60, messages)
+        
+        
+    def create_mobs(mob_name, mob_count, mob_positions):
+      mobs = []
+      zorder = 4
+      if mob_name == "Demon hunter":
+        for i in range(0, mob_count):
+          id = "DemonHunter_" + str(i)
+          health = 60
+          mana = 0
+          damage_melee = 10
+          damage_magic = 0
+          # Copy the default images mentioned in battle_animations.rpy to named ones
+          renpy.copy_images("DemonHunter idle",   id + " idle")
+          renpy.copy_images("DemonHunter hit",    id + " hit")
+          renpy.copy_images("DemonHunter dead",   id + " dead")
+          renpy.copy_images("DemonHunter melee",  id + " melee")
+          
+          x = mob_positions[i][0]
+          y = mob_positions[i][1]
+          mobs.append(Mob(mob_name, id, health, mana, damage_melee, damage_magic, x, y, zorder))
+          
+          zorder += 1
+        
+      elif mob_name == "Mamoru":
+        health = 100
+        mana = 100
+        damage_melee = 20
+        damage_magic = 25
+        x = mob_positions[1][0]
+        y = mob_positions[1][1]
+        mobs.append(Mob(mob_name, "Mamoru", health, mana, damage_melee, damage_magic, x, y, zorder))
+
+      return mobs
+  
+  
+    def show_target_list(mobs):
+      ui.frame(xpos=50, ypos=100, xmaximum=230, background=None)
       ui.vbox()
-      ui.text("attack: melee", xfill=True)
-      ui.textbutton("Punch", clicked=ui.returns("punch"), xfill=True)
-      ui.textbutton("Swipe", clicked=ui.returns("swipe"), xfill=True)
-      ui.textbutton("Kick", clicked=ui.returns("kick"), xfill=True)
-      ui.text("attack: magic")
-      if mp >= 10:
-        ui.textbutton("fireblack", clicked=ui.returns("fireblack"), xfill=True) 
-        ui.textbutton("firewhite", clicked=ui.returns("firewhite"), xfill=True)
-      if mp >= 20:
-        ui.textbutton("icesword", clicked=ui.returns("icesword"), xfill=True)
-      ui.text("")
-      ui.textbutton("return", clicked=ui.returns("return"), xfill=True)
+      ui.text("Select target:", xfill=True)
+      for mob in mobs:
+        if mob.get_health() > 0:
+          ui.textbutton(mob.get_name() + ", " + str(mob.get_health()) + " HP", clicked=ui.returns(mob), xfill=True) 
       ui.close()
       
-  show riroom
+      return
   
-  call show_ui
-  $hp = 100
-  $mp = 100
-  call update_ui
   
-  image riku idle:
-    "gfx/animated/riku/riku_idler01.png"
-    pause 0.2
-    "gfx/animated/riku/riku_idler02.png"
-    pause 0.2
-    "gfx/animated/riku/riku_idler03.png"
-    pause 0.2
-    repeat
-    
-  image riku punch:
-    "gfx/animated/riku/riku_attackr01.png"
-    pause 0.2
-    "gfx/animated/riku/riku_attackr02.png"
-    pause 0.2
-    "gfx/animated/riku/riku_attackr03.png"
-    pause 0.2
-    "gfx/animated/riku/riku_attackr04.png"
-    pause 0.2
-    
-  image riku swipe:
-    "gfx/animated/riku/riku_swiper01.png"
-    pause 0.2
-    "gfx/animated/riku/riku_swiper02.png"
-    pause 0.2
-    "gfx/animated/riku/riku_swiper03.png"
-    pause 0.2
-    "gfx/animated/riku/riku_swiper04.png"
-    pause 0.2
-    
-  image riku kick:
-    "gfx/animated/riku/riku_kickr01.png"
-    pause 0.2
-    "gfx/animated/riku/riku_kickr02.png"
-    pause 0.2
-    "gfx/animated/riku/riku_kickr03.png"
-    pause 0.2
-    "gfx/animated/riku/riku_kickr04.png"
-    pause 0.2
-    "gfx/animated/riku/riku_kickr05.png"
-    pause 0.2
-    "gfx/animated/riku/riku_kickr06.png"
-    pause 0.2
-    "gfx/animated/riku/riku_kickr07.png"
-    pause 0.2
-    "gfx/animated/riku/riku_kickr08.png"
-    pause 0.2
-    
-  image riku fireblack:
-    "gfx/animated/riku/riku_fireblackr01.png"
-    pause 0.2
-    "gfx/animated/riku/riku_fireblackr02.png"
-    pause 0.2
-    "gfx/animated/riku/riku_fireblackr03.png"
-    pause 0.2
-    "gfx/animated/riku/riku_fireblackr04.png"
-    pause 0.2
-  
-  image riku firewhite:
-    "gfx/animated/riku/riku_firewhiter01.png"
-    pause 0.2
-    "gfx/animated/riku/riku_firewhiter02.png"
-    pause 0.2
-    "gfx/animated/riku/riku_firewhiter03.png"
-    pause 0.2
-    "gfx/animated/riku/riku_firewhiter04.png"
-    pause 0.2
-    
-  image riku icesword:
-    "gfx/animated/riku/riku_iceswordr01.png"
-    pause 0.2
-    "gfx/animated/riku/riku_iceswordr02.png"
-    pause 0.2
-    "gfx/animated/riku/riku_iceswordr03.png"
-    pause 0.2
-    "gfx/animated/riku/riku_iceswordr04.png"
-    pause 0.2
-    "gfx/animated/riku/riku_iceswordr05.png"
-    pause 0.2
-    "gfx/animated/riku/riku_iceswordr06.png"
-    pause 0.2
-    "gfx/animated/riku/riku_iceswordr07.png"
-    pause 0.2
-    "gfx/animated/riku/riku_iceswordr08.png"
-    pause 0.2
-    "gfx/animated/riku/riku_iceswordr09.png"
-    pause 0.2
-    "gfx/animated/riku/riku_iceswordr10.png"
-    pause 0.2
-    "gfx/animated/riku/riku_iceswordr11.png"
-    pause 0.2
-    
-  image riku hit:
-    "gfx/animated/riku/riku_hitwussyr01.png"
-    pause 0.4
-    "gfx/animated/riku/riku_hitwussyr02.png"
-    pause 0.4
- 
-  image mob idle:
-    "gfx/animated/riku/riku_idlel03.png"
-    pause 0.2
-    "gfx/animated/riku/riku_idlel02.png"
-    pause 0.2
-    "gfx/animated/riku/riku_idlel01.png"
-    pause 0.2
-    repeat  
-    
-  image mob attack:
-    "gfx/animated/riku/riku_attackl01.png"
-    pause 0.2
-    "gfx/animated/riku/riku_attackl02.png"
-    pause 0.2
-    "gfx/animated/riku/riku_attackl03.png"
-    pause 0.2
-    "gfx/animated/riku/riku_attackl04.png"
-    pause 0.2
-    
-  image mob hit:
-    "gfx/animated/riku/riku_hitl01.png"
-    pause 0.4
-    "gfx/animated/riku/riku_hitl02.png"
-    pause 0.4
+    def show_action_list(player, target):
+      ui.frame(xpos=50, ypos=100, xmaximum=230, background=None)
+      ui.vbox()
+      ui.text(mob_name + ", " + str(target.get_health()) + " HP")
+      ui.textbutton("Attack: melee", clicked=ui.returns("melee"), xfill=True)
+      if player.can_afford_magic():
+        ui.textbutton("Attack: magic", clicked=ui.returns("magic"), xfill=True)
+      else:
+        ui.text("Attack: magic (not enough mana)")
+      ui.textbutton("Cancel", clicked=ui.returns("cancel"), xfill=True) 
+      ui.close()
       
-  show riku idle at Position(xpos=0.5, ypos=0.5)
-  show mob idle at Position(xpos=0.55, ypos=0.5)
-  
-  $fighting = True
-  while fighting:
-    $show_battle_overlay()
-    $action = ui.interact()
-    
-    if action == "return":
-      $fighting = False
-    else:
-      if action == "punch":
-        show riku punch
-        show mob hit
-        $renpy.pause(0.8)
-      elif action == "swipe":
-        show riku swipe
-        show mob hit
-        $renpy.pause(0.8)
-      elif action == "kick":
-        show riku kick
-        show mob hit
-        $renpy.pause(1.6)
-      elif action == "fireblack":
-        show riku fireblack
-        show mob hit
-        $renpy.pause(0.8)
-        $mp -= 10
-      elif action == "firewhite":
-        show riku firewhite
-        show mob hit
-        $renpy.pause(0.8)
-        $mp -= 10
-      elif action == "icesword":
-        show riku icesword
-        $renpy.pause(0.8)
-        show mob hit
-        $renpy.pause(1.4)
-        $mp -= 20
+      return
+      
+      
+    def show_battle_messages(messages):
+      messages.append("")
+      messages.append("Click to continue...")
+      
+      ui.frame(xpos=50, ypos=100, xmaximum=300, background=None)
+      ui.vbox()
+      for message in messages:
+        ui.text(message)
+      ui.close()
+      
+      ui.frame(xpos=0, ypos=0, background=None)
+      ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
+      ui.interact()
+      
+      del messages[:]
+      
+      return
+      
+      
+    def update_bars(player, mini_hp_x, mini_hp_initial_x, mini_hp_area, mini_mp_x, mini_mp_initial_x, mini_mp_area):
+      if player.get_health() <= 0:
+        mini_hp_x = mini_hp_initial_x
+      else:
+        mini_hp_x = int(mini_hp_initial_x + (0.01 * player.get_health()) * mini_hp_area)
         
-        
-        
-      show riku idle
-      show mob idle    
+      if player.get_mana() <= 0:
+        mini_mp_x = mini_mp_initial_x
+      else:
+        mini_mp_x = int(mini_mp_initial_x + (0.01 * player.get_mana()) * mini_mp_area)
       
-      call update_ui
+      renpy.transition(MoveTransition(1.0))
+      renpy.show("minigame_hp", at_list = [Position(xpos=mini_hp_x, ypos=16)])
+      renpy.show("minigame_mp", at_list = [Position(xpos=mini_mp_x, ypos=18)])
+
+      return
+     
+
+    zoom = 2.0
     
-      # enemy's turn
-      show mob attack
-      show riku hit
-      $renpy.pause(0.8)
+    player = Player(player_name, player_hp, player_mp)
+    
+    # HP bar can move a distance of 396 pixels
+    mini_hp_area = 396
+    mini_hp_initial_x = 112
+    mini_hp_x = int(mini_hp_initial_x + (0.01 * player.get_health()) * mini_hp_area)
       
-      $hp -= 10
+    # MP bar can move a distance of 390 pixels
+    mini_mp_area = 390
+    mini_mp_initial_x = 585
+    mini_mp_x = int(mini_mp_initial_x + (0.01 * player.get_mana()) * mini_mp_area)
+    
+    # Create some mobs based on what values were given when entering this label
+    mob_positions = [(420,420), (400,450), (450,480)]
+    mobs = create_mobs(mob_name, mob_count, mob_positions)
+    mobs_alive = len(mobs)
+    
+    renpy.show("riroom")
+    renpy.show("minigame_mp_bg", at_list = [Position(xpos=579,       ypos=16), Transform(anchor=(0.0, 0.0))])
+    renpy.show("minigame_mp",    at_list = [Position(xpos=mini_mp_x, ypos=18), Transform(anchor=(1.0, 0.0))])
+    renpy.show("minigame_hp_bg", at_list = [Position(xpos=105,       ypos=16), Transform(anchor=(0.0, 0.0))])
+    renpy.show("minigame_hp",    at_list = [Position(xpos=mini_hp_x, ypos=16), Transform(anchor=(1.0, 0.0))])
+    renpy.show("background_minigame")
+    
+    renpy.show(player.get_id() + " idle", at_list = [Position(xpos=player.get_x(), ypos=player.get_y()), Transform(zoom=zoom)], zorder=player.get_zorder())
+    
+    for i in range(0,len(mobs)):
+      renpy.show(mobs[i].get_id() + " idle", at_list = [Position(xpos=mobs[i].get_x(), ypos=mobs[i].get_y()), Transform(zoom=zoom)], zorder=mobs[i].get_zorder())
+            
+    messages = []
+  
+    # And the actual battle loop begins
+    while player.get_health() > 0 and mobs_alive > 0:
+      # Show target and action selection lists
+      show_target_list(mobs)
+      target = ui.interact()
+      show_action_list(player, target)
+      action = ui.interact()
       
-      show riku idle
-      show mob idle
-      
-      call update_ui
+      if action != "cancel":
+        player.attack(target, messages)
+        
+        update_bars(player, mini_hp_x, mini_hp_initial_x, mini_hp_area, mini_mp_x, mini_mp_initial_x, mini_mp_area)
+        show_battle_messages(messages)
+        
+        mobs_alive = 0
+        for i in range(0, len(mobs)):
+          mob = mobs[len(mobs)-1-i]
+          if mob.get_health() > 0:
+            mobs_alive += 1
+            mob.attack(player, messages)
+            if player.get_health() <= 0:
+              break
+        
+        if mobs_alive > 0:
+          update_bars(player, mini_hp_x, mini_hp_initial_x, mini_hp_area, mini_mp_x,  mini_mp_initial_x, mini_mp_area)
+          show_battle_messages(messages)
+
+    messages.append("Some post-battle message")
+    show_battle_messages(messages)
           
-  hide riku idle
-  hide mob idle
-  
-  hide riroom
+    # When done, hide all the images
+    renpy.hide(player.get_id())
+    for mob in mobs:
+      renpy.hide(mob.get_id())
+      mob = None
+    renpy.hide("minigame_mp_bg")
+    renpy.hide("minigame_mp")
+    renpy.hide("minigame_hp_bg")
+    renpy.hide("minigame_hp")
+    renpy.hide("background_minigame")
+    renpy.hide("riroom")
+    
+    player = None
   
   return
+  
