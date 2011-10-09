@@ -1,3 +1,9 @@
+image ui        = "gfx/ui.png"
+image ui_hp_bar = "gfx/hp-bar.png"
+image ui_hp_bg  = "gfx/hp-background.png"
+image ui_mp_bar = "gfx/mp-bar.png"
+image ui_mp_bg  = "gfx/mp-background.png"
+
 init python:
   def button_save():
     ui.frame(xpos=98,ypos=630, xpadding=0, ypadding=0, background=None)
@@ -22,62 +28,57 @@ init python:
     ui.imagebutton("gfx/buttons/button_palm_pilot.png", 
                    "gfx/buttons/button_palm_pilot_hover.png",
                    clicked=renpy.curried_call_in_new_context("pda_loop"))
-                   
-  # HP/MP bar positions. Just testing these out, so the values may wary
-  ppp = 2 # "pixels per point"
   
-  hp_initial_x = 27
-  hp_x = hp_initial_x + ppp * hp
-  
-  mp_initial_x = 460
-  mp_x = mp_initial_x + ppp * mp                
-  
-  
-image ui = "gfx/ui.png"
-image hp_bar = "gfx/hp-bar.png"
-image hp_background = "gfx/hp-background.png"
-image mp_bar = "gfx/mp-bar.png"
-image mp_background = "gfx/mp-background.png"
+  # HP bar can move a distance of 300 pixels
+  ui_hp_area = 300
+  ui_hp_initial_x = 176
+  ui_hp_x = int(ui_hp_initial_x + (0.01 * hp) * ui_hp_area)
+  # How big a part should the bar cover: (0.01 * hp) * area
+  # so with 100 hp coverage is 100% (assuming that the value is between 0-100).
+      
+  ui_mp_area = 283
+  ui_mp_initial_x = 603
+  ui_mp_x = int(ui_mp_initial_x + (0.01 * mp) * ui_mp_area)
   
 label show_ui:    
-    show mp_background at Position(xpos=741, ypos=580)
-    show mp_bar at Position(xpos=mp_x, ypos=580)
+  python:
+    renpy.transition(dissolve)
+    renpy.show("ui_mp_bg",  at_list = [Position(xpos=596,     ypos=573), Transform(anchor=(0.0, 0.0))])
+    renpy.show("ui_mp_bar", at_list = [Position(xpos=ui_mp_x, ypos=572), Transform(anchor=(1.0, 0.0))])
+    renpy.show("ui_hp_bg",  at_list = [Position(xpos=171,     ypos=572), Transform(anchor=(0.0, 0.0))])
+    renpy.show("ui_hp_bar", at_list = [Position(xpos=ui_hp_x, ypos=571), Transform(anchor=(1.0, 0.0))])
+    renpy.show("ui")
+    
+    config.overlay_functions.append(button_save)
+    config.overlay_functions.append(button_load)
+    config.overlay_functions.append(button_options)
+    config.overlay_functions.append(button_palm_pilot)
 
-    show hp_background at Position(xpos=324, ypos=579)
-    show hp_bar at Position(xpos=hp_x, ypos=581)
-    
-    show ui
-    
-    with dissolve
-    
-    $config.overlay_functions.append(button_save)
-    $config.overlay_functions.append(button_load)
-    $config.overlay_functions.append(button_options)
-    $config.overlay_functions.append(button_palm_pilot)
-
-    return
+  return
     
 label update_ui:
-    $hp_x = hp_initial_x + ppp * hp
-    $mp_x = mp_initial_x + ppp * mp
-    show hp_bar at Position(xpos=hp_x, ypos=581)
-    show mp_bar at Position(xpos=mp_x, ypos=580)
-    with MoveTransition(1.0)
+  python:
+    ui_hp_x = int(ui_hp_initial_x + (0.01 * hp) * ui_hp_area)
+    ui_mp_x = int(ui_mp_initial_x + (0.01 * mp) * ui_mp_area)
     
-    return
+    renpy.transition(MoveTransition(1.0))
+    renpy.show("ui_mp_bar", at_list = [Position(xpos=ui_mp_x, ypos=572), Transform(anchor=(1.0, 0.0))])
+    renpy.show("ui_hp_bar", at_list = [Position(xpos=ui_hp_x, ypos=571), Transform(anchor=(1.0, 0.0))])
+    
+  return
     
 label hide_ui:
-    hide mp_background
-    hide mp_bar
-    hide hp_background
-    hide hp_bar
-    hide ui
+  python:
+    renpy.transition(dissolve)
+    renpy.hide("ui_mp_bar")
+    renpy.hide("ui_mp_bg")
+    renpy.hide("ui_hp_bar")
+    renpy.hide("ui_hp_bg")
+    renpy.hide("ui")
     
-    $config.overlay_functions.remove(button_save)
-    $config.overlay_functions.remove(button_load)
-    $config.overlay_functions.remove(button_options)
-    $config.overlay_functions.remove(button_palm_pilot)
+    config.overlay_functions.remove(button_save)
+    config.overlay_functions.remove(button_load)
+    config.overlay_functions.remove(button_options)
+    config.overlay_functions.remove(button_palm_pilot)
     
-    with dissolve
-    
-    return
+  return
