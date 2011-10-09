@@ -18,6 +18,12 @@ label prepare_battle_animations:
     repeat
   
   image Riku hit:
+    "gfx/animated/riku/riku_hitl01.png"
+    pause 0.4
+    "gfx/animated/riku/riku_hitl02.png"
+    pause 0.4
+    
+  image Riku hit_crit:
     "gfx/animated/riku/riku_hitwussyl01.png"
     pause 0.4
     "gfx/animated/riku/riku_hitwussyl02.png"
@@ -40,7 +46,7 @@ label prepare_battle_animations:
     "gfx/animated/riku/riku_attackl04.png"
     pause 0.2
     
-  $animation_delays["Riku magic"] = 0.0
+  $animation_delays["Riku magic"] = 0.8
   image Riku magic:
     "gfx/animated/missing.png"
     
@@ -58,6 +64,12 @@ label prepare_battle_animations:
     repeat
   
   image Roman hit:
+    "gfx/animated/riku/riku_hitl01.png"
+    pause 0.4
+    "gfx/animated/riku/riku_hitl02.png"
+    pause 0.4
+    
+  image Roman hit_crit:
     "gfx/animated/riku/riku_hitwussyl01.png"
     pause 0.4
     "gfx/animated/riku/riku_hitwussyl02.png"
@@ -132,6 +144,12 @@ label prepare_battle_animations:
     "gfx/animated/riku/riku_hitr02.png"
     pause 0.4
     
+  image DemonHunter hit_crit:
+    "gfx/animated/riku/riku_hitwussyr01.png"
+    pause 0.4
+    "gfx/animated/riku/riku_hitwussyr02.png"
+    pause 0.4
+    
   image DemonHunter dead:
     "gfx/animated/riku/riku_hitwussyr01.png"
     pause 0.4
@@ -186,6 +204,12 @@ label prepare_battle_animations:
     "gfx/animated/riku/riku_hitr02.png"
     pause 0.4
     
+  image Mamoru hit_crit:
+    "gfx/animated/riku/riku_hitwussyr01.png"
+    pause 0.4
+    "gfx/animated/riku/riku_hitwussyr02.png"
+    pause 0.4
+    
   image Mamoru dead:
     "gfx/animated/riku/riku_hitr01.png"
     pause 0.4
@@ -238,13 +262,16 @@ label prepare_battle_animations:
     repeat  
     
   image Thug hit:
-    "gfx/animated/riku/riku_idler01.png"
-    pause 0.5
     "gfx/animated/riku/riku_hitr01.png"
     pause 0.4
     "gfx/animated/riku/riku_hitr02.png"
     pause 0.4
-    "gfx/animated/riku/riku_idler01.png"
+    
+  image Thug hit_crit:
+    "gfx/animated/riku/riku_hitwussyr01.png"
+    pause 0.4
+    "gfx/animated/riku/riku_hitwussyr02.png"
+    pause 0.4
     
   image Thug dead:
     "gfx/animated/riku/riku_hitwussyr01.png"

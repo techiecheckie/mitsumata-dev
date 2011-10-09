@@ -31,32 +31,22 @@ init python:
     
     # training button
     ui.frame(xpos=66,ypos=502, xpadding=0, ypadding=0, background=None)
-    #ui.image("gfx/buttons/button_train_disabled.png")
     ui.imagebutton("gfx/buttons/button_pda_generic.png", 
                    "gfx/buttons/button_train_hover.png", 
-                   #clicked=ui.returns(("train", "")))
-                   clicked=renpy.curried_call_in_new_context("minigame"))
+                   clicked=ui.returns(("minigame", "")))
+                   #clicked=renpy.curried_call_in_new_context("minigame"))
                    
     # bonus button
     ui.frame(xpos=68,ypos=622, xpadding=0, ypadding=0, background=None)
     ui.image("gfx/buttons/button_bonus_disabled.png")
-    #ui.imagebutton("gfx/buttons/button_bonus.png", 
-    #               "gfx/buttons/button_bonus_hover.png", 
-    #               clicked=ui.returns(("bonus", "")))
     
     # right arrow
     ui.frame(xpos=113,ypos=361, xpadding=0, ypadding=0, background=None)
     ui.image("gfx/buttons/button_arrow_right_disabled.png")
-    #ui.imagebutton("gfx/buttons/button_bonus.png", 
-    #               "gfx/buttons/button_bonus_hover.png", 
-    #               clicked=ui.returns(("bonus", "")))
     
     # left arrow
     ui.frame(xpos=32,ypos=361, xpadding=0, ypadding=0, background=None)
     ui.image("gfx/buttons/button_arrow_left_disabled.png")
-    #ui.imagebutton("gfx/buttons/button_bonus.png", 
-    #               "gfx/buttons/button_bonus_hover.png", 
-    #               clicked=ui.returns(("bonus", "")))
     
   # Displays the inventory. The content (an item grid or a screen showing more 
   # specific item information) is based on what button was previously pressed. 
@@ -144,16 +134,16 @@ init python:
 image background_pda = "gfx/backgrounds/palm_pilot_bg.png"
 
 # PDA loop label. 
-label pda_loop:
-  call hide_ui
-  
-  show background_pda
-  $config.overlay_functions.append(pda_buttons)
-  with dissolve
-  
+label pda_loop: 
   python:    
     button = ""
     button_value = ""
+    
+    hide_main_ui()
+    
+    renpy.transition(dissolve)
+    renpy.show("background_pda")
+    config.overlay_functions.append(pda_buttons)
   
     while (True):
       # Do button stuff
@@ -165,6 +155,17 @@ label pda_loop:
       elif button == "journal manager" and button_value == "change state":
         journal_manager.change_state()
         inventory.disable()
+      elif button == "minigame":
+        renpy.transition(dissolve)
+        renpy.hide("background_pda")
+        config.overlay_functions.remove(pda_buttons)
+        
+        show_minigame_screen(hp, mp)
+        
+        renpy.transition(dissolve)
+        renpy.show("background_pda")
+        config.overlay_functions.append(pda_buttons)
+        
          
       # Do display stuff
       if inventory.is_enabled():
@@ -176,10 +177,10 @@ label pda_loop:
       button, button_value = ui.interact()
       #print "", button, ":", button_value
       
-  hide background_pda 
-  $config.overlay_functions.remove(pda_buttons)
-  with dissolve
+    renpy.transition(dissolve)
+    renpy.hide("background_pda")
+    config.overlay_functions.remove(pda_buttons)
   
-  call show_ui
+    show_main_ui(hp, mp)
   
   return

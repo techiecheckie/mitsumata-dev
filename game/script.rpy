@@ -464,39 +464,21 @@ define na = Character('Naomi', color="#c8ffc8", show_two_window=True )
 
 label start:
     show blackscr with dissolve
-    
-    #$hp = 100
-    #$mp = 0
-    #call battle("Riku", hp, mp, "Demon hunter", 3)
-    #call battle("Roman", hp, mp, "Mamoru", 1)
-    
-    # Note: use "call show_ui" instead of "show ui with dissolve". The label 
-    # called "show_ui" (in ui.rpy) already does that and a few other things, too
-    
-    #show ui with dissolve
-    
-    call show_ui
-    
-    # testing ui (mp/hp bar) updates
-    #$hp = 50
-    #$mp = 30
-    #call update_ui
-    
-    "yarrr"
-    
-    $hp = 50
-    $mp = 30
-    call update_ui
+
+    $show_main_ui(hp, mp)
     
     play music "music/mitsumata1.mp3"
     #show cg 1 with dissolve
     "Once upon a time, there was a prince who was not in any way different from other fairy tale princes."
     
-    #$decision = "3"
+    $hp = 80
+    $mp = 30
+    $update_main_ui(hp, mp)
     
-    #call hide_ui
+    #call battle("Riku", "Demon hunter", 3, "bg riroom")
+    #call battle("Roman", hp, mp, "Mamoru", 1)
+    
     #call nightly_search
-    #call show_ui
     
     "He was rich, handsome, popular, destined to marry a princess, spoiled---"
     
