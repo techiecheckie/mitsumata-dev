@@ -3,8 +3,6 @@ label start:
     window hide None
 
     python:
-        driver = MinigameDriver( DuckHunt() )
-        ui.add( driver )
-        ui.interact( suppress_overlay=True, suppress_underlay=True )
+        run_minigame( DuckHunt )
 
     window show None
