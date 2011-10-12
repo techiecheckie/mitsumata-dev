@@ -1,23 +1,24 @@
-init python:
-  event_triggered = False
-
-label run_event(decision, room):
+label run_event:
   $event_triggered = False
   
-  if room == "riku":
+  if room == "riroom":
     call riku_event(decision)
-  elif room == "susa":
+  elif room == "suroom":
     call susa_event(decision)
-  
+    
   return
   
 label riku_event(decision):
-  #if decision == "1":
+  if decision == "1":
     # add drama here
-  #  $event_triggered = True
-  #elif decision == "3":
-    # moar drama here
-  #  $event_triggered = True
+    #$event_triggered = True
+    pass
+  elif decision == "3":
+    show bg redscr with dissolve
+    "This triggered while entering Riku's room on decision 3. (events.rpy)"
+    hide bg redscr with dissolve
+    
+    $event_triggered = True
     
   return
   

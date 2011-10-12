@@ -36,8 +36,6 @@ init python:
   hp = 0
   mp = 0
   
-  decision = "0"
-  
 #---------------------
 #KONAMI CODE
 #---------------------
@@ -265,15 +263,17 @@ init python:
 # eg. image eileen happy = "eileen_happy.png"
 
 image bg shrfr = "shrinefront.png"
-image bg hall1 = "gfx/backgrounds/hallway1.jpg"
+image bg hall1 = "gfx/backgrounds/Hall1.jpg"
 #image bg hall2 = ""
 #image bg hall3 = ""
 #image bg hall4 = ""
 image bg riroom = "gfx/backgrounds/riroom.jpg"
-#image bg roroom = ""
-#image bg soroom = ""
-#image bg suroom = ""
-#image bg lib = ""
+image bg roroom = "gfx/backgrounds/riroom.jpg"
+image bg soroom = "gfx/backgrounds/riroom.jpg"
+image bg suroom = "gfx/backgrounds/riroom.jpg"
+image bg lib = "gfx/backgrounds/riroom.jpg"
+image bg bathroom = "gfx/backgrounds/riroom.jpg"
+image bg kitchen = "gfx/backgrounds/kitchen.jpg"
 #image bg for1 = ""
 #image bg for2 = ""
 #image bg for3 = ""
@@ -286,6 +286,9 @@ image bg riroom = "gfx/backgrounds/riroom.jpg"
 #image bg cheapbar = ""
 image bg blackscr = "gfx/backgrounds/blackscr.png"
 image bg redscr = "gfx/backgrounds/redscr.jpg"
+
+image map = "gfx/backgrounds/map.png"
+image textbox = "gfx/textbox.png"
 
 #--------------------------------
 #DECLARE CG IMAGES
@@ -470,15 +473,6 @@ label start:
     play music "music/mitsumata1.mp3"
     #show cg 1 with dissolve
     "Once upon a time, there was a prince who was not in any way different from other fairy tale princes."
-    
-    $hp = 80
-    $mp = 30
-    $update_main_ui(hp, mp)
-    
-    #call battle("Riku", "Demon hunter", 3, "bg riroom")
-    #call battle("Roman", hp, mp, "Mamoru", 1)
-    
-    #call nightly_search
     
     "He was rich, handsome, popular, destined to marry a princess, spoiled---"
     

@@ -17,6 +17,11 @@ class Item():
   def get_description(self):
     return self.description
     
+  def get_location(self, decision):
+    for location in self.locations:
+      if location[0] == "any" or location[0] == decision:
+        return location
+    
   def unlock(self):
     self.locked = False
     
@@ -30,13 +35,8 @@ class Item():
   #   ["5", "soume", "any"],
   #   ["4", "any", "any"]
   # ]
-  def is_available(self, decision, room):
+  def is_available(self, decision):
     for location in self.locations:
       if location[0] == "any" or location[0] == decision:
-        if location[1] == "any" or location[1] == room:
-          self.current_stash = location[2]
-          return True
+        return True
     return False
-    
-  def get_current_stash(self):
-    return self.current_stash
