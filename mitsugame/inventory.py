@@ -65,10 +65,10 @@ class Inventory():
   def get_items(self):
     return self.items
     
-  def get_available_items(self, decision, room):   
+  def get_available_items(self, decision):
     items = []
     for item in self.items:
-      if item.is_locked() and item.is_available(decision, room):
+      if item.is_locked() and item.is_available(decision):
         items.append(item)
     return items
   

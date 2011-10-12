@@ -1,282 +1,241 @@
-image map = "gfx/backgrounds/map.png"
-image riku_room = "gfx/backgrounds/Hall1.jpg"
-image roman_room = "gfx/backgrounds/Hall1.jpg"
-image soume_room = "gfx/backgrounds/Hall1.jpg"
-image susa_room = "gfx/backgrounds/Hall1.jpg"
-image hallway1 = "gfx/backgrounds/Hall1.jpg"
-image hallway2 = "gfx/backgrounds/Hall1.jpg"
-image kitchen = "gfx/backgrounds/Kitchen.jpg"
-image bathroom = "gfx/backgrounds/Hall1.jpg"
-image library = "gfx/backgrounds/Hall1.jpg"
+label show_map:
+  # A dict containing the rooms and their items
+  $rooms = { 
+    "riroom" : { "cupboard" : None, "closet" : None, "bed" : None }, 
+    "roroom" : { "stash1" : None, "stash2" : None }, 
+    "soroom" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
+    "suroom" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
+    "hall1" : { "stash1" : None, "stash2" : None }, 
+    "hall2" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
+    "kitchen" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
+    "bathroom" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
+    "lib" : { "stash1" : None, "stash2" : None, "stash3" : None } 
+  }
 
+  # A list of items that match the decision value
+  $items = inventory.get_available_items(decision)
+  
+  python:  
+    # If an item has a place set (items.xml) for this decision, put that item
+    # in the room where it is supposed to be. Otherwise randomize the room
+    for item in items:
+      #  location [0]          [1]            [2]
+      # <location decision="1" room="riroom"  stash="any" />
+      location = item.get_location(decision)
+      if location[1] != "any":
+        stash_list = rooms[location[1]]
+        keys = stash_list.keys()
+        for key in keys:
+          if stash_list[key] == None:
+            stash_list[key] = item
+            break
+        
+        
+      else:
+        random_item_list = rooms[rooms.keys()[random.randint(0, len(rooms)-1)]]
+        #random_item_list.append(item)
+        
+    renpy.transition(dissolve)
+    renpy.show("map")
+    
+    # See how many tries the player has (TODO)
+    tries = 3
+    
+  # Start the map screen loop. 
+  while (tries > 0):
+    $show_tries(tries)  
+    $show_room_icons(decision)
+      
+    $room = ui.interact(suppress_overlay=True)
+    # Temporary return check
+    if room != "return":
+      # See if an event should happen when entering the room
+      call run_event
+      # Break the loop if an event happened. (... set tries to 0 because Renpy
+      # doesn't understand words like "break" and such)
+      if event_triggered:
+        $tries = 0
+      else:
+       $tries = show_room(room, decision, tries, rooms[room])
+    else:
+     $tries = 0
+    
+  # Display a message box before returning to the script
+  $show_tries(tries)
+  $renpy.pause(0.2)
+    
+  $renpy.transition(dissolve)
+  $renpy.show("textbox", at_list=[Position(xpos=0.5, ypos=0.5), Transform(anchor=(0.5,0.5))])
+  $show_tries(tries)
+    
+  $ui.frame(xpos=0.3, ypos=0.35, background=None)
+  if event_triggered:
+    $message = "(Post-event message)"
+  else:
+    $message = "(\"0 tries left\" message)"
+  $ui.text(message + "\n\nClick to continue...")
+    
+  $ui.frame(xpos=0, ypos=0, background=None)
+  $ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
+    
+  $ui.interact(suppress_overlay=True)
+    
+  $renpy.transition(dissolve)
+  $renpy.hide("textbox")
+  $renpy.hide("map")
+    
+  return
+  
 init python:
   import random
   from mitsugame.item import Item
   
-  # Places items in random stashes. stash_count is the amount of stashes in 
-  # the selected room
-  def stash_items(stashes, hideables):   
-    randomly_placeables = []
-    stashed_item_count = 0
-    
-    print "  Placing items with predefined locations:"
-    for item in hideables:
-      stash = item.get_current_stash()
-      if stash != "any":
-        stashes[stash] = item
-        hideables.remove(item)
-        stashed_item_count += 1
-        print "    Placed", item.get_name(), "to", stash
-        
-    print "  Placing the rest of the items (if any) to any locations available:"
-    for stash in stashes:
-      if len(hideables) == 0:
-        break
-        
-      if stashes[stash] == None:
-        item = hideables.pop()
-        stashes[stash] = item
-        print "    Placed", item.get_name(), "to", stash 
-
-  def show_stash_info(stashes, stash_name):
-    if stashes[stash_name] != None:
-      item = stashes.get(stash_name)
+  # Displays the amount of tries/clicks the player has.
+  def show_tries(tries):
+    ui.frame(xpos=25, ypos=723, xmaximum=50, ymaximum=50, background=None)
+    ui.text('%d' % tries, xfill=True, yfill=True)
       
-      inventory.unlock_item(item.get_id())
-      info = "You found item '" + item.get_name() + "'."  
-      
-      # Clear the hiding place
-      stashes[stash_name] = None
-    else:
-      info = "You found nothing."
-      
-    show_info_box(info + "\n\n (Click to hide)")    
-  
-  def show_tidbit_info(tidbit_name):
-    info = "(Default extra clickable. Nothing special here yet.) \n\n (Click to hide)"
+    return
     
-    show_info_box(info)
-    
-  def show_info_box(info):
-    # Creates the info box    
-    ui.detached()
-    infobox = ui.frame(xpos=267, ypos=177, xmaximum=534, ymaximum=353, xpadding=40, ypadding=40, background="gfx/textbox.png")
-    ui.vbox()
-    ui.text(info)
-    ui.close()
-    
-    # Creates a textbutton covering the whole infobox, sort of making the info box a clickable one 
-    ui.detached()
-    infobox_close = ui.frame(xpos=267, ypos=177, xmaximum=534, ymaximum=353, background=None)
-    ui.textbutton("", xfill=True, yfill=True, background=None, clicked=ui.returns("close"))
-    
-    # Add the elements to the ui stack, and wait for the user to click on the box to make it disappear
-    ui.add(infobox)
-    ui.add(infobox_close)
-    button = ""
-    while button != "close":
-      button = ui.interact(clear=False, suppress_overlay=True)
-    ui.remove(infobox)
-    ui.remove(infobox_close)
-  
-  
-  
-# The main label. Displays the room selection screen.
-label nightly_search:  
-  show map
-
-  $overlays = []
-  
-  python:
-    # Return button
-    overlays.append(ui.frame(xpos=0.5, ypos=0.1, xanchor=0.5, yanchor=0.5))
-    ui.textbutton("return", clicked=ui.returns("return"))
-  
+  def show_room_icons(decision):
     # Riku's room
-    overlays.append(ui.frame(xpos=266, ypos=205, xmaximum=98, ymaximum=73, xpadding=0, ypadding=0, background=None))
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("riku"))
+    ui.frame(xpos=266, ypos=205, xmaximum=98, ymaximum=73, xpadding=0, ypadding=0, background=None)
+    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("riroom"))
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("riroom"))
                    
     # Roman's room
-    overlays.append(ui.frame(xpos=449, ypos=204, xmaximum=85, ymaximum=85, xpadding=0, ypadding=0, background=None))
-    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("roman"))
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("roman"))
+    ui.frame(xpos=449, ypos=204, xmaximum=85, ymaximum=85, xpadding=0, ypadding=0, background=None)
+    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("roroom"))
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("roroom"))
     
     # Soume's room    
-    overlays.append(ui.frame(xpos=265, ypos=328, xmaximum=93, ymaximum=95, xpadding=0, ypadding=0, background=None))
-    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("soume"))
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("soume"))
+    ui.frame(xpos=265, ypos=328, xmaximum=93, ymaximum=95, xpadding=0, ypadding=0, background=None)
+    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("soroom"))
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("soroom"))
     
     # Susa's room
-    overlays.append(ui.frame(xpos=387, ypos=318, xmaximum=171, ymaximum=88, xpadding=0, ypadding=0, background=None))
-    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("susa"))
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("susa"))
+    ui.frame(xpos=387, ypos=318, xmaximum=171, ymaximum=88, xpadding=0, ypadding=0, background=None)
+    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("suroom"))
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("suroom"))
     
     # Hallway 1
-    overlays.append(ui.frame(xpos=385, ypos=296, xmaximum=176, ymaximum=15, xpadding=0, ypadding=0, background=None))
-    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("hallway1"))
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("hallway1"))
+    ui.frame(xpos=385, ypos=296, xmaximum=176, ymaximum=15, xpadding=0, ypadding=0, background=None)
+    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("hall1"))
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("hall1"))
     
     # Hallway 2
-    overlays.append(ui.frame(xpos=685, ypos=366, xmaximum=17, ymaximum=158, xpadding=0, ypadding=0, background=None))
-    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("hallway2"))
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("hallway2"))
+    ui.frame(xpos=685, ypos=366, xmaximum=17, ymaximum=158, xpadding=0, ypadding=0, background=None)
+    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("hall2"))
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("hall2"))
     
     # Kitchen
-    overlays.append(ui.frame(xpos=464, ypos=437, xmaximum=77, ymaximum=83, xpadding=0, ypadding=0, background=None))
+    ui.frame(xpos=464, ypos=437, xmaximum=77, ymaximum=83, xpadding=0, ypadding=0, background=None)
     #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("kitchen"))
     ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("kitchen"))
     
     # Bathroom
-    overlays.append(ui.frame(xpos=588, ypos=387, xmaximum=91, ymaximum=115, xpadding=0, ypadding=0, background=None))
-    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("bathroom"))
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("bathroom"))
+    if decision == "something":
+      ui.frame(xpos=588, ypos=387, xmaximum=91, ymaximum=115, xpadding=0, ypadding=0, background=None)
+      #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("bathroom"))
+      ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("bathroom"))
     
     # Library    
-    overlays.append(ui.frame(xpos=549, ypos=542, xmaximum=233, ymaximum=64, xpadding=0, ypadding=0, background=None))
-    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("library"))
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("library"))
-  
-  with dissolve
-  
-  # Without this the buttons will disappear once the dissolve above has finished (le fu?)
-  # Guess how long it took to figure this out...
-  python:
-    for overlay in overlays:
-      ui.add(overlay)
-  
-  $room = ui.interact()
-  
-  if room != "return":
-    hide map 
-    $ui.clear()
-    with dissolve
+    ui.frame(xpos=549, ypos=542, xmaximum=233, ymaximum=64, xpadding=0, ypadding=0, background=None)
+    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("lib"))
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("lib"))
     
-    call show_room(room)
+    # Return
+    ui.frame(xpos=0, ypos=0, background=None)
+    ui.textbutton("Temporary cancel button", clicked=ui.returns("return"))
     
-    if event_triggered == False:
-      jump nightly_search
-    else:
-      return
-  
-  hide map
-  $ui.clear()
-  with dissolve
-  
-  return
-
-
-  
-label show_room(room):
-  $print "Entering room " + room + ", decision " + decision + "..."
-
-  call run_event(decision, room)
-  if event_triggered == True:
-    $print "  Triggered an event. Returning to main script..."
     return
-  else:
-    $print "  No event triggered. Continuing..."
     
-  # Get the locked items (that match the decision and room)
-  $hideables = inventory.get_available_items(decision, room)
-  $print "    Hid", len(hideables), "items."
-  
-  $overlays = []
-
-  # Stash items and activate the room specific overlays
-  if room == "riku":
-    # Define the empty local stashes
-    $stashes = {"closet": None, "cupboard": None, "carpet": None, "bed": None}
+  def show_room(room, decision, tries, items):   
+    renpy.transition(dissolve)
+    renpy.show("bg " + room)
+    # room background names defined in script.rpy
     
-    # Populate the stashes
-    $stash_items(stashes, hideables)
-    
-    # Show the room
-    show riku_room
-    
-    python:
-      # Stashes
-      # Riku's bed
-      overlays.append(ui.frame(xpos=340, ypos=620, xpadding=0, ypadding=0, background=None))
-      ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns(("stash","bed")))
-    
-      # Riku's closet
-      overlays.append(ui.frame(xpos=120, ypos=300, xpadding=0, ypadding=0, background=None))
-      ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns(("stash","closet")))
-  
-      # Riku's carpet
-      overlays.append(ui.frame(xpos=520, ypos=500, xpadding=0, ypadding=0, background=None))
-      ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns(("stash","carpet")))
-  
-      # Riku's cupboard
-      overlays.append(ui.frame(xpos=720, ypos=200, xpadding=0, ypadding=0, background=None))
-      ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns(("stash","cupboard")))      
+    while (tries > 0):
+      show_room_clickables(room)
+      show_tries(tries)
       
-      # Static clickables
-      # Test clickable
-      overlays.append(ui.frame(xpos=320, ypos=200, xmaximum=50, ymaximum=200, xpadding=0, ypadding=0))
-      ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(("tidbit","")))
-  elif room == "roman":
-    #$stashes = {}
-    #$stash_items(stashes, hideables)
-    show roman_room
-    #$config.overlay_functions.append(roman_overlays)
-  elif room == "soume":
-    #$stash_items(4)
-    show soume_room
-  elif room == "susa":
-    #$stash_items(4)
-    show susa_room
-  elif room == "hallway1":
-    #$stash_items(4)
-    show hallway1
-  elif room == "hallway2":
-    #$stash_items(4)    
-    show hallway2
-  elif room == "kitchen":
-    #$stash_items(4)
-    show kitchen
-  elif room == "bathroom":
-    #$stash_items(4)
-    show bathroom
-  elif room == "library":
-    #$stash_items(4)
-    show library
-  
-  # Return button
-  $overlays.append(ui.frame(xpos=0.5, ypos=0.1, xanchor=0.5, yanchor=0.5))
-  $ui.textbutton("return", clicked=ui.returns(("return", "")))
-  
-  # Show everything with a fade-in
-  with dissolve
-  
-  python:
-    # Restore the overlays after the dissolve
-    for overlay in overlays:
-      ui.add(overlay)
-  
-    # Wait for user input in a loop
-    clicked_type, clicked_name = ui.interact(clear=False)
-    while True:
-      if clicked_type == "return":
+      selection = ui.interact(suppress_overlay=True, clear=False)
+      if selection == "return":
         break
-      elif clicked_type == "stash":
-        show_stash_info(stashes, clicked_name)
       else:
-        show_tidbit_info(clicked_name)
-      clicked_type, clicked_name = ui.interact(clear=False)
-    
-    # When done with the loop, remove all the overlays by clearing the ui stack
+        tries = show_info(selection, items, tries)
+      
+    renpy.transition(dissolve)
+    renpy.hide("bg " + room)
     ui.clear()
+    
+    return tries
+    
+  def show_room_clickables(room):
+    if room == "riroom":
+      # Riku room item containers
+      # Cupboard
+      ui.frame(xpos=100, ypos=100, background=None)
+      ui.textbutton("item", clicked=ui.returns(("stash", "cupboard")))
+      
+      # Closet
+      ui.frame(xpos=200, ypos=100, background=None)
+      ui.textbutton("item", clicked=ui.returns(("stash", "closet")))
+      
+      # Bed
+      ui.frame(xpos=300, ypos=100, background=None)
+      ui.textbutton("item", clicked=ui.returns(("stash", "bed")))
+      
+      # ...
+      
+      # Riku room tidbit containers
+      ui.frame(xpos=100, ypos=200, background=None)
+      ui.textbutton("tidbit", clicked=ui.returns(("tidbit", "1")))
+ 
+      ui.frame(xpos=200, ypos=200, background=None)
+      ui.textbutton("tidbit", clicked=ui.returns(("tidbit", "2")))
+      
+    elif room == "roroom":
+      pass
+    elif room == "suroom":
+      pass
+ 
+    # Return button
+    ui.frame(xpos=0, ypos=0, background=None)
+    ui.textbutton("Return", clicked=ui.returns("return"))
+    
+    return
+    
+  def show_info(selection, items, tries):
+    # First, check what info should be displayed
+    if selection[0] == "tidbit":
+      message = "You found a tidbit box.\n\nTidbits are listed in tidbits.xml,\nand are waiting for implementation."
+    else:
+      item = items[selection[1]]
+      if item == None:
+        message = "You found nothing of interest"
+      else:
+        message = "You found an item!\n\nItem name: " + item.get_name()
+        item.unlock()
+        items[selection[1]] = None
+      
+      # Not every click is going to reduce this number, but this works just
+      # fine for now
+      tries -= 1
   
-  hide riku_room
-  hide roman_room
-  hide soume_room
-  hide susa_room
-  hide hallway1
-  hide hallway2
-  hide kitchen
-  hide bathroom
-  hide library
-  with dissolve
-  
-  return
+    # Show the info box
+    renpy.transition(dissolve)
+    renpy.show("textbox", at_list=[Position(xpos=0.5, ypos=0.5), Transform(anchor=(0.5,0.5))])
+    
+    ui.frame(xpos=0.3, ypos=0.3, background=None)
+    ui.text(message + "\n\n(Click to continue.)")
+    
+    ui.frame(xpos=0, ypos=0, background=None)
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
+    
+    ui.interact(suppress_overlay=True)
+    
+    renpy.transition(dissolve)
+    renpy.hide("textbox")
+    
+    return tries
