@@ -45,7 +45,7 @@ init python:
     ui.frame(xpos=842,ypos=651, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/button_palm_pilot.png", 
                    "gfx/buttons/button_palm_pilot_hover.png",
-                   clicked=renpy.curried_call_in_new_context("pda_loop"))
+                   clicked=renpy.curried_call_in_new_context("shop_loop"))
                    
     return
     
@@ -55,7 +55,6 @@ init python:
     ui.imagebutton("gfx/buttons/minigame_save.png", 
                    "gfx/buttons/minigame_save_hover.png", 
                    clicked=renpy.curried_call_in_new_context("_game_menu_save"))
-    
     # load
     ui.frame(xpos=167,ypos=615, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/minigame_load.png", 
@@ -171,4 +170,22 @@ init python:
       config.overlay_functions.remove(minigame_ui_buttons)
     
     return
-  
+    
+  def confirmation_window(action_taken):
+    ui.frame(xpos=0.4, ypos=0.4)
+    
+    ui.vbox()
+    
+    ui.text("Are you sure you want to " + action_taken + "?")
+    ui.textbutton("Yes", clicked=ui.returns("yes"))
+    ui.textbutton("No", clicked=ui.returns("no"))
+    
+    ui.close()
+    
+    confirmation = ""
+    confirmation = ui.interact()
+    
+    if confirmation == "yes":
+        return True
+    else:
+        return False
