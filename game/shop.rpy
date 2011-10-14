@@ -46,6 +46,11 @@ label shop_loop:
               #
               # if persistent_manager.has_item(button_value) == False:
               #    persistent_manager.add_item(button_value)
+              
+              # The old (poorly implemented) persistent manager has been 
+              # updated, so that method doesn't even exist anymore. Use
+              #     inventory.unlock_item(id)
+              # instead. 
               break
       elif button == "exit":
         break

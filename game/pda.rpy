@@ -9,7 +9,7 @@ init python:
   icon_y = 100
   content_x = 370
   content_y = 100
-    
+  
   def pda_buttons():
     # inventory button
     ui.frame(xpos=68,ypos=133, xpadding=0, ypadding=0, background=None)
@@ -57,26 +57,33 @@ init python:
     if button == "inventory":
       items = inventory.get_items()
       
-      ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
-      ui.grid(cols=3, rows=1, xfill=False, yfill=False, transpose=False, xmaximum = 400)
-      for item in items:
-        if item.is_locked():
-          ui.image("gfx/items/generic_item_disabled.png")
-        else:        
-          ui.imagebutton("gfx/items/generic_item.png", 
-                         "gfx/items/generic_item_hover.png", 
-                         clicked=ui.returns(("item", item.get_id())))
-      ui.close()
+      cols = 3
+      rows = len(items)/cols + len(items) % cols
+      
+      for y in range(0, rows):
+        for x in range(0, cols):
+          index = y*cols + x
+          if index >= len(items):
+            break
+            
+          item = items[index]
+          ui.frame(xpos=icon_x + x*80, ypos=icon_y + y*80, xpadding=0, ypadding=0)
+          if item.is_locked():
+            ui.image("gfx/items/generic_item_disabled.png")
+          else:
+            ui.imagebutton("gfx/items/generic_item.png", 
+                           "gfx/items/generic_item_hover.png", 
+                           clicked=ui.returns(("item", item)))
+      
+      
     elif button == "item":
-      item = inventory.get_item(button_value)
-
       ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
       ui.imagebutton("gfx/items/generic_item.png",
                      "gfx/items/generic_item_hover.png",
                      clicked=ui.returns(("inventory", "")))
       
       ui.frame(xpos=content_x, ypos=content_y, xpadding=0, ypadding=0, xmaximum=550, xminimum=550)
-      ui.text(item.get_description())
+      ui.text(button_value.get_description()) # button_value == item
       
   # Displays the journal manager. Just like the inventory part, this one uses 
   # the button to decide what should be displayed.
@@ -85,45 +92,56 @@ init python:
   def show_journal_manager(button, button_value):
     if button == "journal manager":
       journals = journal_manager.get_journals()
-        
-      ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
-      ui.grid(cols=3, rows=1, xfill=False, yfill=False, transpose=False, xmaximum = 400)
-      for journal in journals:
-        if journal.is_locked():
-          ui.image("gfx/buttons/journal_char.png")
-        else:
-          ui.imagebutton("gfx/buttons/journal_char" + journal.get_id() + ".png", 
-                         "gfx/buttons/journal_char_hover.png", 
-                         clicked=ui.returns(("journal", journal.get_id())))
-      ui.close()
+          
+      cols = 3
+      rows = len(journals)/cols + len(journals) % cols
+      
+      for y in range(0, rows):
+        for x in range(0, cols):
+          index = y*cols + x
+          if index >= len(journals):
+            break
+            
+          journal = journals[index]
+          ui.frame(xpos=icon_x + x*100, ypos=icon_y + y*120, xpadding=0, ypadding=0)
+          if journal.is_locked():
+            ui.image("gfx/buttons/journal_char.png")
+          else:
+            ui.imagebutton("gfx/buttons/journal_char" + journal.get_id() + ".png", 
+                           "gfx/buttons/journal_char_hover.png", 
+                           clicked=ui.returns(("journal", journal)))
+     
+     
       
     # Display the journal's titles 
     elif button == "journal":
-      journal = journal_manager.get_journal(button_value)
+      journal = button_value # just to make it more obvious
+      
       if journal != None:
         ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
         ui.imagebutton("gfx/buttons/journal_char" + journal.get_id() + ".png",
                        "gfx/buttons/journal_char_hover.png",
                        clicked=ui.returns(("journal manager", "")))
       
-        entries = journal.get_entries()
+        entries = button_value.get_entries()
         
         ui.frame(xpos=content_x, ypos=content_y)
         ui.vbox()
         for entry in entries:
           if not entry.is_locked():
-            ui.textbutton(entry.get_title(), clicked=ui.returns(("entry", entry.get_id())))
+            ui.textbutton(entry.get_title(), clicked=ui.returns(("entry", (journal, entry))))
         ui.close()
         
     # Display the entry's contents
     elif button == "entry":
-      journal = journal_manager.get_selected_journal()
-      entry = journal.get_entry(button_value)
+      # button_value == tuple
+      journal = button_value[0]
+      entry = button_value[1]
       
       ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
       ui.imagebutton("gfx/buttons/journal_char" + journal.get_id() + ".png",
                      "gfx/buttons/journal_char_hover.png",
-                     clicked=ui.returns(("journal", journal.get_id())))
+                     clicked=ui.returns(("journal", journal)))
       
       ui.frame(xpos=content_x, ypos=content_y, xpadding=0, ypadding=0, xmaximum=520, xminimum=520)
       ui.vbox()
@@ -135,7 +153,7 @@ image background_pda = "gfx/backgrounds/palm_pilot_bg.png"
 
 # PDA loop label. 
 label pda_loop: 
-  python:    
+  python:
     button = ""
     button_value = ""
     
@@ -166,7 +184,6 @@ label pda_loop:
         renpy.show("background_pda")
         config.overlay_functions.append(pda_buttons)
         
-         
       # Do display stuff
       if inventory.is_enabled():
         show_inventory(button, button_value)
