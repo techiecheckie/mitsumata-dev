@@ -24,9 +24,9 @@
 init python:
   print "\n"
 
-  pm = Persistent_manager()
-  inventory = Inventory(pm)
-  journal_manager = Journal_manager(pm)
+  inventory = Inventory()
+  journal_manager = Journal_manager()
+  pm = Persistent_manager(inventory, journal_manager)
   
   # These are the values that will be used when a new game starts. Everything 
   # defined inside this init block will have its state written somewhere when

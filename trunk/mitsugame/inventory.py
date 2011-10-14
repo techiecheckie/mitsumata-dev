@@ -3,15 +3,9 @@ import xml.etree.ElementTree as xml
 import renpy
 
 class Inventory():
-  def __init__(self, persistent_manager):
-    self.persistent_manager = persistent_manager
+  def __init__(self):
     self.items = []
     self.enabled = False
-    
-    # Debug counter
-    unlock_count = 0
-    
-    print "Initializing inventory..."
     
     # Populates the items list, using the items defined in "items.xml"
     items_xml = xml.parse(renpy.loader.transfn("../items.xml"))
@@ -31,15 +25,8 @@ class Inventory():
         locations.append([decision, room, stash])
         
       item = Item(id, name, description, locations)
-      
-      if persistent_manager.has_item(id):
-        item.unlock()
-        unlock_count += 1
-        print "  Unlocked item", item.get_id()
         
       self.items.append(item)
-      
-    print "  Done, ", len(self.items), "items read into memory (%d items unlocked)" % unlock_count
   
   def has_item(self, id):
     for item in self.items:
@@ -57,7 +44,6 @@ class Inventory():
     for item in self.items:
       if item.get_id() == id:
         item.unlock()
-        self.persistent_manager.add_item(id)
         print "Inventory: unlocked item", item.get_id()
         return
     print "[WARN] Could not unlock item, no such id found (id: %s)" % id
