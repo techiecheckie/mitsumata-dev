@@ -150,8 +150,10 @@ init -50 python:
         def is_playing_animation( self ):
             return self.animator.get_current_frame() is not None
 
-        def play_animation( self, name, loop_animation=True ):
-            self.animator.play_animation( name, loop_animation )
+        def play_animation( self, name, loop_animation=True,
+                            on_animation_end=None ):
+            self.animator.play_animation( name, loop_animation,
+                                          on_animation_end )
 
         def set_overlay_visible( self, is_overlay_visible ):
             self.is_overlay_visible = is_overlay_visible
