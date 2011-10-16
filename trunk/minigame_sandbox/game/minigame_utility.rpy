@@ -43,76 +43,20 @@ init -50 python:
             elif anchor_type == Anchor.TOP_RIGHT:
                 return Anchor( size.width, 0 )
 
-    class GameAnimation( object ):
-        def __init__( self, frames, frame_rate=0 ):
-            super( GameAnimation, self ).__init__()
-            self.frames         = ( [ frames ]
-                                    if not isinstance( frames, collections.Sequence )
-                                    else (frames or []) )
-            self.frame_duration = 1.0 / frame_rate if frame_rate > 0 else 0
-            self.current_frame  = 0
-            self.elapsed_time   = 0
-            self.loop_animation = True
-
-        def get_displayables( self ):
-            displayables = []
-            for frame in self.frames:
-                displayables.extend( frame.get_displayables() )
-            return displayables
-
-        def set_looping( self, loop_animation ):
-            self.loop_animation = loop_animation
-
-        def reset( self ):
-            self.elapsed_time  = 0
-            self.current_frame = 0
+    class AutomatedInterpolator( object ):
+        def __init__( self, min_value, max_value, duration ):
+            super( AutomatedInterpolator, self ).__init__()
+            self.min_value    = min_value
+            self.max_value    = max_value
+            self.duration     = float( duration )
+            self.elapsed_time = float( 0 )
 
         def update( self, delta_sec ):
-            if self.frame_duration > 0:
-                self.elapsed_time += delta_sec
-                while self.elapsed_time >= self.frame_duration:
-                    self.elapsed_time  -= self.frame_duration
-                    self.current_frame  = self.current_frame + 1
-                    if self.current_frame >= len( self.frames ):
-                        self.current_frame = self.current_frame % len( self.frames )
-                        if not self.loop_animation:
-                            # return that we're done animating.
-                            return True
+            self.elapsed_time += delta_sec
 
-        def get_current_frame( self ):
-            return self.frames[self.current_frame]
-
-    class GameAnimator( object ):
-        def __init__( self ):
-            super( GameAnimator, self ).__init__()
-            self.animations        = {}
-            self.current_animation = None
-
-        def get_displayables( self ):
-            displayables = []
-            for animation in self.animations.itervalues():
-                displayables.extend( animation.get_displayables() )
-            return displayables
-
-        def add_animation( self, name, animation ):
-            self.animations[name] = animation
-
-        def play_animation( self, name, loop_animation=True ):
-            self.current_animation = self.animations[name]
-            self.current_animation.reset()
-            self.current_animation.set_looping( loop_animation )
-
-        def stop_animation( self ):
-            self.current_animation = None
-
-        def update( self, delta_sec ):
-            if self.current_animation:
-                if self.current_animation.update( delta_sec ):
-                    self.current_animation = None
-
-        def get_current_frame( self ):
-            if self.current_animation:
-                return self.current_animation.get_current_frame()
+        def get_value( self ):
+            alpha = self.elapsed_time / self.duration
+            return self.min_value * (1 - alpha) + self.max_value * alpha
 
     class BoxOverlay( object ):
         def __init__( self, box, color ):
@@ -126,6 +70,91 @@ init -50 python:
                                    (bounds.left, bounds.top,
                                     bounds.right - bounds.left + 1,
                                     bounds.bottom - bounds.top + 1) )
+
+    class GameAnimation( object ):
+        def __init__( self, frames, frame_rate=0 ):
+            super( GameAnimation, self ).__init__()
+            self.frames           = ( [ frames ]
+                                      if not isinstance( frames, collections.Sequence )
+                                      else (frames or []) )
+            self.frame_duration   = 1.0 / frame_rate if frame_rate > 0 else 0
+            self.current_frame    = 0
+            self.elapsed_time     = 0
+            self.loop_animation   = True
+            self.on_animation_end = None
+
+        def get_displayables( self ):
+            displayables = []
+            for frame in self.frames:
+                displayables.extend( frame.get_displayables() )
+            return displayables
+
+        def set_looping( self, loop_animation ):
+            self.loop_animation = loop_animation
+
+        def set_on_animation_end( self, on_animation_end ):
+            self.on_animation_end = on_animation_end
+
+        def reset( self ):
+            self.elapsed_time  = 0
+            self.current_frame = 0
+
+        def update( self, delta_sec ):
+            if self.frame_duration > 0:
+                self.elapsed_time += delta_sec
+                while self.elapsed_time >= self.frame_duration:
+                    self.elapsed_time  -= self.frame_duration
+                    self.current_frame  = self.current_frame + 1
+                    if self.current_frame >= len( self.frames ):
+                        self.current_frame = (self.current_frame % len( self.frames )
+                                              if self.loop_animation
+                                              else len( self.frames ) - 1)
+                        if self.on_animation_end:
+                            self.on_animation_end()
+
+        def get_current_frame( self ):
+            return self.frames[self.current_frame]
+
+    class GameAnimator( object ):
+        def __init__( self ):
+            super( GameAnimator, self ).__init__()
+            self.animations            = {}
+            self.current_animation     = None
+            self.user_on_animation_end = None
+
+        def get_displayables( self ):
+            displayables = []
+            for animation in self.animations.itervalues():
+                displayables.extend( animation.get_displayables() )
+            return displayables
+
+        def add_animation( self, name, animation ):
+            animation.set_on_animation_end( self.on_animation_end )
+            self.animations[name] = animation
+
+        def play_animation( self, name, loop_animation=True,
+                            user_on_animation_end=None ):
+            self.user_on_animation_end = user_on_animation_end
+            self.current_animation     = self.animations[name]
+            self.current_animation.reset()
+            self.current_animation.set_looping( loop_animation )
+
+        def stop_animation( self ):
+            self.current_animation = None
+
+        def on_animation_end( self ):
+            if not self.current_animation.loop_animation:
+                self.stop_animation()
+            if self.user_on_animation_end:
+                self.user_on_animation_end()
+
+        def update( self, delta_sec ):
+            if self.current_animation:
+                self.current_animation.update( delta_sec )
+
+        def get_current_frame( self ):
+            if self.current_animation:
+                return self.current_animation.get_current_frame()
 
     class GameImage( object ):
         def __init__( self, image_filename, anchor=None ):

@@ -3,6 +3,6 @@ label start:
     window hide None
 
     python:
-        run_minigame( DuckHunt )
+        run_minigame( WhackAMole )
 
     window show None
