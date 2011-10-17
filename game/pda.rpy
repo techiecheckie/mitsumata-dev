@@ -48,6 +48,10 @@ init python:
     ui.frame(xpos=32,ypos=361, xpadding=0, ypadding=0, background=None)
     ui.image("gfx/buttons/button_arrow_left_disabled.png")
     
+    # PDA screen gloss
+    ui.frame(xpos=195, ypos=44, background=None)
+    ui.image("gfx/backgrounds/PDA_gloss.png")
+    
   # Displays the inventory. The content (an item grid or a screen showing more 
   # specific item information) is based on what button was previously pressed. 
   #
@@ -149,7 +153,9 @@ init python:
       ui.text(entry.get_text())        
       ui.close()
         
-image background_pda = "gfx/backgrounds/palm_pilot_bg.png"
+image pda_bg = "gfx/backgrounds/PDA_base.png"
+image pda_glow = "gfx/backgrounds/PDA_glow.png"
+image pda_gloss = "gfx/backgrounds/PDA_gloss.png"
 
 # PDA loop label. 
 label pda_loop: 
@@ -160,7 +166,9 @@ label pda_loop:
     hide_main_ui()
     
     renpy.transition(dissolve)
-    renpy.show("background_pda")
+    renpy.show("pda_bg")
+    renpy.show("pda_glow", at_list = [Position(xpos=159, ypos=9), Transform(anchor=(0.0, 0.0))])
+    #renpy.show("pda_gloss", at_list = [Position(xpos=197, ypos=46), Transform(anchor=(0.0, 0.0))], zorder=5)
     config.overlay_functions.append(pda_buttons)
   
     while (True):
@@ -175,13 +183,15 @@ label pda_loop:
         inventory.disable()
       elif button == "minigame":
         renpy.transition(dissolve)
-        renpy.hide("background_pda")
+        renpy.hide("pda_bg")
+        renpy.hide("pda_glow")
         config.overlay_functions.remove(pda_buttons)
         
         show_minigame_screen(hp, mp)
         
         renpy.transition(dissolve)
-        renpy.show("background_pda")
+        renpy.show("pda_bg")
+        renpy.show("pda_glow", at_list = [Position(xpos=159, ypos=9), Transform(anchor=(0.0, 0.0))])
         config.overlay_functions.append(pda_buttons)
         
       # Do display stuff

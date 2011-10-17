@@ -169,7 +169,7 @@ label battle(player_name, mob_name, mob_count, background):
   
   
     def show_target_list(mobs):
-      ui.frame(xpos=50, ypos=100, xmaximum=230, background=None)
+      ui.frame(xpos=65, ypos=100, xmaximum=230, background=None)
       ui.vbox()
       ui.text("Select target:", xfill=True)
       for mob in mobs:
@@ -181,16 +181,22 @@ label battle(player_name, mob_name, mob_count, background):
   
   
     def show_action_list(player, target):
-      ui.frame(xpos=50, ypos=100, xmaximum=230, background=None)
-      ui.vbox()
+      ui.frame(xpos=65, ypos=100, xmaximum=230, background=None)
+      #ui.vbox()
       ui.text(mob_name + ", " + str(target.get_health()) + " HP")
-      ui.textbutton("Attack: melee", clicked=ui.returns("melee"), xfill=True)
+      #ui.textbutton("Attack: melee", clicked=ui.returns("melee"), xfill=True)
+      ui.frame(xpos=65, ypos=140, background=None)
+      ui.imagebutton("gfx/buttons/battle_melee.png", "gfx/buttons/battle_melee_hover.png", clicked=ui.returns("melee"))
+      ui.frame(xpos=195, ypos=136, background=None)
       if player.can_afford_magic():
-        ui.textbutton("Attack: magic", clicked=ui.returns("magic"), xfill=True)
+        #ui.textbutton("Attack: magic", clicked=ui.returns("magic"), xfill=True)
+        ui.imagebutton("gfx/buttons/battle_magic.png", "gfx/buttons/battle_magic_hover.png", clicked=ui.returns("magic"))
       else:
-        ui.text("Attack: magic (not enough mana)")
+        #ui.text("Attack: magic (not enough mana)")
+        ui.image("gfx/buttons/battle_magic_disabled.png")
+      ui.frame(xpos=65, ypos=250, xmaximum=230)
       ui.textbutton("Cancel", clicked=ui.returns("cancel"), xfill=True) 
-      ui.close()
+      #ui.close()
       
       return
       
@@ -199,7 +205,7 @@ label battle(player_name, mob_name, mob_count, background):
       messages.append("")
       messages.append("Click to continue...")
       
-      ui.frame(xpos=50, ypos=100, xmaximum=300, background=None)
+      ui.frame(xpos=65, ypos=100, xmaximum=230, background=None)
       ui.vbox()
       for message in messages:
         ui.text(message)
@@ -213,6 +219,7 @@ label battle(player_name, mob_name, mob_count, background):
       
       return
 
+    # The battle stuff begins
      
     # Create the combatants
     player = Player(player_name, hp, mp)
@@ -256,7 +263,7 @@ label battle(player_name, mob_name, mob_count, background):
           update_minigame_ui(player.get_health(), player.get_mana())
           show_battle_messages(messages)
 
-    messages.append("Some post-battle message")
+    messages.append("(Post-battle message)")
     show_battle_messages(messages)
           
     # When done, hide all the images and clear other resources
@@ -277,3 +284,9 @@ label battle(player_name, mob_name, mob_count, background):
   
   return
   
+label test_battle:
+  $hp = 100
+  $mp = 30
+  call battle("Riku", "Demon hunter", 2, "bg riroom")
+  
+  return

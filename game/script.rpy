@@ -22,8 +22,8 @@
 #***********************************
 
 init python:
-  print "\n"
-
+  print ""
+  
   inventory = Inventory()
   journal_manager = Journal_manager()
   pm = Persistent_manager(inventory, journal_manager)
@@ -35,6 +35,9 @@ init python:
   # variables' states automatically. Which is nice.
   hp = 0
   mp = 0
+  
+  decision = "0"
+  event_triggered = False
   
 #---------------------
 #KONAMI CODE
@@ -264,7 +267,7 @@ init python:
 
 image bg shrfr = "shrinefront.png"
 image bg hall1 = "gfx/backgrounds/Hall1.jpg"
-#image bg hall2 = ""
+image bg hall2 = "gfx/backgrounds/Hall1.jpg"
 #image bg hall3 = ""
 #image bg hall4 = ""
 image bg riroom = "gfx/backgrounds/riroom.jpg"
@@ -467,7 +470,7 @@ define na = Character('Naomi', color="#c8ffc8", show_two_window=True )
 
 label start:
     show blackscr with dissolve
-
+    
     $show_main_ui(hp, mp)
     
     play music "music/mitsumata1.mp3"
