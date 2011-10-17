@@ -30,7 +30,6 @@ label show_map:
             stash_list[key] = item
             break
         
-        
       else:
         random_item_list = rooms[rooms.keys()[random.randint(0, len(rooms)-1)]]
         #random_item_list.append(item)
@@ -63,17 +62,18 @@ label show_map:
   # Display a message box before returning to the script
   $show_tries(tries)
   $renpy.pause(0.2)
-    
-  $renpy.transition(dissolve)
-  $renpy.show("textbox", at_list=[Position(xpos=0.5, ypos=0.5), Transform(anchor=(0.5,0.5))])
-  $show_tries(tries)
-    
-  $ui.frame(xpos=0.3, ypos=0.35, background=None)
+  
   if event_triggered:
     $message = "(Post-event message)"
   else:
     $message = "(\"0 tries left\" message)"
-  $ui.text(message + "\n\nClick to continue...")
+    
+  $renpy.transition(dissolve)
+  $show_tries(tries)
+  $renpy.show("textbox", at_list=[Position(xpos=0.5, ypos=0.5), Transform(anchor=(0.5,0.5))])
+    
+  $ui.frame(xpos=0.3, ypos=0.35, background=None)
+  $ui.text(message)
     
   $ui.frame(xpos=0, ypos=0, background=None)
   $ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
@@ -82,8 +82,8 @@ label show_map:
     
   $renpy.transition(dissolve)
   $renpy.hide("textbox")
-  $renpy.hide("map")
-    
+  $renpy.hide("map")  
+  
   return
   
 init python:
@@ -99,50 +99,41 @@ init python:
     
   def show_room_icons(decision):
     # Riku's room
-    ui.frame(xpos=266, ypos=205, xmaximum=98, ymaximum=73, xpadding=0, ypadding=0, background=None)
-    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("riroom"))
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("riroom"))
+    ui.frame(xpos=262, ypos=202, xmaximum=98, ymaximum=73, xpadding=0, ypadding=0, background=None)
+    ui.imagebutton("gfx/map/room_riku.png", "gfx/map/room_riku_hover.png", clicked=ui.returns("riroom"))
                    
     # Roman's room
-    ui.frame(xpos=449, ypos=204, xmaximum=85, ymaximum=85, xpadding=0, ypadding=0, background=None)
-    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("roroom"))
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("roroom"))
+    ui.frame(xpos=445, ypos=202, xmaximum=85, ymaximum=85, xpadding=0, ypadding=0, background=None)
+    ui.imagebutton("gfx/map/room_roman.png", "gfx/map/room_roman_hover.png", clicked=ui.returns("roroom"))
+
+    # Kitchen
+    ui.frame(xpos=343, ypos=429, xmaximum=77, ymaximum=83, xpadding=0, ypadding=0, background=None)
+    ui.imagebutton("gfx/map/room_kitchen.png", "gfx/map/room_kitchen_hover.png", clicked=ui.returns("kitchen"))
     
     # Soume's room    
-    ui.frame(xpos=265, ypos=328, xmaximum=93, ymaximum=95, xpadding=0, ypadding=0, background=None)
-    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("soroom"))
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("soroom"))
+    ui.frame(xpos=265, ypos=323, xmaximum=93, ymaximum=95, xpadding=0, ypadding=0, background=None)
+    ui.imagebutton("gfx/map/room_soume.png", "gfx/map/room_soume_hover.png", clicked=ui.returns("soroom"))
     
     # Susa's room
-    ui.frame(xpos=387, ypos=318, xmaximum=171, ymaximum=88, xpadding=0, ypadding=0, background=None)
-    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("suroom"))
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("suroom"))
+    ui.frame(xpos=383, ypos=312, xmaximum=171, ymaximum=88, xpadding=0, ypadding=0, background=None)
+    ui.imagebutton("gfx/map/room_susa.png", "gfx/map/room_susa_hover.png", clicked=ui.returns("suroom"))
     
     # Hallway 1
-    ui.frame(xpos=385, ypos=296, xmaximum=176, ymaximum=15, xpadding=0, ypadding=0, background=None)
-    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("hall1"))
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("hall1"))
+    ui.frame(xpos=385, ypos=295, xmaximum=176, ymaximum=15, xpadding=0, ypadding=0, background=None)
+    ui.imagebutton("gfx/map/room_hall1.png", "gfx/map/room_hall1_hover.png", clicked=ui.returns("hall1"))
     
     # Hallway 2
-    ui.frame(xpos=685, ypos=366, xmaximum=17, ymaximum=158, xpadding=0, ypadding=0, background=None)
-    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("hall2"))
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("hall2"))
-    
-    # Kitchen
-    ui.frame(xpos=464, ypos=437, xmaximum=77, ymaximum=83, xpadding=0, ypadding=0, background=None)
-    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("kitchen"))
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("kitchen"))
-    
+    ui.frame(xpos=686, ypos=383, xmaximum=17, ymaximum=158, xpadding=0, ypadding=0, background=None)
+    ui.imagebutton("gfx/map/room_hall2.png", "gfx/map/room_hall2_hover.png", clicked=ui.returns("hall2"))
+
     # Bathroom
-    if decision == "something":
-      ui.frame(xpos=588, ypos=387, xmaximum=91, ymaximum=115, xpadding=0, ypadding=0, background=None)
-      #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("bathroom"))
-      ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("bathroom"))
+    if decision == "0":
+      ui.frame(xpos=566, ypos=382, xmaximum=91, ymaximum=115, xpadding=0, ypadding=0, background=None)
+      ui.imagebutton("gfx/map/room_bathroom.png", "gfx/map/room_bathroom_hover.png", clicked=ui.returns("bathroom"))
     
     # Library    
-    ui.frame(xpos=549, ypos=542, xmaximum=233, ymaximum=64, xpadding=0, ypadding=0, background=None)
-    #ui.imagebutton("gfx/block.png", "gfx/block_hover.png", clicked=ui.returns("lib"))
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("lib"))
+    ui.frame(xpos=546, ypos=523, xmaximum=233, ymaximum=64, xpadding=0, ypadding=0, background=None)
+    ui.imagebutton("gfx/map/room_library.png", "gfx/map/room_library_hover.png", clicked=ui.returns("lib"))
     
     # Return
     ui.frame(xpos=0, ypos=0, background=None)
@@ -213,9 +204,9 @@ init python:
     else:
       item = items[selection[1]]
       if item == None:
-        message = "You found nothing of interest"
+        message = "You found nothing of interest."
       else:
-        message = "You found an item!\n\nItem name: " + item.get_name()
+        message = "You found an item." + "\n\n" + item.get_name()
         item.unlock()
         items[selection[1]] = None
       
@@ -224,18 +215,6 @@ init python:
       tries -= 1
   
     # Show the info box
-    renpy.transition(dissolve)
-    renpy.show("textbox", at_list=[Position(xpos=0.5, ypos=0.5), Transform(anchor=(0.5,0.5))])
-    
-    ui.frame(xpos=0.3, ypos=0.3, background=None)
-    ui.text(message + "\n\n(Click to continue.)")
-    
-    ui.frame(xpos=0, ypos=0, background=None)
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
-    
-    ui.interact(suppress_overlay=True)
-    
-    renpy.transition(dissolve)
-    renpy.hide("textbox")
+    show_message_window(message)
     
     return tries

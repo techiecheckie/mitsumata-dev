@@ -18,11 +18,11 @@ init python:
   ui_mp_initial_x = 603
   ui_mp_x = 0
   
-  mini_hp_area = 396
+  mini_hp_area = 395
   mini_hp_initial_x = 113
   mini_hp_x = 0
   
-  mini_mp_area = 390
+  mini_mp_area = 388
   mini_mp_initial_x = 585
   mini_mp_x = 0
 
@@ -45,36 +45,42 @@ init python:
     ui.frame(xpos=842,ypos=651, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/button_palm_pilot.png", 
                    "gfx/buttons/button_palm_pilot_hover.png",
-                   clicked=renpy.curried_call_in_new_context("shop_loop"))
+                   clicked=renpy.curried_call_in_new_context("pda_loop"))
+                   
+    ui.frame(xpos=10, ypos=10)
+    ui.textbutton("map", clicked=renpy.curried_call_in_new_context("show_map"))
+    
+    ui.frame(xpos=100, ypos=10)
+    ui.textbutton("test battle", clicked=renpy.curried_call_in_new_context("test_battle"))
                    
     return
     
   def minigame_ui_buttons():
     # save
-    ui.frame(xpos=42,ypos=594, xpadding=0, ypadding=0, background=None)
+    ui.frame(xpos=40,ypos=589, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/minigame_save.png", 
                    "gfx/buttons/minigame_save_hover.png", 
                    clicked=renpy.curried_call_in_new_context("_game_menu_save"))
     # load
-    ui.frame(xpos=167,ypos=615, xpadding=0, ypadding=0, background=None)
+    ui.frame(xpos=165,ypos=611, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/minigame_load.png", 
                    "gfx/buttons/minigame_load_hover.png", 
                    clicked=renpy.curried_call_in_new_context("_game_menu_load"))
                    
     # option
-    ui.frame(xpos=34,ypos=653, xpadding=0, ypadding=0, background=None)
+    ui.frame(xpos=38,ypos=649, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/minigame_option.png", 
                    "gfx/buttons/minigame_option_hover.png", 
                    clicked=renpy.curried_call_in_new_context("_game_menu_preferences"))
    
     # game menu (minigame menu?)
-    ui.frame(xpos=170,ypos=679, xpadding=0, ypadding=0, background=None)
+    ui.frame(xpos=164,ypos=675, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/minigame_menu.png", 
                    "gfx/buttons/minigame_menu_hover.png", 
                    clicked=ui.returns(""))
                   
     # exit
-    ui.frame(xpos=42,ypos=709, xpadding=0, ypadding=0, background=None)
+    ui.frame(xpos=41,ypos=704, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/minigame_exit.png", 
                    "gfx/buttons/minigame_exit_hover.png", 
                    clicked=ui.returns("exit"))
@@ -189,3 +195,18 @@ init python:
         return True
     else:
         return False
+        
+  def show_message_window(message):
+    renpy.transition(dissolve)
+    renpy.show("textbox", at_list=[Position(xpos=0.5, ypos=0.5), Transform(anchor=(0.5,0.5))])
+    
+    ui.frame(xpos=0.3, ypos=0.35, background=None)
+    ui.text(message)
+    
+    ui.frame(xpos=0, ypos=0, background=None)
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
+    
+    ui.interact(suppress_overlay=True)
+    
+    renpy.transition(dissolve)
+    renpy.hide("textbox")
