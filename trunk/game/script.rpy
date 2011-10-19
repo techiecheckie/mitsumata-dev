@@ -265,6 +265,24 @@ init python:
 #----------------------------------
 # eg. image eileen happy = "eileen_happy.png"
 
+<<<<<<< .mine
+#image bg shrfr = 
+image bg hall1 = "gfx/backgrounds/Hallway1.png"
+image bg hall2 = "gfx/backgrounds/Hallway2.png"
+image bg riroom = "gfx/backgrounds/room1.png"
+image bg roroom = "gfx/backgrounds/room2.png"
+image bg soroom = "gfx/backgrounds/room3.png"
+image bg suroom = "gfx/backgrounds/room4.png"
+image bg lib = "gfx/backgrounds/library.png"
+#image bg bathroom = 
+image bg kitchen = "gfx/backgrounds/kitchen.png"
+image bg dfor1 = "gfx/backgrounds/dforest1.png"
+image bg dfor2 = "gfx/backgrounds/dforest2.png"
+image bg dfor3 = "gfx/backgrounds/dforest3.png"
+image bg nfor1 = "gfx/backgrounds/nforest1.png"
+image bg nfor2 = "gfx/backgrounds/nforest2.png"
+image bg nfor3 = "gfx/backgrounds/nforest3.png"
+=======
 image bg shrfr = "shrinefront.png"
 image bg hall1 = "gfx/backgrounds/Hall1.jpg"
 image bg hall2 = "gfx/backgrounds/Hall1.jpg"
@@ -281,11 +299,13 @@ image bg kitchen = "gfx/backgrounds/kitchen.jpg"
 #image bg for2 = ""
 #image bg for3 = ""
 #image bg for4 = ""
+>>>>>>> .r48
 #image bg traingr = ""
-#image bg garden = ""
-#image bg street = ""
-#image bg store = ""
-#image bg backalley = ""
+image bg gar1 = "gfx/backgrounds/garden1.png"
+image bg gar2 = "gfx/backgrounds/garden2.png"
+image bg street = "gfx/backgrounds/streetalley1.png"
+image bg store = "gfx/backgrounds/store.png"
+image bg backalley = "gfx/backgrounds/streetalley2.png"
 #image bg cheapbar = ""
 image bg blackscr = "gfx/backgrounds/blackscr.png"
 image bg redscr = "gfx/backgrounds/redscr.jpg"
@@ -302,7 +322,7 @@ image textbox = "gfx/textbox.png"
 #-----------------------------------------------
 #DECLARE RIKU SPRITE IMAGES
 #-----------------------------------------------
-#image r happy = ""
+image r happy = "gfx/sprites/rhappy.png"
 #image r sad = ""
 #image r scare = ""
 #image r grin = ""
@@ -316,34 +336,50 @@ image textbox = "gfx/textbox.png"
 #---------------------------------------------------
 #DECLARE ROMAN SPRITE IMAGES
 #---------------------------------------------------
-#image ro happy = ""
-#image ro sad = ""
+image ro happy = "gfx/sprites/rohappy.png"
+image ro sad = "gfx/sprites/rosad.png"
 #image ro scare = ""
 #image ro fight = ""
 #image ro blush = ""
-#image ro upset = ""
-#image ro neutral = ""
+image ro worried = "gfx/sprites/roworried.png"
+image ro neutral = "gfx/sprites/roneu.png"
+image ro pout = "gfx/sprites/ropout.png"
 
 #------------------------------------------------
 #DECLARE SUSA SPRITE IMAGES
 #------------------------------------------------
-#image su mad = ""
-#image su neu = ""
-#image su scare = ""
-#image su smirk = ""
-#image su grin = ""
+image su mad = "gfx/sprites/sutch.png"
+image su neu = "gfx/sprites/suneu.png"
+image su scare = "gfx/sprites/suflip.png"
+image su smirk = "gfx/sprites/susmirk.png"
+image su grin = "gfx/sprites/suamuse.png"
+image su dub = "gfx/sprites/suohrly.png"
+image su irk = "gfx/sprites/suannoy.png"
 
 #---------------------------------------------------
 #DECLARE SOUME SPRITE IMAGES
 #---------------------------------------------------
-#image s neu = ""
-#image s upset = ""
-#image s smile = ""
-#image s think = ""
-#image s mad = ""
-#image s youkogrin = ""
-#image s youkofrown = ""
-#image s frown = ""
+image s neu = "gfx/sprites/sneu.png"
+image s upset = "gfx/sprites/supset.png"
+image s smile = "gfx/sprites/sbigsm.png"
+image s think = "gfx/sprites/sthought.png"
+image s mad = "gfx/sprites/spissed.png"
+image s sadsm = "gfx/sprites/ssadsm.png"
+image s nerv = "gfx/sprites/snerve.png"
+image s ohmy = "gfx/sprites/sohmy.png"
+image s distr = "gfx/sprites/sdistractedo.png"
+image s blank = "gfx/sprites/sblanko.png"
+image s sad = "gfx/sprites/sdepress.png"
+image s pens = "gfx/sprites/spensive.png"
+image s gigg ="gfx/sprites/stitter.png"
+image s shock = "gfx/sprites/sshock.png"
+image yougrin = "gfx/sprites/youdkgrin.png"
+image youpiss = "gfx/sprites/youpissed.png"
+image yousm = "gfx/sprites/yousm.png"
+image youflirt = "gfx/sprites/youflirt.png"
+image youmisch = "gfx/sprites/youmis.png"
+image youneu = "gfx/sprites/youneu.png"
+image youbore = "gfx/sprites/youbored.png"
 
 #----------------------------------------------
 #DECLARE LIZA SPRITE IMAGES
@@ -558,15 +594,17 @@ label start:
 
     "Night, Mom."
     #hide cg 1 with fade
-    hide ui with dissolve
+    hide ui
     $ renpy.pause(2)
 
 label Scene1:
         show bg blackscr with dissolve
         $ renpy.pause(1)
-        show bg riroom with dissolve
+        show bg nfor1 with dissolve
+        $show_main_ui(hp,mp)
         $ renpy.pause(2)
-        show ui with dissolve
+        
+
         "It's so dark in here. No windows, no sunlight. Smells musty and wet. Wherever this is, it's probably far underground."
 
         "That’s smart. Wouldn’t expect any less from these kidnappers."
@@ -644,7 +682,7 @@ label Scene1:
 
         "I lift a fist to teach the kid a lesson. He’s slow; you could see it in his muscles."
 
-        #show bg redscr with dissolve
+        show bg redscr with dissolve
         pr "Aack! My arm---"
 
         "The vivid eyes I’d been looking at hover above me, and suddenly my arm is on fire! Broken! Nearly torn out of the socket and bleeding all over."
@@ -658,21 +696,28 @@ label Scene1:
         boy "Think of this as fate. That sounds kind of nice, doesn’t it?"
         #hide CG Mameat with fade
 
-        #hide bg redscr with dissolve
+        hide bg redscr with dissolve
+        $renpy.pause(1.0)
+        hide bg nfor1 with dissolve
+        $renpy.pause(2.0)
+        hide ui
 # CG: Screen fades to black/red?
 # play sound Screaming, crunching, grinding, all sorts of unholy noises.
         $ renpy.pause(5.0)
 
 label Scene2:
-        show ui
-        #show bg street with dissolve
+        show bg street with dissolve
+        $show_main_ui(hp, mp)
+
         #show student 1 with fade
 
         gir "Riku. ...HEY, Riku, wake the hell up!"
 
         r "Huh? Oh."
 
-        #show r neu with fade
+        hide ui
+        show r happy with fade
+        $show_main_ui(hp,mp)
         #show sg neu with fade
         "If you haven't figured it out yet, I'm Riku. Midorikawa Riku, age 17, third year in high school."
         "I don't believe in silly crap like blood-type personalities, and even if I did, I dunno mine. I don't believe in horoscopes, either. Superstition is for kids."
@@ -765,9 +810,13 @@ label Scene2:
 
         "I wave quickly to my friends, mouthing a good-bye. Ugh. No other seventeen year old in the universe has to be home this early. So fucking unfair."
 
+        hide rihappy with fade
+        hide bg street with dissolve
+        $ renpy.pause(4.0)
+        hide ui
 label Scene3:
         #---Flashback---
-        hide bg riroom with dissolve
+        $show_main_ui(hp, mp)
         #show cg rikflash with dissolve
         #hide cg rikflash with dissolve
         
@@ -802,10 +851,12 @@ label Scene3:
 
         pa "This time he’s paying for that out of his allowance."
 
+        hide ui
 # --------
 
 label Scene4:
-        show bg riroom with dissolve
+        show bg back alley with dissolve
+        $show_main_ui(hp,mp)
         "My parents didn't let me have a new door for three whole months cause of that."
 
         "I do have to be careful, though. Friendly punches can turn into broken arms when I’m the one doing the punching."
@@ -821,6 +872,7 @@ label Scene4:
 
         # play sound Door unlocking.
 
+        show rhappy with fade
         r "I’m home."
 
         pa "Riku—in here, please."
