@@ -167,8 +167,8 @@ init python:
     BOX_OVERLAY_COLOR = Color( 0, 0, 255, 100 )
 
     class WhackAMole( Minigame ):
-        def __init__( self, level_number=1 ):
-            super( WhackAMole, self ).__init__()
+        def __init__( self, origin_x=0, origin_y=0, level_number=1 ):
+            super( WhackAMole, self ).__init__( origin_x, origin_y )
 
             if level_number > len( MOLE_LEVELS ) or level_number <= 0:
                 raise ValueError( "Invalid Whack-a-Mole level number %d.  "
@@ -545,7 +545,8 @@ init python:
                     self.total_score = self.base_score + self.accuracy_bonus
 
         def render( self, blitter ):
-            world_transform = GameTransform()
+            origin_x, origin_y = self.get_origin()
+            world_transform    = GameTransform( origin_x, origin_y )
             self.background["renderer"].render( blitter, world_transform )
 
             self.time_remaining_hud["renderer"].render( blitter, world_transform )
