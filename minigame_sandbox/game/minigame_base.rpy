@@ -86,12 +86,16 @@ init -50 python:
         LEFT_MOUSE_BUTTON  = 1
         RIGHT_MOUSE_BUTTON = 2
 
-        def __init__( self ):
+        def __init__( self, origin_x, origin_y ):
             super( Minigame, self ).__init__()
             self.is_quitting = False
+            self.origin      = (origin_x, origin_y)
 
         def get_displayables( self ):
             return []
+
+        def get_origin( self ):
+            return self.origin
 
         def render( self, blitter ):
             pass
@@ -123,11 +127,12 @@ init -50 python:
         def on_mouse_up( self, mx, my, button ):
             pass
 
-    def run_minigame( game_type, *args, **kwds ):
+    def run_minigame( game_type, x=0, y=0, *args, **kwds ):
         try:
-            driver = MinigameDriver( game_type( *args, **kwds ) )
+            driver = MinigameDriver( game_type( x, y, *args, **kwds ) )
             ui.add( driver )
             ui.interact( suppress_overlay=True, suppress_underlay=True )
+            return driver.get_game_result()
         except:
             # make sure no matter what happens we can always see our mouse.
             show_mouse()
