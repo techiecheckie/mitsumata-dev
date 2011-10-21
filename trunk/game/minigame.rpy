@@ -15,7 +15,7 @@ init python:
       if button == "exit":
         break
       elif button == "molegame":
-        score = start_mole_game()
+        score = run_minigame( WhackAMole, 370, 115 )
         # And do something with it...
 
     hide_minigame_ui(background, False)
