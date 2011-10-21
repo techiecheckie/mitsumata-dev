@@ -1,9 +1,9 @@
 init -50 python:
     import collections
     import copy
+    import math
     import time
 
-    Size   = collections.namedtuple( "Size", [ "width", "height" ] )
     Color  = collections.namedtuple( "Color", [ "red", "green", "blue", "alpha" ] )
     Bounds = collections.namedtuple( "Bounds", [ "left", "top", "right", "bottom" ] )
 
@@ -57,6 +57,9 @@ init -50 python:
         def get_value( self ):
             alpha = self.elapsed_time / self.duration
             return self.min_value * (1 - alpha) + self.max_value * alpha
+
+        def get_truncated_value( self ):
+            return math.trunc( self.get_value() )
 
     class BoxOverlay( object ):
         def __init__( self, box, color ):
@@ -219,6 +222,12 @@ init -50 python:
 
         def reset( self ):
             self.current_time = time.time()
+
+    class Size( object ):
+        def __init__( self, width, height ):
+            super( Size, self ).__init__()
+            self.width  = width
+            self.height = height
 
     def get_blitter( displayable ):
         return renpy.render( displayable, renpy.config.screen_width,

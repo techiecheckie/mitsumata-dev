@@ -72,8 +72,7 @@ init python:
             small_bird["renderer"].add_animation( "flying", GameAnimation( [ GameImage( "gfx/duck_hunt/small_bird/small_bird-%d.png" % frame_index, Anchor.CENTER )
                                                                              for frame_index in xrange( 4 ) ], 8 ) )
             small_bird["collider"] = GameBoxCollider( Size( 50, 30 ), Anchor.CENTER )
-            small_bird["renderer"].set_bounds_overlay( BoxOverlay( small_bird["collider"], Color( 0, 255, 0, 100 ) ) )
-            small_bird["renderer"].set_overlay_visible( False )
+            small_bird["renderer"].set_collider_visible( True )
             small_bird["behavior"] = SmallBirdBehavior()
             PrefabFactory.add_prefab( "small_bird", small_bird )
 
@@ -82,8 +81,7 @@ init python:
             big_bird["renderer"].add_animation( "flying", GameAnimation( [ GameImage( "gfx/duck_hunt/big_bird/big_bird-%d.png" % frame_index, Anchor.CENTER )
                                                                            for frame_index in xrange( 8 ) ], 8 ) )
             big_bird["collider"] = GameBoxCollider( Size( 90, 35 ), Anchor.CENTER )
-            big_bird["renderer"].set_bounds_overlay( BoxOverlay( big_bird["collider"], Color( 0, 255, 0, 100 ) ) )
-            big_bird["renderer"].set_overlay_visible( False )
+            big_bird["renderer"].set_collider_visible( True )
             big_bird["behavior"] = BigBirdBehavior()
             PrefabFactory.add_prefab( "big_bird", big_bird )
 
@@ -99,8 +97,7 @@ init python:
             self.fire_zone["renderer"] = GameRenderer()
             self.fire_zone["collider"] = GameBoxCollider( zone_size )
             self.fire_zone["transform"].set_position( 0, 50 )
-            self.fire_zone["renderer"].set_bounds_overlay( BoxOverlay( self.fire_zone["collider"], Color( 255, 0, 0, 100 ) ) )
-            self.fire_zone["renderer"].set_overlay_visible( False )
+            self.fire_zone["renderer"].set_collider_visible( True )
 
         def create_boom( self ):
             boom = GameObject( "boom" )
