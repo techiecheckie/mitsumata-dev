@@ -483,6 +483,9 @@ init python:
 
             return displayables
 
+        def get_result( self ):
+            return self.total_score
+
         def update( self, delta_sec ):
             if self.state == MOLE_GAME_STATE_COUNTDOWN:
                 self.countdown_hud.update( delta_sec )
