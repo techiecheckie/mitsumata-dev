@@ -200,6 +200,9 @@ init -50 python:
                                   if hasattr( text_callback, "__call__" )
                                   else lambda : str( text_callback ))
 
+        def get_displayables( self ):
+            return []
+
         def render( self, blitter, transform, is_flipped=False ):
             text = Text( self.text_callback() )
             if is_flipped:

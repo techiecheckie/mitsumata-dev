@@ -129,6 +129,14 @@ init python:
                         MEDIUM_MOLE_TYPE : 3,
                         HARD_MOLE_TYPE   : 5 }
 
+    # mole score values.
+    MOLE_SCORE_VALUES = { EASY_MOLE_TYPE   : 100,
+                          MEDIUM_MOLE_TYPE : 350,
+                          HARD_MOLE_TYPE   : 600 }
+
+    # accuracy bonus.
+    MOLE_BASE_ACCURACY_BONUS = 500
+
     # game dimensions.
     NUMBER_ROWS    = 3
     NUMBER_COLUMNS = 3
@@ -194,12 +202,13 @@ init python:
             self.occupied_cells = []
 
             # set up entities.
-            self.background   = None
-            self.dirt_piles   = []
-            self.easy_moles   = []
-            self.medium_moles = []
-            self.hard_moles   = []
-            self.huds         = []
+            self.background         = None
+            self.dirt_piles         = []
+            self.easy_moles         = []
+            self.medium_moles       = []
+            self.hard_moles         = []
+            self.start_screen_hud   = None
+            self.time_remaining_hud = None
 
             self.create_background()
             self.create_moles()
@@ -282,10 +291,13 @@ init python:
                 self.dirt_piles.append( dirt_pile )
 
         def create_huds( self ):
-            time_remaining_hud = GameObject()
-            time_remaining_hud["renderer"] = GameRenderer( GameText( self.get_time_remaining ) )
-            time_remaining_hud["transform"].set_position( 10, 10 )
-            self.huds.append( time_remaining_hud )
+            self.start_screen_hud             = GameObject()
+            self.start_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/whack_a_mole/start_screen.png" ) )
+            self.start_screen_hud["transform"].set_position( 138, 50 )
+
+            self.time_remaining_hud = GameObject()
+            self.time_remaining_hud["renderer"] = GameRenderer( GameText( self.get_time_remaining ) )
+            self.time_remaining_hud["transform"].set_position( 10, 10 )
 
         def get_available_cell( self ):
             while True:
@@ -347,7 +359,8 @@ init python:
             cell             = self.get_available_cell()
             mole             = PrefabFactory.instantiate( mole_type )
             mole["behavior"] = MoleBehavior( MOLE_HIT_POINTS[mole_type],
-                                             self.mole_duration.get_value() )
+                                             self.mole_duration.get_value(),
+                                             MOLE_SCORE_VALUES[mole_type] )
             mole["behavior"].emerge()
             mole["transform"].set_position( *CELL_POSITIONS[cell] )
             mole_lists[mole_type].append( mole )
@@ -360,6 +373,20 @@ init python:
         def get_displayables( self ):
             displayables = []
             displayables.extend( self.background["renderer"].get_displayables() )
+
+            for dirt in self.dirt_piles:
+                displayables.extend( dirt["renderer"].get_displayables() )
+
+            moles = itertools.chain( self.easy_moles,
+                                     self.medium_moles,
+                                     self.hard_moles )
+
+            for mole in moles:
+                displayables.extend( mole["renderer"].get_displayables() )
+
+            displayables.extend( self.start_screen_hud["renderer"].get_displayables() )
+            displayables.extend( self.time_remaining_hud["renderer"].get_displayables() )
+
             return displayables
 
         def update( self, delta_sec ):
@@ -417,17 +444,19 @@ init python:
             for dirt_pile in self.dirt_piles:
                 dirt_pile["renderer"].render( blitter, world_transform )
 
-            for mole in self.easy_moles:
-                mole["renderer"].render( blitter, world_transform )
+            if self.state == MOLE_GAME_STATE_BEGIN:
+                self.start_screen_hud["renderer"].render( blitter, world_transform )
+            elif self.state == MOLE_GAME_STATE_PLAY:
+                for mole in self.easy_moles:
+                    mole["renderer"].render( blitter, world_transform )
 
-            for mole in self.medium_moles:
-                mole["renderer"].render( blitter, world_transform )
+                for mole in self.medium_moles:
+                    mole["renderer"].render( blitter, world_transform )
 
-            for mole in self.hard_moles:
-                mole["renderer"].render( blitter, world_transform )
+                for mole in self.hard_moles:
+                    mole["renderer"].render( blitter, world_transform )
 
-            for hud in self.huds:
-                hud["renderer"].render( blitter, world_transform )
+            self.time_remaining_hud["renderer"].render( blitter, world_transform )
 
         def on_key_down( self, key ):
             if key == pygame.K_ESCAPE:
@@ -472,12 +501,13 @@ init python:
                     self.mole_countdown = self.spawn_time.get_value()
 
     class MoleBehavior( GameComponent ):
-        def __init__( self, number_hit_points, duration ):
+        def __init__( self, number_hit_points, duration, score_value ):
             super( MoleBehavior, self ).__init__()
             self.state             = MOLE_STATE_BURIED
             self.idle_remaining    = duration
             self.dead_countdown    = 0
             self.number_hit_points = number_hit_points
+            self.score_value       = score_value
 
         def die( self ):
             self.state = MOLE_STATE_DYING
