@@ -606,7 +606,10 @@ init python:
         def on_mouse_down( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
                 if self.state == MOLE_GAME_STATE_PLAY:
-                    mole                = self.get_mole_at_position( mx, my )
+                    # XXX: there really needs to be a way to properly factor this.
+                    origin_x, origin_y  = self.get_origin()
+                    mole                = self.get_mole_at_position( mx - origin_x,
+                                                                     my - origin_y )
                     self.number_clicks += 1
                     if mole and mole["behavior"].is_alive():
                         mole["behavior"].hit()
