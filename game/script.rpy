@@ -265,7 +265,7 @@ init python:
 #----------------------------------
 # eg. image eileen happy = "eileen_happy.png"
 
-<<<<<<< .mine
+#<<<<<<< .mine
 #image bg shrfr = 
 image bg hall1 = "gfx/backgrounds/Hallway1.png"
 image bg hall2 = "gfx/backgrounds/Hallway2.png"
@@ -282,24 +282,24 @@ image bg dfor3 = "gfx/backgrounds/dforest3.png"
 image bg nfor1 = "gfx/backgrounds/nforest1.png"
 image bg nfor2 = "gfx/backgrounds/nforest2.png"
 image bg nfor3 = "gfx/backgrounds/nforest3.png"
-=======
-image bg shrfr = "shrinefront.png"
-image bg hall1 = "gfx/backgrounds/Hall1.jpg"
-image bg hall2 = "gfx/backgrounds/Hall1.jpg"
-#image bg hall3 = ""
-#image bg hall4 = ""
-image bg riroom = "gfx/backgrounds/riroom.jpg"
-image bg roroom = "gfx/backgrounds/riroom.jpg"
-image bg soroom = "gfx/backgrounds/riroom.jpg"
-image bg suroom = "gfx/backgrounds/riroom.jpg"
-image bg lib = "gfx/backgrounds/riroom.jpg"
-image bg bathroom = "gfx/backgrounds/riroom.jpg"
-image bg kitchen = "gfx/backgrounds/kitchen.jpg"
-#image bg for1 = ""
-#image bg for2 = ""
-#image bg for3 = ""
-#image bg for4 = ""
->>>>>>> .r48
+# =======
+# image bg shrfr = "shrinefront.png"
+# image bg hall1 = "gfx/backgrounds/Hall1.jpg"
+# image bg hall2 = "gfx/backgrounds/Hall1.jpg"
+# #image bg hall3 = ""
+# #image bg hall4 = ""
+# image bg riroom = "gfx/backgrounds/riroom.jpg"
+# image bg roroom = "gfx/backgrounds/riroom.jpg"
+# image bg soroom = "gfx/backgrounds/riroom.jpg"
+# image bg suroom = "gfx/backgrounds/riroom.jpg"
+# image bg lib = "gfx/backgrounds/riroom.jpg"
+# image bg bathroom = "gfx/backgrounds/riroom.jpg"
+# image bg kitchen = "gfx/backgrounds/kitchen.jpg"
+# #image bg for1 = ""
+# #image bg for2 = ""
+# #image bg for3 = ""
+# #image bg for4 = ""
+# >>>>>>> .r48
 #image bg traingr = ""
 image bg gar1 = "gfx/backgrounds/garden1.png"
 image bg gar2 = "gfx/backgrounds/garden2.png"

@@ -1,23 +1,155 @@
-﻿init python:
+init python:
+    import collections
+    import itertools
     import math
     import pygame
-    import time
 
-    # map of pygame event types to a string describing them.
-    PYGAME_EVENT_NAMES = { pygame.QUIT            : "Quit",
-                           pygame.ACTIVEEVENT     : "Active Event",
-                           pygame.KEYDOWN         : "Key Down",
-                           pygame.KEYUP           : "Key Up",
-                           pygame.MOUSEMOTION     : "Mouse Motion",
-                           pygame.MOUSEBUTTONUP   : "Mouse Button Up",
-                           pygame.MOUSEBUTTONDOWN : "Mouse Button Down",
-                           pygame.JOYAXISMOTION   : "Joystick Axis Motion",
-                           pygame.JOYBALLMOTION   : "Joystick Ball Motion",
-                           pygame.JOYBUTTONUP     : "Joystick Button Up",
-                           pygame.JOYBUTTONDOWN   : "Joystick Button Down",
-                           pygame.VIDEORESIZE     : "Video Resize",
-                           pygame.VIDEOEXPOSE     : "Video Expose",
-                           pygame.USEREVENT       : "User Event" }
+    class MoleLevel( object ):
+        def __init__( self, time_limit, max_moles, max_easy_moles,
+                      max_medium_moles, max_hard_moles, spawn_time,
+                      mole_duration ):
+            super( MoleLevel, self ).__init__()
+
+            self.time_limit       = time_limit
+            self.max_moles        = max_moles
+            self.max_easy_moles   = max_easy_moles
+            self.max_medium_moles = max_medium_moles
+            self.max_hard_moles   = max_hard_moles
+            self.spawn_time       = spawn_time
+            self.mole_duration    = mole_duration
+
+    # Define the settings that affect the difficulty for each Whack-A-Mole
+    # level.  The settings for each level are described as follows:
+    #
+    #     time_limit       - The length of the game in seconds.
+    #
+    #     max_moles        - Pair of numbers describing the number of moles
+    #                        that can appear at once on the board, regardless
+    #                        of their difficulty.  The first number of the max
+    #                        number of moles that appear at the beginning of
+    #                        the game, and the second number is the max number
+    #                        that can appear at the end of the game.  Larger
+    #                        number makes the game more difficult.
+    #
+    #     max_easy_moles   - Pair of numbers describing the number of "easy"
+    #                        moles that appear at once on the board.  The first
+    #                        first number is the number of these moles that
+    #                        can appear at once at the beginning of the game,
+    #                        and the second number is the number that can appear
+    #                        at the end of the game.  Larger numbers make the
+    #                        game more difficult.
+    #
+    #     max_medium_moles - Pair of numbers describing the number of "medium"
+    #                        moles that appear at once on the board.  The first
+    #                        first number is the number of these moles that
+    #                        can appear at once at the beginning of the game,
+    #                        and the second number is the number that can appear
+    #                        at the end of the game.  Larger numbers make the
+    #                        game more difficult.
+    #
+    #     max_hard_moles   - Pair of numbers describing the number of "hard"
+    #                        moles that appear at once on the board.  The first
+    #                        first number is the number of these moles that
+    #                        can appear at once at the beginning of the game,
+    #                        and the second number is the number that can appear
+    #                        at the end of the game.  Larger numbers make the
+    #                        game more difficult.
+    #
+    #     spawn_time       - Pair of numbers describing how often a new mole
+    #                        appears on the game board, in seconds.  The first
+    #                        number is the mole spawn time at the start of the
+    #                        game, and the second number is mole spawn time at
+    #                        the end of the game.  Smaller numbers make the game
+    #                        more difficult.
+    #
+    #     mole_duration    - Pair of numbers describing how long a mole stays on
+    #                        screen before it disappears, in seconds.  Thie first
+    #                        number is the mole's duration at the beginning of
+    #                        the game, and the second number is the mole's
+    #                        duration at the end of the game.  Smaller numbers
+    #                        make the game more difficult.
+    #
+    # Additional levels can be created by creating new MoleLevel entries and
+    # filling in the values for each of its settings.
+    MOLE_LEVELS = [
+        # Level 1
+        MoleLevel( time_limit       = 60,
+                   max_moles        = (2, 8),
+                   max_easy_moles   = (3, 5),
+                   max_medium_moles = (0, 4),
+                   max_hard_moles   = (0, 3),
+                   spawn_time       = (0.75, 0.25),
+                   mole_duration    = (1.6, 0.36) )
+        ]
+
+    #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####
+
+    # different states the whack a mole game can be in.
+    MOLE_GAME_STATE_BEGIN     = "mole_begin"
+    MOLE_GAME_STATE_COUNTDOWN = "mole_countdown"
+    MOLE_GAME_STATE_PLAY      = "mole_play"
+    MOLE_GAME_STATE_END       = "mole_end"
+
+    # mole states.
+    MOLE_STATE_DEAD       = "dead"
+    MOLE_STATE_DYING      = "dying"
+    MOLE_STATE_EMERGING   = "emerging"
+    MOLE_STATE_IDLE       = "idle"
+    MOLE_STATE_SUBMERGING = "submerging"
+    MOLE_STATE_BURIED     = "buried"
+
+    # animation names.
+    MOLE_ANIMATION_DEAD     = "dead"
+    MOLE_ANIMATION_EMERGE   = "emerge"
+    MOLE_ANIMATION_SUBMERGE = "submerge"
+
+    # frameset names.
+    COUNTDOWN_FRAMESET_GO    = "countdown-go"
+    COUNTDOWN_FRAMESET_ONE   = "countdown-1"
+    COUNTDOWN_FRAMESET_TWO   = "countdown-2"
+    COUNTDOWN_FRAMESET_THREE = "countdown-3"
+    MOLE_FRAMESET_DEAD       = "dead"
+
+    # animation durations.  the inverse of these are the animations frames per
+    # second value passed to the GameAnimation constructor.
+    MOLE_ANIMATION_DEAD_DURATION     = 0.2
+    MOLE_ANIMATION_EMERGE_DURATION   = 0.7
+    MOLE_ANIMATION_SUBMERGE_DURATION = 0.35
+
+    # duration a dead mole stays on screen.
+    MOLE_DEAD_DURATION = 0.6
+
+    # number of animation frames.
+    NUMBER_DEAD_FRAMES     = 3
+    NUMBER_EMERGE_FRAMES   = 10
+    NUMBER_SUBMERGE_FRAMES = 4
+
+    # prefab names.
+    EASY_MOLE_TYPE   = "easy_mole"
+    MEDIUM_MOLE_TYPE = "medium_mole"
+    HARD_MOLE_TYPE   = "hard_mole"
+
+    # mole hit points.
+    MOLE_HIT_POINTS = { EASY_MOLE_TYPE   : 1,
+                        MEDIUM_MOLE_TYPE : 3,
+                        HARD_MOLE_TYPE   : 5 }
+
+    # mole score values.
+    MOLE_SCORE_VALUES = { EASY_MOLE_TYPE   : 100,
+                          MEDIUM_MOLE_TYPE : 350,
+                          HARD_MOLE_TYPE   : 600 }
+
+    # accuracy bonus.
+    MOLE_BASE_ACCURACY_BONUS  = 500
+    MOLE_EXTRA_ACCURACY_BONUS = 100
+
+    # game dimensions.
+    NUMBER_ROWS    = 3
+    NUMBER_COLUMNS = 3
+    NUMBER_CELLS   = NUMBER_ROWS * NUMBER_COLUMNS
+
+    # mole size in pixels.
+    MOLE_SIZE = Size( 64, 60 )
 
     # pixel position of the upper left corner for each mole in the 3x3 grid
     # relative to the upper left corner of the whack a mole background image.
@@ -31,469 +163,543 @@
                        (2,1) : (280, 438),
                        (2,2) : (508, 443) }
 
-    # different states the whack a mole game can be in.
-    MOLE_STATE_BEGIN = "mole_begin"
-    MOLE_STATE_PLAY  = "mole_play"
-    MOLE_STATE_END   = "mole_end"
+    # misc. debug stuff.
+    BOX_OVERLAY_COLOR = Color( 0, 0, 255, 100 )
 
-    # different states each mole can be in.
-    MOLE_ANIM_STATE_EMERGE   = "mole_emerge"
-    MOLE_ANIM_STATE_IDLE     = "mole_idle"
-    MOLE_ANIM_STATE_SUBMERGE = "mole_submerge"
-    MOLE_ANIM_STATE_BURIED   = "mole_buried"
+    class WhackAMole( Minigame ):
+        def __init__( self, origin_x=0, origin_y=0, level_number=1 ):
+            super( WhackAMole, self ).__init__( origin_x, origin_y )
 
-    # messages displayed for each of the whack a mole game states.
-    STATE_MESSAGES = { MOLE_STATE_BEGIN : "Click anywhere to begin!",
-                       MOLE_STATE_PLAY  : "GO! Whack them moles!",
-                       MOLE_STATE_END   : "Game over!\nClick quit to exit." }
+            if level_number > len( MOLE_LEVELS ) or level_number <= 0:
+                raise ValueError( "Invalid Whack-a-Mole level number %d.  "
+                                  "Level number must be between 1 and %d." %
+                                  (level_number, len( MOLE_LEVELS )) )
 
-    # stores info on a visible mole.
-    class Mole( object ):
-        def __init__( self, cell, duration ):
-            self.cell         = cell
-            self.duration     = duration
-            self.elapsed_time  = 0
-            self.current_frame = 0
-            self.state         = MOLE_ANIM_STATE_EMERGE
+            # set up automated level difficulty parameters.
+            level = MOLE_LEVELS[level_number - 1]
 
-            # constants.  the start, stop, and number of frames are relative
-            # to the WhackAMole.mole_frames list.  specifically, it assumes
-            # that mole_frames stores frames 1 through 11 of the mole
-            # animation, meaning frame indices are offset by 1.
-            self.EMERGE_DURATION          = 0.7
-            self.EMERGE_START_FRAME_INDEX = 0
-            self.EMERGE_STOP_FRAME_INDEX  = 11
-            self.NUMBER_EMERGE_FRAMES     = (self.EMERGE_STOP_FRAME_INDEX -
-                                             self.EMERGE_START_FRAME_INDEX + 1)
+            self.time_remaining   = AutomatedInterpolator( level.time_limit,
+                                                           0,
+                                                           level.time_limit )
+            self.spawn_time       = AutomatedInterpolator( level.spawn_time[0],
+                                                           level.spawn_time[1],
+                                                           level.time_limit )
+            self.max_moles        = AutomatedInterpolator( level.max_moles[0],
+                                                           level.max_moles[1],
+                                                           level.time_limit )
+            self.max_easy_moles   = AutomatedInterpolator( level.max_easy_moles[0],
+                                                           level.max_easy_moles[1],
+                                                           level.time_limit )
+            self.max_medium_moles = AutomatedInterpolator( level.max_medium_moles[0],
+                                                           level.max_medium_moles[1],
+                                                           level.time_limit )
+            self.max_hard_moles   = AutomatedInterpolator( level.max_hard_moles[0],
+                                                           level.max_hard_moles[1],
+                                                           level.time_limit )
+            self.mole_duration    = AutomatedInterpolator( level.mole_duration[0],
+                                                           level.mole_duration[1],
+                                                           level.time_limit )
 
-            # submerge animation starts on frame number 8, which corresponds to
-            # index 7 in WhackAMole.mole_frames.
-            self.SUBMERGE_DURATION          = 0.5
-            self.SUBMERGE_START_FRAME_INDEX = 7
-            self.SUBMERGE_STOP_FRAME_INDEX  = 0
-            self.NUMBER_SUBMERGE_FRAMES     = (self.SUBMERGE_START_FRAME_INDEX -
-                                               self.SUBMERGE_STOP_FRAME_INDEX + 1)
-
-        # returns True if the mole is buried and should be removed from the
-        # game's list of active moles.
-        def update( self, time_delta ):
-            self.elapsed_time  += time_delta
-
-            if self.state == MOLE_ANIM_STATE_EMERGE:
-                frame_offset       = math.trunc( self.elapsed_time /
-                                                 self.EMERGE_DURATION *
-                                                 (self.NUMBER_EMERGE_FRAMES - 1) )
-                self.current_frame = self.EMERGE_START_FRAME_INDEX + frame_offset
-
-                if self.elapsed_time >= self.EMERGE_DURATION:
-                    self.state        = MOLE_ANIM_STATE_IDLE
-                    self.elapsed_time = 0
-            elif self.state == MOLE_ANIM_STATE_IDLE:
-                if self.elapsed_time >= self.duration:
-                    self.state        = MOLE_ANIM_STATE_SUBMERGE
-                    self.elapsed_time = 0
-            elif self.state == MOLE_ANIM_STATE_SUBMERGE:
-                # NOTE: since we play the animation in reverse, we subtract the
-                #       offset this time around.
-                frame_offset       = math.trunc( self.elapsed_time /
-                                                 self.SUBMERGE_DURATION *
-                                                 (self.NUMBER_SUBMERGE_FRAMES - 1) )
-                self.current_frame = self.SUBMERGE_START_FRAME_INDEX - frame_offset
-
-                if self.elapsed_time >= self.SUBMERGE_DURATION:
-                    self.state = MOLE_ANIM_STATE_BURIED
-            elif self.state == MOLE_ANIM_STATE_BURIED:
-                return True
-
-    # an image button that can be used inside a Ren'Py minigame where
-    # ui.interact() has been called with suppress_overlay = True.
-    class MinigameButton( renpy.Displayable ):
-        def __init__( self, image, x, y, visible=True, **kwds ):
-            super( MinigameButton, self ).__init__( **kwds )
-
-            self.image   = image
-            self.x       = x
-            self.y       = y
-            self.visible = visible
-            image_render = renpy.render( self.image, 0, 0, 0, 0 )
-            image_size   = image_render.get_size()
-            self.width   = image_size[0]
-            self.height  = image_size[1]
-
-        # draw the ui button using the given renpy.Render object.
-        def draw( self, render, st, at ):
-            image_render = renpy.render( self.image, 0, 0, st, at )
-            render.blit( image_render, (self.x, self.y) )
-
-        # boiler plate.
-        def visit( self ):
-            return [ self.image ]
-
-        # returns True if the button is visible and the mouse is clicked inside
-        # its bounds.
-        def is_clicked( self, mx, my ):
-            if not self.visible:
-                return False
-
-            left   = self.x
-            top    = self.y
-            right  = left + self.width
-            bottom = top + self.height
-
-            return left <= mx <= right and top <= my <= bottom
-
-    # computes ranges for AutomatedRange based on the absolute extent of a
-    # parameter and the desired width and distance of the sliding window that
-    # will move over those values.
-    def compute_range( absolute_min, absolute_max, width_percentage, alpha ):
-        range_width  = (absolute_max - absolute_min) * width_percentage / 100.0
-        range_middle = absolute_min * (1.0 - alpha) + absolute_max * alpha
-        range_min    = range_middle - range_width / 2.0
-        range_max    = range_middle + range_width / 2.0
-
-        # make sure we don't fall outside the absolute min and max values.
-        return ( max( range_min, absolute_min ), min( range_max, absolute_max ) )
-
-    # automated range of parameter values.
-    class AutomatedRange( object ):
-        def __init__( self, name, initial_min, initial_max,
-                      final_min, final_max, duration ):
-            super( AutomatedRange, self ).__init__()
-            self.name         = name
-            self.initial_min  = initial_min
-            self.initial_max  = initial_max
-            self.min_distance = final_min - initial_min
-            self.max_distance = final_max - initial_max
-            self.range_min    = initial_min
-            self.range_max    = initial_max
-            self.duration     = duration
-            self.elapsed_time = 0
-
-            renpy.log( "INITIALIZING %s: (%.3f, %.3f) -> (%.3f, %.3f)" %
-                       (self.name, initial_min, initial_max, final_min, final_max) )
-
-        def update( self, delta_time ):
-            self.elapsed_time += delta_time
-            ratio              = self.elapsed_time / self.duration
-            self.range_min     = self.initial_min + self.min_distance * ratio
-            self.range_max     = self.initial_max + self.max_distance * ratio
-
-        def get_value( self ):
-            value = renpy.random.uniform( self.range_min, self.range_max )
-            renpy.log( "(%s) Value: %.3f   Elapsed: %s   Min: %.3f   Max: %.3f" %
-                       (self.name, value, self.elapsed_time,
-                        self.range_min, self.range_max) )
-            return value
-
-    # displayable used for implementing the whack a mole minigame.
-    class WhackAMole( renpy.Displayable ):
-        # idea is difficulty = 0 is the easiest, difficult = 1 is the hardest.
-        def __init__( self, initial_difficulty=0.5, final_difficulty=0.5, **kwds ):
-            super( WhackAMole, self ).__init__( **kwds )
-
-            # how long the game will last in seconds.
-            GAME_DURATION = 30
-
-            # game state.
-            self.seconds_remaining = GAME_DURATION
-            self.state             = MOLE_STATE_BEGIN
-            self.score             = 0
-            self.active_moles      = []
-            self.final_score       = 0
-
-            # difficulty controls.  each control defines an absolute min value
-            # and an absolute max value.  this percentage controls how much
-            # the difficulty varies as a function of a fixed percent of the
-            # range of valid values for that control.
-            DIFFICULTY_VARIANCE = 30
-
-            # the maximum number of moles that can be on the game board at a time.
-            MAX_ACTIVE_MOLES_CONTROL_MIN = 1
-            MAX_ACTIVE_MOLES_CONTROL_MAX = 5
-
-            initial_range = compute_range( MAX_ACTIVE_MOLES_CONTROL_MIN,
-                                           MAX_ACTIVE_MOLES_CONTROL_MAX,
-                                           DIFFICULTY_VARIANCE,
-                                           initial_difficulty )
-            final_range   = compute_range( MAX_ACTIVE_MOLES_CONTROL_MIN,
-                                           MAX_ACTIVE_MOLES_CONTROL_MAX,
-                                           DIFFICULTY_VARIANCE,
-                                           final_difficulty )
-
-            self.max_active_moles = AutomatedRange( "max_active_moles",
-                                                    initial_range[0], initial_range[1],
-                                                    final_range[0], final_range[1],
-                                                    GAME_DURATION )
-
-            # the amount of time until the next mole appears on the board.
-            # because this range decreases as we get more difficult, use the
-            # inverse of the given difficulties.
-            MOLE_SPAWN_TIME_CONTROL_MIN  = 0.25
-            MOLE_SPAWN_TIME_CONTROL_MAX  = 0.75
-
-            initial_range = compute_range( MOLE_SPAWN_TIME_CONTROL_MIN,
-                                           MOLE_SPAWN_TIME_CONTROL_MAX,
-                                           DIFFICULTY_VARIANCE,
-                                           1 - initial_difficulty )
-            final_range   = compute_range( MOLE_SPAWN_TIME_CONTROL_MIN,
-                                           MOLE_SPAWN_TIME_CONTROL_MAX,
-                                           DIFFICULTY_VARIANCE,
-                                           1 - final_difficulty )
-
-            self.mole_spawn_time = AutomatedRange( "mole_spawn_time",
-                                                   initial_range[0], initial_range[1],
-                                                   final_range[0], final_range[1],
-                                                   GAME_DURATION )
-
-            # the amount of time a mole stays on the screen after it has fully
-            # finished its emerged animation.  because this range decreases as
-            # we get more difficult, use the inverse of the given
-            # difficulties.
-            MOLE_DURATION_TIME_CONTROL_MIN = 0.35
-            MOLE_DURATION_TIME_CONTROL_MAX = 1.6
-
-            initial_range = compute_range( MOLE_DURATION_TIME_CONTROL_MIN,
-                                           MOLE_DURATION_TIME_CONTROL_MAX,
-                                           DIFFICULTY_VARIANCE,
-                                           1 - initial_difficulty )
-            final_range   = compute_range( MOLE_DURATION_TIME_CONTROL_MIN,
-                                           MOLE_DURATION_TIME_CONTROL_MAX,
-                                           DIFFICULTY_VARIANCE,
-                                           1 - final_difficulty )
-
-            self.mole_duration_time = AutomatedRange( "mole_duration_time",
-                                                      initial_range[0], initial_range[1],
-                                                      final_range[0], final_range[1],
-                                                      GAME_DURATION )
-
-            # timing state.
-            self.last_time      = 0
+            # set up game state.
+            self.state          = MOLE_GAME_STATE_BEGIN
+            self.time_limit     = level.time_limit
+            self.base_score     = 0
+            self.accuracy_bonus = 0
+            self.number_clicks  = 0
+            self.number_hits    = 0
+            self.total_score    = 0
             self.mole_countdown = 0
+            self.occupied_cells = []
 
-            # image assets.
-            self.sprite_manager = SpriteManager()
-            self.background     = Image( "gfx/backgrounds/whack_a_mole_bg.png" )
-            self.mole_frames    = [ Image( "gfx/animated/mole/mole_1.png" ),
-                                    Image( "gfx/animated/mole/mole_2.png" ),
-                                    Image( "gfx/animated/mole/mole_3.png" ),
-                                    Image( "gfx/animated/mole/mole_4.png" ),
-                                    Image( "gfx/animated/mole/mole_5.png" ),
-                                    Image( "gfx/animated/mole/mole_6.png" ),
-                                    Image( "gfx/animated/mole/mole_7.png" ),
-                                    Image( "gfx/animated/mole/mole_8.png" ),
-                                    Image( "gfx/animated/mole/mole_9.png" ),
-                                    Image( "gfx/animated/mole/mole_10.png" ),
-                                    Image( "gfx/animated/mole/mole_11.png" ),
-                                    Image( "gfx/animated/mole/mole_12.png" ) ]
-            self.dirt           = self.mole_frames[0]
+            # set up entities.
+            self.background         = None
+            self.dirt_piles         = []
+            self.easy_moles         = []
+            self.medium_moles       = []
+            self.hard_moles         = []
+            self.countdown_hud      = None
+            self.score_hud          = None
+            self.start_screen_hud   = None
+            self.stop_screen_hud    = None
+            self.time_remaining_hud = None
 
-            # Get a render object so we can use ren'py to figure out the size
-            # of each of art assets.
-            background_render = renpy.render( self.background, 0, 0, 0, 0 )
-            background_size   = background_render.get_size()
-            mole_render       = renpy.render( self.dirt, 0, 0, 0, 0 )
-            mole_size         = mole_render.get_size()
+            self.create_background()
+            self.create_moles()
+            self.create_dirt()
+            self.create_huds()
 
-            # size and position constants.
-            self.BACKGROUND_WIDTH  = background_size[0]
-            self.BACKGROUND_HEIGHT = background_size[1]
-            self.BACKGROUND_LEFT   = 370
-            self.BACKGROUND_TOP    = 115
+        def create_background( self ):
+            self.background = GameObject()
+            self.background["renderer"] = GameRenderer( GameImage( "gfx/whack_a_mole/background.png" ) )
 
-            self.MOLE_WIDTH  = mole_size[0]
-            self.MOLE_HEIGHT = mole_size[1]
+        def create_moles( self ):
+            # easy moles.
+            easy_mole             = GameObject()
+            easy_mole["collider"] = GameBoxCollider( MOLE_SIZE )
+            easy_mole["renderer"] = GameRenderer( GameImage( "gfx/whack_a_mole/mole/mole-easy-static.png" ) )
+            easy_mole["renderer"].add_animation( MOLE_ANIMATION_EMERGE,
+                                                 GameAnimation( [ GameImage( "gfx/whack_a_mole/mole/mole-easy-%d.png" % frame_index, Anchor.TOP_LEFT )
+                                                                  for frame_index in xrange( NUMBER_EMERGE_FRAMES ) ],
+                                                                NUMBER_EMERGE_FRAMES / MOLE_ANIMATION_EMERGE_DURATION ) )
+            easy_mole["renderer"].add_animation( MOLE_ANIMATION_SUBMERGE,
+                                                 GameAnimation( [ GameImage( "gfx/whack_a_mole/mole/mole-easy-%d.png" % frame_index, Anchor.TOP_LEFT )
+                                                                  for frame_index in reversed( xrange( NUMBER_SUBMERGE_FRAMES ) ) ],
+                                                                NUMBER_SUBMERGE_FRAMES / MOLE_ANIMATION_SUBMERGE_DURATION ) )
+            easy_mole["renderer"].add_animation( MOLE_ANIMATION_DEAD,
+                                                 GameAnimation( [ GameImage( "gfx/whack_a_mole/mole/mole_dead-easy-%d.png" % frame_index, Anchor.TOP_LEFT )
+                                                                  for frame_index in xrange( NUMBER_DEAD_FRAMES ) ],
+                                                                NUMBER_DEAD_FRAMES / MOLE_ANIMATION_DEAD_DURATION ) )
+            easy_mole["renderer"].set_frame( MOLE_FRAMESET_DEAD, GameImage( "gfx/whack_a_mole/mole/mole_dead-easy.png" ) )
+            easy_mole["renderer"].set_collider_visible( False )
+            PrefabFactory.add_prefab( EASY_MOLE_TYPE, easy_mole )
 
-            self.NUMBER_ROWS    = 3
-            self.NUMBER_COLUMNS = 3
+            # medium moles.
+            medium_mole             = GameObject()
+            medium_mole["collider"] = GameBoxCollider( MOLE_SIZE )
+            medium_mole["renderer"] = GameRenderer( GameImage( "gfx/whack_a_mole/mole/mole-medium-static.png" ) )
+            medium_mole["renderer"].add_animation( MOLE_ANIMATION_EMERGE,
+                                                   GameAnimation( [ GameImage( "gfx/whack_a_mole/mole/mole-medium-%d.png" % frame_index, Anchor.TOP_LEFT )
+                                                                    for frame_index in xrange( NUMBER_EMERGE_FRAMES ) ],
+                                                                  NUMBER_EMERGE_FRAMES / MOLE_ANIMATION_EMERGE_DURATION ) )
+            medium_mole["renderer"].add_animation( MOLE_ANIMATION_SUBMERGE,
+                                                   GameAnimation( [ GameImage( "gfx/whack_a_mole/mole/mole-medium-%d.png" % frame_index, Anchor.TOP_LEFT )
+                                                                    for frame_index in reversed( xrange( NUMBER_SUBMERGE_FRAMES ) ) ],
+                                                                  NUMBER_SUBMERGE_FRAMES / MOLE_ANIMATION_SUBMERGE_DURATION ) )
+            medium_mole["renderer"].add_animation( MOLE_ANIMATION_DEAD,
+                                                   GameAnimation( [ GameImage( "gfx/whack_a_mole/mole/mole_dead-medium-%d.png" % frame_index, Anchor.TOP_LEFT )
+                                                                    for frame_index in xrange( NUMBER_DEAD_FRAMES ) ],
+                                                                  NUMBER_DEAD_FRAMES / MOLE_ANIMATION_DEAD_DURATION ) )
+            medium_mole["renderer"].set_frame( MOLE_FRAMESET_DEAD, GameImage( "gfx/whack_a_mole/mole/mole_dead-medium.png" ) )
+            medium_mole["renderer"].set_collider_visible( False )
+            PrefabFactory.add_prefab( MEDIUM_MOLE_TYPE, medium_mole )
 
-            self.TEXT_LEFT = 60
-            self.TEXT_TOP  = 100
+            # hard moles.
+            hard_mole             = GameObject()
+            hard_mole["collider"] = GameBoxCollider( MOLE_SIZE )
+            hard_mole["renderer"] = GameRenderer( GameImage( "gfx/whack_a_mole/mole/mole-hard-static.png" ) )
+            hard_mole["renderer"].add_animation( MOLE_ANIMATION_EMERGE,
+                                                 GameAnimation( [ GameImage( "gfx/whack_a_mole/mole/mole-hard-%d.png" % frame_index, Anchor.TOP_LEFT )
+                                                                  for frame_index in xrange( NUMBER_EMERGE_FRAMES ) ],
+                                                                NUMBER_EMERGE_FRAMES / MOLE_ANIMATION_EMERGE_DURATION ) )
+            hard_mole["renderer"].add_animation( MOLE_ANIMATION_SUBMERGE,
+                                                 GameAnimation( [ GameImage( "gfx/whack_a_mole/mole/mole-hard-%d.png" % frame_index, Anchor.TOP_LEFT )
+                                                                  for frame_index in reversed( xrange( NUMBER_SUBMERGE_FRAMES ) ) ],
+                                                                NUMBER_SUBMERGE_FRAMES / MOLE_ANIMATION_SUBMERGE_DURATION ) )
+            hard_mole["renderer"].add_animation( MOLE_ANIMATION_DEAD,
+                                                 GameAnimation( [ GameImage( "gfx/whack_a_mole/mole/mole_dead-hard-%d.png" % frame_index, Anchor.TOP_LEFT )
+                                                                  for frame_index in xrange( NUMBER_DEAD_FRAMES ) ],
+                                                                NUMBER_DEAD_FRAMES / MOLE_ANIMATION_DEAD_DURATION ) )
+            hard_mole["renderer"].set_frame( MOLE_FRAMESET_DEAD, GameImage( "gfx/whack_a_mole/mole/mole_dead-hard.png" ) )
+            hard_mole["renderer"].set_collider_visible( False )
+            PrefabFactory.add_prefab( HARD_MOLE_TYPE, hard_mole )
 
-            # ui assets.
-            self.quit_button = MinigameButton( Image( "gfx/quit_button.png" ),
-                                               self.TEXT_LEFT, self.TEXT_TOP + 100,
-                                               False )
+        def create_dirt( self ):
+            dirt             = GameObject()
+            dirt["renderer"] = GameRenderer( GameImage( "gfx/whack_a_mole/dirt.png" ) )
+            PrefabFactory.add_prefab( "dirt", dirt )
 
-        # boiler plate needed by Displayable class.  just returns all children
-        # displayables.
-        #
-        # XXX: I don't know how important it is to get ALL displayables used in
-        #      this list.  Trying to track the Text displayables given how
-        #      transient they are seems more of a pain than it may be worth.
-        def visit( self ):
-            children = [ self.background ]
-            children.extend( self.mole_frames )
-            return children
+            for position in CELL_POSITIONS.itervalues():
+                transform = GameTransform( *position )
+                dirt_pile = PrefabFactory.instantiate( "dirt", transform )
+                self.dirt_piles.append( dirt_pile )
 
-        # event handler.  handles mouse clicks, updates the game board, and
-        # stops the game once time has run out.
-        def event( self, e, x, y, st ):
-            if self.state == MOLE_STATE_BEGIN:
-                # start the game after the player clicks to start.
-                if e.type == pygame.MOUSEBUTTONUP and e.button == 1:
-                    self.state          = MOLE_STATE_PLAY
-                    self.last_time      = time.time()
-                    self.mole_countdown = self.mole_spawn_time.get_value()
-            elif self.state == MOLE_STATE_END:
-                # leave the game once the player clicks.
-                #if e.type == pygame.MOUSEBUTTONUP and e.button == 1:
-                #    if self.quit_button.is_clicked( x, y ):
-                #        return self.score
-                self.final_score = self.score
-                return
-            elif self.state == MOLE_STATE_PLAY:
-                # update the countdown timers.
-                current_time            = time.time()
-                time_delta              = current_time - self.last_time
-                self.last_time          = current_time
-                self.seconds_remaining -= time_delta
-                self.mole_countdown    -= time_delta
+        def create_huds( self ):
+            self.countdown_hud = GameObject()
+            self.countdown_hud["renderer"] = GameRenderer()
+            self.countdown_hud["behavior"] = CountdownBehavior()
+            self.countdown_hud["renderer"].set_frame( COUNTDOWN_FRAMESET_GO, GameImage( "gfx/whack_a_mole/countdown/countdown-go.png" ) )
+            self.countdown_hud["renderer"].set_frame( COUNTDOWN_FRAMESET_ONE, GameImage( "gfx/whack_a_mole/countdown/countdown-1.png" ) )
+            self.countdown_hud["renderer"].set_frame( COUNTDOWN_FRAMESET_TWO, GameImage( "gfx/whack_a_mole/countdown/countdown-2.png" ) )
+            self.countdown_hud["renderer"].set_frame( COUNTDOWN_FRAMESET_THREE, GameImage( "gfx/whack_a_mole/countdown/countdown-3.png" ) )
+            self.countdown_hud["renderer"].set_frameset( COUNTDOWN_FRAMESET_THREE )
 
-                # automate the difficulty parameters.
-                self.max_active_moles.update( time_delta )
-                self.mole_spawn_time.update( time_delta )
-                self.mole_duration_time.update( time_delta )
+            self.score_hud             = GameObject()
+            self.score_hud["renderer"] = GameRenderer( GameText( self.get_score ) )
+            self.score_hud["transform"].set_position( 400, 10 )
 
-                # list of moles to add and remove this frame.
-                moles_to_add    = []
-                moles_to_remove = []
+            self.start_screen_hud             = GameObject()
+            self.start_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/whack_a_mole/start_screen.png" ) )
+            self.start_screen_hud["transform"].set_position( 138, 50 )
 
-                # see if it's time to add another mole.
-                if self.mole_countdown <= 0 and self.seconds_remaining > 0:
-                    # don't exceed the max we can have on the screen at a time.
-                    if len( self.active_moles ) + 1 < self.max_active_moles.get_value():
-                        mole = self.create_mole()
-                        moles_to_add.append( self.create_mole() )
+            self.stop_screen_hud             = GameObject()
+            self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/whack_a_mole/stop_screen.png" ) )
+            self.stop_screen_hud["transform"].set_position( 138, 50 )
 
-                    # reset when we try to add another mole.
-                    self.mole_countdown = self.mole_spawn_time.get_value()
+            base_score             = GameObject()
+            base_score["renderer"] = GameRenderer( GameText( self.get_base_score ) )
+            base_score["transform"].set_position( 185, 159 )
+            self.stop_screen_hud.add_child( base_score )
 
-                # update active moles and remove those that are buried.
-                for mole in self.active_moles:
-                    if mole.update( time_delta ):
-                        moles_to_remove.append( mole )
+            accuracy_bonus             = GameObject()
+            accuracy_bonus["renderer"] = GameRenderer( GameText( self.get_accuracy_bonus ) )
+            accuracy_bonus["transform"].set_position( 185, 251 )
+            self.stop_screen_hud.add_child( accuracy_bonus )
 
-                for mole in moles_to_remove:
-                    self.active_moles.remove( mole )
+            total_score             = GameObject()
+            total_score["renderer"] = GameRenderer( GameText( self.get_total_score ) )
+            total_score["transform"].set_position( 185, 320 )
+            self.stop_screen_hud.add_child( total_score )
 
-                for mole in moles_to_add:
-                    self.active_moles.append( mole )
+            self.time_remaining_hud = GameObject()
+            self.time_remaining_hud["renderer"] = GameRenderer( GameText( self.get_time_remaining ) )
+            self.time_remaining_hud["transform"].set_position( 10, 10 )
 
-                # see if we hit a mole.
-                if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
-                    mole = self.get_mole_at_mouse( x, y )
-                    if mole:
-                        self.active_moles.remove( mole )
-                        self.score += 1
+        def compute_accuracy_bonus( self ):
+            self.accuracy_bonus = 0
+            if self.number_clicks > 0:
+                hit_percentage = float(self.number_hits) / self.number_clicks
 
-                # stop the game if there's no more time.  make sure to show
-                # the quit button at this time, and remove any visible moles.
-                if self.seconds_remaining <= 0:
-                    self.state               = MOLE_STATE_END
-                    self.quit_button.visible = True
-                    self.active_moles        = []
+                if hit_percentage >= 0.8:
+                    self.accuracy_bonus += MOLE_BASE_ACCURACY_BONUS
+                if hit_percentage >= 0.85:
+                    self.accuracy_bonus += MOLE_EXTRA_ACCURACY_BONUS
+                if hit_percentage >= 0.9:
+                    self.accuracy_bonus += MOLE_EXTRA_ACCURACY_BONUS
+                if hit_percentage >= 0.95:
+                    self.accuracy_bonus += MOLE_EXTRA_ACCURACY_BONUS
+                if hit_percentage >= 1:
+                    self.accuracy_bonus += (2 * MOLE_EXTRA_ACCURACY_BONUS)
 
-            # continually render and update.
-            renpy.redraw( self, 0 )
-            renpy.timeout( 0 )
+        def get_accuracy_bonus( self ):
+            if self.accuracy_bonus == 0:
+                return "%20d" % self.accuracy_bonus
+            elif self.accuracy_bonus < 1000:
+                return "%18d" % self.accuracy_bonus
+            else:
+                return "%16d" % self.accuracy_bonus
 
-        # creates a new mole to add to the game board.
-        def create_mole( self ):
-            # keep trying to find a free cell.
-            cell = self.get_random_cell()
-            while self.is_cell_active( cell ):
+        def get_available_cell( self ):
+            while True:
                 cell = self.get_random_cell()
+                if cell not in self.occupied_cells:
+                    return cell
 
-            duration = self.mole_duration_time.get_value()
-            return Mole( cell, duration )
+        def get_base_score( self ):
+            if self.base_score < 1000:
+                return "%20d" % self.base_score
+            elif self.base_score < 10000:
+                return "%18d" % self.base_score
+            else:
+                return "%16d" % self.base_score
 
-        # gets a random cell in the game board as a (row, col) tuple.
-        def get_random_cell( self ):
-            return (renpy.random.randint( 0, self.NUMBER_ROWS - 1),
-                    renpy.random.randint( 0, self.NUMBER_COLUMNS - 1))
+        def get_total_score( self ):
+            if self.total_score < 1000:
+                return "%20d" % self.total_score
+            elif self.total_score < 10000:
+                return "%18d" % self.total_score
+            else:
+                return "%16d" % self.total_score
 
-        # returns True if a mole is occupying the given cell.  otherwise False.
-        def is_cell_active( self, cell ):
-            for mole in self.active_moles:
-                if cell == mole.cell:
-                    return True
-            return False
+        def get_cell( self, x, y ):
+            position = (x, y)
+            for cell in CELL_POSITIONS:
+                if CELL_POSITIONS[cell] == position:
+                    return cell
 
-        # returns the Mole object under the given mouse position or None if
-        # there is no Mole currently.
-        def get_mole_at_mouse( self, mx, my ):
-            for mole in self.active_moles:
-                position = CELL_POSITIONS[mole.cell]
-                left     = self.BACKGROUND_LEFT + position[0]
-                top      = self.BACKGROUND_TOP + position[1]
-                right    = left + self.MOLE_WIDTH
-                bottom   = top + self.MOLE_HEIGHT
-                if left <= mx <= right and top <= my <= bottom:
+        def get_mole_at_cell( self, cell ):
+            position = CELL_POSITIONS[cell]
+            moles    = itertools.chain( self.easy_moles,
+                                        self.medium_moles,
+                                        self.hard_moles )
+
+            for mole in moles:
+                if (mole["transform"].x == position[0] and
+                    mole["transform"].y == position[1]):
                     return mole
 
-        # renders the game.
-        def render( self, width, height, st, at ):
-            render = renpy.Render( width, height )
+        def get_mole_at_position( self, x, y ):
+            moles = itertools.chain( self.easy_moles,
+                                     self.medium_moles,
+                                     self.hard_moles )
 
-            # render the background.
-            background_render = renpy.render( self.background, 1024, 768, st, at )
-            render.blit( background_render, (self.BACKGROUND_LEFT, self.BACKGROUND_TOP) )
+            for mole in moles:
+                if mole["collider"].is_point_inside( x, y ):
+                    return mole
 
-            # render the timer.
-            timer_text   = Text( "Time Remaining: %d" % self.seconds_remaining )
-            timer_render = renpy.render( timer_text, renpy.config.screen_width,
-                                         renpy.config.screen_height, st, at )
-            render.blit( timer_render, (self.TEXT_LEFT, self.TEXT_TOP) )
+        def get_random_cell( self ):
+            return (renpy.random.randint( 0, NUMBER_ROWS - 1),
+                    renpy.random.randint( 0, NUMBER_COLUMNS - 1))
 
-            # render the score.
-            score_text   = Text( "Score: %d" % self.score )
-            score_render = renpy.render( score_text, renpy.config.screen_width,
-                                         renpy.config.screen_height, st, at )
-            render.blit( score_render, (self.TEXT_LEFT, self.TEXT_TOP + 24) )
+        def get_score( self ):
+            return "Score: %16d" % self.base_score
 
-            # render state-sensitive message.
-            message_text   = Text( STATE_MESSAGES[self.state] )
-            message_render = renpy.render( message_text, renpy.config.screen_width,
-                                           renpy.config.screen_height, st, at )
-            render.blit( message_render, (self.TEXT_LEFT, self.TEXT_TOP + 48) )
+        def get_time_remaining( self ):
+            return "Time Remaining: %d" %  self.time_remaining.get_ceil_value()
 
-            # render the quit button if it's visible.
-            #if self.quit_button.visible:
-            #    self.quit_button.draw( render, st, at )
+        def on_mole_death( self, score_value ):
+            self.base_score += score_value
 
-            # render each dirt mound.
-            dirt_render = renpy.render( self.dirt, 0, 0, st, at )
-            for position in CELL_POSITIONS.values():
-                x = self.BACKGROUND_LEFT + position[0]
-                y = self.BACKGROUND_TOP + position[1]
-                render.blit( dirt_render, (x,y) )
+        def remove_dead_moles( self, moles ):
+            # free cells that are no longer occupied.
+            for mole in moles:
+                if not mole.is_alive():
+                    cell = self.get_cell( mole["transform"].x,
+                                          mole["transform"].y )
+                    self.occupied_cells.remove( cell )
 
-            # render the moles on screen.
-            for mole in self.active_moles:
-                position    = CELL_POSITIONS[mole.cell]
-                x           = self.BACKGROUND_LEFT + position[0]
-                y           = self.BACKGROUND_TOP + position[1]
-                mole_render = renpy.render( self.mole_frames[mole.current_frame],
-                                            0, 0, st, at )
-                render.blit( mole_render, (x,y) )
+            # update the list with only those moles that are alive.
+            moles[:] = [ mole for mole in moles if mole.is_alive() ]
 
-            return render
-            
-        def get_final_score(self):
-          return self.final_score
+        def spawn_mole( self, mole_type ):
+            # clean way to pull the right list to add the new mole to.
+            mole_lists = { EASY_MOLE_TYPE   : self.easy_moles,
+                           MEDIUM_MOLE_TYPE : self.medium_moles,
+                           HARD_MOLE_TYPE   : self.hard_moles }
 
-    # Minigame starts here.  Change this label to start and the start label in
-    # script.rpy to something else to test this out.
-    def start_mole_game():
-      # the first parameter is the initial relative difficulty.  the second
-        # is the final relative difficulty.  for both values, 0 is the easiest,
-        # and 1 is the hardest.
-        whack = WhackAMole( 0.15, 0.95 )
-        ui.add( whack )
-        #result = ui.interact( suppress_overlay=True, suppress_underlay=True )
-        ui.interact()
-        # Could do update_stats(whack.get_final_score()) or something similar here
-        # to see if the user has finished the game (succesfully) and if the stats
-        # should be updated. For now this'll just print the final score.
+            # create the new mole.
+            cell             = self.get_available_cell()
+            mole             = PrefabFactory.instantiate( mole_type )
+            mole["behavior"] = MoleBehavior( MOLE_HIT_POINTS[mole_type],
+                                             self.mole_duration.get_value(),
+                                             MOLE_SCORE_VALUES[mole_type],
+                                             self.on_mole_death )
+            mole["behavior"].emerge()
+            mole["transform"].set_position( *CELL_POSITIONS[cell] )
+            mole_lists[mole_type].append( mole )
+            self.occupied_cells.append( cell )
 
-        return whack.get_final_score()
+        def update_moles( self, moles, delta_sec ):
+            for mole in moles:
+                mole.update( delta_sec )
+
+        def get_displayables( self ):
+            displayables = []
+            displayables.extend( self.background["renderer"].get_displayables() )
+
+            for dirt in self.dirt_piles:
+                displayables.extend( dirt["renderer"].get_displayables() )
+
+            moles = itertools.chain( self.easy_moles,
+                                     self.medium_moles,
+                                     self.hard_moles )
+
+            for mole in moles:
+                displayables.extend( mole["renderer"].get_displayables() )
+
+            displayables.extend( self.countdown_hud["renderer"].get_displayables() )
+            displayables.extend( self.start_screen_hud["renderer"].get_displayables() )
+            displayables.extend( self.stop_screen_hud["renderer"].get_displayables() )
+            displayables.extend( self.time_remaining_hud["renderer"].get_displayables() )
+
+            return displayables
+
+        def get_result( self ):
+            return self.total_score
+
+        def update( self, delta_sec ):
+            if self.state == MOLE_GAME_STATE_COUNTDOWN:
+                self.countdown_hud.update( delta_sec )
+                if not self.countdown_hud.is_alive():
+                    self.state = MOLE_GAME_STATE_PLAY
+            elif self.state == MOLE_GAME_STATE_PLAY:
+                # update automated parameters.
+                self.time_remaining.update( delta_sec )
+                self.spawn_time.update( delta_sec )
+                self.max_moles.update( delta_sec )
+                self.max_easy_moles.update( delta_sec )
+                self.max_medium_moles.update( delta_sec )
+                self.max_hard_moles.update( delta_sec )
+                self.mole_duration.update( delta_sec )
+
+                # update all moles.
+                self.update_moles( self.easy_moles, delta_sec )
+                self.update_moles( self.medium_moles, delta_sec )
+                self.update_moles( self.hard_moles, delta_sec )
+
+                # see if it's time to add a mole.
+                self.mole_countdown -= delta_sec
+
+                if (self.mole_countdown <= 0 and
+                    self.time_remaining.get_value() > 0):
+                    # get new countdown for next time.
+                    self.mole_countdown = self.spawn_time.get_value()
+
+                    # get which mole type are available.
+                    mole_types = []
+
+                    if len( self.easy_moles ) < self.max_easy_moles.get_truncated_value():
+                        mole_types.append( EASY_MOLE_TYPE )
+                    if len( self.medium_moles ) < self.max_medium_moles.get_truncated_value():
+                        mole_types.append( MEDIUM_MOLE_TYPE )
+                    if len( self.hard_moles ) < self.max_hard_moles.get_truncated_value():
+                        mole_types.append( HARD_MOLE_TYPE )
+
+                    number_moles = (len( self.easy_moles ) +
+                                    len( self.medium_moles ) +
+                                    len( self.hard_moles ))
+
+                    # only attempt add a mole if there's a free cell and there's
+                    # a mole of a particular type we can add.
+                    if mole_types and number_moles < self.max_moles.get_truncated_value():
+                        self.spawn_mole( renpy.random.choice( mole_types ) )
+
+                # remove moles that have died.
+                self.remove_dead_moles( self.easy_moles )
+                self.remove_dead_moles( self.medium_moles )
+                self.remove_dead_moles( self.hard_moles )
+
+                # see if it's game over.
+                if self.time_remaining.get_value() <= 0:
+                    self.state = MOLE_GAME_STATE_END
+                    self.compute_accuracy_bonus()
+                    self.total_score = self.base_score + self.accuracy_bonus
+
+        def render( self, blitter ):
+            origin_x, origin_y = self.get_origin()
+            world_transform    = GameTransform( origin_x, origin_y )
+            self.background["renderer"].render( blitter, world_transform )
+
+            self.time_remaining_hud["renderer"].render( blitter, world_transform )
+            self.score_hud["renderer"].render( blitter, world_transform )
+
+            for dirt_pile in self.dirt_piles:
+                dirt_pile["renderer"].render( blitter, world_transform )
+
+            if self.state == MOLE_GAME_STATE_BEGIN:
+                self.start_screen_hud["renderer"].render( blitter, world_transform )
+            elif self.state == MOLE_GAME_STATE_COUNTDOWN:
+                self.countdown_hud["renderer"].render( blitter, world_transform )
+            elif self.state == MOLE_GAME_STATE_PLAY:
+                for mole in self.easy_moles:
+                    mole["renderer"].render( blitter, world_transform )
+
+                for mole in self.medium_moles:
+                    mole["renderer"].render( blitter, world_transform )
+
+                for mole in self.hard_moles:
+                    mole["renderer"].render( blitter, world_transform )
+            elif self.state == MOLE_GAME_STATE_END:
+                self.stop_screen_hud["renderer"].render( blitter, world_transform )
+
+        def on_key_down( self, key ):
+            if key == pygame.K_ESCAPE:
+                self.quit()
+
+            if self.state == MOLE_GAME_STATE_PLAY:
+                mole = None
+
+                if key == pygame.K_KP1 or key == pygame.K_z:
+                    mole = self.get_mole_at_cell( (2,0) )
+                elif key == pygame.K_KP2 or key == pygame.K_x:
+                    mole = self.get_mole_at_cell( (2,1) )
+                elif key == pygame.K_KP3 or key == pygame.K_c:
+                    mole = self.get_mole_at_cell( (2,2) )
+                elif key == pygame.K_KP4 or key == pygame.K_a:
+                    mole = self.get_mole_at_cell( (1,0) )
+                elif key == pygame.K_KP5 or key == pygame.K_s:
+                    mole = self.get_mole_at_cell( (1,1) )
+                elif key == pygame.K_KP6 or key == pygame.K_d:
+                    mole = self.get_mole_at_cell( (1,2) )
+                elif key == pygame.K_KP7 or key == pygame.K_q:
+                    mole = self.get_mole_at_cell( (0,0) )
+                elif key == pygame.K_KP8 or key == pygame.K_w:
+                    mole = self.get_mole_at_cell( (0,1) )
+                elif key == pygame.K_KP9 or key == pygame.K_e:
+                    mole = self.get_mole_at_cell( (0,2) )
+
+                self.number_clicks += 1
+
+                if mole and mole["behavior"].is_alive():
+                    mole["behavior"].hit()
+                    self.number_hits += 1
+
+        def on_mouse_down( self, mx, my, button ):
+            if button == Minigame.LEFT_MOUSE_BUTTON:
+                if self.state == MOLE_GAME_STATE_PLAY:
+                    # XXX: there really needs to be a way to properly factor this.
+                    origin_x, origin_y  = self.get_origin()
+                    mole                = self.get_mole_at_position( mx - origin_x,
+                                                                     my - origin_y )
+                    self.number_clicks += 1
+                    if mole and mole["behavior"].is_alive():
+                        mole["behavior"].hit()
+                        self.number_hits += 1
+
+        def on_mouse_up( self, mx, my, button ):
+            if button == Minigame.LEFT_MOUSE_BUTTON:
+                if self.state == MOLE_GAME_STATE_BEGIN:
+                    self.state = MOLE_GAME_STATE_COUNTDOWN
+                elif self.state == MOLE_GAME_STATE_END:
+                    self.quit()
+
+    class CountdownBehavior( GameComponent ):
+        def __init__( self ):
+            super( CountdownBehavior, self ).__init__()
+            self.elapsed_time = 0
+
+        def update( self, delta_sec ):
+            self.elapsed_time += delta_sec
+
+            if self.elapsed_time > 3.85:
+                self.game_object.kill()
+            elif self.elapsed_time > 3:
+                self.game_object["renderer"].set_frameset( COUNTDOWN_FRAMESET_GO )
+                self.game_object["transform"].set_position( 15, 150 )
+            else:
+                self.game_object["transform"].set_position( 95, 20 )
+
+                if self.elapsed_time > 2:
+                    self.game_object["renderer"].set_frameset( COUNTDOWN_FRAMESET_ONE )
+                elif self.elapsed_time > 1:
+                    self.game_object["renderer"].set_frameset( COUNTDOWN_FRAMESET_TWO )
+                else:
+                    self.game_object["renderer"].set_frameset( COUNTDOWN_FRAMESET_THREE )
+
+    class MoleBehavior( GameComponent ):
+        def __init__( self, number_hit_points, duration, score_value,
+                      kill_callback ):
+            super( MoleBehavior, self ).__init__()
+            self.state             = MOLE_STATE_BURIED
+            self.idle_remaining    = duration
+            self.dead_countdown    = 0
+            self.kill_callback     = kill_callback
+            self.number_hit_points = number_hit_points
+            self.score_value       = score_value
+
+        def die( self ):
+            self.state = MOLE_STATE_DYING
+            self.game_object["renderer"].play_animation( MOLE_ANIMATION_DEAD,
+                                                         loop_animation=False,
+                                                         on_animation_end=self.on_dead_end )
+            self.kill_callback( self.score_value )
+
+        def emerge( self ):
+            self.state = MOLE_STATE_EMERGING
+            self.game_object["renderer"].play_animation( MOLE_ANIMATION_EMERGE,
+                                                         loop_animation=False,
+                                                         on_animation_end=self.on_emerge_end )
+
+        def hit( self ):
+            self.number_hit_points -= 1
+            if self.number_hit_points == 0:
+                self.die()
+
+        def is_alive( self ):
+            return self.state != MOLE_STATE_DEAD or self.state != MOLE_STATE_DYING
+
+        def on_dead_end( self ):
+            self.state          = MOLE_STATE_DEAD
+            self.dead_countdown = MOLE_DEAD_DURATION
+            self.game_object["renderer"].set_frameset( MOLE_FRAMESET_DEAD )
+
+        def on_emerge_end( self ):
+            self.state = MOLE_STATE_IDLE
+
+        def on_submerge_end( self ):
+            self.game_object.kill()
+
+        def submerge( self ):
+            self.state = MOLE_STATE_SUBMERGING
+            self.game_object["renderer"].play_animation( MOLE_ANIMATION_SUBMERGE,
+                                                         loop_animation=False,
+                                                         on_animation_end=self.on_submerge_end )
+
+        def update( self, delta_sec ):
+            if self.state == MOLE_STATE_IDLE:
+                self.idle_remaining -= delta_sec
+                if self.idle_remaining <= 0:
+                    self.submerge()
+            elif self.state == MOLE_STATE_DEAD:
+                self.dead_countdown -= delta_sec
+                if self.dead_countdown <= 0:
+                    self.game_object.kill()
