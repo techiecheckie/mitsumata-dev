@@ -140,7 +140,8 @@ init python:
                           HARD_MOLE_TYPE   : 600 }
 
     # accuracy bonus.
-    MOLE_BASE_ACCURACY_BONUS = 500
+    MOLE_BASE_ACCURACY_BONUS  = 500
+    MOLE_EXTRA_ACCURACY_BONUS = 100
 
     # game dimensions.
     NUMBER_ROWS    = 3
@@ -177,8 +178,8 @@ init python:
             # set up automated level difficulty parameters.
             level = MOLE_LEVELS[level_number - 1]
 
-            self.time_remaining   = AutomatedInterpolator( 0,
-                                                           level.time_limit,
+            self.time_remaining   = AutomatedInterpolator( level.time_limit,
+                                                           0,
                                                            level.time_limit )
             self.spawn_time       = AutomatedInterpolator( level.spawn_time[0],
                                                            level.spawn_time[1],
@@ -202,8 +203,11 @@ init python:
             # set up game state.
             self.state          = MOLE_GAME_STATE_BEGIN
             self.time_limit     = level.time_limit
-            self.score          = 0
-            self.final_score    = 0
+            self.base_score     = 0
+            self.accuracy_bonus = 0
+            self.number_clicks  = 0
+            self.number_hits    = 0
+            self.total_score    = 0
             self.mole_countdown = 0
             self.occupied_cells = []
 
@@ -214,7 +218,9 @@ init python:
             self.medium_moles       = []
             self.hard_moles         = []
             self.countdown_hud      = None
+            self.score_hud          = None
             self.start_screen_hud   = None
+            self.stop_screen_hud    = None
             self.time_remaining_hud = None
 
             self.create_background()
@@ -307,19 +313,82 @@ init python:
             self.countdown_hud["renderer"].set_frame( COUNTDOWN_FRAMESET_THREE, GameImage( "gfx/whack_a_mole/countdown/countdown-3.png" ) )
             self.countdown_hud["renderer"].set_frameset( COUNTDOWN_FRAMESET_THREE )
 
+            self.score_hud             = GameObject()
+            self.score_hud["renderer"] = GameRenderer( GameText( self.get_score ) )
+            self.score_hud["transform"].set_position( 400, 10 )
+
             self.start_screen_hud             = GameObject()
             self.start_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/whack_a_mole/start_screen.png" ) )
             self.start_screen_hud["transform"].set_position( 138, 50 )
 
+            self.stop_screen_hud             = GameObject()
+            self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/whack_a_mole/stop_screen.png" ) )
+            self.stop_screen_hud["transform"].set_position( 138, 50 )
+
+            base_score             = GameObject()
+            base_score["renderer"] = GameRenderer( GameText( self.get_base_score ) )
+            base_score["transform"].set_position( 185, 159 )
+            self.stop_screen_hud.add_child( base_score )
+
+            accuracy_bonus             = GameObject()
+            accuracy_bonus["renderer"] = GameRenderer( GameText( self.get_accuracy_bonus ) )
+            accuracy_bonus["transform"].set_position( 185, 251 )
+            self.stop_screen_hud.add_child( accuracy_bonus )
+
+            total_score             = GameObject()
+            total_score["renderer"] = GameRenderer( GameText( self.get_total_score ) )
+            total_score["transform"].set_position( 185, 320 )
+            self.stop_screen_hud.add_child( total_score )
+
             self.time_remaining_hud = GameObject()
             self.time_remaining_hud["renderer"] = GameRenderer( GameText( self.get_time_remaining ) )
             self.time_remaining_hud["transform"].set_position( 10, 10 )
+
+        def compute_accuracy_bonus( self ):
+            self.accuracy_bonus = 0
+            if self.number_clicks > 0:
+                hit_percentage = float(self.number_hits) / self.number_clicks
+
+                if hit_percentage >= 0.8:
+                    self.accuracy_bonus += MOLE_BASE_ACCURACY_BONUS
+                if hit_percentage >= 0.85:
+                    self.accuracy_bonus += MOLE_EXTRA_ACCURACY_BONUS
+                if hit_percentage >= 0.9:
+                    self.accuracy_bonus += MOLE_EXTRA_ACCURACY_BONUS
+                if hit_percentage >= 0.95:
+                    self.accuracy_bonus += MOLE_EXTRA_ACCURACY_BONUS
+                if hit_percentage >= 1:
+                    self.accuracy_bonus += (2 * MOLE_EXTRA_ACCURACY_BONUS)
+
+        def get_accuracy_bonus( self ):
+            if self.accuracy_bonus == 0:
+                return "%20d" % self.accuracy_bonus
+            elif self.accuracy_bonus < 1000:
+                return "%18d" % self.accuracy_bonus
+            else:
+                return "%16d" % self.accuracy_bonus
 
         def get_available_cell( self ):
             while True:
                 cell = self.get_random_cell()
                 if cell not in self.occupied_cells:
                     return cell
+
+        def get_base_score( self ):
+            if self.base_score < 1000:
+                return "%20d" % self.base_score
+            elif self.base_score < 10000:
+                return "%18d" % self.base_score
+            else:
+                return "%16d" % self.base_score
+
+        def get_total_score( self ):
+            if self.total_score < 1000:
+                return "%20d" % self.total_score
+            elif self.total_score < 10000:
+                return "%18d" % self.total_score
+            else:
+                return "%16d" % self.total_score
 
         def get_cell( self, x, y ):
             position = (x, y)
@@ -351,9 +420,14 @@ init python:
             return (renpy.random.randint( 0, NUMBER_ROWS - 1),
                     renpy.random.randint( 0, NUMBER_COLUMNS - 1))
 
+        def get_score( self ):
+            return "Score: %16d" % self.base_score
+
         def get_time_remaining( self ):
-            return "Time Remaining: %d" % (self.time_limit -
-                                           self.time_remaining.get_value())
+            return "Time Remaining: %d" %  self.time_remaining.get_ceil_value()
+
+        def on_mole_death( self, score_value ):
+            self.base_score += score_value
 
         def remove_dead_moles( self, moles ):
             # free cells that are no longer occupied.
@@ -377,7 +451,8 @@ init python:
             mole             = PrefabFactory.instantiate( mole_type )
             mole["behavior"] = MoleBehavior( MOLE_HIT_POINTS[mole_type],
                                              self.mole_duration.get_value(),
-                                             MOLE_SCORE_VALUES[mole_type] )
+                                             MOLE_SCORE_VALUES[mole_type],
+                                             self.on_mole_death )
             mole["behavior"].emerge()
             mole["transform"].set_position( *CELL_POSITIONS[cell] )
             mole_lists[mole_type].append( mole )
@@ -401,7 +476,9 @@ init python:
             for mole in moles:
                 displayables.extend( mole["renderer"].get_displayables() )
 
+            displayables.extend( self.countdown_hud["renderer"].get_displayables() )
             displayables.extend( self.start_screen_hud["renderer"].get_displayables() )
+            displayables.extend( self.stop_screen_hud["renderer"].get_displayables() )
             displayables.extend( self.time_remaining_hud["renderer"].get_displayables() )
 
             return displayables
@@ -458,9 +535,18 @@ init python:
                 self.remove_dead_moles( self.medium_moles )
                 self.remove_dead_moles( self.hard_moles )
 
+                # see if it's game over.
+                if self.time_remaining.get_value() <= 0:
+                    self.state = MOLE_GAME_STATE_END
+                    self.compute_accuracy_bonus()
+                    self.total_score = self.base_score + self.accuracy_bonus
+
         def render( self, blitter ):
             world_transform = GameTransform()
             self.background["renderer"].render( blitter, world_transform )
+
+            self.time_remaining_hud["renderer"].render( blitter, world_transform )
+            self.score_hud["renderer"].render( blitter, world_transform )
 
             for dirt_pile in self.dirt_piles:
                 dirt_pile["renderer"].render( blitter, world_transform )
@@ -478,8 +564,8 @@ init python:
 
                 for mole in self.hard_moles:
                     mole["renderer"].render( blitter, world_transform )
-
-            self.time_remaining_hud["renderer"].render( blitter, world_transform )
+            elif self.state == MOLE_GAME_STATE_END:
+                self.stop_screen_hud["renderer"].render( blitter, world_transform )
 
         def on_key_down( self, key ):
             if key == pygame.K_ESCAPE:
@@ -507,21 +593,27 @@ init python:
                 elif key == pygame.K_KP9 or key == pygame.K_e:
                     mole = self.get_mole_at_cell( (0,2) )
 
+                self.number_clicks += 1
+
                 if mole and mole["behavior"].is_alive():
                     mole["behavior"].hit()
+                    self.number_hits += 1
 
         def on_mouse_down( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
                 if self.state == MOLE_GAME_STATE_PLAY:
-                    mole = self.get_mole_at_position( mx, my )
+                    mole                = self.get_mole_at_position( mx, my )
+                    self.number_clicks += 1
                     if mole and mole["behavior"].is_alive():
                         mole["behavior"].hit()
+                        self.number_hits += 1
 
         def on_mouse_up( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
                 if self.state == MOLE_GAME_STATE_BEGIN:
-                    self.state          = MOLE_GAME_STATE_COUNTDOWN
-#                    self.mole_countdown = self.spawn_time.get_value()
+                    self.state = MOLE_GAME_STATE_COUNTDOWN
+                elif self.state == MOLE_GAME_STATE_END:
+                    self.quit()
 
     class CountdownBehavior( GameComponent ):
         def __init__( self ):
@@ -547,11 +639,13 @@ init python:
                     self.game_object["renderer"].set_frameset( COUNTDOWN_FRAMESET_THREE )
 
     class MoleBehavior( GameComponent ):
-        def __init__( self, number_hit_points, duration, score_value ):
+        def __init__( self, number_hit_points, duration, score_value,
+                      kill_callback ):
             super( MoleBehavior, self ).__init__()
             self.state             = MOLE_STATE_BURIED
             self.idle_remaining    = duration
             self.dead_countdown    = 0
+            self.kill_callback     = kill_callback
             self.number_hit_points = number_hit_points
             self.score_value       = score_value
 
@@ -560,6 +654,7 @@ init python:
             self.game_object["renderer"].play_animation( MOLE_ANIMATION_DEAD,
                                                          loop_animation=False,
                                                          on_animation_end=self.on_dead_end )
+            self.kill_callback( self.score_value )
 
         def emerge( self ):
             self.state = MOLE_STATE_EMERGING

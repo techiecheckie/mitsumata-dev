@@ -173,9 +173,9 @@ init -50 python:
 
         def get_displayables( self ):
             displayables = []
-            frame        = self.frames[self.current_frameset]
-            if frame:
-                displayables.extend( frame.get_displayables() )
+            for frameset in self.frames:
+                if self.frames[frameset]:
+                    displayables.extend( self.frames[frameset].get_displayables() )
             displayables.extend( self.animator.get_displayables() )
             return displayables
 
