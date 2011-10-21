@@ -1,10 +1,10 @@
 init python:
-  def show_minigame_screen(hp, mp):
+  def show_minigame_screen():
     button = ""
     button_value = ""
 
     background = "bg riroom"
-    show_minigame_ui(background, hp, mp, False)
+    show_minigame_ui(background, False)
   
     while True:
       # A temporary button to start the molegame

@@ -38,6 +38,7 @@ init python:
   
   decision = "0"
   event_triggered = False
+  pda = False
   
 #---------------------
 #KONAMI CODE
@@ -265,7 +266,6 @@ init python:
 #----------------------------------
 # eg. image eileen happy = "eileen_happy.png"
 
-#<<<<<<< .mine
 #image bg shrfr = 
 image bg hall1 = "gfx/backgrounds/Hallway1.png"
 image bg hall2 = "gfx/backgrounds/Hallway2.png"
@@ -282,24 +282,6 @@ image bg dfor3 = "gfx/backgrounds/dforest3.png"
 image bg nfor1 = "gfx/backgrounds/nforest1.png"
 image bg nfor2 = "gfx/backgrounds/nforest2.png"
 image bg nfor3 = "gfx/backgrounds/nforest3.png"
-# =======
-# image bg shrfr = "shrinefront.png"
-# image bg hall1 = "gfx/backgrounds/Hall1.jpg"
-# image bg hall2 = "gfx/backgrounds/Hall1.jpg"
-# #image bg hall3 = ""
-# #image bg hall4 = ""
-# image bg riroom = "gfx/backgrounds/riroom.jpg"
-# image bg roroom = "gfx/backgrounds/riroom.jpg"
-# image bg soroom = "gfx/backgrounds/riroom.jpg"
-# image bg suroom = "gfx/backgrounds/riroom.jpg"
-# image bg lib = "gfx/backgrounds/riroom.jpg"
-# image bg bathroom = "gfx/backgrounds/riroom.jpg"
-# image bg kitchen = "gfx/backgrounds/kitchen.jpg"
-# #image bg for1 = ""
-# #image bg for2 = ""
-# #image bg for3 = ""
-# #image bg for4 = ""
-# >>>>>>> .r48
 #image bg traingr = ""
 image bg gar1 = "gfx/backgrounds/garden1.png"
 image bg gar2 = "gfx/backgrounds/garden2.png"
@@ -505,12 +487,17 @@ define na = Character('Naomi', color="#c8ffc8", show_two_window=True )
 #--------------------------------
 
 label start:
+    $ pda = False
+
     show blackscr with dissolve
-    
-    $show_main_ui(hp, mp)
-    
-    play music "music/mitsumata1.mp3"
+
+    #play music "music/mitsumata1.mp3"
     #show cg 1 with dissolve
+    
+    #show bg dfor3
+    $ show_main_ui()
+    #with dissolve
+    
     "Once upon a time, there was a prince who was not in any way different from other fairy tale princes."
     
     "He was rich, handsome, popular, destined to marry a princess, spoiled---"
@@ -594,21 +581,29 @@ label start:
 
     "Night, Mom."
     #hide cg 1 with fade
-    hide ui
-    $ renpy.pause(2)
+    #hide ui
+    
+    hide bg dfor3
+    $ hide_main_ui()
+    with fade
+    
+    #$ renpy.pause(2)
 
 label Scene1:
         show bg blackscr with dissolve
         $ renpy.pause(1)
-        show bg nfor1 with dissolve
-        $show_main_ui(hp,mp)
+        
+        show bg nfor1
+        $ show_main_ui()
+        with dissolve
+        
         $ renpy.pause(2)
         
 
         "It's so dark in here. No windows, no sunlight. Smells musty and wet. Wherever this is, it's probably far underground."
 
         "That’s smart. Wouldn’t expect any less from these kidnappers."
-
+        
         "I can't see too far out of my own cell; it’s nearly pitch black in here. I can see pretty well in low lights, but I can only catch a glint of the glassy eyes of the guy in the other cell."
 
         "Reminds me of donuts, the glazed kind. I don’t know much about this world and I haven’t been here that long, but discovering donuts was worth the confusion."
@@ -707,7 +702,7 @@ label Scene1:
 
 label Scene2:
         show bg street with dissolve
-        $show_main_ui(hp, mp)
+        $show_main_ui()
 
         #show student 1 with fade
 
@@ -717,7 +712,7 @@ label Scene2:
 
         hide ui
         show r happy with fade
-        $show_main_ui(hp,mp)
+        $show_main_ui()
         #show sg neu with fade
         "If you haven't figured it out yet, I'm Riku. Midorikawa Riku, age 17, third year in high school."
         "I don't believe in silly crap like blood-type personalities, and even if I did, I dunno mine. I don't believe in horoscopes, either. Superstition is for kids."
@@ -2093,6 +2088,7 @@ label Scene17:
     
     r "It’s rare?"
     
+
     s "It’s specific to my kind, but..."
     
     r "...if you don’t want to talk about it---"
@@ -2878,6 +2874,7 @@ label Scene29:
     
     a "STOOOOOOOOOOOOOOOOP!!!"
     
+
     #show screen flash 
     #play sound lightning
     
@@ -5422,6 +5419,7 @@ label Scene49:
     "I just killed a man."
 
     k  "HURK!"
+
 
     "Doctor Osamu is vomiting behind me.  He looks shaken, the first time I’ve ever seen him drop his confident demeanor.  It could be the smell.  Like fucking burnt hair and rotten meat."
 
