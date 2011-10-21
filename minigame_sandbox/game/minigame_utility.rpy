@@ -58,6 +58,9 @@ init -50 python:
             alpha = self.elapsed_time / self.duration
             return self.min_value * (1 - alpha) + self.max_value * alpha
 
+        def get_ceil_value( self ):
+            return math.ceil( self.get_value() )
+
         def get_truncated_value( self ):
             return math.trunc( self.get_value() )
 
