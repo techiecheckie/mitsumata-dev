@@ -5,11 +5,13 @@ init python:
     import pygame
 
     class MoleLevel( object ):
-        def __init__( self, time_limit, max_easy_moles, max_medium_moles,
-                      max_hard_moles, spawn_time, mole_duration ):
+        def __init__( self, time_limit, max_moles, max_easy_moles,
+                      max_medium_moles, max_hard_moles, spawn_time,
+                      mole_duration ):
             super( MoleLevel, self ).__init__()
 
             self.time_limit       = time_limit
+            self.max_moles        = max_moles
             self.max_easy_moles   = max_easy_moles
             self.max_medium_moles = max_medium_moles
             self.max_hard_moles   = max_hard_moles
@@ -20,6 +22,14 @@ init python:
     # level.  The settings for each level are described as follows:
     #
     #     time_limit       - The length of the game in seconds.
+    #
+    #     max_moles        - Pair of numbers describing the number of moles
+    #                        that can appear at once on the board, regardless
+    #                        of their difficulty.  The first number of the max
+    #                        number of moles that appear at the beginning of
+    #                        the game, and the second number is the max number
+    #                        that can appear at the end of the game.  Larger
+    #                        number makes the game more difficult.
     #
     #     max_easy_moles   - Pair of numbers describing the number of "easy"
     #                        moles that appear at once on the board.  The first
@@ -64,9 +74,10 @@ init python:
     MOLE_LEVELS = [
         # Level 1
         MoleLevel( time_limit       = 60,
-                   max_easy_moles   = (1, 4),
-                   max_medium_moles = (0, 3),
-                   max_hard_moles   = (0, 1),
+                   max_moles        = (2, 8),
+                   max_easy_moles   = (3, 5),
+                   max_medium_moles = (0, 4),
+                   max_hard_moles   = (0, 3),
                    spawn_time       = (0.75, 0.25),
                    mole_duration    = (1.6, 0.36) )
         ]
@@ -96,9 +107,12 @@ init python:
 
     # animation durations.  the inverse of these are the animations frames per
     # second value passed to the GameAnimation constructor.
-    MOLE_ANIMATION_DEAD_DURATION     = 0.35
+    MOLE_ANIMATION_DEAD_DURATION     = 0.2
     MOLE_ANIMATION_EMERGE_DURATION   = 0.7
     MOLE_ANIMATION_SUBMERGE_DURATION = 0.35
+
+    # duration a dead mole stays on screen.
+    MOLE_DEAD_DURATION = 0.6
 
     # number of animation frames.
     NUMBER_DEAD_FRAMES     = 3
@@ -155,6 +169,9 @@ init python:
                                                            level.time_limit )
             self.spawn_time       = AutomatedInterpolator( level.spawn_time[0],
                                                            level.spawn_time[1],
+                                                           level.time_limit )
+            self.max_moles        = AutomatedInterpolator( level.max_moles[0],
+                                                           level.max_moles[1],
                                                            level.time_limit )
             self.max_easy_moles   = AutomatedInterpolator( level.max_easy_moles[0],
                                                            level.max_easy_moles[1],
@@ -282,6 +299,17 @@ init python:
                 if CELL_POSITIONS[cell] == position:
                     return cell
 
+        def get_mole_at_cell( self, cell ):
+            position = CELL_POSITIONS[cell]
+            moles    = itertools.chain( self.easy_moles,
+                                        self.medium_moles,
+                                        self.hard_moles )
+
+            for mole in moles:
+                if (mole["transform"].x == position[0] and
+                    mole["transform"].y == position[1]):
+                    return mole
+
         def get_mole_at_position( self, x, y ):
             moles = itertools.chain( self.easy_moles,
                                      self.medium_moles,
@@ -339,6 +367,7 @@ init python:
                 # update automated parameters.
                 self.time_remaining.update( delta_sec )
                 self.spawn_time.update( delta_sec )
+                self.max_moles.update( delta_sec )
                 self.max_easy_moles.update( delta_sec )
                 self.max_medium_moles.update( delta_sec )
                 self.max_hard_moles.update( delta_sec )
@@ -373,7 +402,7 @@ init python:
 
                     # only attempt add a mole if there's a free cell and there's
                     # a mole of a particular type we can add.
-                    if mole_types and number_moles < NUMBER_CELLS:
+                    if mole_types and number_moles < self.max_moles.get_truncated_value():
                         self.spawn_mole( renpy.random.choice( mole_types ) )
 
                 # remove moles that have died.
@@ -404,11 +433,36 @@ init python:
             if key == pygame.K_ESCAPE:
                 self.quit()
 
+            if self.state == MOLE_GAME_STATE_PLAY:
+                mole = None
+
+                if key == pygame.K_KP1 or key == pygame.K_z:
+                    mole = self.get_mole_at_cell( (2,0) )
+                elif key == pygame.K_KP2 or key == pygame.K_x:
+                    mole = self.get_mole_at_cell( (2,1) )
+                elif key == pygame.K_KP3 or key == pygame.K_c:
+                    mole = self.get_mole_at_cell( (2,2) )
+                elif key == pygame.K_KP4 or key == pygame.K_a:
+                    mole = self.get_mole_at_cell( (1,0) )
+                elif key == pygame.K_KP5 or key == pygame.K_s:
+                    mole = self.get_mole_at_cell( (1,1) )
+                elif key == pygame.K_KP6 or key == pygame.K_d:
+                    mole = self.get_mole_at_cell( (1,2) )
+                elif key == pygame.K_KP7 or key == pygame.K_q:
+                    mole = self.get_mole_at_cell( (0,0) )
+                elif key == pygame.K_KP8 or key == pygame.K_w:
+                    mole = self.get_mole_at_cell( (0,1) )
+                elif key == pygame.K_KP9 or key == pygame.K_e:
+                    mole = self.get_mole_at_cell( (0,2) )
+
+                if mole and mole["behavior"].is_alive():
+                    mole["behavior"].hit()
+
         def on_mouse_down( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
                 if self.state == MOLE_GAME_STATE_PLAY:
                     mole = self.get_mole_at_position( mx, my )
-                    if mole:
+                    if mole and mole["behavior"].is_alive():
                         mole["behavior"].hit()
 
         def on_mouse_up( self, mx, my, button ):
@@ -442,9 +496,12 @@ init python:
             if self.number_hit_points == 0:
                 self.die()
 
+        def is_alive( self ):
+            return self.state != MOLE_STATE_DEAD or self.state != MOLE_STATE_DYING
+
         def on_dead_end( self ):
             self.state          = MOLE_STATE_DEAD
-            self.dead_countdown = 1.5
+            self.dead_countdown = MOLE_DEAD_DURATION
             self.game_object["renderer"].set_frameset( MOLE_FRAMESET_DEAD )
 
         def on_emerge_end( self ):
