@@ -121,13 +121,17 @@ init -50 python:
                     my_bounds.bottom >= their_bounds.top)
 
     class GameRenderer( GameComponent ):
-        def __init__( self, frame=None, animations=None, initial_animation=None ):
+        DEFAULT_FRAMESET = "default"
+
+        def __init__( self, default_frame=None, animations=None,
+                      initial_animation=None ):
             super( GameRenderer, self ).__init__()
-            self.frame              = frame
-            self.animator           = GameAnimator()
-            self.bounds_overlay     = None
-            self.is_overlay_visible = False
-            self.is_flipped         = False
+            self.current_frameset         = "default"
+            self.frames                   = { GameRenderer.DEFAULT_FRAMESET : default_frame }
+            self.animator                 = GameAnimator()
+            self.collider_color           = Color( 0, 255, 255, 100 )
+            self.is_collider_visible      = False
+            self.is_flipped               = False
 
             if animations:
                 for name in animations:
@@ -135,11 +139,23 @@ init -50 python:
                 if initial_animation:
                     self.animator.play_animation( initial_animation )
 
+        def set_collider_visible( self, is_visible ):
+            self.is_collider_visible = is_visible
+
+        def set_collider_color( self, collider_color ):
+            self.collider_color = collider_color
+
+        def set_frame( self, frameset, frame ):
+            self.frames[frameset] = frame
+
+        def set_frameset( self, frameset ):
+            if frameset not in self.frames:
+                raise ValueError( "Invalid frameset %s.  Not a recognized "
+                                  "frameset name." )
+            self.current_frameset = frameset
+
         def flip( self ):
             self.is_flipped = not self.is_flipped
-
-        def set_bounds_overlay( self, overlay ):
-            self.bounds_overlay = overlay
 
         def add_animation( self, name, animation ):
             self.animator.add_animation( name, animation )
@@ -155,13 +171,11 @@ init -50 python:
             self.animator.play_animation( name, loop_animation,
                                           on_animation_end )
 
-        def set_overlay_visible( self, is_overlay_visible ):
-            self.is_overlay_visible = is_overlay_visible
-
         def get_displayables( self ):
             displayables = []
-            if self.frame:
-                displayables.extend( self.frame.get_displayables() )
+            frame        = self.frames[self.current_frameset]
+            if frame:
+                displayables.extend( frame.get_displayables() )
             displayables.extend( self.animator.get_displayables() )
             return displayables
 
@@ -169,7 +183,8 @@ init -50 python:
             self.animator.update( delta_sec )
 
         def render( self, blitter, world_transform ):
-            frame     = self.animator.get_current_frame() or self.frame
+            frame     = (self.animator.get_current_frame() or
+                         self.frames[self.current_frameset])
             transform = self.game_object["transform"] + world_transform
 
             if frame:
@@ -179,8 +194,18 @@ init -50 python:
                 for renderer in child.get_components( GameRenderer ):
                     renderer.render( blitter, transform )
 
-            if self.bounds_overlay and self.is_overlay_visible:
-                self.bounds_overlay.render( blitter )
+            if self.is_collider_visible:
+                self.render_collider( blitter )
+
+        def render_collider( self, blitter ):
+            collider = self.game_object["collider"]
+
+            if isinstance( collider, GameBoxCollider ):
+                bounds = collider.get_bounds()
+                blitter.canvas().rect( self.collider_color,
+                                       (bounds.left, bounds.top,
+                                        bounds.right - bounds.left + 1,
+                                        bounds.bottom - bounds.top + 1) )
 
     class GameTransform( GameComponent ):
         def __init__( self, x=0, y=0, angle=0 ):

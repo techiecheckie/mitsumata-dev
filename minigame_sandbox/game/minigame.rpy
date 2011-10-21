@@ -65,6 +65,8 @@ init -50 python:
                     self.game.on_mouse_move( mx, my )
                 elif e.type == pygame.MOUSEBUTTONDOWN:
                     self.game.on_mouse_down( mx, my, e.button )
+                elif e.type == pygame.MOUSEBUTTONUP:
+                    self.game.on_mouse_up( mx, my, e.button )
 
                 # update the game.
                 self.game.update( delta_sec )
@@ -116,6 +118,9 @@ init -50 python:
             pass
 
         def on_mouse_down( self, mx, my, button ):
+            pass
+
+        def on_mouse_up( self, mx, my, button ):
             pass
 
     def run_minigame( game_type, *args, **kwds ):
