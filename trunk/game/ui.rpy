@@ -43,16 +43,13 @@ init python:
                    clicked=renpy.curried_call_in_new_context("_game_menu_preferences"))
 
     ui.frame(xpos=842,ypos=651, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/buttons/button_palm_pilot.png", 
-                   "gfx/buttons/button_palm_pilot_hover.png",
-                   clicked=renpy.curried_call_in_new_context("pda_loop"))
-                   
-    ui.frame(xpos=10, ypos=10)
-    ui.textbutton("map", clicked=renpy.curried_call_in_new_context("show_map"))
-    
-    ui.frame(xpos=100, ypos=10)
-    ui.textbutton("test battle", clicked=renpy.curried_call_in_new_context("test_battle"))
-                   
+    if pda:
+      ui.imagebutton("gfx/buttons/button_palm_pilot.png", 
+                     "gfx/buttons/button_palm_pilot_hover.png",
+                     clicked=renpy.curried_call_in_new_context("pda_loop"))
+    else:
+      ui.image("gfx/buttons/button_palm_pilot_disabled.png")
+                    
     return
     
   def minigame_ui_buttons():
@@ -90,32 +87,32 @@ init python:
   def calculate_new_main_ui_positions(hp, mp):
     # How big a part should the bar cover: (0.01 * hp) * area
     # so with 100 hp coverage is 100% (assuming that the value is between 0-100).
-    ui_hp_x = int(ui_hp_initial_x + (0.01 * hp) * ui_hp_area)
-    ui_mp_x = int(ui_mp_initial_x + (0.01 * mp) * ui_mp_area)
+    ui_hp_x = int(ui_hp_initial_x + (0.001 * hp) * ui_hp_area)
+    ui_mp_x = int(ui_mp_initial_x + (0.001 * mp) * ui_mp_area)
     
     return (ui_hp_x, ui_mp_x)
     
   def calculate_new_minigame_ui_positions(hp, mp):
-    mini_hp_x = int(mini_hp_initial_x + (0.01 * hp) * mini_hp_area)
-    mini_mp_x = int(mini_mp_initial_x + (0.01 * mp) * mini_mp_area)
+    mini_hp_x = int(mini_hp_initial_x + (0.001 * hp) * mini_hp_area)
+    mini_mp_x = int(mini_mp_initial_x + (0.001 * mp) * mini_mp_area)
     
     return (mini_hp_x, mini_mp_x)
   
-  def show_main_ui(hp, mp):
+  def show_main_ui():
     (ui_hp_x, ui_mp_x) = calculate_new_main_ui_positions(hp, mp)
   
     renpy.transition(dissolve)
-    renpy.show("ui_mp_bg",  at_list = [Position(xpos=596,     ypos=573), Transform(anchor=(0.0, 0.0))])
-    renpy.show("ui_mp_bar", at_list = [Position(xpos=ui_mp_x, ypos=572), Transform(anchor=(1.0, 0.0))])
-    renpy.show("ui_hp_bg",  at_list = [Position(xpos=171,     ypos=572), Transform(anchor=(0.0, 0.0))])
-    renpy.show("ui_hp_bar", at_list = [Position(xpos=ui_hp_x, ypos=571), Transform(anchor=(1.0, 0.0))])
-    renpy.show("ui")
+    renpy.show("ui_mp_bg",  at_list = [Position(xpos=596,     ypos=573), Transform(anchor=(0.0, 0.0))], zorder=8)
+    renpy.show("ui_mp_bar", at_list = [Position(xpos=ui_mp_x, ypos=572), Transform(anchor=(1.0, 0.0))], zorder=8)
+    renpy.show("ui_hp_bg",  at_list = [Position(xpos=171,     ypos=572), Transform(anchor=(0.0, 0.0))], zorder=8)
+    renpy.show("ui_hp_bar", at_list = [Position(xpos=ui_hp_x, ypos=571), Transform(anchor=(1.0, 0.0))], zorder=8)
+    renpy.show("ui", zorder=8)
     
     config.overlay_functions.append(main_ui_buttons)
 
     return
     
-  def update_main_ui(hp, mp):
+  def update_main_ui():
     (ui_hp_x, ui_mp_x) = calculate_new_main_ui_positions(hp, mp)
     
     renpy.transition(MoveTransition(1.0))
@@ -138,7 +135,7 @@ init python:
     
     return
   
-  def show_minigame_ui(background, hp, mp, battle):
+  def show_minigame_ui(background, battle):
     (mini_hp_x, mini_mp_x) = calculate_new_minigame_ui_positions(hp, mp)
     
     renpy.transition(dissolve)

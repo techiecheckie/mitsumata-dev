@@ -27,12 +27,6 @@ class Inventory():
       item = Item(id, name, description, locations)
         
       self.items.append(item)
-  
-  def has_item(self, id):
-    for item in self.items:
-      if item.get_id() == item_id:
-        return True
-    return False
 
   def get_item(self, id):
     for item in self.items:
@@ -47,6 +41,14 @@ class Inventory():
         print "Inventory: unlocked item", item.get_id()
         return
     print "[WARN] Could not unlock item, no such id found (id: %s)" % id
+  
+  def item_unlocked(self, item_id):
+    item = self.get_item(item_id)
+    if item == None:
+      print "[WARN] No item found with id '%s'" % item_id
+      return False
+    else:
+      return not item.is_locked()
   
   def get_items(self):
     return self.items

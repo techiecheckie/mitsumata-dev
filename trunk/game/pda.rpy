@@ -155,7 +155,6 @@ init python:
         
 image pda_bg = "gfx/backgrounds/PDA_base.png"
 image pda_glow = "gfx/backgrounds/PDA_glow.png"
-image pda_gloss = "gfx/backgrounds/PDA_gloss.png"
 
 # PDA loop label. 
 label pda_loop: 
@@ -187,7 +186,7 @@ label pda_loop:
         renpy.hide("pda_glow")
         config.overlay_functions.remove(pda_buttons)
         
-        show_minigame_screen(hp, mp)
+        show_minigame_screen()
         
         renpy.transition(dissolve)
         renpy.show("pda_bg")
@@ -205,9 +204,10 @@ label pda_loop:
       #print "", button, ":", button_value
       
     renpy.transition(dissolve)
-    renpy.hide("background_pda")
+    renpy.hide("pda_bg")
+    renpy.hide("pda_glow")
     config.overlay_functions.remove(pda_buttons)
   
-    show_main_ui(hp, mp)
+    show_main_ui()
   
   return

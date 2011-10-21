@@ -90,7 +90,7 @@ label battle(player_name, mob_name, mob_count, background):
           damage = self.damage_melee
         elif action == "magic":
           damage = self.damage_magic
-          self.mana -= 20
+          self.mana -= 10 # add any bonuses that items give
         
         # Player's crit chance may vary, using hard-coded values for now
         if random.randint(1,20) == 20:
@@ -230,7 +230,7 @@ label battle(player_name, mob_name, mob_count, background):
     
     # Update the screen elements
     hide_main_ui()
-    show_minigame_ui(background, player.get_health(), player.get_mana(), True)
+    show_minigame_ui(background, True)
     
     renpy.show(player.get_id() + " idle", at_list = [Position(xpos=player.get_x(), ypos=player.get_y()), Transform(zoom=zoom)], zorder=player.get_zorder())
     
@@ -280,7 +280,7 @@ label battle(player_name, mob_name, mob_count, background):
     player = None
   
     hide_minigame_ui(background, True)
-    show_main_ui(hp, mp)
+    show_main_ui()
   
   return
   
