@@ -2,8 +2,7 @@
 #NOTES TO PROGRAMMERS FROM SEIRA
 #****************************************************
 
-#Currently at line 4594 out of 5946, going back and editing funny sounding lines prior to that.
-#Added Kazutaka's route for basic scripting.
+#Currently at line 1538. Check Bad Endings for necessary animation creations.
 #Line 4484 contains a puzzle minigame. 
 #Don't forget Roman's "lock" minigame.
 
@@ -38,7 +37,6 @@ init python:
   
   decision = "0"
   event_triggered = False
-  pda = False
   
 #---------------------
 #KONAMI CODE
@@ -282,6 +280,8 @@ image bg dfor3 = "gfx/backgrounds/dforest3.png"
 image bg nfor1 = "gfx/backgrounds/nforest1.png"
 image bg nfor2 = "gfx/backgrounds/nforest2.png"
 image bg nfor3 = "gfx/backgrounds/nforest3.png"
+#image bg shrfr = "shrinefront.png"
+image bg kitchen = "gfx/backgrounds/kitchen.jpg"
 #image bg traingr = ""
 image bg gar1 = "gfx/backgrounds/garden1.png"
 image bg gar2 = "gfx/backgrounds/garden2.png"
@@ -289,6 +289,7 @@ image bg street = "gfx/backgrounds/streetalley1.png"
 image bg store = "gfx/backgrounds/store.png"
 image bg backalley = "gfx/backgrounds/streetalley2.png"
 #image bg cheapbar = ""
+
 image bg blackscr = "gfx/backgrounds/blackscr.png"
 image bg redscr = "gfx/backgrounds/redscr.jpg"
 
@@ -299,6 +300,7 @@ image textbox = "gfx/textbox.png"
 #DECLARE CG IMAGES
 #--------------------------------
 
+image bg dream = "gfx/backgrounds/dream.jpg"
 
 
 #-----------------------------------------------
@@ -355,13 +357,13 @@ image s sad = "gfx/sprites/sdepress.png"
 image s pens = "gfx/sprites/spensive.png"
 image s gigg ="gfx/sprites/stitter.png"
 image s shock = "gfx/sprites/sshock.png"
-image yougrin = "gfx/sprites/youdkgrin.png"
-image youpiss = "gfx/sprites/youpissed.png"
-image yousm = "gfx/sprites/yousm.png"
-image youflirt = "gfx/sprites/youflirt.png"
-image youmisch = "gfx/sprites/youmis.png"
-image youneu = "gfx/sprites/youneu.png"
-image youbore = "gfx/sprites/youbored.png"
+image you grin = "gfx/sprites/youdkgrin.png"
+image you piss = "gfx/sprites/youpissed.png"
+image you sm = "gfx/sprites/yousm.png"
+image you flirt = "gfx/sprites/youflirt.png"
+image you misch = "gfx/sprites/youmis.png"
+image you neu = "gfx/sprites/youneu.png"
+image you bore = "gfx/sprites/youbored.png"
 
 #----------------------------------------------
 #DECLARE LIZA SPRITE IMAGES
@@ -429,35 +431,61 @@ image youbore = "gfx/sprites/youbored.png"
 #-----------------------------------
 #DECLARE GAME CHARS
 #-----------------------------------
-define su = Character('Susa', color="#c8ffc8", show_two_window=True )
-define r = Character('Riku', color="#c8ffc8", show_two_window=True)
-define ro = Character('Roman', color="#c8c8ff", show_two_window=True )
-define s = Character('Soume', color="#c8fffff", show_two_window=True )
-define l = Character('Liza', color="c8fcccc",show_two_window=True)
-define m = Character('Mamoru', color="c8fcfcf", show_two_window=True)
-define k = Character('Doctor Osamu',  color="#c8ffc8", show_two_window=True)
-define n = Character('Norah',  color="#c8ffc8", show_two_window=True)
-define u =Character('u',  color="#c8ffc8", show_two_window=True)
-define dg = Character('Demon Hunter 1',  color="#c8ffc8", show_two_window=True)
-define db = Character('Demon Hunter 2',  color="#c8ffc8", show_two_window=True)
-define sg = Character('Student 1',  color="#c8ffc8", show_two_window=True)
-define sb = Character('Student 2',  color="#c8ffc8", show_two_window=True)
-define rg = Character('Majin 1',  color="#c8ffc8", show_two_window=True)
-define rb = Character('Majin 2',  color="#c8ffc8", show_two_window=True)
-define p = Character('Plant',  color="#c8ffc8", show_two_window=True)
-define pr = Character('Prisoner 1',  color="#c8ffc8", show_two_window=True)
-define pri = Character('Prisoner 2',  color="#c8ffc8", show_two_window=True)
-define ma = Character('Man',  color="#c8ffc8", show_two_window=True)
-define wo = Character('Woman',  color="#c8ffc8", show_two_window=True)
-define boy = Character('Boy',  color="#c8ffc8", show_two_window=True)
-define gir = Character('Girl',  color="#c8ffc8", show_two_window=True)
-define se = Character('Servant',  color="#c8ffc8", show_two_window=True)
-define ma = Character('Mom',  color="#c8ffc8", show_two_window=True)
-define pa = Character('Dad',  color="#c8ffc8", show_two_window=True)
-define ob = Character('Older Boy 1', color="#c8ffc8", show_two_window=True )
-define ob1 = Character('Older Boy 2',  color="#c8ffc8", show_two_window=True)
-define a = Character('Audra', color="#c8ffc8", show_two_window=True )
-define na = Character('Naomi', color="#c8ffc8", show_two_window=True )
+define su = Character('Susa', show_two_window=False)
+define r = Character('Riku', show_two_window=False)
+define ro = Character('Roman', show_two_window=False )
+define s = Character('Soume', show_two_window=False )
+define l = Character('Liza', show_two_window=False)
+define m = Character('Mamoru', show_two_window=False)
+define k = Character('Doctor Osamu', show_two_window=False)
+define n = Character('Norah', show_two_window=False)
+define u =Character('u',  show_two_window=False)
+define dg = Character('Demon Hunter 1', show_two_window=False)
+define db = Character('Demon Hunter 2', show_two_window=False)
+define sg = Character('Student 1', show_two_window=False)
+define sb = Character('Student 2', show_two_window=False)
+define rg = Character('Majin 1', show_two_window=False)
+define rb = Character('Majin 2', show_two_window=False)
+define p = Character('Plant', show_two_window=False)
+define pr = Character('Prisoner 1', show_two_window=False)
+define pri = Character('Prisoner 2', show_two_window=False)
+define ma = Character('Man', show_two_window=False)
+define wo = Character('Woman',  show_two_window=False)
+define boy = Character('Boy', show_two_window=False)
+define gir = Character('Girl', show_two_window=False)
+define se = Character('Servant', show_two_window=False)
+define ma = Character('Mom',  show_two_window=False)
+define pa = Character('Dad', show_two_window=False)
+define ob = Character('Older Boy 1', show_two_window=False )
+define ob1 = Character('Older Boy 2', show_two_window=False)
+define a = Character('Audra', show_two_window=False )
+define na = Character('Naomi', show_two_window=False )
+
+#*****************************************
+# DYNAMIC CHARACTER NAMING
+#*****************************************
+init:
+    $ m = DynamicCharacter ("Mamoru")
+    $ s = DynamicCharacter ("Soume")
+    $ su = DynamicCharacter ("Susa")
+    $ ro = DynamicCharacter ("Roman")
+    $ n = DynamicCharacter ("Norah")
+    $ k = DynamicCharacter ("Kazu")
+    $ a = DynamicCharacter ("Audra")
+    $ na = DynamicCharacter ("Naomi")
+
+
+    # Set "maid_name" to mean something early on in the game.
+    # You don't have to use it right away.
+    # $ maid_name = "Maid"
+    # ''now'' the variable "maid_name" exists - it's only created when you set it.
+
+    #millie "I hope you'll be comfortable here."
+    #millie "We always do our best to make our guests comfortable."
+    #millie "If you need anything, just ask for \"Millie\" - that's me."
+    #$ maid_name = "Millie"
+    #millie "The bell boy's just bringing your suitcases now."
+
 
 #***********************
 # SPLASH SCREEN
@@ -467,37 +495,56 @@ define na = Character('Naomi', color="#c8ffc8", show_two_window=True )
 
 # We'll comment it out for now.
 #
-#label splashscreen:
-#     $ renpy.pause(0)
-#     scene black
-#     show text "rosegold games presents..." with dissolve
-#     $ renpy.pause(5.0)
-#     hide text with dissolve
-#     show text "Mitsumata: The First Act" with dissolve
-#     $ renpy.pause(5.0)
-#     hide text with dissolve
-#     show text "Part I" with dissolve
-#     $ renpy.pause(1.0)
-#     hide text with dissolve
+label splashscreen:
+     $ renpy.pause(0)
+     scene bg redscr
+     show text "rosegold games presents..." with dissolve
+     $ renpy.pause(5.0)
+     hide text with dissolve
+     show text "Mitsumata: The First Act" with dissolve
+     $ renpy.pause(5.0)
+     hide text with dissolve
+     show text "Part I" with dissolve
+     $ renpy.pause(1.0)
+     hide text with dissolve
 
-#     return
+     return
+
+#*******************************
+# EFFECT COMMANDS
+#*******************************
+init:
+   $ slow_dissolve = Dissolve(3.0)
+   $ slow_fade = Fade(2, 2, 3)
 
 #--------------------------------
 # GAME STARTS HURR
 #--------------------------------
 
 label start:
+
+#***********************
+# PYTHON LABELS
+#***********************
+    $ knife = False
     $ pda = False
-
-    show blackscr with dissolve
-
-    #play music "music/mitsumata1.mp3"
+        
+    
+    
+    
+    
+    
+    
+    
+    
+#--------------------------------
+# GAME STARTS HURR
+#--------------------------------    
+    scene bg blackscr
+    $show_main_ui(hp, mp)
+    
+    play music "music/mitsumata1.mp3"
     #show cg 1 with dissolve
-    
-    #show bg dfor3
-    $ show_main_ui()
-    #with dissolve
-    
     "Once upon a time, there was a prince who was not in any way different from other fairy tale princes."
     
     "He was rich, handsome, popular, destined to marry a princess, spoiled---"
@@ -580,30 +627,21 @@ label start:
     "Good night, Riku."
 
     "Night, Mom."
-    #hide cg 1 with fade
-    #hide ui
-    
-    hide bg dfor3
-    $ hide_main_ui()
-    with fade
-    
-    #$ renpy.pause(2)
+    $ renpy.pause(2.0)
 
 label Scene1:
-        show bg blackscr with dissolve
-        $ renpy.pause(1)
+        scene bg blackscr with fade
+        $ renpy.pause(2.0)
         
-        show bg nfor1
-        $ show_main_ui()
-        with dissolve
+        scene bg nfor1 with slow_dissolve
+        $show_main_ui(hp,mp)
         
-        $ renpy.pause(2)
+        $ renpy.pause(3.0)
         
-
         "It's so dark in here. No windows, no sunlight. Smells musty and wet. Wherever this is, it's probably far underground."
 
         "That’s smart. Wouldn’t expect any less from these kidnappers."
-        
+
         "I can't see too far out of my own cell; it’s nearly pitch black in here. I can see pretty well in low lights, but I can only catch a glint of the glassy eyes of the guy in the other cell."
 
         "Reminds me of donuts, the glazed kind. I don’t know much about this world and I haven’t been here that long, but discovering donuts was worth the confusion."
@@ -612,10 +650,12 @@ label Scene1:
 
         pri "You’re a long way from that stuff, brother."
 
+        #play laughter sound
         "The babbling amongst the other cells breaks for some cracked, hoarse laughter."
 
         "Always keep them laughing, eh?"
 
+        #play footsteps
         "I hear footsteps, coming closer. The room becomes dead silent."
 
         "That can't be good."
@@ -678,6 +718,8 @@ label Scene1:
         "I lift a fist to teach the kid a lesson. He’s slow; you could see it in his muscles."
 
         show bg redscr with dissolve
+        $ renpy.pause(2.0)
+        
         pr "Aack! My arm---"
 
         "The vivid eyes I’d been looking at hover above me, and suddenly my arm is on fire! Broken! Nearly torn out of the socket and bleeding all over."
@@ -689,42 +731,45 @@ label Scene1:
         pr "No...spare me...I don’t want to---"
 
         boy "Think of this as fate. That sounds kind of nice, doesn’t it?"
-        #hide CG Mameat with fade
-
-        hide bg redscr with dissolve
-        $renpy.pause(1.0)
-        hide bg nfor1 with dissolve
-        $renpy.pause(2.0)
-        hide ui
-# CG: Screen fades to black/red?
+        #hide CG Mameat
+        
+        scene bg blackscr with slow_dissolve
 # play sound Screaming, crunching, grinding, all sorts of unholy noises.
-        $ renpy.pause(5.0)
+        $ renpy.pause(3.0)
+        #show some kind of splash page here
 
 label Scene2:
-        show bg street with dissolve
-        $show_main_ui()
+        scene bg street
+        with slow_fade
+        $show_main_ui(hp, mp)
+        $ renpy.pause(1.0)
 
-        #show student 1 with fade
+        #show student 1 with dissolve
 
-        gir "Riku. ...HEY, Riku, wake the hell up!"
-
+        sg "Riku." 
+        
+        $ renpy.pause(1.0)
+        
+        sg "...HEY, Riku, wake the hell up!"
+        #shake effect here
+        
+        show r happy:
+            alpha 0.0
+            time 0.75
+            linear 1.0 alpha 1.0
         r "Huh? Oh."
-
-        hide ui
-        show r happy with fade
-        $show_main_ui()
-        #show sg neu with fade
+        
         "If you haven't figured it out yet, I'm Riku. Midorikawa Riku, age 17, third year in high school."
         "I don't believe in silly crap like blood-type personalities, and even if I did, I dunno mine. I don't believe in horoscopes, either. Superstition is for kids."
 
-        boy "You've been out of it lately, man...you okay?"
-
+        sb "You've been out of it lately, man...you okay?"
+        
         r "Yeah, just thinkin' too hard on school starting again, I guess."
 
-        boy "Pff, yeah. No more free time at all. Even school breaks are gonna get eaten by studying."
+        sb "Pff, yeah. No more free time at all. Even school breaks are gonna get eaten by studying."
 
-        gir "Don't remind me of the college exams! I'm so nervous about getting into Toudai. What if I don't get in? How am I going to tell my parents?" 
-        gir "What if I don't make it into Keio either, and I have to go to CRAM SCHOOL for a year before I can reapply? And then what if I fail AGAIN and my parents disown me for being so stupid?! I can't HANDLE THIS---"
+        sg "Don't remind me of the college exams! I'm so nervous about getting into Toudai. What if I don't get in? How am I going to tell my parents?" 
+        sg "{size=17}What if I don't make it into Keio either, and I have to go to CRAM SCHOOL for a year before I can reapply? And then what if I fail AGAIN and my parents disown me for being so stupid?! I can't HANDLE THIS---{/size}"
 
         "What else do you expect 17 year olds to talk about?"
         "This year in high school is the worst. Once the second half of the year rolls around, no more free time, no more club activities, no more sports---no more fun, period. College exams will own our lives." 
@@ -733,25 +778,25 @@ label Scene2:
 
         r "Heh. I heard that this one time, when the school’s practice grades weren't high enough, the principal expelled a bunch of people to raise the marks."
 
-        gir "Oh god, you're joking. Tell me you're joking."
+        sg "Oh god, you're joking. Tell me you're joking."
 
         "I am, but she doesn't need to know that."
 
-        gir "Riku, don't be a jerk. Not everyone can fly by on sports scholarships like you."
+        sg "Riku, don't be a jerk. Not everyone can fly by on sports scholarships like you."
 
         r "Hey now, don't make it more than it is."
 
-        gir "What are you talking about? You’ve got automatic entry no matter how bad you do!"
+        sg "What are you talking about? You’ve got automatic entry no matter how bad you do!"
 
         r "Yeah, yeah, maybe, but I'm not going to get into any top schools on just sports, and my grades aren't exactly amazing."
 
-        gir "That's because you cut class to go drinking!"
+        sg "That's because you cut class to go drinking!"
 
         r "A man's gotta have priorities!"
 
         "I guess it’s true. I don't have to worry much about grades since I'm kind of a sports legend around here, and even if our school did kick crappy third years out every exam time, I'd get to stay, cause, well..."
 
-        boy "Now that I think about it, Riku, you never told us what you got on the first practice exam."
+        sb "Now that I think about it, Riku, you never told us what you got on the first practice exam."
 
         r "Pfft. Who cares. It was like the bottom quarter."
 
@@ -763,24 +808,24 @@ label Scene2:
         "'Sides, I wasn’t exactly in the bottom quarter anyway." 
         "Not that I studied; I just have a good memory is all. Helps on tests."
 
-        gir "Well, serves you right for cutting and refusing to study. That’s okay. When I’m a doctor, you can always be my personal cleaning boy."
+        sg "Well, serves you right for cutting and refusing to study. That’s okay. When I’m a doctor, you can always be my personal cleaning boy."
 
         #play sound Laughter.
 
         #Riku grumbles to himself.
         r "Grr."
 
-        gir "Don't make a sad face, Riku. I could always tutor you, if you're serious...but I'm talking hardcore, three-hour-a-day study sessions, and eight hours on weekends--"
+        sg "Don't make a sad face, Riku. I could always tutor you, if you're serious...but I'm talking hardcore, three-hour-a-day study sessions, and eight hours on weekends--"
 
-        boy "How the hell's he supposed to play if he's studying that much?"
+        sb "How the hell's he supposed to play if he's studying that much?"
 
-        gir "Well, obviously he'll have to sacrifice sports! This is his future!"
+        sg "Well, obviously he'll have to sacrifice sports! This is his future!"
 
         "My watch beeps."
 
         r "...shit."
         
-        boy "Aw, you gotta head home?"
+        sb "Aw, you gotta head home?"
         
         "I grab my bag and stand, yawning. Just one more day of vacation left, and then it's 48 hours a week of the worst school hell ever."
         "Fuuuuuck.The principal might as well just castrate me now and get it over with."
@@ -788,33 +833,34 @@ label Scene2:
         "Who in their right mind can even sit for that long, anyway? I got ADD just thinking about it."
 
         r "Yeah, it's gettin' dark, and I set my watch to tell me when I’m an hour late. Actually, I expect---"
-        $ renpy.pause(3.0)
         #play sound Ring ring ring.
-
+        $ renpy.pause(2.0)
+        
         r "--my parents to be calling. Yello? Right right, I know; I'm coming. I'm coming!"
 
         "Those people barking loudly into the phone? My parents. People say I’m lucky, adopted into a rich family of doctors, but they don’t have to live with ‘em."
 
+        show r upset:
+            alpha 0.0
+            time 2.0
+            alpha 1.0
         r "No, I get it---"
-        $ renpy.pause(2.0)
-        "Awww, not the TV..."
+        
+        r "Awww, not the TV..."
 
         #play sound Mumbled speaking.
 
         r "I was already on my way home! Honest! I'm like a minute away!"
 
         "I wave quickly to my friends, mouthing a good-bye. Ugh. No other seventeen year old in the universe has to be home this early. So fucking unfair."
-
-        hide rihappy with fade
-        hide bg street with dissolve
-        $ renpy.pause(4.0)
-        hide ui
+        
 label Scene3:
         #---Flashback---
+        scene bg blackscr
+        #scene cg rikyouth with slow_fade
         $show_main_ui(hp, mp)
-        #show cg rikflash with dissolve
-        #hide cg rikflash with dissolve
-        
+
+        $ renpy.pause(2.0)
         r "How come I can't do sports this year? I'm good at them, the teacher SAYS!"
 
         pa "You're not ready to handle the responsibilities that come with being on a sports team."
@@ -838,36 +884,47 @@ label Scene3:
 
         #Riku: Makes a loud noise of child-like rage.
         r "ARAAAAAAAAAAAGHAFLDSK!"
-        $ renpy.pause(5.0)
+        #Shaking screen effect goes here.
         # play sound Sound of shit breaking all over the house.
 
         #Mom sighs.
         ma "…Oh, Riku."
 
         pa "This time he’s paying for that out of his allowance."
-
-        hide ui
+       
 # --------
 
 label Scene4:
-        show bg back alley with dissolve
+        scene bg blackscr
+        
+        scene bg street 
+        show r happy at right
+        with fade
         $show_main_ui(hp,mp)
+        
         "My parents didn't let me have a new door for three whole months cause of that."
 
         "I do have to be careful, though. Friendly punches can turn into broken arms when I’m the one doing the punching."
 
         "I make it back to my street pretty fast, running full speed from the beach. My parents won't get on my ass too much for it. They'll actually believe that I was close to home."
 
+        #show r
+        #alpha
+        #time
+        #alpha
         r "Mm. Kind of cold for spring..."
+        #play sound wind
 
         "Someone's following me. They're being unnaturally discreet about it, too...usually the idiots who want to—well, try to—pick on me don't make much of a show of hiding very well." 
         "Guess they figure it'd be like hiding from the fishbowl when you're trying to catch one of the fish."
 
         "Heh. My stalkers getting smarter? That'll be the day. Still, if I start a fight at this time of evening on my own street, my parents will flip a nut."
 
-        # play sound Door unlocking.
-
-        show rhappy with fade
+        hide r happy with dissolve
+        #play sound Door unlocking.
+        #put some kind of door opening effect here to lead into bg rhouse
+        show bg room1 with dissolve
+        
         r "I’m home."
 
         pa "Riku—in here, please."
@@ -876,6 +933,7 @@ label Scene4:
 
         r "Yeah, Pop?"
 
+        # show pa
         pa "Do you understand why we give you a curfew?"
 
         r "Yeah, Pop."
@@ -901,7 +959,7 @@ label Scene4:
 
         "It's a damn form letter by this point."
 
-        pa "One day, when I get you a job at the company, you're going to see the benefits of going to bed early and waking up early. Life isn't all about friends, Riku. You’ll have a wife and children who rely on you."
+        pa "{size=17}One day, when I get you a job at the company, you're going to see the benefits of going to bed early and waking up early. Life isn't all about friends, Riku. You’ll have a wife and children who rely on you.{/size}"
 
         r "Sorry again, Pop. Am I free to go?"
 
@@ -910,11 +968,16 @@ label Scene4:
         "I hate his lectures, even when they're short. Nothing outright depresses me more than thinking of having to take up a desk job. My dad doesn't even care about what I wanna do."
 
         "I don't get no respect around here. No respect at all."
-        hide bg riroom with dissolve
-        $ renpy.pause(5.0)
         
-label Scene5:
+        
+label flashback:
+    scene bg blackscr
+    show bg dream with slow_fade
+    #put some kind of wispy cloudy effect here
+    $show_main_ui(hp,mp)
+    
     "She's there, again, in my dreams."
+    #play sound wind
     "Who are you?"
     "Why can't I stop seeing you?"
     "And why the fuck won't you let me get a good night's rest?"
@@ -926,12 +989,19 @@ label Scene5:
     $ renpy.pause(2.0)
     #Riku screams.
     "No-- where--"
-    $ renpy.pause(4.0)
+   
+label Scene5: 
+    scene bg blackscr
+    show bg blackscr
     #play sound Clock alarm
+    #time 3.0
+    #stop sound
     
+    $show_main_ui(hp,mp)
+    #Shaking screen effect here
     r "AAAAAAAAAAAAAAAAAAAAAGH!"
     
-    show bg riroom with dissolve
+    show bg riroom with slow_dissolve
     
     "My hand goes out and smashes the alarm clock to bits. Literal bits—it’s scrap metal now. Serves the fucking thing right for scaring the shit out of me."
     
@@ -955,8 +1025,8 @@ label Scene5:
     
     "Alcohol’s just what I need."
     
-    #show bg backalley
-    
+    show bg street with dissolve
+    $ renpy.pause(1.5)
     "I like this place, for a few reasons. One, it’s always got idiots willing to make a bet with me, and two, it’s off the main road, so there aren’t any annoying people nagging at me for underage drinking."
     
     "I wave to my friends. They’re crowded around a table with some large guys, shot glasses already set up."
@@ -1023,10 +1093,13 @@ label Scene5:
     "When his head hits the table, I immediately snatch up all the money and head off to the bathroom. The poor dumbass." 
     "He never had a chance. His friends are fawning all over him to make sure he’s not going to croak on ‘em."
     
+    show bg blackscr with dissolve
+    $renpy.pause(1.0)
     "This is the worst part about it, for me. Staring at the nasty bathroom ceiling, I do my business, and by the time I leave the bathroom, it’s like I haven’t had a drop. That’s it. Good-bye, sweet buzz."
     
     "I give my friend his share of the money and stuff the rest in my pocket. Didn’t even get a hangover after nine shots."
     
+    show bg riroom with slow_dissolve
     "Annoyed. I’m so annoyed I don’t even realize I’ve headed home early."
     
     pa "Hey, Riku, can you come here for a moment?"
@@ -1039,20 +1112,37 @@ label Scene5:
     
     r "Hm---ahh!"
    
-    #I'm thinking we should put a "show" command here with pictures of the items and a small description. That might be the simplest way just to get it on the screen. Lemme know what you think.
-    #show item palmpilot with fade at center
-    "Received Palm Pilot."
+    #We need a status message thinger here to declare items.
+    "Received PDA."
+    $ pda = True
+    if pda:
+        "You can now access the PDA menu."
+        #Stick an animation here that forces the PDA to blink.
+        "Let's click on it now to bring it up."
+    #I would like to put the pda_loop here, but turning it off returns to the main menu.
+   
+    "The PDA is how you keep track of your items and what you learn."
+    "It has other uses, but those come up later."
+    "Remember to check your PDA often."
     
+    #This goes back in the regular box.
     r "Whoa, this is the latest tech! It’s awesome! Thanks!"
     
     "I guess it’s not always bad to be the kid of two doctors."
 
 
-#show cg dream sequence
-#There should be some laughter sounds during the dream sequence.
-
-
 label Scene6:
+    scene bg blackscr
+    scene bg dream 
+    with slow_fade
+    #play sound laughter
+    #time 4.0
+    #stop sound
+    show bg blackscr with slow_dissolve
+    
+    show bg room1
+    $show_main_ui(hp,mp)
+    
     r "Ugh, again with that stupid dream..."
     
     "I don’t really have time to waste, not on a school day. Not like I want to go, but the first few days aren’t usually too bad, at least." 
@@ -1060,6 +1150,8 @@ label Scene6:
     
     "I know I can run fast, but I like to walk with friends sometimes. Now I have something to do on the way there~"
     
+    show bg street with dissolve
+    $renpy.pause(1.0)
     dg "That’s the kid, isn’t it?"
     
     db "You sure?"
@@ -1080,11 +1172,10 @@ label Scene6:
     
     "Huh."
     
-    "I’m not smiling so much anymore."
-    
     r "If you guys have some business with me, let’s get it over with. I have class."
     
     #play sound Knives clicking
+    dg "Yeah kid, I'd say we had some business withya."
     
     r "Whoa, is all that really necessary? I’m just one small kid..."
     
@@ -1100,7 +1191,7 @@ label Scene6:
     
     db "You should come with us quietly if you want this to go easy."
     
-    r "I don’t think so, grandpa." #Alt: "Yeah, or you could just go fuck yourselves."
+    r "Yeah, or you could just go fuck yourselves."
     
     dg "Nasty mouth, just like they said."
     
@@ -1111,6 +1202,7 @@ label Scene6:
     "I close my eyes. I can almost see them just by listening."
     
     #Riku makes martial arts cries while attacking.
+    #Screen shaking effect
     r "HIIIIIIIIYAH!"
     
     #play sound people getting hit
@@ -1135,45 +1227,58 @@ label Scene6:
     
     "One of the dropped knives is by my feet. It’s pretty fancy; looks like there’s actual gold and silver laced into the handle in some sort of emblem shape..."
 
-#label dec1:
-    #show 
-    #Pick up Knife.
-    #--Continue.
-    #"Received Knife."
-    #Leave Knife.
-    #--Bad End 1.
+menu:
+    "Pick up Knife.":
+        jump getknife
+        
+    "Leave Knife.":
+        jump leaveknife
+        
+label getknife:
+        #Message box should go here, too...
+        "You picked up the knife."
+        "The knife has been recorded in your PDA."
+        
+        #This goes in the regular textbox.
+        "Might as well keep it. If I can’t use it, I can pawn it."
+        $ knife = True
+        jump Scene7
+   
+label leaveknife:
+        "You decided to leave the knife."
+        jump scene7
     
     
 label Scene7:
-    "Might as well keep it. If I can’t use it, I can pawn it."
-    
     r "Assholes. I guess if I run the whole way, I’ll still be on time for class..."
     
     "I start to run out of the alley when a wave of nausea hits."
+    #Some kind of nausea effect here.
     
     r "Oomph."
     
-    #U is Mamoru.
-    u "Ahh, are you all right?"
+    $ Mamoru = "Dark Man"
+    
+    m "Ahh, are you all right?"
     
     r "---uh---"
     
     "I look up and see a dark man. He seems perfectly normal, but for the first time I can remember...I’m uneasy. Afraid. I want to run. I back up slowly."
     
     #Mamoru chuckles.
-    u "It looks like you have a fair sense about your situation. That’s more than many of your kind, you know."
+    m "It looks like you have a fair sense about your situation. That’s more than many of your kind, you know."
     
     r "My...kind?"
     
-    u "Yes, of course. You didn’t think you were human, did you? Silly child. No, you’re more like...a pig, or a cow. Ahh, but you’re still just an infant, so a piglet or a calf. Cute, really."
+    m "Yes, of course. You didn’t think you were human, did you? Silly child. No, you’re more like...a pig, or a cow. Ahh, but you’re still just an infant, so a piglet or a calf. Cute, really."
     
     r "...what do you mean?"
     
-    u "I’m afraid I don’t really have the time to explain. My stomach doesn’t like to be kept waiting."
+    m "I’m afraid I don’t really have the time to explain. My stomach doesn’t like to be kept waiting."
     
     r "W-what?!"
     
-    u "You’re going to run, aren’t you? Feel free; I’ll give you a small head start."
+    m "You’re going to run, aren’t you? Feel free; I’ll give you a small head start."
     
     #play sound Sound of a backpack dropping
     #stop sound
@@ -1185,106 +1290,142 @@ label Scene7:
     
     "God, I’ve run into one of his friends, haven’t I? I’m gonna die, I’m gonna--"
     
-    #This U is Soume.
-    u "Please stay here. I will handle him."
+    $ Soume = "Beautiful Person"
+    
+    s "Please stay here. I will handle him."
     
     "When I look up, a man who smells like flowers is hovering over me. Before I know it, I’m being surrounded by sweet-smelling vines that seem to be blocking me off." 
     "He smiles and nods, placing a finger over his lips, before the vines let him out and close."
-    
-#label dec2:    
-    #show
-    #Trust him.
-    #--Continue.
-    #Don’t trust him.
-    #--Bad End
+
+menu:
+    "Trust them.":
+        jump trustsoume
+        
+    "Don't trust them.":
+        jump dontrust
+        
+label trustsoume:
+        #Message box should go here, too...
+        jump Scene8
+   
+label dontrust:
+        "There's no way in hell I can trust this guy."
+        "I should try to find my own way out."
+        jump badend1    
 
 label Scene8:
     "I know I probably shouldn’t trust him, but I’m shaking so bad that I’ll take anyone who isn’t eating me. I sit down."
     
-    #This U is Mamoru again.
-    u "Look what I found~"
+    m "Look what I found~"
     
     r "AAANGH!"
     
-    u "Well, look at what we have here."
+    m "Well, look at what we have here."
     
     "He’s got me by the neck with a red, inflamed hand, and he yanks me through the vines."
     
+    #Put a yank through vines effect.
+    #play sound hissing of acid burned skin
     #Mamoru makes a sound of pain.
-    u "Nngh. Oi. Chemical burns? How positively droll."
-    #U = Roman
-    u "Hey---uh---you!"
-    #U = Mamoru
-    u "Really, this meal is becoming a bit too much."
-    #U = Roman
-    u "Let him go, or I will...make you regret it!"
+    m "Nngh." 
+    #stop sound
+    m "Oi. Chemical burns? How positively droll."
+    
+    $ Roman = "Awkward Kid"
+    ro "Hey---uh---you!"
+    
+    m "Really, this meal is becoming a bit too much."
+   
+    ro "Let him go, or I will...make you regret it!"
     
     "I don’t think this guy knows what he’s doing."
     
-    "The new person focuses, and a flash of blue light forms before quickly dissipating."
+    #Flash of light needed here?
+    "A flash of blue light suddenly appears in his hand, before quickly dissipating."
+    
+    m "..."
+    r "..."
+    ro "..."
+    
+    "..."
     
     "Correction: he definitely has no clue what he’s doing. What’s the point of people coming to save me if they can’t even do it RIGHT!"
-    #U = Mamoru
-    u "Let me guess—you’re the new meat? Too bad. I suppose I can fit you both in."
-    #U = Roman
-    u "Wai--wait--I’ll get it---"
     
+    m "Let me guess—you’re the new meat? Too bad. I suppose I can fit you both in."
+    
+    r "Wai--wait--I’ll get it---"
+    #flash of light here too
     #play sound false start magic attack
     
-    # I would like to have animation effects if we can. Here is where there would be some.
-    #show image Blue light 
-    #show image blue light 2
-    #show image blue light
-    #show image blue light 2
-    
     "That’s it. I’m dead. I didn’t even get laid once."
-    #U = Mamoru
-    u "Good show, really, but I’ve had enough dinner interruptions for one day."
+    
+    m "Good show, really, but I’ve had enough dinner interruptions for one day."
     
     "I have to do something, I have to--"
+    #stop sound
+ 
+menu:
+    "Use Knife":
+        jump useknife
+        
+    "Shoulda picked up that knife!":
+        jump noknife
+        
+label useknife:
+    if knife:
+        "Thank god I picked up that knife!"
+        jump useknife1
+    else:
+        jump noknife
+label noknife:
+        "You didn't pick it up!"
+        jump badend1
+        
+label useknife1:
+    "I attack using the knife I picked up, sinking it into his wrist."
     
-#label dec3:
-    #DECISION:
-    #Attack.
-    #--Use Knife.
-    
-    #"I attack using the knife I picked up, sinking it into his wrist."
-    
-    #Nothing there!
-    #--Use FIRE!
+    m "Tch." 
 
-    #"An odd, hot feeling bubbles up from deep inside. It’s familiar...it sort of reminds me of that dream."
+    "An odd, hot feeling bubbles up from deep inside. It’s familiar...it sort of reminds me of that dream."
 
-    #"I don’t want to die."
+    "I don’t want to die."
     
-    #"I don’t--"
+    "I don’t--"
     
-    #Roman
-    #u "Damn it...damn it, why won’t it work..."
+    #Blue light flashing here.
+    ro "Damn it...damn it, why won’t it work..."
     
-    #Mamoru
-    #u "-yawn- Still slow, are you? Truly pathetic. Get out of my way...I’m famished."
+    #Mamoru yawns
+    m "Still slow, are you? Truly pathetic. Get out of my way...I’m famished."
     
     #play sound The flare of fire.
+    #Put some awesome fire effect here.
     
 label Scene9:
-#Mamoru
-    u "Aahhh! My hand--! You---"
-#Soume    
-    u "You’re done for today, aren’t you?"
+    scene bg blackscr
+    scene bg street
+    #show m unhappy
+    with slow_fade
+    $show_main_ui(hp,mp)
+    m "Aahhh! My hand--! You---"
+    
+    s "You’re done for today, aren’t you?"
 #Mamoru has a knowing, understand, amused voice here.
-    u "...ahhh. You. I’ll be back. I suppose you already know that."
+    m "...ahhh. You. I’ll be back. I suppose you already know that."
 #Soume has a calm, amused voice here.    
-    u "I wouldn’t expect any less."
+    s "I wouldn’t expect any less."
 #Mamoru sounds amused here, too.    
-    u "You live to grow more delicious another day, Riku-chan."
-    #show bg blackscr with dissolve
+    m "You live to grow more delicious another day, Riku-chan."
 
-label Scene11:
-
-    #show bg backalley
-    #show ro upset with fade
-    #show r upset with fade
+label Scene10:
+    scene bg blackscr
+    scene bg street 
+    with slow_fade
+    
+    show ro worried at left
+    #show r upset at right
+    
+    $show_main_ui(hp,mp)
     
     ro "Hey, are you okay? I’m really sorry about the malfunction back there...I’m still kind of new to this whole rescuing thing..."
     
@@ -1299,24 +1440,26 @@ label Scene11:
     #Soume chuckles
     s "I’m afraid not, Midorikawa Riku-san."
     
-    #show s neu with fade
+    #hide ro upset
+    #hide r upset
+    #show bg firstview
+    #Put wispy wind effect here.
     
     "He smells powerfully of flowers. It’s making me dizzy."
     
-    "I don’t know. His eyes are so green."
+    "And his eyes are so green."
     
     r "R-Riku’s fine."
     
     s "Ara, Riku-san, then?"
     
-    #hide ro upset with fade
-    #show ro smile with fade
-    
     ro "Nice to meet you! Are you okay? Come have a seat...you must be famished and in shock and--"
     
-    s "Roman-kun, perhaps we should exercise a bit of restraint..."
+    s "\"Roman\"-kun, perhaps we should exercise a bit of restraint..."
+    $ Roman = "Roman"
     
-    ro "Right, sorry again... Erm... I’m Roman. Roman Kovalyov. This is my partner, Soume. It’s nice to meet you. Try to have a seat."
+    ro "Right, sorry again... Erm... I’m Roman. Roman Kovalyov. This is my partner, \"Soume\". It’s nice to meet you. Try to have a seat."
+    $ Soume = "Soume"
     
     r "School. I’m late. They’ll...call my parents...I gotta go."
     
@@ -1324,12 +1467,16 @@ label Scene11:
     
     s "Please. You must rest. We will deal with your school for you."
     
+    show bg street
+    #show r happy
+    show s smile at right
+    with dissolve
+    
     "The red-haired guy...Soume, touches my shoulder, and that smell of flowers invades my face. I end up sitting down on the curb."
     
     r "...who was that?"
     
-    #hide ro smile with fade
-    #show ro frown with fade
+    show ro worried at left
     
     ro "Mamoru. He’s a hunter."
     
@@ -1337,15 +1484,13 @@ label Scene11:
     
     ro "Yes. The very same."
     
-    #hide r upset with fade
-    #show r scare with fade
+    #show r scare at right
     
     r "He said...he tried to -eat- me and then...FIRE out of my HANDS."
     
-    #hide s neu with fade
-    #show s concern with fade
+    show s neu at right
     
-    s "That’s the good side to all of it—you have a few special abilities. You must be terribly stressed, but please listen to me carefully. You are in a lot of danger. Those people will not stop coming after you."
+    s "{size =17}That’s the good side to all of it—you have a few special abilities. You must be terribly stressed, but please listen to me carefully. You are in a lot of danger. Those people will not stop coming after you.{/size}"
     
     r "...oh god, I really fucked up this time..."
     
@@ -1355,24 +1500,23 @@ label Scene11:
     
     s "Yes, your biology is different."
     
-    #hide r scare with fade
-    #show r confu with fade
+    #show r confu at right
     r "So, uh...you guys are like me?"
     
     s "Precisely. Allow me to show you."
     
-    #hide ro frown with fade
-    #hide s concern with fade
-    #show ro neu with fade
-    #show s smile with fade
+    hide s new
+    hide ro worried
+    with dissolve
+    #show bg soumeheal
+    #with dissolve
+    #Put some nice little soft green glowing effect here.
     
-    # show green glow
-    # hide green glow
-    
-    #show cg plant growing with fade
-    #hide r confu with fade
-    #show r surp with fade
-    
+    #show bg street 
+    #show r excite at left
+    #show s smile at right
+    #with slow_dissolve
+   
     r "Whoa--! You just grew a plant...in your hand!"
     
     #Soume chuckles here.
@@ -1381,6 +1525,7 @@ label Scene11:
     #play sound Breath of air.
     
     "Soume blows over the tiny bud and a thin powder flies into my face."
+    #Some powder flying effect here.
     
     #hide ro smile with fade
     #show ro upset with fade
@@ -2088,7 +2233,6 @@ label Scene17:
     
     r "It’s rare?"
     
-
     s "It’s specific to my kind, but..."
     
     r "...if you don’t want to talk about it---"
@@ -2874,7 +3018,6 @@ label Scene29:
     
     a "STOOOOOOOOOOOOOOOOP!!!"
     
-
     #show screen flash 
     #play sound lightning
     
@@ -5419,7 +5562,6 @@ label Scene49:
     "I just killed a man."
 
     k  "HURK!"
-
 
     "Doctor Osamu is vomiting behind me.  He looks shaken, the first time I’ve ever seen him drop his confident demeanor.  It could be the smell.  Like fucking burnt hair and rotten meat."
 
