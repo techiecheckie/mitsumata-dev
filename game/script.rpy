@@ -517,33 +517,68 @@ init:
    $ slow_dissolve = Dissolve(3.0)
    $ slow_fade = Fade(2, 2, 3)
 
+#***********************
+# ITEM LABELS
+#***********************
+#This unlocks an item.
+#inventory.unlock_item("id")
+#This locks it again.
+#inventory.lock_item("id")
+#This checks to see if an item is unlocked.
+#inventory.item_unlocked("id")
+#This checks to see if an item is locked.
+#inventory.item_locked("id")
+
+#For simplistic use during checking for unlocked items
+$ pda = inventory.item_unlocked("pda")
+$ knife = inventory.item_unlocked("knife")
+$ wallet = inventory.item_unlocked("wallet")
+$ fullwallet = inventory.item_unlocked("fullwallet")
+$ signet = inventory.item_unlocked("signet")
+$ redjewel = inventory.item_unlocked("redjewel")
+$ map = inventory.item_unlocked("map")
+$ salve = inventory.item_unlocked("salve")
+$ ice = inventory.item_unlocked("ice")
+$ rose = inventory.item_unlocked("rose")
+$ cake = inventory.item_unlocked("cake")
+$ goodice = inventory.item_unlocked("goodice")
+$ trackseed = inventory.item_unlocked("trackseed")
+$ memo = inventory.item_unlocked("memo")
+$ pic = inventory.item_unlocked("pic")
+$ coin = inventory.item_unlocked("coin")
+$ seal = inventory.item_unlocked("seal")
+$ sake = inventory.item_unlocked("sake")
+$ spice = inventory.item_unlocked("spice")
+$ meat = inventory.item_unlocked("meat")
+$ veg = inventory.item_unlocked("veg")
+$ herb = inventory.item_unlocked("herb")
+$ pollen = inventory.item_unlocked("pollen")
+$ clara = inventory.item_unlocked("clara")
+$ terra = inventory.item_unlocked("terra")
+$ vita = inventory.item_unlocked("vita")
+$ mitsumata = inventory.item_unlocked("mitsumata")
+$ uni = inventory.item_unlocked("uni")
+$ gun = inventory.item_unlocked("gun")
+$ book1 = inventory.item_unlocked("book1")
+$ book2 = inventory.item_unlocked("book2")
+$ book3 = inventory.item_unlocked("book3")
+$ book4 = inventory.item_unlocked("book4")
+$ garden = inventory.item_unlocked("garden")
+$ phone = inventory.item_unlocked("phone")
+$ game = inventory.item_unlocked("game")
+$ strpot = inventory.item_unlocked("strpotion")
+$ magpot = inventory.item_unlocked("magpotion")
+
 #--------------------------------
 # GAME STARTS HURR
 #--------------------------------
 
-label start:
-
-#***********************
-# PYTHON LABELS
-#***********************
-    $ knife = False
-    $ pda = False
-        
+label start:    
     
-    
-    
-    
-    
-    
-    
-    
-#--------------------------------
-# GAME STARTS HURR
-#--------------------------------    
     scene bg blackscr
     $show_main_ui(hp, mp)
     
-    play music "music/mitsumata1.mp3"
+    #play music "music/mitsumata1.mp3"
     #show cg 1 with dissolve
     "Once upon a time, there was a prince who was not in any way different from other fairy tale princes."
     
@@ -628,13 +663,14 @@ label start:
 
     "Night, Mom."
     $ renpy.pause(2.0)
-
+    
 label Scene1:
         scene bg blackscr with fade
         $ renpy.pause(2.0)
         
-        scene bg nfor1 with slow_dissolve
+        scene bg nfor1 
         $show_main_ui(hp,mp)
+        with slow_dissolve
         
         $ renpy.pause(3.0)
         
@@ -717,9 +753,11 @@ label Scene1:
 
         "I lift a fist to teach the kid a lesson. He’s slow; you could see it in his muscles."
 
-        show bg redscr with dissolve
+        $ hide_main_ui(hp,mp)
+        show bg redscr 
+        with dissolve
         $ renpy.pause(2.0)
-        
+        $ show_main_ui(hp,mp)
         pr "Aack! My arm---"
 
         "The vivid eyes I’d been looking at hover above me, and suddenly my arm is on fire! Broken! Nearly torn out of the socket and bleeding all over."
@@ -732,16 +770,17 @@ label Scene1:
 
         boy "Think of this as fate. That sounds kind of nice, doesn’t it?"
         #hide CG Mameat
-        
-        scene bg blackscr with slow_dissolve
+        $hide_main_ui(hp,mp)
+        scene bg blackscr 
+        with slow_dissolve
 # play sound Screaming, crunching, grinding, all sorts of unholy noises.
         $ renpy.pause(3.0)
         #show some kind of splash page here
 
 label Scene2:
         scene bg street
-        with slow_fade
         $show_main_ui(hp, mp)
+        with slow_fade
         $ renpy.pause(1.0)
 
         #show student 1 with dissolve
@@ -856,9 +895,11 @@ label Scene2:
         
 label Scene3:
         #---Flashback---
-        scene bg blackscr
-        #scene cg rikyouth with slow_fade
+        scene bg blackscr with fade
+        
+        #scene cg rikyouth
         $show_main_ui(hp, mp)
+        with slow_fade
 
         $ renpy.pause(2.0)
         r "How come I can't do sports this year? I'm good at them, the teacher SAYS!"
@@ -899,8 +940,9 @@ label Scene4:
         
         scene bg street 
         show r happy at right
-        with fade
         $show_main_ui(hp,mp)
+        with fade
+        
         
         "My parents didn't let me have a new door for three whole months cause of that."
 
