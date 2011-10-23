@@ -2,8 +2,12 @@
 
 init python:
 
+    game_width  = 635
+    game_height = 590
+
     games = [
-        ("minigame_mole", "Whack-A-Mole")
+        ("minigame_mole", "Whack-A-Mole"),
+        ("minigame_duck", "Hunt Duck")
         ]
 
 screen games:
@@ -44,24 +48,24 @@ label start:
         call screen games( adj=games_adjustment )
 
         if _return is False:
-            jump end
+            return
 
         call expression _return
-
-#    window hide None
-#
-#    python:
-#        run_minigame( WhackAMole )
-#
-#    window show None
-
-label end:
-    d "Leaving minigames."
-    return
 
 label minigame_mole:
     window hide None
     python:
-        run_minigame( WhackAMole )
+        run_minigame( WhackAMole,
+                      0, 0,
+                      game_width, game_height )
+    window show None
+    return
+
+label minigame_duck:
+    window hide None
+    python:
+        run_minigame( DuckHunt,
+                      0, 0,
+                      game_width, game_height )
     window show None
     return

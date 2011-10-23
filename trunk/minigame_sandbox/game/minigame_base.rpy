@@ -86,16 +86,46 @@ init -50 python:
         LEFT_MOUSE_BUTTON  = 1
         RIGHT_MOUSE_BUTTON = 2
 
-        def __init__( self, origin_x, origin_y ):
+        def __init__( self ):
             super( Minigame, self ).__init__()
             self.is_quitting = False
-            self.origin      = (origin_x, origin_y)
+            self.origin      = (0, 0)
+            self.width       = 0
+            self.height      = 0
 
         def get_displayables( self ):
             return []
 
+        def get_game_width( self ):
+            return self.width
+
+        def get_game_height( self ):
+            return self.height
+
         def get_origin( self ):
             return self.origin
+
+        def get_origin_x( self ):
+            return self.origin[0]
+
+        def get_origin_y( self ):
+            return self.origin[1]
+
+        def get_world_transform( self ):
+            return GameTransform( self.origin[0], self.origin[1] )
+
+        def set_game_width( self, width ):
+            self.width = width
+
+        def set_game_height( self, height ):
+            self.height = height
+
+        def set_origin( self, x, y ):
+            self.origin = (x, y )
+
+        def transform_screen_to_world( self, x, y ):
+            return (x - self.origin[0],
+                    y - self.origin[1])
 
         def render( self, blitter ):
             pass
@@ -127,9 +157,17 @@ init -50 python:
         def on_mouse_up( self, mx, my, button ):
             pass
 
-    def run_minigame( game_type, x=0, y=0, *args, **kwds ):
+    def run_minigame( game_type,
+                      x=0, y=0,
+                      game_width=renpy.config.screen_width,
+                      game_height=renpy.config.screen_height,
+                      *args, **kwds ):
         try:
-            driver = MinigameDriver( game_type( x, y, *args, **kwds ) )
+            game   = game_type( *args, **kwds )
+            driver = MinigameDriver( game )
+            game.set_origin( x, y )
+            game.set_game_width( game_width )
+            game.set_game_height( game_height )
             ui.add( driver )
             ui.interact( suppress_overlay=True, suppress_underlay=True )
             return driver.get_game_result()
