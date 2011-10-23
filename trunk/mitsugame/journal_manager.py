@@ -47,19 +47,15 @@ class Journal_manager():
   def get_journal(self, id):
     for journal in self.journals:
       if journal.get_id() == id:
-        self.selected_journal = journal
         return journal
-        
-    self.selected_journal = None
     return None
     
   def unlock_entry(self, journal_id, entry_id):
-    for journal in self.journals:
-      if journal.get_id() == journal_id:
-        for entry in journal.get_entries():
-          if entry.get_id() == entry_id:
-            entry.unlock()
-            journal.unlock()
-            print "Journal: unlocked entry " + entry_id + " in journal " + journal_id
-            return
+    journal = self.get_journal(journal_id)
+    if journal != None:
+      for entry in journal.get_entries():
+        if entry.get_id() == entry_id:
+          entry.unlock()
+          journal.unlock()
+          return
     print "[WARN] Could not unlock entry, no such id found (journal_id: %s, entry_id: %s)" % (journal_id, entry_id)

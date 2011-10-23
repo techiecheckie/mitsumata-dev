@@ -131,6 +131,7 @@ init python:
     renpy.hide("ui_hp_bg")
     renpy.hide("ui")
 
+    #if config.overlay_functions.
     config.overlay_functions.remove(main_ui_buttons)
     
     return
@@ -146,6 +147,7 @@ init python:
     renpy.show("minigame_hp_bar", at_list = [Position(xpos=mini_hp_x, ypos=16), Transform(anchor=(1.0, 0.0))])
     renpy.show("minigame_ui")
     
+    # temp
     if not battle:
       config.overlay_functions.append(minigame_ui_buttons)
 
@@ -193,12 +195,51 @@ init python:
     else:
         return False
         
-  def show_message_window(message):
+  def show_message(message, size):
+    if size == "large":
+      box = "textbox_l"
+      x_pos = 0.3 # or use a pixel value, x_pos = 500
+      y_pos = 0.35
+      x_max = 500
+    elif size == "medium":
+      box = "textbox_m"
+      x_pos = 0.25
+      y_pos = 0.45
+      x_max = 580
+    elif size == "small":
+      box = "textbox_s"
+      x_pos = 0.45
+      y_pos = 0.47
+      x_max = 130
+  
     renpy.transition(dissolve)
-    renpy.show("textbox", at_list=[Position(xpos=0.5, ypos=0.5), Transform(anchor=(0.5,0.5))])
+    renpy.show(box, at_list=[Position(xpos=0.5, ypos=0.5), Transform(anchor=(0.5,0.5))], zorder=9)
     
-    ui.frame(xpos=0.3, ypos=0.35, background=None)
+    ui.frame(xpos=x_pos, ypos=y_pos, xmaximum=x_max, background=None)
     ui.text(message)
+    
+    # Full screen hidden button, "click anywhere to continue" kind
+    ui.frame(xpos=0, ypos=0, background=None)
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
+    
+    ui.interact(suppress_overlay=True)
+    
+    renpy.transition(dissolve)
+    renpy.hide(box)
+    
+    return
+
+  def unlock_item(item_id):
+    item = inventory.get_item(item_id)
+    item.unlock()
+    update_stats(item.get_bonuses())
+    
+    # Box 1
+    renpy.transition(dissolve)
+    renpy.show("textbox_m", at_list=[Position(xpos=0.5, ypos=0.5), Transform(anchor=(0.5,0.5))], zorder=9)
+        
+    ui.frame(xpos=0.25, ypos=0.45, background=None)
+    ui.text(item.get_name() + " recorded")
     
     ui.frame(xpos=0, ypos=0, background=None)
     ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
@@ -206,4 +247,49 @@ init python:
     ui.interact(suppress_overlay=True)
     
     renpy.transition(dissolve)
-    renpy.hide("textbox")
+    renpy.hide("textbox_m")
+    
+    # Box 2
+    renpy.transition(dissolve)
+    renpy.show("textbox_l", at_list=[Position(xpos=0.5, ypos=0.5), Transform(anchor=(0.5,0.5))], zorder=9)
+    
+    ui.frame(xpos=0.3, ypos=0.35, background=None)
+    ui.image("gfx/items/generic_item.png")
+    
+    ui.frame(xpos=0.4, ypos=0.35, xmaximum=300, background=None)
+    ui.text(item.get_description())
+    
+    ui.frame(xpos=0, ypos=0, background=None)
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
+    
+    ui.interact(suppress_overlay=True)
+    
+    renpy.transition(dissolve)
+    renpy.hide("textbox_l")
+    
+    return
+    
+  def unlock_entry(journal_id, entry_id):
+    journal_manager.unlock_entry(journal_id, entry_id)
+    
+    renpy.transition(dissolve)
+    renpy.show("textbox_m", at_list=[Position(xpos=0.5, ypos=0.5), Transform(anchor=(0.5,0.5))], zorder=9)
+        
+    ui.frame(xpos=0.25, ypos=0.45, xmaximum=550, background=None)
+    ui.text("Entry " + entry_id + " recorded")
+    
+    ui.frame(xpos=0, ypos=0, background=None)
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
+    
+    ui.interact(suppress_overlay=True)
+    
+    renpy.transition(dissolve)
+    renpy.hide("textbox_m")
+    
+    return
+
+  # Stub, will have to see about moving this someplace else
+  def update_stats(bonuses):
+    print "Item bonus:", bonuses
+    
+    return

@@ -34,9 +34,11 @@ init python:
   # variables' states automatically. Which is nice.
   hp = 0
   mp = 0
+  tries = 3
   
-  decision = "0"
+  decision = "5"
   event_triggered = False
+  pda = False
   
 #---------------------
 #KONAMI CODE
@@ -294,7 +296,9 @@ image bg blackscr = "gfx/backgrounds/blackscr.png"
 image bg redscr = "gfx/backgrounds/redscr.jpg"
 
 image map = "gfx/backgrounds/map.png"
-image textbox = "gfx/textbox.png"
+image textbox_l = "gfx/textbox.png"
+image textbox_m = "gfx/textbox_2.png"
+image textbox_s = "gfx/textbox_mini.png"
 
 #--------------------------------
 #DECLARE CG IMAGES
@@ -517,66 +521,23 @@ init:
    $ slow_dissolve = Dissolve(3.0)
    $ slow_fade = Fade(2, 2, 3)
 
-#***********************
-# ITEM LABELS
-#***********************
-#This unlocks an item.
-#inventory.unlock_item("id")
-#This locks it again.
-#inventory.lock_item("id")
-#This checks to see if an item is unlocked.
-#inventory.item_unlocked("id")
-#This checks to see if an item is locked.
-#inventory.item_locked("id")
-
-#For simplistic use during checking for unlocked items
-$ pda = inventory.item_unlocked("pda")
-$ knife = inventory.item_unlocked("knife")
-$ wallet = inventory.item_unlocked("wallet")
-$ fullwallet = inventory.item_unlocked("fullwallet")
-$ signet = inventory.item_unlocked("signet")
-$ redjewel = inventory.item_unlocked("redjewel")
-$ map = inventory.item_unlocked("map")
-$ salve = inventory.item_unlocked("salve")
-$ ice = inventory.item_unlocked("ice")
-$ rose = inventory.item_unlocked("rose")
-$ cake = inventory.item_unlocked("cake")
-$ goodice = inventory.item_unlocked("goodice")
-$ trackseed = inventory.item_unlocked("trackseed")
-$ memo = inventory.item_unlocked("memo")
-$ pic = inventory.item_unlocked("pic")
-$ coin = inventory.item_unlocked("coin")
-$ seal = inventory.item_unlocked("seal")
-$ sake = inventory.item_unlocked("sake")
-$ spice = inventory.item_unlocked("spice")
-$ meat = inventory.item_unlocked("meat")
-$ veg = inventory.item_unlocked("veg")
-$ herb = inventory.item_unlocked("herb")
-$ pollen = inventory.item_unlocked("pollen")
-$ clara = inventory.item_unlocked("clara")
-$ terra = inventory.item_unlocked("terra")
-$ vita = inventory.item_unlocked("vita")
-$ mitsumata = inventory.item_unlocked("mitsumata")
-$ uni = inventory.item_unlocked("uni")
-$ gun = inventory.item_unlocked("gun")
-$ book1 = inventory.item_unlocked("book1")
-$ book2 = inventory.item_unlocked("book2")
-$ book3 = inventory.item_unlocked("book3")
-$ book4 = inventory.item_unlocked("book4")
-$ garden = inventory.item_unlocked("garden")
-$ phone = inventory.item_unlocked("phone")
-$ game = inventory.item_unlocked("game")
-$ strpot = inventory.item_unlocked("strpotion")
-$ magpot = inventory.item_unlocked("magpotion")
-
 #--------------------------------
 # GAME STARTS HURR
 #--------------------------------
 
-label start:    
-    
+label start:
+
+#***********************
+# PYTHON LABELS
+#***********************
+    $ knife = False
+    $ pda = False
+        
+#--------------------------------
+# GAME STARTS HURR
+#--------------------------------    
     scene bg blackscr
-    $show_main_ui(hp, mp)
+    $show_main_ui()
     
     #play music "music/mitsumata1.mp3"
     #show cg 1 with dissolve
@@ -663,14 +624,13 @@ label start:
 
     "Night, Mom."
     $ renpy.pause(2.0)
-    
+
 label Scene1:
         scene bg blackscr with fade
         $ renpy.pause(2.0)
         
-        scene bg nfor1 
-        $show_main_ui(hp,mp)
-        with slow_dissolve
+        scene bg nfor1 with slow_dissolve
+        $show_main_ui()
         
         $ renpy.pause(3.0)
         
@@ -753,11 +713,9 @@ label Scene1:
 
         "I lift a fist to teach the kid a lesson. He’s slow; you could see it in his muscles."
 
-        $ hide_main_ui(hp,mp)
-        show bg redscr 
-        with dissolve
+        show bg redscr with dissolve
         $ renpy.pause(2.0)
-        $ show_main_ui(hp,mp)
+        
         pr "Aack! My arm---"
 
         "The vivid eyes I’d been looking at hover above me, and suddenly my arm is on fire! Broken! Nearly torn out of the socket and bleeding all over."
@@ -770,17 +728,16 @@ label Scene1:
 
         boy "Think of this as fate. That sounds kind of nice, doesn’t it?"
         #hide CG Mameat
-        $hide_main_ui(hp,mp)
-        scene bg blackscr 
-        with slow_dissolve
+        
+        scene bg blackscr with slow_dissolve
 # play sound Screaming, crunching, grinding, all sorts of unholy noises.
         $ renpy.pause(3.0)
         #show some kind of splash page here
 
 label Scene2:
         scene bg street
-        $show_main_ui(hp, mp)
         with slow_fade
+        $show_main_ui()
         $ renpy.pause(1.0)
 
         #show student 1 with dissolve
@@ -895,11 +852,9 @@ label Scene2:
         
 label Scene3:
         #---Flashback---
-        scene bg blackscr with fade
-        
-        #scene cg rikyouth
-        $show_main_ui(hp, mp)
-        with slow_fade
+        scene bg blackscr
+        #scene cg rikyouth with slow_fade
+        $show_main_ui()
 
         $ renpy.pause(2.0)
         r "How come I can't do sports this year? I'm good at them, the teacher SAYS!"
@@ -940,9 +895,8 @@ label Scene4:
         
         scene bg street 
         show r happy at right
-        $show_main_ui(hp,mp)
         with fade
-        
+        $show_main_ui()
         
         "My parents didn't let me have a new door for three whole months cause of that."
 
@@ -1016,7 +970,7 @@ label flashback:
     scene bg blackscr
     show bg dream with slow_fade
     #put some kind of wispy cloudy effect here
-    $show_main_ui(hp,mp)
+    $show_main_ui()
     
     "She's there, again, in my dreams."
     #play sound wind
@@ -1039,7 +993,7 @@ label Scene5:
     #time 3.0
     #stop sound
     
-    $show_main_ui(hp,mp)
+    $show_main_ui()
     #Shaking screen effect here
     r "AAAAAAAAAAAAAAAAAAAAAGH!"
     
@@ -1131,7 +1085,7 @@ label Scene5:
     ob "Nnngh..."
     
     "Someone has to pour his glass for him. Everyone in the bar’s staring at me. They don’t get how I can still be so clear-headed. What can I say...I’m a great drunk."
-    
+       
     "When his head hits the table, I immediately snatch up all the money and head off to the bathroom. The poor dumbass." 
     "He never had a chance. His friends are fawning all over him to make sure he’s not going to croak on ‘em."
     
@@ -1161,7 +1115,8 @@ label Scene5:
         "You can now access the PDA menu."
         #Stick an animation here that forces the PDA to blink.
         "Let's click on it now to bring it up."
-    #I would like to put the pda_loop here, but turning it off returns to the main menu.
+        #I would like to put the pda_loop here, but turning it off returns to the main menu.
+        call pda_loop
    
     "The PDA is how you keep track of your items and what you learn."
     "It has other uses, but those come up later."
@@ -1183,7 +1138,7 @@ label Scene6:
     show bg blackscr with slow_dissolve
     
     show bg room1
-    $show_main_ui(hp,mp)
+    $show_main_ui()
     
     r "Ugh, again with that stupid dream..."
     
@@ -1448,7 +1403,7 @@ label Scene9:
     scene bg street
     #show m unhappy
     with slow_fade
-    $show_main_ui(hp,mp)
+    $show_main_ui()
     m "Aahhh! My hand--! You---"
     
     s "You’re done for today, aren’t you?"
@@ -1467,7 +1422,7 @@ label Scene10:
     show ro worried at left
     #show r upset at right
     
-    $show_main_ui(hp,mp)
+    $show_main_ui()
     
     ro "Hey, are you okay? I’m really sorry about the malfunction back there...I’m still kind of new to this whole rescuing thing..."
     
@@ -2973,6 +2928,7 @@ label Scene28:
     
     ro "Veal? That’s baby deer, isn’t it? I couldn’t."
     
+
     l "If you so wish..."
     
     ro "I do. I’m not even sure how you could eat a poor young thing..."
@@ -3839,6 +3795,7 @@ label Scene35:
     
     "Forget this. I’ll just follow him."
     
+
     r "Roman, here I commmmmmmme-"
     
     #play sound Crashing noises
@@ -4545,6 +4502,7 @@ label Scene41:
     r "It was just a mistake...you don't have to get so mad about something like that."
 
     "{size=17}He lets out this drawn out sigh and actually stops messing with the machine for a second. He rubs his eyes, and the way he talks to me I get the fucking 
+
     impression that this is the way he’d explain something to a brain-damaged brick.{/size}"
 
     k  "Because I’ve earned it, you understand?"

@@ -59,9 +59,9 @@ init python:
   # icons.
   def show_inventory(button, button_value):
     if button == "inventory":
-      items = inventory.get_items()
+      items = inventory.get_inventory_items()
       
-      cols = 3
+      cols = 6
       rows = len(items)/cols + len(items) % cols
       
       for y in range(0, rows):
@@ -97,7 +97,7 @@ init python:
     if button == "journal manager":
       journals = journal_manager.get_journals()
           
-      cols = 3
+      cols = 6
       rows = len(journals)/cols + len(journals) % cols
       
       for y in range(0, rows):
@@ -111,7 +111,7 @@ init python:
           if journal.is_locked():
             ui.image("gfx/buttons/journal_char.png")
           else:
-            ui.imagebutton("gfx/buttons/journal_char" + journal.get_id() + ".png", 
+            ui.imagebutton("gfx/buttons/journal_char.png", 
                            "gfx/buttons/journal_char_hover.png", 
                            clicked=ui.returns(("journal", journal)))
      
@@ -123,7 +123,7 @@ init python:
       
       if journal != None:
         ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
-        ui.imagebutton("gfx/buttons/journal_char" + journal.get_id() + ".png",
+        ui.imagebutton("gfx/buttons/journal_char.png",
                        "gfx/buttons/journal_char_hover.png",
                        clicked=ui.returns(("journal manager", "")))
       
@@ -143,7 +143,7 @@ init python:
       entry = button_value[1]
       
       ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/buttons/journal_char" + journal.get_id() + ".png",
+      ui.imagebutton("gfx/buttons/journal_char.png",
                      "gfx/buttons/journal_char_hover.png",
                      clicked=ui.returns(("journal", journal)))
       
