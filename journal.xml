@@ -1,42 +1,398 @@
 <journals>
-  <journal id="1">
+  <journal id="Riku">
     <entries>
-      <entry id="1">
-        <title>001 char1's first entry</title>
-        <content>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas semper dignissim ante, at volutpat purus pretium eu. Vestibulum facilisis, tortor sed gravida malesuada, leo mi luctus elit, volutpat ultrices mi massa in enim. Nam id tortor sed quam varius sollicitudin. Etiam risus eros, ultrices vel consectetur sit amet, lobortis at massa. Suspendisse mauris dui, placerat vitae ullamcorper in, fringilla a sapien. Nunc eu felis eu ligula molestie egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce convallis commodo quam, et malesuada elit porta aliquam. Nunc ut nunc vel enim sagittis egestas. Ut erat purus, gravida non fringilla tincidunt, congue nec nisi. Nulla bibendum arcu ut risus sodales a aliquet massa porttitor.</content>
+      <entry id="001">
+        <title>Dreams</title>
+        <content>Riku constantly has odd, lucid dreams about a woman he doesn't know reaching for him. </content>
       </entry>
-      <entry id="2">
-        <title>002 char1's second entry</title>
-        <content>Vestibulum erat ipsum, aliquam quis consequat nec, condimentum ut nisi. Ut nec dui urna, gravida interdum enim. Quisque libero ante, pharetra nec faucibus eget, tempus iaculis risus. Phasellus vehicula lorem ac quam semper ut vestibulum augue egestas. Cras pharetra luctus dolor in pulvinar. Quisque in sollicitudin est. Phasellus et iaculis metus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi vel nulla ut odio bibendum ornare. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse sed facilisis elit. Proin eleifend ante eget ipsum mattis rhoncus. Duis eu enim ut leo aliquet egestas. Proin est lectus, pulvinar tempor cursus vehicula, varius vitae nisi. Suspendisse fringilla elit eros, ac sagittis eros. Morbi et risus non sapien dapibus consectetur. </content>
+
+
+      <entry id="002">
+        <title>The Basics</title>
+        <content>Midorikawa Riku is a 17 year old kid who attends BlahBlah High School. He dislikes sitting still, and rarely does any homework, but his amazing memory allows him to do well on tests as long as he pays any attention. He is the school's sports star and MVP in track, soccer, and football. </content>
       </entry>
-      <entry id="3">
-        <title>003 char1's third entry</title>
-        <content>Nullam vitae auctor odio. Curabitur ut odio ante, sed rhoncus magna. Pellentesque sollicitudin varius consequat. Cras mi sapien, consequat ac aliquam tincidunt, aliquam vitae lorem. Praesent condimentum hendrerit volutpat. Sed varius dignissim molestie. Sed ultricies aliquam quam, ut cursus neque aliquet nec. Ut sit amet nisi iaculis felis adipiscing pulvinar. Donec porta convallis faucibus. Quisque sit amet elit risus. Fusce interdum consequat fermentum. Nulla nec ligula ut nisi iaculis fringilla. Aliquam erat volutpat. In hac habitasse platea dictumst. </content>
+
+
+      <entry id="003">
+        <title>Dark Fire</title>
+        <content>Riku's ability manifests as a dark fire that seems able to spread from his entire body. It burns very fiercely, and is hard for Riku to control.</content>
       </entry>
+
+
+      <entry id="004">
+        <title>Rare Ability?</title>
+        <content>Supposedly no one at the rescue has seen this ability before. Is it that rare?</content>
+      </entry>
+
     </entries>
   </journal>
-  <journal id="2">
+
+
+
+
+<journal id="Roman">
     <entries>
-      <entry id="1">
-        <title>001 char2's first entry</title>
-        <content>Suspendisse mollis nisl nec nunc condimentum porta. In hac habitasse platea dictumst. Etiam ligula nisl, aliquet eu ornare id, interdum non dolor. Sed gravida, justo non sollicitudin ultrices, nisi lorem feugiat tortor, in sodales diam augue sit amet justo. Vestibulum facilisis justo quis erat tincidunt sit amet ultrices massa fringilla. Pellentesque rutrum scelerisque arcu vel accumsan. Morbi nec mauris eu justo lacinia placerat id quis nisl. Sed urna dolor, faucibus faucibus imperdiet euismod, mattis sed mauris. </content>
+      <entry id="005">
+        <title>Ice</title>
+        <content>Roman is an Ice user. He can only make ice form in his hands, though supposedly he should be able to freeze water in the air just by concentrating. Maybe he should train more.</content>
       </entry>
+
+ <entry id="006">
+        <title>Vegan Majin?</title>
+        <content>Roman doesn't eat flesh or anything that comes from animals, such as honey or eggs. That's pretty weird for a Majin. </content>
+      </entry>
+
+ <entry id="007">
+        <title>Old Kitchen Servant</title>
+        <content>Roman used to be a servant in a kitchen back when he lived in Russia. He ran away when he found out that the meat he was cooking came from Majin that were no longer useful. That's also why he chose to become a vegan.</content>
+      </entry>
+
+ <entry id="008">
+        <title>Chef?</title>
+        <content>Roman got his chef skills from his old position as a kitchen servant.</content>
+      </entry>
+
     </entries>
   </journal>
-  <journal id="3">
+
+
+<journal id="Soume">
     <entries>
-      <entry id="1">
-        <title>001 char3's first entry</title>
-        <content>Nulla vitae lacus eros, at porta mi. Maecenas et lorem a nulla dignissim tempor. Donec blandit, quam viverra sodales commodo, purus elit sollicitudin leo, ut laoreet lacus libero tempor tellus. Morbi et metus lorem, dictum scelerisque lorem. Praesent viverra arcu ut lorem dapibus euismod. Suspendisse potenti. Mauris vitae ipsum enim. </content>
+      <entry id="009">
+        <title>Frail?</title>
+        <content>Soume seems so strong during training, but he got ill in the hallway and had to sit down. His chest is full of bones...</content>
       </entry>
-      <entry id="2">
-        <title>002 char3's second entry</title>
-        <content>Aliquam sit amet lacus id massa luctus suscipit. Maecenas accumsan tincidunt lectus pharetra commodo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras at felis nec nunc rutrum cursus. Vivamus malesuada, nibh ac rutrum tempor, dui purus rutrum diam, in varius elit quam at purus. Nunc molestie adipiscing est in aliquam. Integer vel metus ut nulla vehicula auctor sed lacinia purus. Donec ultrices tortor sed ante tristique ornare. Nulla facilisi. Aenean quis mauris ac est cursus dignissim. Nunc imperdiet, nibh sed ultricies malesuada, arcu velit convallis metus, ac gravida diam ligula ut diam. Nam arcu risus, mollis eleifend ullamcorper eu, rutrum id tellus. Quisque semper tortor at diam tempor pharetra. Integer id urna nec augue aliquet euismod. Phasellus lacus urna, auctor congue accumsan vel, volutpat a nibh. Vestibulum interdum egestas pharetra. </content>
+
+
+      <entry id="010">
+        <title>Plants!</title>
+        <content>Soume is a plant user. He talks to them and is able to grow them from seeds in his hands. He can even collect pollen. No one knows the full potential of his power.</content>
       </entry>
-      <entry id="3">
-        <title>003 char3's third entry</title>
-        <content>Curabitur hendrerit facilisis arcu quis pharetra. Phasellus elit enim, ornare eget egestas vel, tincidunt id eros. Vivamus nulla ligula, vulputate nec porta vel, congue a lorem. Maecenas ligula lectus, consectetur sit amet dignissim sed, faucibus at ipsum. Donec erat neque, cursus eu facilisis a, semper quis elit. Nullam aliquam metus eget dui ultrices pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc laoreet tempor libero. </content>
+
+
+      <entry id="011">
+        <title>Lactose Intolerant!</title>
+        <content>Soume tried to eat some of Riku's strawberry shortcake and seemed to have some...stomach problems. He's probably allergic to dairy products.</content>
       </entry>
+
+
+      <entry id="012">
+        <title>What does he eat?!</title>
+        <content>Soume drinks a lot of water, but have you ever, ever seen him eat? Roman gets an answer from him, finally. He eats very sparingly, and rarely, because the only thing his stomach can tolerate is fresh, live meat. </content>
+      </entry>
+
+
+      <entry id="013">
+        <title>Childhood Suffering</title>
+        <content>As a child, Soume suffered the worst experiences that anyone could imagine. He was abused emotionally, physically, and sexually by humans who wanted to break him. It explains a lot of his personality...</content>
+      </entry>
+
+
+      <entry id="014">
+        <title>Are Plants Aware?</title>
+        <content>Soume is always talking to his plants, and unlike other plants, they MOVE to look at him sometimes! Are plants smarter than we think they are, or is that just Soume's special ability? He does create monster plants that listen to his commands... </content>
+      </entry>
+
+
+      <entry id="015">
+        <title>Traitor</title>
+        <content>The family that Susa saved Soume from, the Akemiya, still had a hold over Soume these last 20 years. He's been working as a double agent...and he succeeded. The rescue has been destroyed, and countless killed. </content>
+      </entry>
+
     </entries>
   </journal>
+
+
+
+<journal id="Susa">
+    <entries>
+      <entry id="016">
+        <title>Temple Owner</title>
+        <content>Crotchety lady who runs the temple. She looks maybe 25, but supposedly is over 80 years old. Dunno how that works. </content>
+      </entry>
+
+      <entry id="017">
+        <title>Gamer?</title>
+        <content>Miss Susa really loves video games. She has a million of them in her room, and all kinds of consoles and controllers. Her favorite is Hunt Duck. </content>
+      </entry>
+
+      <entry id="018">
+        <title>Former Hunter</title>
+        <content>Susa is the oldest daughter of the Kamiya family, one of the families that runs the Church of the Acts. She was raised to hunt Majin and has killed countless numbers of them. She was first in line to be the head of the family, but left when she realized the true extent of the pain she was causing, using her knowledge to save Majin instead. Soume was one of the first she saved, at least 20 years ago. </content>
+      </entry>
+
+      <entry id="019">
+        <title>...girlfriend???</title>
+        <content>Miss Susa likes women? And she was dating Liza? Weird. Wonder why they broke up. </content>
+      </entry>
+
+      <entry id="020">
+        <title>Siblings and children?</title>
+        <content>Susa has a little brother, but she never mentions him. Her son, SonNameHere, was lost in the ambush Susa did 20 years ago in which Soume was rescued. That loss seems to be the reason Liza and her aren't together anymore. </content>
+      </entry>
+
+    </entries>
+  </journal>
+
+
+
+<journal id="Mamoru">
+    <entries>
+      <entry id="021">
+        <title>Allergies?</title>
+        <content>Mamoru's hand was really red when he touched Soume's plants, but Riku was completely fine. Does he have allergies? </content>
+      </entry>
+
+      <entry id="022">
+        <title>Light Fire</title>
+        <content>Mamoru also can use fire, though his fire is a strange, pale white color. </content>
+      </entry>
+
+      <entry id="023">
+        <title>Weirdo</title>
+        <content>Mamoru is always so casual when he attacks, always poking fun and he sometimes leaves without doing anything. What's his whole deal? </content>
+      </entry>
+
+
+      <entry id="024">
+        <title>The Other Sister</title>
+        <content>Mamoru says that Norah is his only sister, but he has another, an older sister...Miss Susa. He hates her because just before she left, she tried to kill him in his sleep. </content>
+      </entry>
+
+
+    </entries>
+  </journal>
+
+
+
+<journal id="Kazutaka">
+    <entries>
+      <entry id="025">
+        <title>Doctor</title>
+        <content>Kaz is a doctor </content>
+      </entry>
+
+      <entry id="026">
+        <title>Author?</title>
+        <content>Kaz is an author </content>
+      </entry>
+
+      <entry id="027">
+        <title>Paranoid!</title>
+        <content>kaz be mad paranoid </content>
+      </entry>
+
+      <entry id="028">
+        <title>Love of Learning</title>
+        <content>kaz be lovin lernins </content>
+      </entry>
+
+
+      <entry id="029">
+        <title>Experiment!</title>
+        <content>kaz be lovin experimenting on things </content>
+      </entry>
+
+
+      <entry id="030">
+        <title>Rumors...</title>
+        <content>he's a blood sucking vampireeee </content>
+      </entry>
+
+    </entries>
+  </journal>
+
+
+
+<journal id="Liza">
+    <entries>
+      <entry id="031">
+        <title>Roman's Friend?</title>
+        <content>roman's old friend from russia </content>
+      </entry>
+
+      <entry id="032">
+        <title>Susa's Ex???</title>
+        <content>susa's ex gf </content>
+      </entry>
+
+      <entry id="033">
+        <title>Majin Hunting Majin</title>
+        <content>she be huntin the majins </content>
+      </entry>
+
+      <entry id="034">
+        <title>A son?</title>
+        <content>she has a kid omg </content>
+      </entry>
+
+      <entry id="035">
+        <title>Ex-military</title>
+        <content>she used to work for hitler </content>
+      </entry>
+
+    </entries>
+  </journal>
+
+
+<journal id="Norah">
+    <entries>
+      <entry id="036">
+        <title>Who is that?</title>
+        <content>the fuck is this chick anyway </content>
+      </entry>
+
+    </entries>
+  </journal>
+
+
+<journal id="Church of the Three Acts">
+    <entries>
+      <entry id="037">
+        <title>Signet</title>
+        <content>a symbol given to hunters </content>
+      </entry>
+
+      <entry id="038">
+        <title>Community Behavior</title>
+        <content>they have salvation armies and blackmail billionaires and lure charismatic poor people into stuff </content>
+      </entry>
+
+      <entry id="039">
+        <title>Religious Tenets</title>
+        <content>three acts of war between humans and majin </content>
+      </entry>
+
+      <entry id="040">
+        <title>Cult?</title>
+        <content>they're totes an underground cult and will fuck you up if you try to leave </content>
+      </entry>
+
+      <entry id="041">
+        <title>Surface Dealings</title>
+        <content>they operate like any other church </content>
+      </entry>
+
+      <entry id="042">
+        <title>Underground Dealings</title>
+        <content>they be selling those majins yo </content>
+      </entry>
+
+    </entries>
+  </journal>
+
+
+
+<journal id="Majin">
+    <entries>
+      <entry id="043">
+        <title>Basic Biology</title>
+        <content>majin do things </content>
+      </entry>
+
+      <entry id="044">
+        <title>Flame Users</title>
+        <content>firesssss </content>
+      </entry>
+
+      <entry id="045">
+        <title>Eating Habits</title>
+        <content>they eats the meats </content>
+      </entry>
+
+      <entry id="046">
+        <title>Youko</title>
+        <content>fox demons </content>
+      </entry>
+
+      <entry id="047">
+        <title>Ice Users</title>
+        <content>they be using ice </content>
+      </entry>
+
+      <entry id="048">
+        <title>Puberty</title>
+        <content>puberty at 100 </content>
+      </entry>
+
+      <entry id="049">
+        <title>Eating Habits 2</title>
+        <content>some eat live only omggg </content>
+      </entry>
+
+      <entry id="050">
+        <title>History</title>
+        <content>they come from some other world or smth </content>
+      </entry>
+
+      <entry id="051">
+        <title>Prophesy</title>
+        <content>there be some prophesy about the third act and shit </content>
+      </entry>
+
+      <entry id="052">
+        <title>Ogres</title>
+        <content>like liza </content>
+      </entry>
+
+      <entry id="053">
+        <title>Sensors</title>
+        <content>like kaz </content>
+      </entry>
+
+    </entries>
+  </journal>
+
+
+
+<journal id="Human World">
+    <entries>
+      <entry id="054">
+        <title>Presence of Majin</title>
+        <content>where they come from, idk, they appear outta nowhars </content>
+      </entry>
+
+      <entry id="055">
+        <title>Majin Rescue Facilies</title>
+        <content>susa runs this in a temple </content>
+      </entry>
+
+      <entry id="056">
+        <title>Majin Sales</title>
+        <content>they be sold for all kinds of slavery </content>
+      </entry>
+
+      <entry id="057">
+        <title>Super Humans?</title>
+        <content>humans with powers like majinssssomg. susa, mamoru and norah are these </content>
+      </entry>
+
+      <entry id="058">
+        <title>Shrine Attacks</title>
+        <content>ppl been attacking this place </content>
+      </entry>
+
+      <entry id="059">
+        <title>Breeding Camps</title>
+        <content>they make halfies and sell em. still really small tho. run by akemiya </content>
+      </entry>
+
+      <entry id="060">
+        <title>Uses for Majin Flesh</title>
+        <content>food, potions </content>
+      </entry>
+
+      <entry id="061">
+        <title>Majin Experimentation</title>
+        <content>these experiments are awful, soume got one on his balls </content>
+      </entry>
+
+      <entry id="062">
+        <title>A Majin World?</title>
+        <content>omg where it be </content>
+      </entry>
+
+    </entries>
+  </journal>
+
 </journals>

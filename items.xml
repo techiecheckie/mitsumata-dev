@@ -1,25 +1,512 @@
 <items>
-  <item id="1">
-    <name>Item 1</name>
-    <description>Item 1 description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas semper dignissim ante, at volutpat purus pretium eu. Vestibulum facilisis, tortor sed gravida malesuada, leo mi luctus elit, volutpat ultrices mi massa in enim. Nam id tortor sed quam varius sollicitudin. Etiam risus eros, ultrices vel consectetur sit amet, lobortis at massa. Suspendisse mauris dui, placerat vitae ullamcorper in, fringilla a sapien. Nunc eu felis eu ligula molestie egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce convallis commodo quam, et malesuada elit porta aliquam. Nunc ut nunc vel enim sagittis egestas. Ut erat purus, gravida non fringilla tincidunt, congue nec nisi. Nulla bibendum arcu ut risus sodales a aliquet massa porttitor.</description>
+  <item id="pda">
+    <name>PDA</name>
+    <description>A state of the art organizer that Riku received for a senior year gift. He can keep memos, write information, and also play a few simple games on it. A must-have for every tech-savvy teenager.
+</description>
     <location decision="any" room="any" stash="any" />
   </item>
-  <item id="2">
-    <name>Item 2</name>
-    <description>Item 2 description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas semper dignissim ante, at volutpat purus pretium eu. Vestibulum facilisis, tortor sed gravida malesuada, leo mi luctus elit, volutpat ultrices mi massa in enim. Nam id tortor sed quam varius sollicitudin. Etiam risus eros, ultrices vel consectetur sit amet, lobortis at massa. Suspendisse mauris dui, placerat vitae ullamcorper in, fringilla a sapien. Nunc eu felis eu ligula molestie egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce convallis commodo quam, et malesuada elit porta aliquam. Nunc ut nunc vel enim sagittis egestas. Ut erat purus, gravida non fringilla tincidunt, congue nec nisi. Nulla bibendum arcu ut risus sodales a aliquet massa porttitor.</description>   
-    <location decision="1" room="riroom"  stash="any" />
-    <location decision="3" room="riroom" stash="cupboard" />
-    <location decision="5" room="soroom" stash="any" />
-    <location decision="7" room="any"   stash="any" />
+
+
+  <item id="knife">
+    <name>Antique Knife</name>
+    <description>A knife dropped by the two assassins sent after Riku. The blade is an extremely hard steel, and the hilt is inlaid with silver, gold and bronze. It has a strange signet on it that Riku doesn't recognize.
+</description>   
+    <location decision="any" room="any"  stash="any" />
+      </item>
+
+
+  <item id="wallet">
+    <name>Empty Wallet</name>
+    <description>A wallet given to Riku by his parents when he was 10 years old. It has a picture of PuniUni on it. Riku likes it so much he refuses to use any other wallet, but he doesn't let his friends see it.
+</description>
+    <location decision="any" room="any" stash="any" />
   </item>
-  <item id="3">
-    <name>Item 3</name>
-    <description>Item 3 description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas semper dignissim ante, at volutpat purus pretium eu. Vestibulum facilisis, tortor sed gravida malesuada, leo mi luctus elit, volutpat ultrices mi massa in enim. Nam id tortor sed quam varius sollicitudin. Etiam risus eros, ultrices vel consectetur sit amet, lobortis at massa. Suspendisse mauris dui, placerat vitae ullamcorper in, fringilla a sapien. Nunc eu felis eu ligula molestie egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce convallis commodo quam, et malesuada elit porta aliquam. Nunc ut nunc vel enim sagittis egestas. Ut erat purus, gravida non fringilla tincidunt, congue nec nisi. Nulla bibendum arcu ut risus sodales a aliquet massa porttitor.</description>
-    <location decision="3" room="riroom" stash="closet" />
-    <location decision="5" room="riroom" stash="any" />
+
+
+ <item id="fullwallet">
+    <name>Full Wallet</name>
+    <description>A wallet given to Riku by his parents when he was 10 years old. It has a picture of PuniUni on it. Riku likes it so much he refuses to use any other wallet, but he doesn't let his friends see it. It contains a wad of cash.
+</description>
+    <location decision="any" room="any" stash="any" />
+      </item>
+
+  <item id="signet">
+    <name>Church of the Acts Signet</name>
+    <description>A signet that represents the Church of the Acts, the major religion across the world, with headquarters stationed in rural Japan. Though it is most popular in America and Europe, it is rapidly picking up speed in Asia.
+</description>
+    <location decision="any" room="any" stash="any" />
+      </item>
+
+  <item id="redjewel">
+    <name>Parent's Good Luck Charm</name>
+    <description>This is a deep red jewel that Riku was found with as a baby. It seems to have a strange liquid inside, and has a faint glow. Riku's parents kept it hidden from him until now. It isn't made of any material known in science.
+</description>
+    <location decision="any" room="any" stash="any" />
+      </item>
+
+    <item id="map">
+    <name>Map to Susa's Estate</name>
+    <description>A map of Susa's grounds where Susa's temple is. It's several acres big, in total, so the map is very large. Riku will probably need it so that he doesn't get lost.</description>
   </item>
-    <item id="4">
-    <name>Item 4</name>
-    <description>Item 4 description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas semper dignissim ante, at volutpat purus pretium eu. Vestibulum facilisis, tortor sed gravida malesuada, leo mi luctus elit, volutpat ultrices mi massa in enim. Nam id tortor sed quam varius sollicitudin. Etiam risus eros, ultrices vel consectetur sit amet, lobortis at massa. Suspendisse mauris dui, placerat vitae ullamcorper in, fringilla a sapien. Nunc eu felis eu ligula molestie egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce convallis commodo quam, et malesuada elit porta aliquam. Nunc ut nunc vel enim sagittis egestas. Ut erat purus, gravida non fringilla tincidunt, congue nec nisi. Nulla bibendum arcu ut risus sodales a aliquet massa porttitor.</description>
+
+  <item id="salve">
+    <name>Fire Salve</name>
+    <description> A protective salve that helps heal burns and protect from fire abilities.
+</description>
+    <location decision="any" room="any" stash="any" />
   </item>
+
+
+  <item id="ice">
+    <name>First Ice Sculpture</name>
+    <description>The first sculpture Roman ever managed to do with his ice abilities. It's a bit ugly and malformed, but Roman loves it and doesn't seem to want to fix it.
+</description>   
+    <location decision="any" room="any"  stash="any" />
+      </item>
+
+
+  <item id="rose">
+    <name>Makai Rose</name>
+    <description>A special breed of rose created by Soume. It mixes the DNA of several different roses from the human world, and roses from the demon world. It has no thorns and smells like heaven.
+</description>
+    <location decision="any" room="any" stash="any" />
+      </item>
+
+
+    <item id="cake">
+    <name>Strawberry Shortcake</name>
+    <description>A cake from Riku's favorite bakery. It has thick, luscious strawberries and perfectly crafted cream.
+</description>
+  </item>
+
+
+  <item id="goodice">
+    <name>Improved Ice Sculpture</name>
+    <description>An ice sculpture Roman created well after he had decent control of his ice power. It is shaped like a Makai Rose, curiously enough...
+</description>
+    <location decision="any" room="any" stash="any" />
+      </item>
+
+
+    <item id="trackseed">
+    <name>Tracking Seeds</name>
+    <description>These seeds embed themselves under the skin and work like a homing beacon to allow Soume to track anyone for several thousand kilometers. 
+</description>
+  </item>
+
+
+  <item id="memo">
+    <name>Memo to Family</name>
+    <description>A note Susa wrote to her little brother. She hasn't sent it, and it's yellowed and aged, as if it were very old.
+</description>
+    <location decision="any" room="any" stash="any" />
+      </item>
+
+
+    <item id="pic">
+    <name>Old Picture</name>
+    <description>A picture of Susa, Liza, and their son twenty years ago. They look happy.
+</description>
+  </item>
+
+
+
+
+#Search Items
+
+  <item id="coin">
+    <name>Gold Coin</name>
+    <description>A coin from the Makai. It's greened from its age, and it looks to have some sort of jewel in the center of the gold.
+</description>
+    <location decision="any" room="any" stash="any" />
+      </item>
+
+
+    <item id="seal">
+    <name>Anti-Majin Seals</name>
+    <description>These seals were crafted 2000 years ago as a way to prevent Majin energy from penetrating an area. It severely weakens any Majin who manages to be surrounded by them, and it also prevents things like Tracking Seeds from working. The protective seals the Japanese use today are less effective versions of these ancient seals.
+</description>
+  </item>
+
+
+  <item id="sake">
+    <name>Onigoroshi</name>
+    <description>A powerful sake that is very easy to get drunk off of, hence its name, Demon Killer.
+</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+  <item id="spice">
+    <name>Cooking Spice</name>
+    <description>A medley of spices made by Roman, crafted from his years of experience as an assistant chef in a kitchen. It smells strong and spicy.
+</description>   
+    <location decision="any" room="any"  stash="any" />
+      </item>
+
+
+  <item id="meat">
+    <name>Fresh Meat</name>
+    <description>A variety of fresh, raw meat kept in Susa's kitchen. Roman checked, there isn't any Majin meat there, though a few things look questionable...
+</description>
+    <location decision="any" room="any" stash="any" />
+      </item>
+
+
+  <item id="veg">
+    <name>Garden Vegetables</name>
+    <description>Some vegetables collected from Soume's garden. They have a strong smell, which is odd for vegetables...it is possible that they will grow teeth. Better not eat these.
+</description>
+	   <location decision="any" room="any" stash="any" />
+  </item>
+
+
+  <item id="herb">
+    <name>Herbs</name>
+    <description>Herbs that Soume grows in his garden. Like everything Soume grows, it has a very strong, lovely scent. These herbs may be edible, but Soume usually crushes them into powders for pollens.
+</description>
+    <location decision="any" room="any" stash="any" />
+      </item>
+
+
+    <item id="pollen">
+    <name>Pungent Pollen</name>
+    <description>A crushed blend of plants, made specially by Soume. The smell is calming...it makes one want to forget all of his troubles. Soume seems to use this pollen a lot...but all of its effects are not known.
+</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+  <item id="clara">
+    <name>Aqua Clara</name>
+    <description>A potion that replenishes the mind.
+</description>
+    <location decision="any" room="any" stash="any" />
+      </item>
+
+
+    <item id="terra">
+    <name>Aqua Terra</name>
+    <description>A potion that replenishes the body.
+</description>    
+	<location decision="any" room="any" stash="any" />
+	  </item>
+
+
+  <item id="vita">
+    <name>Aqua Vita</name>
+    <description>A potion that replenishes the soul.
+</description>
+    <location decision="any" room="any" stash="any" />
+      </item>
+
+
+   <item id="mitsumata">
+    <name>Mitsumata Flower</name>
+    <description>A flower that grows in Japan. It means “unsuspecting love” and is used to make Japanese paper.
+</description>
+    <location decision="any" room="any" stash="any" />
+	</item>
+
+    <item id="uni">
+    <name>PuniUni</name>
+    <description>PuniUni is a favorite icon amongst young children and teenaged girls. He's an adorable sea urchin, and will soon have his own TV show. Riku has a picture of him on his wallet, but he doesn't show it to others in case they make fun of him.
+</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+
+#Store Items
+
+  <item id="gun">
+    <name>Hunt Duck Gun</name>
+    <description>A gun used with a video game called Hunt Duck, which is Susa's favorite game. She broke her old one over Riku's head, and he must pay for it.
+</description>
+    <location decision="any" room="any" stash="any" />
+      </item>
+
+
+    <item id="book1">
+    <name>Intro to Majin Biological Processes</name>
+    <description>A medical book written by Doctor Osamu, to help others learn about Majin biology. This is the first book in the series.
+</description>
+  </item>
+
+
+  <item id="book2">
+    <name>Adv. Majin Biological Processes</name>
+    <description>A medical book written by Doctor Osamu to help others learn about Majin biology. This is the second book in the series.
+</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+  <item id="book3">
+    <name>Majin Organ Systemic Function</name>
+    <description>An advanced textbox written by Doctor Osamu to help new Majin doctors learn about Majin biology. It focuses on organs and systemic functions.
+</description>   
+    <location decision="any" room="any"  stash="any" />
+      </item>
+
+
+  <item id="book4">
+    <name>Prophesies and Falsehoods</name>
+    <description>A historical textbook written by Doctor Osamu about prophesies amongst the underground Majin world.
+</description>
+    <location decision="any" room="any" stash="any" />
+      </item>
+
+
+  <item id="garden">
+    <name>Gardening Set</name>
+    <description>A set of gardening tools put together by Soume. There's some soil, a small shovel, a pot and some seeds.
+</description>
+	   <location decision="any" room="any" stash="any" />
+  </item>
+
+
+  <item id="phone">
+    <name>Cellular Phone</name>
+    <description>A state of the art cellular phone with all the bells and whistles.
+</description>
+    <location decision="any" room="any" stash="any" />
+      </item>
+
+
+    <item id="game">
+    <name>State of the Art Video Game</name>
+    <description>The new video game system that recently came out in Japan. Susa doesn't like it at all, and sticks with the old video game system.
+</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+<item id="strpotion">
+    <name>Hyper Strength Potion</name>
+    <description>A potion drafted by the owner of the little Majin shop. No clue what's in it, but it seems to invigorate you when you hold it.
+</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+  <item id="magpotion">
+    <name>Hyper Elemental Potion</name>
+    <description>A potion drafted by the owner of the little Majin shop. No clue what's in it, but it seems to invigorate you when you hold it.
+</description>   
+    <location decision="any" room="any"  stash="any" />
+      </item>
+
+
+
+#Planting Items
+
+<item id="aos">
+    <name>Ao Seed</name>
+    <description>Planting Item.</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+<item id="bos">
+    <name>Bo Seed</name>
+    <description>Planting Item.</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+<item id="cos">
+    <name>Co Seed</name>
+    <description>Planting Item.</description>   
+    <location decision="any" room="any"  stash="any" />
+      </item>
+
+<item id="dos">
+    <name>Do Seed</name>
+    <description>Planting Item.</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+<item id="eos">
+    <name>Eo Seed</name>
+    <description>Planting Item.</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+<item id="fos">
+    <name>Fo Seed</name>
+    <description>Planting Item.</description>   
+    <location decision="any" room="any"  stash="any" />
+      </item>
+
+<item id="gos">
+    <name>Go Seed</name>
+    <description>Planting Item.</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+<item id="mos">
+    <name>Mo Seed</name>
+    <description>Planting Item.</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+<item id="ios">
+    <name>Io Seed</name>
+    <description>Planting Item.</description>   
+    <location decision="any" room="any"  stash="any" />
+      </item>
+
+<item id="jos">
+    <name>Jo Seed</name>
+    <description>Planting Item.</description>   
+    <location decision="any" room="any"  stash="any" />
+      </item>
+
+
+
+
+#Full grown plants
+
+
+<item id="aop">
+    <name>Ao Plant</name>
+    <description>A plant grown from the Ao seed. It adds __HP and __MP.</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+<item id="bop">
+    <name>Bo Plant</name>
+    <description>A plant grown from the Bo seed. It adds __HP and __MP.</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+<item id="cop">
+    <name>Co Plant</name>
+    <description>A plant grown from the Co seed. It adds __HP and __MP.</description>   
+    <location decision="any" room="any"  stash="any" />
+      </item>
+
+<item id="dop">
+    <name>Do Plant</name>
+    <description>A plant grown from the Do seed. It adds __HP and __MP.</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+<item id="eop">
+    <name>Eo Plant</name>
+    <description>A plant grown from the Eo seed. It adds __HP and __MP.</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+<item id="fop">
+    <name>Fo Plant</name>
+    <description>A plant grown from the Fo seed. It adds __HP and __MP.</description>   
+    <location decision="any" room="any"  stash="any" />
+      </item>
+
+<item id="gop">
+    <name>Go Plant</name>
+    <description>A plant grown from the Go seed. It adds __HP and __MP.</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+<item id="mop">
+    <name>Mo Plant</name>
+    <description>A plant grown from the Mo seed. It adds __HP and __MP.</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+<item id="iop">
+    <name>Io Plant</name>
+    <description>A plant grown from the Io seed. It adds __HP and __MP.</description>   
+    <location decision="any" room="any"  stash="any" />
+      </item>
+
+<item id="jop">
+    <name>Jo Plant</name>
+    <description>A plant grown from the Jo seed. It adds __HP and __MP.</description>   
+    <location decision="any" room="any"  stash="any" />
+      </item>
+
+
+
+
+#Monster plants
+
+
+<item id="aom">
+    <name>Monster Ao Plant</name>
+    <description>A plant grown from the Ao seed. Mutations caused it to look like this. It adds __HP and __MP.</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+<item id="bom">
+    <name>Monster Bo Plant</name>
+    <description>A plant grown from the Bo seed. Mutations caused it to look like this. It adds __HP and __MP.</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+<item id="com">
+    <name>Monster Co Plant</name>
+    <description>A plant grown from the Co seed. Mutations caused it to look like this. It adds __HP and __MP.</description>   
+    <location decision="any" room="any"  stash="any" />
+      </item>
+
+<item id="dom">
+    <name>Monster Do Plant</name>
+    <description>A plant grown from the Do seed. Mutations caused it to look like this. It adds __HP and __MP.</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+<item id="eom">
+    <name>Monster Eo Plant</name>
+    <description>A plant grown from the Eo seed. Mutations caused it to look like this. It adds __HP and __MP.</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+<item id="fom">
+    <name>Monster Fo Plant</name>
+    <description>A plant grown from the Fo seed. Mutations caused it to look like this. It adds __HP and __MP.</description>   
+    <location decision="any" room="any"  stash="any" />
+      </item>
+
+<item id="gom">
+    <name>Monster Go Plant</name>
+    <description>A plant grown from the Go seed. Mutations caused it to look like this. It adds __HP and __MP.</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+<item id="mom">
+    <name>Monster Mo Plant</name>
+    <description>A plant grown from the Mo seed. Mutations caused it to look like this. It adds __HP and __MP.</description>
+    <location decision="any" room="any" stash="any" />
+  </item>
+
+
+<item id="iom">
+    <name>Monster Io Plant</name>
+    <description>A plant grown from the Io seed. It adds __HP and __MP.</description>   
+    <location decision="any" room="any"  stash="any" />
+      </item>
+
+<item id="jom">
+    <name>Monster Jo Plant</name>
+    <description>A plant grown from the Jo seed. Mutations caused it to look like this. It adds __HP and __MP.</description>   
+    <location decision="any" room="any"  stash="any" />
+      </item>
+  
 </items>
