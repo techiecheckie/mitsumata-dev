@@ -120,6 +120,9 @@ init -50 python:
                     my_bounds.top <= their_bounds.bottom and
                     my_bounds.bottom >= their_bounds.top)
 
+        def set_size( self, size ):
+            self.size = size
+
     class GameRenderer( GameComponent ):
         DEFAULT_FRAMESET = "default"
 
