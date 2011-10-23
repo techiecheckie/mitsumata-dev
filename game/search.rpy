@@ -1,48 +1,66 @@
 label show_map:
   # A dict containing the rooms and their items
   $rooms = { 
-    "riroom" : { "cupboard" : None, "closet" : None, "bed" : None }, 
-    "roroom" : { "stash1" : None, "stash2" : None }, 
-    "soroom" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
-    "suroom" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
-    "hall1" : { "stash1" : None, "stash2" : None }, 
-    "hall2" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
-    "kitchen" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
-    "bathroom" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
-    "lib" : { "stash1" : None, "stash2" : None, "stash3" : None } 
+    "riroom" : { "equipment" : None, "clothes" : None, "trophies" : None, "posters" : None },
+    #"roroom" : { "stash1" : None, "stash2" : None }, 
+    "soroom" : { "plants" : None, "vines" : None, "hairclips" : None, "jewelry" : None, "nailpolish" : None, "clothes" : None } 
+    #"suroom" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
+    #"hall1" : { "stash1" : None, "stash2" : None }, 
+    #"hall2" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
+    #"kitchen" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
+    #"bathroom" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
+    #"lib" : { "stash1" : None, "stash2" : None, "stash3" : None } 
   }
 
   # A list of items that match the decision value
-  $items = inventory.get_available_items(decision)
+  $items = inventory.get_items(decision, "map") 
   
   python:  
     # If an item has a place set (items.xml) for this decision, put that item
     # in the room where it is supposed to be. Otherwise randomize the room
     for item in items:
-      #  location [0]          [1]            [2]
-      # <location decision="1" room="riroom"  stash="any" />
-      location = item.get_location(decision)
-      if location[1] != "any":
-        stash_list = rooms[location[1]]
-        keys = stash_list.keys()
-        for key in keys:
-          if stash_list[key] == None:
-            stash_list[key] = item
+      location = item.get_map_location(decision)
+      
+      if location["room"] != "any":
+        stash_list = rooms[location["room"]]
+        stash_keys = stash_list.keys()
+
+        # Place the item to the first free stash. If the item has a stash set
+        # for the current decision, ignore that for now.
+        for stash_key in stash_keys:
+          if stash_list[stash_key] == None:
+            stash_list[stash_key] = item
             break
-        
-      else:
-        random_item_list = rooms[rooms.keys()[random.randint(0, len(rooms)-1)]]
-        #random_item_list.append(item)
+            
+      else:     
+        # Try randomizing the spot three times before breaking the loop.
+        #
+        # Could do something smarter here, like removing full stashes from the 
+        # list or even putting the items to the first available stash, but 
+        # that'll have to be seen to later.
+        rand_attempts = 3
+        while (rand_attempts > 0):
+          # Get a random room key
+          room_key = rooms.keys()[random.randint(0, len(rooms)-1)]
+          # Get its stash list and grab a random stash key from it
+          stashes = rooms[room_key]
+          stash_key = stashes.keys()[random.randint(0, len(stashes)-1)]
+          # Place the item in the stash (if it is empty, otherwise try again)
+          if stashes[stash_key] == None:
+            stashes[stash_key] = item
+            break
+            
+          rand_attempts -= 1
         
     renpy.transition(dissolve)
     renpy.show("map")
-    
-    # See how many tries the player has (TODO)
-    tries = 3
-    
+    hide_main_ui()
+       
+    current_tries = tries
+       
   # Start the map screen loop. 
-  while (tries > 0):
-    $show_tries(tries)  
+  while (current_tries > 0):
+    $show_tries(current_tries)  
     $show_room_icons(decision)
       
     $room = ui.interact(suppress_overlay=True)
@@ -53,11 +71,11 @@ label show_map:
       # Break the loop if an event happened. (... set tries to 0 because Renpy
       # doesn't understand words like "break" and such)
       if event_triggered:
-        $tries = 0
+        $current_tries = 0
       else:
-       $tries = show_room(room, decision, tries, rooms[room])
+       $current_tries = show_room(room, decision, tries, rooms[room])
     else:
-     $tries = 0
+     $current_tries = 0
     
   # Display a message box before returning to the script
   $show_tries(tries)
@@ -68,21 +86,11 @@ label show_map:
   else:
     $message = "(\"0 tries left\" message)"
     
-  $renpy.transition(dissolve)
-  $show_tries(tries)
-  $renpy.show("textbox", at_list=[Position(xpos=0.5, ypos=0.5), Transform(anchor=(0.5,0.5))])
-    
-  $ui.frame(xpos=0.3, ypos=0.35, background=None)
-  $ui.text(message)
-    
-  $ui.frame(xpos=0, ypos=0, background=None)
-  $ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
-    
-  $ui.interact(suppress_overlay=True)
+  $show_message(message, "large")
     
   $renpy.transition(dissolve)
-  $renpy.hide("textbox")
-  $renpy.hide("map")  
+  $renpy.hide("map")
+  $show_main_ui()  
   
   return
   
@@ -91,9 +99,9 @@ init python:
   from mitsugame.item import Item
   
   # Displays the amount of tries/clicks the player has.
-  def show_tries(tries):
+  def show_tries(current_tries):
     ui.frame(xpos=25, ypos=723, xmaximum=50, ymaximum=50, background=None)
-    ui.text('%d' % tries, xfill=True, yfill=True)
+    ui.text('%d' % current_tries, xfill=True, yfill=True)
       
     return
     
@@ -141,12 +149,12 @@ init python:
     
     return
     
-  def show_room(room, decision, tries, items):   
+  def show_room(room, decision, current_tries, items):   
     renpy.transition(dissolve)
-    renpy.show("bg " + room)
+    renpy.show("bg " + room, zorder=1)
     # room background names defined in script.rpy
     
-    while (tries > 0):
+    while (current_tries > 0):
       show_room_clickables(room)
       show_tries(tries)
       
@@ -154,28 +162,34 @@ init python:
       if selection == "return":
         break
       else:
-        tries = show_info(selection, items, tries)
+        current_tries = show_info(selection, items, current_tries)
       
     renpy.transition(dissolve)
     renpy.hide("bg " + room)
     ui.clear()
     
-    return tries
+    return current_tries
     
   def show_room_clickables(room):
     if room == "riroom":
       # Riku room item containers
+      #"riroom" : { "equipment" : None, "clothes" : None, "trophies" : None, "posters" : None },
+
       # Cupboard
       ui.frame(xpos=100, ypos=100, background=None)
-      ui.textbutton("item", clicked=ui.returns(("stash", "cupboard")))
+      ui.textbutton("item", clicked=ui.returns(("stash", "equipment")))
       
       # Closet
       ui.frame(xpos=200, ypos=100, background=None)
-      ui.textbutton("item", clicked=ui.returns(("stash", "closet")))
+      ui.textbutton("item", clicked=ui.returns(("stash", "clothes")))
       
       # Bed
       ui.frame(xpos=300, ypos=100, background=None)
-      ui.textbutton("item", clicked=ui.returns(("stash", "bed")))
+      ui.textbutton("item", clicked=ui.returns(("stash", "trophies")))
+      
+      # Bed
+      ui.frame(xpos=400, ypos=100, background=None)
+      ui.textbutton("item", clicked=ui.returns(("stash", "posters")))
       
       # ...
       
@@ -186,9 +200,11 @@ init python:
       ui.frame(xpos=200, ypos=200, background=None)
       ui.textbutton("tidbit", clicked=ui.returns(("tidbit", "2")))
       
-    elif room == "roroom":
+    elif room == "roroom":    
+      #"roroom" : { "stash1" : None, "stash2" : None }, 
       pass
     elif room == "suroom":
+      #"soroom" : { "plants" : None, "vines" : None, "hairclips" : None, "jewelry" : None, "nailpolish" : None, "clothes" : None } 
       pass
  
     # Return button
@@ -197,10 +213,10 @@ init python:
     
     return
     
-  def show_info(selection, items, tries):
+  def show_info(selection, items, current_tries):
     # First, check what info should be displayed
     if selection[0] == "tidbit":
-      message = "You found a tidbit box.\n\nTidbits are listed in tidbits.xml,\nand are waiting for implementation."
+      message = "You found a tidbit."
     else:
       item = items[selection[1]]
       if item == None:
@@ -208,13 +224,18 @@ init python:
       else:
         message = "You found an item." + "\n\n" + item.get_name()
         item.unlock()
+        update_stats(item.get_bonuses())
+        
         items[selection[1]] = None
+        
       
       # Not every click is going to reduce this number, but this works just
       # fine for now
-      tries -= 1
+      current_tries -= 1
   
     # Show the info box
-    show_message_window(message)
+    # show_message_window(message)
     
-    return tries
+    show_message(message, "large")
+    
+    return current_tries

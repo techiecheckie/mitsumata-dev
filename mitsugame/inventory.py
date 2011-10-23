@@ -14,17 +14,42 @@ class Inventory():
       id          = item_element.get("id")
       name        = item_element.find("name").text
       description = item_element.find("description").text
-      locations_list  = item_element.findall("location")
+      locations = item_element.find("locations")
       
-      locations = []
+      item_locations = None
+      item_bonuses   = None
       
-      for location in locations_list:
-        decision = location.get("decision")
-        room     = location.get("room")
-        stash    = location.get("stash")
-        locations.append([decision, room, stash])
+      if locations != None:
+        item_locations = []
         
-      item = Item(id, name, description, locations)
+        # Map
+        map_locations = locations.findall("map")
+        for map_location in map_locations:
+         item_location = {}
+         item_location["location"] = "map"
+         item_location["decision"] = map_location.get("decision")
+         item_location["room"]     = map_location.get("room")
+         # Not used yet (if ever)
+         #item_location["stash"]    = map_location.get("stash")
+        
+         item_locations.append(item_location)
+        
+        # Shop; could do better as a separated chunk, but this'll do for now
+        shop_locations = locations.findall("shop")
+        for shop_location in shop_locations:
+          item_location = {}
+          item_location["location"] = "shop"
+          item_location["decision"] = shop_location.get("decision")
+      
+          item_locations.append(item_location)
+        
+      bonuses = item_element.find("bonuses")
+      if bonuses != None:
+        item_bonuses =  {}
+        for bonus in bonuses:
+          item_bonuses[bonus.tag] = bonus.text    
+              
+      item = Item(id, name, description, item_locations, item_bonuses)
         
       self.items.append(item)
 
@@ -35,11 +60,10 @@ class Inventory():
     return None
     
   def unlock_item(self, id):
-    for item in self.items:
-      if item.get_id() == id:
-        item.unlock()
-        print "Inventory: unlocked item", item.get_id()
-        return
+    item = self.get_item(id)
+    if item != None:
+      item.unlock()
+      return
     print "[WARN] Could not unlock item, no such id found (id: %s)" % id
   
   def item_unlocked(self, item_id):
@@ -50,15 +74,15 @@ class Inventory():
     else:
       return not item.is_locked()
   
-  def get_items(self):
+  def get_inventory_items(self):
     return self.items
     
-  def get_available_items(self, decision):
+  def get_items(self, decision, location):
     items = []
     for item in self.items:
-      if item.is_locked() and item.is_available(decision):
+      if item.is_available(decision, location):
         items.append(item)
-    return items
+    return items  
   
   def change_state(self):
     self.enabled = not self.enabled
