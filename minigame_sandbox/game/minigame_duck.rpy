@@ -15,7 +15,7 @@ init python:
             self.bird_speed     = bird_speed
 
     HUNT_LEVELS = [
-        HuntLevel( time_limit     = 60,
+        HuntLevel( time_limit     = 5,
                    max_birds      = (4, 10),
                    max_easy_birds = (3, 7),
                    spawn_time     = (0.75, 0.25),
@@ -131,6 +131,8 @@ init python:
             self.booms              = []
             self.easy_birds         = []
             self.score_hud          = None
+            self.start_screen_hud   = None
+            self.stop_screen_hud    = None
             self.time_remaining_hud = None
 
             self.create_background()
@@ -183,7 +185,7 @@ init python:
                                                  GameAnimation( [ GameImage( "gfx/duck_hunt/bird/dead/bird_dead-easy-%d.png" % frame_index, Anchor.CENTER )
                                                                   for frame_index in xrange( NUMBER_BIRD_DEAD_FRAMES ) ],
                                                                 NUMBER_BIRD_DEAD_FRAMES / BIRD_ANIMATION_DEAD_DURATION ) )
-            easy_bird["renderer"].set_collider_visible( True )
+            easy_bird["renderer"].set_collider_visible( False )
             PrefabFactory.add_prefab( EASY_BIRD_TYPE, easy_bird )
 
         def create_boom( self ):
@@ -197,6 +199,19 @@ init python:
             PrefabFactory.add_prefab( BOOM_TYPE, boom )
 
         def create_huds( self ):
+            self.start_screen_hud             = GameObject()
+            self.start_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/duck_hunt/start_screen.png" ) )
+            self.start_screen_hud["transform"].set_position( 138, 50 )
+
+            self.stop_screen_hud             = GameObject()
+            self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/duck_hunt/stop_screen.png" ) )
+            self.stop_screen_hud["transform"].set_position( 138, 50 )
+
+            base_score             = GameObject()
+            base_score["renderer"] = GameRenderer( GameText( self.get_base_score ) )
+            base_score["transform"].set_position( 185, 159 )
+            self.stop_screen_hud.add_child( base_score )
+
             self.score_hud             = GameObject()
             self.score_hud["renderer"] = GameRenderer( GameText( self.get_score ) )
             self.score_hud["transform"].set_position( 400, 10 )
@@ -204,6 +219,14 @@ init python:
             self.time_remaining_hud = GameObject()
             self.time_remaining_hud["renderer"] = GameRenderer( GameText( self.get_time_remaining ) )
             self.time_remaining_hud["transform"].set_position( 10, 10 )
+
+        def get_base_score( self ):
+            if self.base_score < 1000:
+                return "%20d" % self.base_score
+            elif self.base_score < 10000:
+                return "%18d" % self.base_score
+            else:
+                return "%16d" % self.base_score
 
         def get_score( self ):
             return "Score: %16d" % self.base_score
@@ -280,6 +303,10 @@ init python:
             for boom in self.booms:
                 displayables.extend( boom["renderer"].get_displayables() )
 
+            displayables.extend( self.start_screen_hud["renderer"].get_displayables() )
+            displayables.extend( self.stop_screen_hud["renderer"].get_displayables() )
+            displayables.extend( self.time_remaining_hud["renderer"].get_displayables() )
+
             return displayables
 
         def render( self, blitter ):
@@ -287,12 +314,16 @@ init python:
             self.background["renderer"].render( blitter, world_transform )
             self.player["renderer"].render( blitter, world_transform )
 
-            if self.state == HUNT_GAME_STATE_PLAY:
+            if self.state == HUNT_GAME_STATE_BEGIN:
+                self.start_screen_hud["renderer"].render( blitter, world_transform )
+            elif self.state == HUNT_GAME_STATE_PLAY:
                 for bird in itertools.chain( self.easy_birds ):
                     bird["renderer"].render( blitter, world_transform )
 
                 for boom in self.booms:
                     boom["renderer"].render( blitter, world_transform )
+            elif self.state == HUNT_GAME_STATE_END:
+                self.stop_screen_hud["renderer"].render( blitter, world_transform )
 
             self.time_remaining_hud["renderer"].render( blitter, world_transform )
             self.score_hud["renderer"].render( blitter, world_transform )
