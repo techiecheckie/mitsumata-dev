@@ -18,9 +18,10 @@ init -50 python:
         TOP_LEFT     = "TOP_LEFT"
         TOP_RIGHT    = "TOP_RIGHT"
 
-        def __init__( self, x, y ):
-            self.x = x
-            self.y = y
+        def __init__( self, x, y, anchor_type=None ):
+            self.x    = x
+            self.y    = y
+            self.type = anchor_type
 
         @staticmethod
         def create( anchor_type, size ):
@@ -183,15 +184,21 @@ init -50 python:
             return [ self.image ]
 
         def render( self, blitter, transform, is_flipped=False ):
-            image = self.image
+            width  = self.size.width * transform.scale
+            height = self.size.height * transform.scale
+            anchor = self.anchor
+            image  = im.Scale( self.image, width, height )
+
+            if anchor.type:
+                anchor = Anchor.create( anchor.type, Size( width, height ) )
 
             if is_flipped:
                 image = im.Flip( image, horizontal=True )
-                x     = transform.x + self.anchor.x - self.size.width + 1
-                y     = transform.y + self.anchor.y - self.size.height + 1
+                x     = transform.x + anchor.x - width + 1
+                y     = transform.y + anchor.y - height + 1
             else:
-                x = transform.x - self.anchor.x
-                y = transform.y - self.anchor.y
+                x = transform.x - anchor.x
+                y = transform.y - anchor.y
 
             blitter.blit( get_blitter( image ), (x, y) )
 
