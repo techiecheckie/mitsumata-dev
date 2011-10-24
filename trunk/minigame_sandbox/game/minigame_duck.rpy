@@ -119,22 +119,25 @@ init python:
                                                            level.time_limit )
 
             # setup game state.
-            self.state      = HUNT_GAME_STATE_PLAY
+            self.state      = HUNT_GAME_STATE_BEGIN
             self.time_limit = level.time_limit
             self.base_score = 0
             self.bird_countdown = 1
 
 
             # set up entities.
-            self.background = None
-            self.player     = None
-            self.booms      = []
-            self.easy_birds = []
+            self.background         = None
+            self.player             = None
+            self.booms              = []
+            self.easy_birds         = []
+            self.score_hud          = None
+            self.time_remaining_hud = None
 
             self.create_background()
             self.create_player()
             self.create_birds()
             self.create_boom()
+            self.create_huds()
 
         def quit( self ):
             super( DuckHunt, self ).quit()
@@ -180,7 +183,7 @@ init python:
                                                  GameAnimation( [ GameImage( "gfx/duck_hunt/bird/dead/bird_dead-easy-%d.png" % frame_index, Anchor.CENTER )
                                                                   for frame_index in xrange( NUMBER_BIRD_DEAD_FRAMES ) ],
                                                                 NUMBER_BIRD_DEAD_FRAMES / BIRD_ANIMATION_DEAD_DURATION ) )
-            easy_bird["renderer"].set_collider_visible( False )
+            easy_bird["renderer"].set_collider_visible( True )
             PrefabFactory.add_prefab( EASY_BIRD_TYPE, easy_bird )
 
         def create_boom( self ):
@@ -192,6 +195,21 @@ init python:
                                                            NUMBER_BOOM_FIRE_FRAMES / BOOM_FIRE_DURATION ) )
             boom["behavior"] = BoomBehavior()
             PrefabFactory.add_prefab( BOOM_TYPE, boom )
+
+        def create_huds( self ):
+            self.score_hud             = GameObject()
+            self.score_hud["renderer"] = GameRenderer( GameText( self.get_score ) )
+            self.score_hud["transform"].set_position( 400, 10 )
+
+            self.time_remaining_hud = GameObject()
+            self.time_remaining_hud["renderer"] = GameRenderer( GameText( self.get_time_remaining ) )
+            self.time_remaining_hud["transform"].set_position( 10, 10 )
+
+        def get_score( self ):
+            return "Score: %16d" % self.base_score
+
+        def get_time_remaining( self ):
+            return "Time Remaining: %d" %  self.time_remaining.get_ceil_value()
 
         def is_out_of_bounds( self, bird ):
             bird_bounds    = bird["collider"].get_bounds()
@@ -269,11 +287,15 @@ init python:
             self.background["renderer"].render( blitter, world_transform )
             self.player["renderer"].render( blitter, world_transform )
 
-            for bird in self.easy_birds:
-                bird["renderer"].render( blitter, world_transform )
+            if self.state == HUNT_GAME_STATE_PLAY:
+                for bird in itertools.chain( self.easy_birds ):
+                    bird["renderer"].render( blitter, world_transform )
 
-            for boom in self.booms:
-                boom["renderer"].render( blitter, world_transform )
+                for boom in self.booms:
+                    boom["renderer"].render( blitter, world_transform )
+
+            self.time_remaining_hud["renderer"].render( blitter, world_transform )
+            self.score_hud["renderer"].render( blitter, world_transform )
 
         def update( self, delta_sec ):
             if self.state == HUNT_GAME_STATE_COUNTDOWN:
@@ -331,10 +353,9 @@ init python:
                 # remove gunshots that have died.
                 self.booms[:] = [ boom for boom in self.booms if boom.is_alive() ]
 
-                # XXX: change this detect when a bird exits screen.
-#                if not self.fire_zone["collider"].is_box_overlapping( bird["collider"] ):
-#                    renpy.log( "Kill bird (%s)" % delta_sec )
-#                    bird.kill()
+                # see if it's game over.
+                if self.time_remaining.get_value() <= 0:
+                    self.state = HUNT_GAME_STATE_END
 
         def on_key_down( self, key ):
             if key == pygame.K_ESCAPE:
@@ -358,6 +379,13 @@ init python:
                         if (bird["collider"].is_point_inside( mx, my ) and
                             not bird["behavior"].is_shot_down()):
                             bird["behavior"].shoot()
+
+        def on_mouse_up( self, mx, my, button ):
+            if button == Minigame.LEFT_MOUSE_BUTTON:
+                if self.state == HUNT_GAME_STATE_BEGIN:
+                    self.state = HUNT_GAME_STATE_PLAY
+                elif self.state == HUNT_GAME_STATE_END:
+                    self.quit()
 
     class BirdBehavior( GameComponent ):
         def __init__( self, direction, speed, number_hit_points, score_value,

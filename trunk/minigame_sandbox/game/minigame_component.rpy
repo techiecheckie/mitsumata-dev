@@ -87,16 +87,24 @@ init -50 python:
             return left <= x <= right and top <= y <= bottom
 
         def get_bounds( self ):
+            scale  = self.game_object["transform"].scale
+            width  = self.size.width * scale
+            height = self.size.height * scale
+            anchor = self.anchor
+
+            if anchor.type:
+                anchor = Anchor.create( anchor.type, Size( width, height ) )
+
             if self.is_flipped:
-                left   = self.game_object["transform"].x + self.anchor.x - self.size.width + 1
-                top    = self.game_object["transform"].y + self.anchor.y - self.size.height + 1
-                right  = left + self.size.width - 1
-                bottom = top + self.size.height - 1
+                left   = self.game_object["transform"].x + anchor.x - width + 1
+                top    = self.game_object["transform"].y + anchor.y - height + 1
+                right  = left + width - 1
+                bottom = top + height - 1
             else:
-                left   = self.game_object["transform"].x - self.anchor.x
-                top    = self.game_object["transform"].y - self.anchor.y
-                right  = left + self.size.width - 1
-                bottom = top + self.size.height - 1
+                left   = self.game_object["transform"].x - anchor.x
+                top    = self.game_object["transform"].y - anchor.y
+                right  = left + width - 1
+                bottom = top + height - 1
 
             return Bounds( left, top, right, bottom )
 
@@ -211,16 +219,16 @@ init -50 python:
                                         bounds.bottom - bounds.top + 1) )
 
     class GameTransform( GameComponent ):
-        def __init__( self, x=0, y=0, angle=0 ):
+        def __init__( self, x=0, y=0, scale=1.0 ):
             super( GameTransform, self ).__init__()
             self.x     = x
             self.y     = y
-            self.angle = angle
+            self.scale = float( scale )
 
         def __add__( self, other ):
             return GameTransform( self.x + other.x,
                                   self.y + other.y,
-                                  self.angle + other.angle )
+                                  self.scale )
 
         def translate( self, dx, dy ):
             self.x += dx
