@@ -5,23 +5,28 @@ init python:
 
     class HuntLevel( object ):
         def __init__( self, time_limit, max_birds, max_easy_birds,
-                      spawn_time, bird_speed, bird_scale ):
+                      max_medium_birds, max_hard_birds, spawn_time,
+                      bird_speed, bird_scale ):
             super( HuntLevel, self ).__init__()
 
-            self.time_limit     = time_limit
-            self.max_birds      = max_birds
-            self.max_easy_birds = max_easy_birds
-            self.spawn_time     = spawn_time
-            self.bird_speed     = bird_speed
-            self.bird_scale     = bird_scale
+            self.time_limit       = time_limit
+            self.max_birds        = max_birds
+            self.max_easy_birds   = max_easy_birds
+            self.max_medium_birds = max_medium_birds
+            self.max_hard_birds   = max_hard_birds
+            self.spawn_time       = spawn_time
+            self.bird_speed       = bird_speed
+            self.bird_scale       = bird_scale
 
     HUNT_LEVELS = [
-        HuntLevel( time_limit     = 60,
-                   max_birds      = (4, 10),
-                   max_easy_birds = (3, 7),
-                   spawn_time     = (0.75, 0.25),
-                   bird_speed     = (80, 80),
-                   bird_scale     = (1.0, 1.5) )
+        HuntLevel( time_limit       = 60,
+                   max_birds        = (4, 10),
+                   max_easy_birds   = (3, 7),
+                   max_medium_birds = (0, 4),
+                   max_hard_birds   = (0, 3),
+                   spawn_time       = (0.75, 0.25),
+                   bird_speed       = (80, 140),
+                   bird_scale       = (1.0, 1.5) )
         ]
 
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####
@@ -69,8 +74,10 @@ init python:
     NUMBER_BIRD_SHOT_RIGHT_FRAMES = 2
 
     # prefab names.
-    BOOM_TYPE      = "boom"
-    EASY_BIRD_TYPE = "easy_bird"
+    BOOM_TYPE        = "boom"
+    EASY_BIRD_TYPE   = "easy_bird"
+    MEDIUM_BIRD_TYPE = "medium_bird"
+    HARD_BIRD_TYPE   = "hard_bird"
 
     # bird directions.
     BIRD_DIRECTION_DOWN  = "down"
@@ -82,10 +89,14 @@ init python:
     BIRD_FALL_SPEED = 260
 
     # bird hit points.
-    BIRD_HIT_POINTS = { EASY_BIRD_TYPE : 1 }
+    BIRD_HIT_POINTS = { EASY_BIRD_TYPE   : 1,
+                        MEDIUM_BIRD_TYPE : 3,
+                        HARD_BIRD_TYPE   : 5 }
 
     # bird score values.
-    BIRD_SCORE_VALUES = { EASY_BIRD_TYPE : 100 }
+    BIRD_SCORE_VALUES = { EASY_BIRD_TYPE   : 100,
+                          MEDIUM_BIRD_TYPE : 350,
+                          HARD_BIRD_TYPE   : 600 }
 
     # bird size in pixels.
     BIRD_ALIVE_SIZE = Size( 40, 40 )
@@ -120,6 +131,12 @@ init python:
             self.max_easy_birds   = AutomatedInterpolator( level.max_easy_birds[0],
                                                            level.max_easy_birds[1],
                                                            level.time_limit )
+            self.max_medium_birds = AutomatedInterpolator( level.max_medium_birds[0],
+                                                           level.max_medium_birds[1],
+                                                           level.time_limit )
+            self.max_hard_birds   = AutomatedInterpolator( level.max_hard_birds[0],
+                                                           level.max_hard_birds[1],
+                                                           level.time_limit )
 
             # setup game state.
             self.state      = HUNT_GAME_STATE_BEGIN
@@ -133,6 +150,8 @@ init python:
             self.player             = None
             self.booms              = []
             self.easy_birds         = []
+            self.medium_birds       = []
+            self.hard_birds         = []
             self.score_hud          = None
             self.start_screen_hud   = None
             self.stop_screen_hud    = None
@@ -190,6 +209,74 @@ init python:
                                                                 NUMBER_BIRD_DEAD_FRAMES / BIRD_ANIMATION_DEAD_DURATION ) )
             easy_bird["renderer"].set_collider_visible( False )
             PrefabFactory.add_prefab( EASY_BIRD_TYPE, easy_bird )
+
+            medium_bird = GameObject()
+            medium_bird["collider"] = GameBoxCollider( BIRD_ALIVE_SIZE, Anchor.CENTER )
+            medium_bird["renderer"] = GameRenderer()
+            medium_bird["renderer"].add_animation( BIRD_ANIMATION_FLY_DOWN,
+                                                   GameAnimation( [ GameImage( "gfx/duck_hunt/bird/down/bird_down-medium-%d.png" % frame_index, Anchor.CENTER )
+                                                                    for frame_index in xrange( NUMBER_BIRD_FLY_DOWN_FRAMES ) ],
+                                                                  NUMBER_BIRD_FLY_DOWN_FRAMES / BIRD_ANIMATION_FLY_DOWN_DURATION ) )
+            medium_bird["renderer"].add_animation( BIRD_ANIMATION_FLY_LEFT,
+                                                   GameAnimation( [ GameImage( "gfx/duck_hunt/bird/left/bird_left-medium-%d.png" % frame_index, Anchor.CENTER )
+                                                                    for frame_index in xrange( NUMBER_BIRD_FLY_LEFT_FRAMES ) ],
+                                                                  NUMBER_BIRD_FLY_LEFT_FRAMES / BIRD_ANIMATION_FLY_LEFT_DURATION ) )
+            medium_bird["renderer"].add_animation( BIRD_ANIMATION_FLY_RIGHT,
+                                                   GameAnimation( [ GameImage( "gfx/duck_hunt/bird/right/bird_right-medium-%d.png" % frame_index, Anchor.CENTER )
+                                                                    for frame_index in xrange( NUMBER_BIRD_FLY_RIGHT_FRAMES ) ],
+                                                                  NUMBER_BIRD_FLY_RIGHT_FRAMES / BIRD_ANIMATION_FLY_RIGHT_DURATION ) )
+            medium_bird["renderer"].add_animation( BIRD_ANIMATION_FLY_UP,
+                                                   GameAnimation( [ GameImage( "gfx/duck_hunt/bird/up/bird_up-medium-%d.png" % frame_index, Anchor.CENTER )
+                                                                    for frame_index in xrange( NUMBER_BIRD_FLY_UP_FRAMES ) ],
+                                                                  NUMBER_BIRD_FLY_UP_FRAMES / BIRD_ANIMATION_FLY_UP_DURATION ) )
+            medium_bird["renderer"].add_animation( BIRD_ANIMATION_SHOT_LEFT,
+                                                   GameAnimation( [ GameImage( "gfx/duck_hunt/bird/shot/bird_shot_left-medium-%d.png" % frame_index, Anchor.CENTER )
+                                                                    for frame_index in xrange( NUMBER_BIRD_SHOT_LEFT_FRAMES ) ],
+                                                                  NUMBER_BIRD_SHOT_LEFT_FRAMES / BIRD_ANIMATION_SHOT_LEFT_DURATION ) )
+            medium_bird["renderer"].add_animation( BIRD_ANIMATION_SHOT_RIGHT,
+                                                   GameAnimation( [ GameImage( "gfx/duck_hunt/bird/shot/bird_shot_right-medium-%d.png" % frame_index, Anchor.CENTER )
+                                                                    for frame_index in xrange( NUMBER_BIRD_SHOT_RIGHT_FRAMES ) ],
+                                                                  NUMBER_BIRD_SHOT_RIGHT_FRAMES / BIRD_ANIMATION_SHOT_RIGHT_DURATION ) )
+            medium_bird["renderer"].add_animation( BIRD_ANIMATION_DEAD,
+                                                   GameAnimation( [ GameImage( "gfx/duck_hunt/bird/dead/bird_dead-medium-%d.png" % frame_index, Anchor.CENTER )
+                                                                    for frame_index in xrange( NUMBER_BIRD_DEAD_FRAMES ) ],
+                                                                  NUMBER_BIRD_DEAD_FRAMES / BIRD_ANIMATION_DEAD_DURATION ) )
+            medium_bird["renderer"].set_collider_visible( False )
+            PrefabFactory.add_prefab( MEDIUM_BIRD_TYPE, medium_bird )
+
+            hard_bird = GameObject()
+            hard_bird["collider"] = GameBoxCollider( BIRD_ALIVE_SIZE, Anchor.CENTER )
+            hard_bird["renderer"] = GameRenderer()
+            hard_bird["renderer"].add_animation( BIRD_ANIMATION_FLY_DOWN,
+                                                 GameAnimation( [ GameImage( "gfx/duck_hunt/bird/down/bird_down-hard-%d.png" % frame_index, Anchor.CENTER )
+                                                                  for frame_index in xrange( NUMBER_BIRD_FLY_DOWN_FRAMES ) ],
+                                                                NUMBER_BIRD_FLY_DOWN_FRAMES / BIRD_ANIMATION_FLY_DOWN_DURATION ) )
+            hard_bird["renderer"].add_animation( BIRD_ANIMATION_FLY_LEFT,
+                                                 GameAnimation( [ GameImage( "gfx/duck_hunt/bird/left/bird_left-hard-%d.png" % frame_index, Anchor.CENTER )
+                                                                  for frame_index in xrange( NUMBER_BIRD_FLY_LEFT_FRAMES ) ],
+                                                                NUMBER_BIRD_FLY_LEFT_FRAMES / BIRD_ANIMATION_FLY_LEFT_DURATION ) )
+            hard_bird["renderer"].add_animation( BIRD_ANIMATION_FLY_RIGHT,
+                                                 GameAnimation( [ GameImage( "gfx/duck_hunt/bird/right/bird_right-hard-%d.png" % frame_index, Anchor.CENTER )
+                                                                  for frame_index in xrange( NUMBER_BIRD_FLY_RIGHT_FRAMES ) ],
+                                                                NUMBER_BIRD_FLY_RIGHT_FRAMES / BIRD_ANIMATION_FLY_RIGHT_DURATION ) )
+            hard_bird["renderer"].add_animation( BIRD_ANIMATION_FLY_UP,
+                                                 GameAnimation( [ GameImage( "gfx/duck_hunt/bird/up/bird_up-hard-%d.png" % frame_index, Anchor.CENTER )
+                                                                  for frame_index in xrange( NUMBER_BIRD_FLY_UP_FRAMES ) ],
+                                                                NUMBER_BIRD_FLY_UP_FRAMES / BIRD_ANIMATION_FLY_UP_DURATION ) )
+            hard_bird["renderer"].add_animation( BIRD_ANIMATION_SHOT_LEFT,
+                                                 GameAnimation( [ GameImage( "gfx/duck_hunt/bird/shot/bird_shot_left-hard-%d.png" % frame_index, Anchor.CENTER )
+                                                                  for frame_index in xrange( NUMBER_BIRD_SHOT_LEFT_FRAMES ) ],
+                                                                NUMBER_BIRD_SHOT_LEFT_FRAMES / BIRD_ANIMATION_SHOT_LEFT_DURATION ) )
+            hard_bird["renderer"].add_animation( BIRD_ANIMATION_SHOT_RIGHT,
+                                                 GameAnimation( [ GameImage( "gfx/duck_hunt/bird/shot/bird_shot_right-hard-%d.png" % frame_index, Anchor.CENTER )
+                                                                  for frame_index in xrange( NUMBER_BIRD_SHOT_RIGHT_FRAMES ) ],
+                                                                NUMBER_BIRD_SHOT_RIGHT_FRAMES / BIRD_ANIMATION_SHOT_RIGHT_DURATION ) )
+            hard_bird["renderer"].add_animation( BIRD_ANIMATION_DEAD,
+                                                 GameAnimation( [ GameImage( "gfx/duck_hunt/bird/dead/bird_dead-hard-%d.png" % frame_index, Anchor.CENTER )
+                                                                  for frame_index in xrange( NUMBER_BIRD_DEAD_FRAMES ) ],
+                                                                NUMBER_BIRD_DEAD_FRAMES / BIRD_ANIMATION_DEAD_DURATION ) )
+            hard_bird["renderer"].set_collider_visible( False )
+            PrefabFactory.add_prefab( HARD_BIRD_TYPE, hard_bird )
 
         def create_boom( self ):
             boom = GameObject()
@@ -254,7 +341,9 @@ init python:
             self.base_score += score_value
 
         def spawn_bird( self, bird_type ):
-            bird_lists = { EASY_BIRD_TYPE : self.easy_birds }
+            bird_lists = { EASY_BIRD_TYPE   : self.easy_birds,
+                           MEDIUM_BIRD_TYPE : self.medium_birds,
+                           HARD_BIRD_TYPE   : self.hard_birds }
 
             # create the new bird.
             speed     = self.bird_speed.get_value()
@@ -302,7 +391,9 @@ init python:
             displayables.extend( self.background["renderer"].get_displayables() )
             displayables.extend( self.player["renderer"].get_displayables() )
 
-            for bird in itertools.chain( self.easy_birds ):
+            for bird in itertools.chain( self.easy_birds,
+                                         self.medium_birds,
+                                         self.hard_birds ):
                 displayables.extend( bird["renderer"].get_displayables() )
 
             for boom in self.booms:
@@ -317,12 +408,13 @@ init python:
         def render( self, blitter ):
             world_transform = GameTransform()
             self.background["renderer"].render( blitter, world_transform )
-            self.player["renderer"].render( blitter, world_transform )
 
             if self.state == HUNT_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, world_transform )
             elif self.state == HUNT_GAME_STATE_PLAY:
-                for bird in itertools.chain( self.easy_birds ):
+                for bird in itertools.chain( self.easy_birds,
+                                             self.medium_birds,
+                                             self.hard_birds ):
                     bird["renderer"].render( blitter, world_transform )
 
                 for boom in self.booms:
@@ -332,6 +424,7 @@ init python:
 
             self.time_remaining_hud["renderer"].render( blitter, world_transform )
             self.score_hud["renderer"].render( blitter, world_transform )
+            self.player["renderer"].render( blitter, world_transform )
 
         def update( self, delta_sec ):
             if self.state == HUNT_GAME_STATE_COUNTDOWN:
@@ -342,17 +435,23 @@ init python:
                 self.spawn_time.update( delta_sec )
                 self.max_birds.update( delta_sec )
                 self.max_easy_birds.update( delta_sec )
+                self.max_medium_birds.update( delta_sec )
+                self.max_hard_birds.update( delta_sec )
 
                 # update all gunshots.
                 for boom in self.booms:
                     boom.update( delta_sec )
 
                 # update all birds.
-                for bird in itertools.chain( self.easy_birds ):
+                for bird in itertools.chain( self.easy_birds,
+                                             self.medium_birds,
+                                             self.hard_birds ):
                     bird.update( delta_sec )
 
                 # kill those birds that are outside the game screen.
-                for bird in itertools.chain( self.easy_birds ):
+                for bird in itertools.chain( self.easy_birds,
+                                             self.medium_birds,
+                                             self.hard_birds ):
                     if self.is_out_of_bounds( bird ):
                         bird.kill()
 
@@ -365,17 +464,38 @@ init python:
                     self.bird_countdown = self.spawn_time.get_value()
 
                     # get which bird types are available.
-                    bird_types        = []
-                    number_easy_birds = 0
+                    bird_types          = []
+                    number_easy_birds   = 0
+                    number_medium_birds = 0
+                    number_hard_birds   = 0
 
-                    for bird in itertools.chain( self.easy_birds ):
+                    # check easy birds.
+                    for bird in self.easy_birds:
                         if not bird["behavior"].is_shot_down():
                             number_easy_birds += 1
 
                     if number_easy_birds < self.max_easy_birds.get_truncated_value():
                         bird_types.append( EASY_BIRD_TYPE )
 
-                    number_birds = number_easy_birds
+                    # check medium birds.
+                    for bird in self.medium_birds:
+                        if not bird["behavior"].is_shot_down():
+                            number_medium_birds += 1
+
+                    if number_medium_birds < self.max_medium_birds.get_truncated_value():
+                        bird_types.append( MEDIUM_BIRD_TYPE )
+
+                    # check hard birds.
+                    for bird in self.hard_birds:
+                        if not bird["behavior"].is_shot_down():
+                            number_hard_birds += 1
+
+                    if number_hard_birds < self.max_hard_birds.get_truncated_value():
+                        bird_types.append( HARD_BIRD_TYPE )
+
+                    number_birds = (number_easy_birds +
+                                    number_medium_birds +
+                                    number_hard_birds)
 
                     # only attempt to add a bird if there's a bird of a
                     # particular type that we can add.
@@ -383,7 +503,9 @@ init python:
                         self.spawn_bird( renpy.random.choice( bird_types ) )
 
                 # remove birds that have died.
-                self.easy_birds[:] = [ bird for bird in self.easy_birds if bird.is_alive() ]
+                self.easy_birds[:]   = [ bird for bird in self.easy_birds if bird.is_alive() ]
+                self.medium_birds[:] = [ bird for bird in self.medium_birds if bird.is_alive() ]
+                self.hard_birds[:]   = [ bird for bird in self.hard_birds if bird.is_alive() ]
 
                 # remove gunshots that have died.
                 self.booms[:] = [ boom for boom in self.booms if boom.is_alive() ]
@@ -410,7 +532,9 @@ init python:
                     mx, my = self.transform_screen_to_world( mx, my )
                     self.spawn_boom( mx, my )
 
-                    for bird in itertools.chain( self.easy_birds ):
+                    for bird in itertools.chain( self.easy_birds,
+                                                 self.medium_birds,
+                                                 self.hard_birds ):
                         if (bird["collider"].is_point_inside( mx, my ) and
                             not bird["behavior"].is_shot_down()):
                             bird["behavior"].shoot()
