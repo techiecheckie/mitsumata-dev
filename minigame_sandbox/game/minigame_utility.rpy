@@ -236,6 +236,17 @@ init -50 python:
         def reset( self ):
             self.current_time = time.time()
 
+    class Randomizer( object ):
+        def __init__( self, min_value, max_value ):
+            self.min_value = min_value
+            self.max_value = max_value
+
+        def get_value( self ):
+            return renpy.random.uniform( self.min_value, self.max_value )
+
+        def get_integral_value( self ):
+            return renpy.random.randint( self.min_value, self.max_value )
+
     class Size( object ):
         def __init__( self, width, height ):
             super( Size, self ).__init__()

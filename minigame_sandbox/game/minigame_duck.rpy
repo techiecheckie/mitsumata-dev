@@ -5,7 +5,7 @@ init python:
 
     class HuntLevel( object ):
         def __init__( self, time_limit, max_birds, max_easy_birds,
-                      spawn_time, bird_speed ):
+                      spawn_time, bird_speed, bird_scale ):
             super( HuntLevel, self ).__init__()
 
             self.time_limit     = time_limit
@@ -13,13 +13,15 @@ init python:
             self.max_easy_birds = max_easy_birds
             self.spawn_time     = spawn_time
             self.bird_speed     = bird_speed
+            self.bird_scale     = bird_scale
 
     HUNT_LEVELS = [
-        HuntLevel( time_limit     = 5,
+        HuntLevel( time_limit     = 60,
                    max_birds      = (4, 10),
                    max_easy_birds = (3, 7),
                    spawn_time     = (0.75, 0.25),
-                   bird_speed     = (80, 80) )
+                   bird_speed     = (80, 80),
+                   bird_scale     = (1.0, 1.5) )
         ]
 
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####
@@ -105,9 +107,10 @@ init python:
             self.time_remaining   = AutomatedInterpolator( level.time_limit,
                                                            0,
                                                            level.time_limit )
-            self.bird_speed       = AutomatedInterpolator( level.bird_speed[0],
-                                                           level.bird_speed[1],
-                                                           level.time_limit )
+            self.bird_speed       = Randomizer( level.bird_speed[0],
+                                                level.bird_speed[1] )
+            self.bird_scale       = Randomizer( level.bird_scale[0],
+                                                level.bird_scale[1] )
             self.spawn_time       = AutomatedInterpolator( level.spawn_time[0],
                                                            level.spawn_time[1],
                                                            level.time_limit )
@@ -255,6 +258,7 @@ init python:
 
             # create the new bird.
             speed     = self.bird_speed.get_value()
+            scale     = self.bird_scale.get_value()
             direction = renpy.random.choice( [ BIRD_DIRECTION_DOWN,
                                                BIRD_DIRECTION_LEFT,
                                                BIRD_DIRECTION_RIGHT,
@@ -283,6 +287,7 @@ init python:
                 y = self.get_origin_y() + self.get_game_height() + half_height
 
             bird["transform"].set_position( x, y )
+            bird["transform"].set_scale( scale )
             bird["behavior"].fly()
             bird_lists[bird_type].append( bird )
 
@@ -334,7 +339,6 @@ init python:
             elif self.state == HUNT_GAME_STATE_PLAY:
                 # update automated parameters.
                 self.time_remaining.update( delta_sec )
-                self.bird_speed.update( delta_sec )
                 self.spawn_time.update( delta_sec )
                 self.max_birds.update( delta_sec )
                 self.max_easy_birds.update( delta_sec )

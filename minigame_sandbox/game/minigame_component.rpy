@@ -234,6 +234,9 @@ init -50 python:
             self.x += dx
             self.y += dy
 
+        def set_scale( self, scale ):
+            self.scale = scale
+
         def set_position( self, x, y ):
             self.x = x
             self.y = y
