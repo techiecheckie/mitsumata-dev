@@ -149,25 +149,6 @@ init python:
 #$ ambient(("sounds/ambient02.ogg","sounds/ambient06.ogg","sounds/ambient09.ogg"), 4)
 
 
-#--------------------------
-# TEXT ALIGNMENT
-#--------------------------
-
-#This places the alignment of the name for each character in the textbox.
-#    style.say_who_window.background = Frame("frame.png", 15, 15) #Background skin
-#    style.say_who_window.xalign = 0.0
-#    style.say_who_window.yalign = 1.0
-    #style.say_who_window.xpos = 100 #For precise placement
-    #style.say_who_window.ypos = 100 #For precise placement
-#    style.say_who_window.left_padding = 15
-#    style.say_who_window.top_padding = 15
-#    style.say_who_window.right_padding = 15
-#    style.say_who_window.bottom_padding = 15
-#    style.say_who_window.xminimum = 150
-#    style.say_who_window.yminimum = 15
-#    style.say_who_window.xfill = False
-
-
 #--------------------------------------
 # SOUNDS DURING TYPING  
 #--------------------------------------    
@@ -296,9 +277,7 @@ image bg blackscr = "gfx/backgrounds/blackscr.png"
 image bg redscr = "gfx/backgrounds/redscr.jpg"
 
 image map = "gfx/backgrounds/map.png"
-image textbox_l = "gfx/textbox.png"
-image textbox_m = "gfx/textbox_2.png"
-image textbox_s = "gfx/textbox_mini.png"
+image textbox = "gfx/textbox.png"
 
 #--------------------------------
 #DECLARE CG IMAGES
@@ -412,10 +391,10 @@ image you bore = "gfx/sprites/youbored.png"
 #-----------------------------------------------------
 #DECLARE STUDENT SPRITE IMAGES
 #-----------------------------------------------------
-#image sg neu = ""
-#image sg freak = ""
-#image sb neu = ""
-#image sb ? = ""
+image st gneu = "gfx/sprites/girstuneu.png"
+image st gwor = "gfx/sprites/girstuwor.png"
+image st bneu = "gfx/sprites/boystuneu.png"
+image st bmad = "gfx/sprites/boystumad.png"
 
 #------------------------------------------------
 #DECLARE MAJIN SPRITE IMAGES
@@ -484,11 +463,11 @@ init:
     # $ maid_name = "Maid"
     # ''now'' the variable "maid_name" exists - it's only created when you set it.
 
-    #millie "I hope you'll be comfortable here."
-    #millie "We always do our best to make our guests comfortable."
-    #millie "If you need anything, just ask for \"Millie\" - that's me."
-    #$ maid_name = "Millie"
-    #millie "The bell boy's just bringing your suitcases now."
+    # millie "I hope you'll be comfortable here."
+    # millie "We always do our best to make our guests comfortable."
+    # millie "If you need anything, just ask for \"Millie\" - that's me."
+    # $ maid_name = "Millie"
+    # millie "The bell boy's just bringing your suitcases now."
 
 
 #***********************
@@ -521,26 +500,69 @@ init:
    $ slow_dissolve = Dissolve(3.0)
    $ slow_fade = Fade(2, 2, 3)
 
+#***********************
+# ITEM LABELS
+#***********************
+#This unlocks an item.
+#inventory.unlock_item("id")
+#This locks it again.
+#inventory.lock_item("id")
+#This checks to see if an item is unlocked.
+#inventory.item_unlocked("id")
+#This checks to see if an item is locked.
+#inventory.item_locked("id")
+
+#For simplistic use during checking for unlocked items
+$ pda = inventory.item_unlocked("pda")
+$ knife = inventory.item_unlocked("knife")
+$ wallet = inventory.item_unlocked("wallet")
+$ fullwallet = inventory.item_unlocked("fullwallet")
+$ signet = inventory.item_unlocked("signet")
+$ redjewel = inventory.item_unlocked("redjewel")
+$ map = inventory.item_unlocked("map")
+$ salve = inventory.item_unlocked("salve")
+$ ice = inventory.item_unlocked("ice")
+$ rose = inventory.item_unlocked("rose")
+$ cake = inventory.item_unlocked("cake")
+$ goodice = inventory.item_unlocked("goodice")
+$ trackseed = inventory.item_unlocked("trackseed")
+$ memo = inventory.item_unlocked("memo")
+$ pic = inventory.item_unlocked("pic")
+$ coin = inventory.item_unlocked("coin")
+$ seal = inventory.item_unlocked("seal")
+$ sake = inventory.item_unlocked("sake")
+$ spice = inventory.item_unlocked("spice")
+$ meat = inventory.item_unlocked("meat")
+$ veg = inventory.item_unlocked("veg")
+$ herb = inventory.item_unlocked("herb")
+$ pollen = inventory.item_unlocked("pollen")
+$ clara = inventory.item_unlocked("clara")
+$ terra = inventory.item_unlocked("terra")
+$ vita = inventory.item_unlocked("vita")
+$ mitsumata = inventory.item_unlocked("mitsumata")
+$ uni = inventory.item_unlocked("uni")
+$ gun = inventory.item_unlocked("gun")
+$ book1 = inventory.item_unlocked("book1")
+$ book2 = inventory.item_unlocked("book2")
+$ book3 = inventory.item_unlocked("book3")
+$ book4 = inventory.item_unlocked("book4")
+$ garden = inventory.item_unlocked("garden")
+$ phone = inventory.item_unlocked("phone")
+$ game = inventory.item_unlocked("game")
+$ strpot = inventory.item_unlocked("strpotion")
+$ magpot = inventory.item_unlocked("magpotion")
+
 #--------------------------------
 # GAME STARTS HURR
 #--------------------------------
 
-label start:
-
-#***********************
-# PYTHON LABELS
-#***********************
-    $ knife = False
-    $ pda = False
-        
-#--------------------------------
-# GAME STARTS HURR
-#--------------------------------    
+label start:    
+    
     scene bg blackscr
-    $show_main_ui()
+    $ show_main_ui()
     
     #play music "music/mitsumata1.mp3"
-    #show cg 1 with dissolve
+    #show bg rikureading
     "Once upon a time, there was a prince who was not in any way different from other fairy tale princes."
     
     "He was rich, handsome, popular, destined to marry a princess, spoiled---"
@@ -624,13 +646,15 @@ label start:
 
     "Night, Mom."
     $ renpy.pause(2.0)
-
+    
 label Scene1:
         scene bg blackscr with fade
         $ renpy.pause(2.0)
         
-        scene bg nfor1 with slow_dissolve
+        #scene bg mameat1
+        scene bg nfor1 
         $show_main_ui()
+        with slow_dissolve
         
         $ renpy.pause(3.0)
         
@@ -683,12 +707,16 @@ label Scene1:
 
         "Is that...?"
 
+        #show bg mameat2
+        #eye-light flicker animation?
         "The thick metal door opens, and a little boy walks in, looking at me with large, shiny light brown eyes."
  
-        #show cg Mameat with fade        
+        #play sound doorcreak
         boy "Hi."
 
-        "I give him a look. I really hate the weird lingo here, but these people don't understand any logical language. And instead of a standard set of three, every other person is speaking some new gibberish." 
+        "I give him a look. I really hate the weird lingo here, but these people don't understand any logical language." 
+        "Every other person is speaking some new gibberish, instead of the normal set of three"
+        "What's the point of having like 100 different languages? Nobody can't understand nobody else!"
         "Doesn’t make any damn sense, but these meatsacks got tiny brains and won’t have any clue what you’re sayin’ otherwise."
 
         pr "...uh, hey."
@@ -703,9 +731,9 @@ label Scene1:
 
         gir "Smells like piss in here."
 
-        boy "OKAY, just give me a MINUTE."
+        #boy scoffs.
 
-        se "Please don't rush your brother's dinner, little mistress~"
+        se "Please don't rush your brother's dinner, little mistress."
 
         gir "Some of us have lives and don't want to spend all evening watching someone ELSE eat."
 
@@ -713,11 +741,13 @@ label Scene1:
 
         "I lift a fist to teach the kid a lesson. He’s slow; you could see it in his muscles."
 
-        show bg redscr with dissolve
+        $ hide_main_ui()
+        show bg redscr 
+        with dissolve
         $ renpy.pause(2.0)
-        
+        $ show_main_ui()
         pr "Aack! My arm---"
-
+        
         "The vivid eyes I’d been looking at hover above me, and suddenly my arm is on fire! Broken! Nearly torn out of the socket and bleeding all over."
 
         pr "Aghh--why...are you...with--"
@@ -727,20 +757,21 @@ label Scene1:
         pr "No...spare me...I don’t want to---"
 
         boy "Think of this as fate. That sounds kind of nice, doesn’t it?"
-        #hide CG Mameat
         
-        scene bg blackscr with slow_dissolve
+        $hide_main_ui()
+        scene bg blackscr 
+        with slow_dissolve
 # play sound Screaming, crunching, grinding, all sorts of unholy noises.
         $ renpy.pause(3.0)
         #show some kind of splash page here
 
 label Scene2:
         scene bg street
-        with slow_fade
         $show_main_ui()
+        with slow_fade
         $ renpy.pause(1.0)
 
-        #show student 1 with dissolve
+        show st gneu at right with dissolve
 
         sg "Riku." 
         
@@ -749,24 +780,32 @@ label Scene2:
         sg "...HEY, Riku, wake the hell up!"
         #shake effect here
         
-        show r happy:
+        show r happy at left:
             alpha 0.0
             time 0.75
             linear 1.0 alpha 1.0
+        with dissolve
         r "Huh? Oh."
         
         "If you haven't figured it out yet, I'm Riku. Midorikawa Riku, age 17, third year in high school."
         "I don't believe in silly crap like blood-type personalities, and even if I did, I dunno mine. I don't believe in horoscopes, either. Superstition is for kids."
 
+        show r happy at left
+        show st bneu at right
+        with dissolve
         sb "You've been out of it lately, man...you okay?"
         
         r "Yeah, just thinkin' too hard on school starting again, I guess."
 
         sb "Pff, yeah. No more free time at all. Even school breaks are gonna get eaten by studying."
 
+        show st gneu at right with dissolve
         sg "Don't remind me of the college exams! I'm so nervous about getting into Toudai. What if I don't get in? How am I going to tell my parents?" 
+        show st gwor at right with dissolve
         sg "{size=17}What if I don't make it into Keio either, and I have to go to CRAM SCHOOL for a year before I can reapply? And then what if I fail AGAIN and my parents disown me for being so stupid?! I can't HANDLE THIS---{/size}"
 
+        $renpy.pause(1.0)
+        show st gneu at right with dissolve
         "What else do you expect 17 year olds to talk about?"
         "This year in high school is the worst. Once the second half of the year rolls around, no more free time, no more club activities, no more sports---no more fun, period. College exams will own our lives." 
         "Our high school has a pretty good reputation for getting kids into top-level schools, and they're hard-asses about that reputation."
@@ -774,14 +813,17 @@ label Scene2:
 
         r "Heh. I heard that this one time, when the school’s practice grades weren't high enough, the principal expelled a bunch of people to raise the marks."
 
+        show st gwor at right with dissolve
         sg "Oh god, you're joking. Tell me you're joking."
 
         "I am, but she doesn't need to know that."
 
-        sg "Riku, don't be a jerk. Not everyone can fly by on sports scholarships like you."
+        show st bmad at right with dissolve
+        sb "Riku, don't be a jerk. Not everyone can fly by on sports scholarships like you."
 
         r "Hey now, don't make it more than it is."
 
+        show st gneu at right with dissolve
         sg "What are you talking about? You’ve got automatic entry no matter how bad you do!"
 
         r "Yeah, yeah, maybe, but I'm not going to get into any top schools on just sports, and my grades aren't exactly amazing."
@@ -792,6 +834,7 @@ label Scene2:
 
         "I guess it’s true. I don't have to worry much about grades since I'm kind of a sports legend around here, and even if our school did kick crappy third years out every exam time, I'd get to stay, cause, well..."
 
+        show st bneu at right with dissolve
         sb "Now that I think about it, Riku, you never told us what you got on the first practice exam."
 
         r "Pfft. Who cares. It was like the bottom quarter."
@@ -804,6 +847,7 @@ label Scene2:
         "'Sides, I wasn’t exactly in the bottom quarter anyway." 
         "Not that I studied; I just have a good memory is all. Helps on tests."
 
+        show st gneu at right with dissolve
         sg "Well, serves you right for cutting and refusing to study. That’s okay. When I’m a doctor, you can always be my personal cleaning boy."
 
         #play sound Laughter.
@@ -813,14 +857,18 @@ label Scene2:
 
         sg "Don't make a sad face, Riku. I could always tutor you, if you're serious...but I'm talking hardcore, three-hour-a-day study sessions, and eight hours on weekends--"
 
+        show st bneu at right with dissolve
         sb "How the hell's he supposed to play if he's studying that much?"
 
+        show st gneu at right with dissolve
         sg "Well, obviously he'll have to sacrifice sports! This is his future!"
 
         "My watch beeps."
+        #play sound beep
 
         r "...shit."
         
+        show st bneu at right with dissolve
         sb "Aw, you gotta head home?"
         
         "I grab my bag and stand, yawning. Just one more day of vacation left, and then it's 48 hours a week of the worst school hell ever."
@@ -852,9 +900,11 @@ label Scene2:
         
 label Scene3:
         #---Flashback---
-        scene bg blackscr
-        #scene cg rikyouth with slow_fade
+        scene bg blackscr with fade
+        
+        #scene bg rikyouth
         $show_main_ui()
+        with slow_fade
 
         $ renpy.pause(2.0)
         r "How come I can't do sports this year? I'm good at them, the teacher SAYS!"
@@ -894,9 +944,9 @@ label Scene4:
         scene bg blackscr
         
         scene bg street 
-        show r happy at right
-        with fade
+        show r happy
         $show_main_ui()
+        with fade
         
         "My parents didn't let me have a new door for three whole months cause of that."
 
@@ -904,10 +954,8 @@ label Scene4:
 
         "I make it back to my street pretty fast, running full speed from the beach. My parents won't get on my ass too much for it. They'll actually believe that I was close to home."
 
-        #show r
-        #alpha
-        #time
-        #alpha
+        show r happy with dissolve
+       
         r "Mm. Kind of cold for spring..."
         #play sound wind
 
@@ -919,12 +967,14 @@ label Scene4:
         hide r happy with dissolve
         #play sound Door unlocking.
         #put some kind of door opening effect here to lead into bg rhouse
-        show bg room1 with dissolve
+        show bg riroom with dissolve
+        show r happy with dissolve
         
         r "I’m home."
 
         pa "Riku—in here, please."
 
+        #show r upset with dissolve
         "Aw fuck."
 
         r "Yeah, Pop?"
@@ -967,10 +1017,11 @@ label Scene4:
         
         
 label flashback:
-    scene bg blackscr
+    scene bg blackscr with fade
     show bg dream with slow_fade
     #put some kind of wispy cloudy effect here
     $show_main_ui()
+    with fade
     
     "She's there, again, in my dreams."
     #play sound wind
@@ -983,17 +1034,19 @@ label flashback:
     "My hand looks weird."
     "She's right there. I can almost..."
     $ renpy.pause(2.0)
+    #stronger wispy cloud/blur effect?
     #Riku screams.
     "No-- where--"
    
 label Scene5: 
-    scene bg blackscr
-    show bg blackscr
+    scene bg blackscr with fade
     #play sound Clock alarm
     #time 3.0
     #stop sound
     
     $show_main_ui()
+    with slow_dissolve
+    
     #Shaking screen effect here
     r "AAAAAAAAAAAAAAAAAAAAAGH!"
     
@@ -1022,6 +1075,7 @@ label Scene5:
     "Alcohol’s just what I need."
     
     show bg street with dissolve
+    #show bg bar with dissolve
     $ renpy.pause(1.5)
     "I like this place, for a few reasons. One, it’s always got idiots willing to make a bet with me, and two, it’s off the main road, so there aren’t any annoying people nagging at me for underage drinking."
     
@@ -1039,6 +1093,7 @@ label Scene5:
     
     "I take a seat and order a burger, rare. The food here's not great, but there's only so many ways you can do a rare burger wrong, mostly by actually trying to cook it."
     
+    show r happy with dissolve
     r "Are you here for laughs, or to lose a bet? If you're not a bunch of princesses, why don't we go straight for the good stuff? Onigoroshi sound good?"
     
     "{size=17}Onigoroshi is practically like drinking rubbing alcohol. They don't call it “the demon killer” for nothing; you make it through a few shots and that shit'll put hair on your chest or make your nuts drop, or some other manly shit.{/size}"
@@ -1050,6 +1105,12 @@ label Scene5:
     "Ha ha ha. I totally haven’t heard that one before. The big fucking assholes are high-fiving each other like they fucking won a Pulitzer for that cheap line."
     
     "Taking their money will be a pleasure."
+    
+    $hide_main_ui()
+    #scene bg barcg with fade
+    $renpy.pause(1.0)
+    $show_main_ui()
+    with dissolve
     
     "My sake comes and I pour myself three glasses, setting the bottle down next to my dumbfuck opponent."
     
@@ -1085,7 +1146,7 @@ label Scene5:
     ob "Nnngh..."
     
     "Someone has to pour his glass for him. Everyone in the bar’s staring at me. They don’t get how I can still be so clear-headed. What can I say...I’m a great drunk."
-       
+    
     "When his head hits the table, I immediately snatch up all the money and head off to the bathroom. The poor dumbass." 
     "He never had a chance. His friends are fawning all over him to make sure he’s not going to croak on ‘em."
     
@@ -1109,19 +1170,18 @@ label Scene5:
     r "Hm---ahh!"
    
     #We need a status message thinger here to declare items.
-    "Received PDA."
-    $ pda = True
-    if pda:
+    $ unlock_item("pda")
+    if $ pda:
         "You can now access the PDA menu."
         #Stick an animation here that forces the PDA to blink.
         "Let's click on it now to bring it up."
-        #I would like to put the pda_loop here, but turning it off returns to the main menu.
-        call pda_loop
+    call pda_loop #I would like to put the pda_loop here, but turning it off returns to the main menu.
    
-    "The PDA is how you keep track of your items and what you learn."
-    "It has other uses, but those come up later."
-    "Remember to check your PDA often."
+    $ show_message("The PDA is how you keep track of your items and what you learn.", "medium")
+    $ show_message("It has other uses, but those come up later.", "medium")
+    $ show_message("Remember to check your PDA often.","medium")
     
+    $ inventory.unlock_item("wallet")
     #This goes back in the regular box.
     r "Whoa, this is the latest tech! It’s awesome! Thanks!"
     
@@ -1137,8 +1197,9 @@ label Scene6:
     #stop sound
     show bg blackscr with slow_dissolve
     
-    show bg room1
+    show bg riroom
     $show_main_ui()
+    with dissolve
     
     r "Ugh, again with that stupid dream..."
     
@@ -1148,21 +1209,38 @@ label Scene6:
     "I know I can run fast, but I like to walk with friends sometimes. Now I have something to do on the way there~"
     
     show bg street with dissolve
-    $renpy.pause(1.0)
+    $renpy.pause(1.5)
+    
+    show dg neu at left
+    show db neu at right
+    with dissolve
     dg "That’s the kid, isn’t it?"
     
     db "You sure?"
     
     dg "Pretty sure. Let’s go."
+    hide dg neu
+    hide db neu
+    with dissolve
     
     "Isn’t this my lucky day? I know I look small, but SHIT--"
     
     "They’re following me. I don’t want them to know where my friend lives."
     
+    show bg backalley
     "I walk down an alley that’s on the way, instead. I’ll probably be late for school at this rate."
     
+    show r happy:
+        alpha 0.0
+        time 0.75
+        linear 0.75
+        alpha 1.0
+    with dissolve    
     "I turn around and grin."
     
+    show dg neu at left
+    show db neu at right
+    with dissolve
     db "Heh. Just like they said, yeah?"
     
     dg "HQ’s information is top-notch, after all."
@@ -1174,6 +1252,7 @@ label Scene6:
     #play sound Knives clicking
     dg "Yeah kid, I'd say we had some business withya."
     
+    #show r surp
     r "Whoa, is all that really necessary? I’m just one small kid..."
     
     "Gotta play up your strengths, right?"
@@ -1196,8 +1275,15 @@ label Scene6:
     
     "They’re coming, splitting up to take me from both sides."
     
+    scene bg blackscr
+    $show_main_ui()
+    with fade
     "I close my eyes. I can almost see them just by listening."
     
+    scene bg backalley
+    $show_main_ui()
+    #show r fight
+    with dissolve
     #Riku makes martial arts cries while attacking.
     #Screen shaking effect
     r "HIIIIIIIIYAH!"
@@ -1238,7 +1324,7 @@ label getknife:
         
         #This goes in the regular textbox.
         "Might as well keep it. If I can’t use it, I can pawn it."
-        $ knife = True
+        $ inventory.unlock_item("knife")
         jump Scene7
    
 label leaveknife:
@@ -1247,7 +1333,10 @@ label leaveknife:
     
     
 label Scene7:
+    #show r mad
     r "Assholes. I guess if I run the whole way, I’ll still be on time for class..."
+    #hide r mad
+    #play running sound
     
     "I start to run out of the alley when a wave of nausea hits."
     #Some kind of nausea effect here.
@@ -1256,6 +1345,11 @@ label Scene7:
     
     $ Mamoru = "Dark Man"
     
+    #$hide_main_ui()
+    #scene bg mamview
+    #with fade
+    #$renpy.pause(1.0)
+    #$show_main_ui()
     m "Ahh, are you all right?"
     
     r "---uh---"
@@ -1277,6 +1371,7 @@ label Scene7:
     
     m "You’re going to run, aren’t you? Feel free; I’ll give you a small head start."
     
+    show bg blackscr with dissolve
     #play sound Sound of a backpack dropping
     #stop sound
     #play sound running sounds.
@@ -1369,7 +1464,7 @@ menu:
         jump noknife
         
 label useknife:
-    if knife:
+    if $ knife:
         "Thank god I picked up that knife!"
         jump useknife1
     else:
@@ -1399,11 +1494,12 @@ label useknife1:
     #Put some awesome fire effect here.
     
 label Scene9:
-    scene bg blackscr
+    scene bg blackscr with fade
     scene bg street
     #show m unhappy
-    with slow_fade
     $show_main_ui()
+    with slow_fade
+    
     m "Aahhh! My hand--! You---"
     
     s "You’re done for today, aren’t you?"
@@ -1415,14 +1511,15 @@ label Scene9:
     m "You live to grow more delicious another day, Riku-chan."
 
 label Scene10:
-    scene bg blackscr
-    scene bg street 
+    scene bg blackscr with fade
+    
+    scene bg street
+    $show_main_ui()
     with slow_fade
     
     show ro worried at left
     #show r upset at right
     
-    $show_main_ui()
     
     ro "Hey, are you okay? I’m really sorry about the malfunction back there...I’m still kind of new to this whole rescuing thing..."
     
@@ -1502,7 +1599,7 @@ label Scene10:
     
     s "Precisely. Allow me to show you."
     
-    hide s new
+    hide s neu
     hide ro worried
     with dissolve
     #show bg soumeheal
@@ -1549,14 +1646,21 @@ label Scene10:
 #* * * * ** * * *
 
 label Scene12:
+    scene blackscr with fade
+    
+    scene bg riroom
+    $show_main_ui()
+    with slow_fade
     "Like I thought, they were already waiting for me. I've been in some spats before, but how was I gonna explain THIS?"
     
+    #show ma
     ma "Riku, it's only the first day and already you're being brought home by truant officers?"
-    
+    #show ro
     ro "I'm sorry ma'am. We aren't truant officers. We actually--"
     
     ma "Did you get into a fight with these people? I'm very sorry about my son, gentlemen. And YOU! March straight up to your room---"
-    
+    #hide ro
+    #show r
     r "Mom, STOP! We could all be in danger."
     
     s "Yes, Riku-kun is right. There isn’t much time, so please simply allow me to explain. Your son was attacked this morning by some very dangerous people." 
@@ -1603,7 +1707,7 @@ label Scene12:
     
     ma "Riku, listen to me. No matter what happens, we’ll be here. You remember what I told you about staying safe. And take this."
     
-    #Received: Good Luck Charm.
+    $ inventory.unlock_item("redjewel")
     
     r "Yeah. Thanks, Mom."
     
@@ -1612,7 +1716,8 @@ label Scene12:
     #Riku sounds choked up here, like he's about to cry.
     r "I’m gonna call soon as I can, okay?"
     
-    "And just like that, the old Midorikawa Riku was dead. In an instant, everything had changed, and my new life was finally starting."
+    "And just like that, the old Midorikawa Riku was dead." 
+    "In an instant, everything had changed, and my new life was finally starting."
     
     "I wonder if the girls are gonna be cute."
 
@@ -1621,14 +1726,18 @@ label Scene12:
 #-----------------------------  
     
 label Scene13:
-
+    scene blackscr with fade
+    
+    scene bg dfor3
+    $show_main_ui()
+    with slow_fade
     r "What a fuuuuucking long ride!"
     
     s "But it was exhilarating, wasn’t it? Seeing the city, seeing the people go by. I do SO love the train system!"
         
     r "Roman, your uh...friend here...is a little...off."
     
-    #show ro frown with fade
+    #show ro frown 
     ro "Don’t say that; he’s just not used to going much of anywhere. He’s always like this when we get out. I think it’s sort of endearing."
     
     r "Sure. Endearing. Right. (Aa sou.)"
@@ -1641,7 +1750,8 @@ label Scene13:
     
     "He’s still prancing around like a fucking butterfly."
     
-    "A giant pink kimono-wearing butterfly. Roman’s staring at him like he’s waiting for him to burst into flames, or something, before finally pulling out a map and futzing with it."
+    "A giant pink kimono-wearing butterfly." 
+    "Roman’s staring at him like he’s waiting for him to burst into flames, or something, before finally pulling out a map and futzing with it."
     
     ro "Um...the er--I can’t read these kanji---I think---oi."
     
@@ -1668,7 +1778,8 @@ label Scene13:
     
     r "...something happening?"
     
-    s "-giggles, blowing sound-"
+    #Soume giggles here and blows.
+    s "Hee hee."
     
     r "Agh---"
     
@@ -1679,17 +1790,27 @@ label Scene13:
     "I could’ve complained more, but he saved my life, I guess."
     
     #show ro frown with fade
+    $hide_main_ui()
+    scene blackscr
+    with fade
     
     #* * * * * * *
-    
+    scene nfor3
+    $show_main_ui()
+    with fade
+  
     "It’s nightfall by the time we get there, and I’m exhausted."
+    
+    show r happy at left with dissolve
     
     r "I’m starvin’. If this place doesn’t have food, I’m going to cook one of you guys."
     
+    show s gigg at right with dissolve
     #Soume giggles.
     s "I’m afraid we wouldn’t be to your tastes, Riku-kun~"
     
-    #show ro frown with fade
+    hide s gigg
+    show ro pout at right with dissolve
     ro "That’s really not a nice thing to say."
     
     r "Stick in the mud."
@@ -1704,9 +1825,15 @@ label Scene13:
     
     "Roman points up. And up. And up. I think I see a dot up there, somewhere, deep in the distance."
     
+    scene bg shrfr
+    $hide_main_ui()
+    with slow_dissolve
+    #Make the shrine go up.
+    $show_main_ui()
+    
     r "...you’re kidding."
     
-    #show ro pissy with fade
+    show ro pout with dissolve
     ro "Well, what did you expect? It wouldn't be very safe if it were just out in the main road."
     
     r "Nyeeeeh."
@@ -1715,8 +1842,20 @@ label Scene13:
     
     r "I am not made for all this camping---whoa."
     
-    #show bg shrfr
-    #show bg Scroll through the entire set of shrine images-
+    show bg riroom with slow_dissolve
+    show bg roroom with slow_dissolve
+    show bg soroom with slow_dissolve
+    show bg suroom with slow_dissolve
+    show bg kitchen with slow_dissolve
+    show bg hall1 with slow_dissolve
+    show bg library with slow_dissolve
+    show bg hall2 with slow_dissolve
+    #show bg bath with slow_dissolve
+    #show bg traingr1 with slow_dissolve
+    #show bg traingr2 with slow_dissolve
+    show bg gar1 with slow_dissolve
+    show bg gar2 with slow_dissolve
+    #show bg shrfr with slow_dissolve
     
     "The shrine is huge, when you get up close to it, and there are koi ponds, gardens, a pool and a training ground."
     
@@ -1736,6 +1875,9 @@ label Scene13:
     #show ro smile
     r "Yeah. I guess he’s not so bad."
     
+    $renpy.pause(2.0)
+    show suroom with dissolve
+    
     s "Susa-san~ We’ve returned."
     
     su "Bout time ya fuckin’ brats got here. Took you all damn day. You bring the kid? Disinfect him?"
@@ -1751,7 +1893,11 @@ label Scene13:
     r "Hey, ya ol’ bitch, don’t call me sho---AAA--HEY--QUI--YOU"
     
     #play sound Smacked Around
-    
+    #scene bg suangry with fade
+    #$hide_main_ui()
+    #shaking screen effect
+    #$show_main_ui()
+     
     su "You cuss in my shrine again, and next time I’ll break a hole in your skull, got it?"
     
     r "Bitch--you actually bruise---AA--OW-OW-OW-OKAY-QUIT IT!"
@@ -1766,6 +1912,8 @@ label Scene13:
     
     su "That’s what I thought. Take him to his room, and to the doctor later. You have permission to do whatever you gotta to get him to comply."
     
+    show hall1 with slow_dissolve
+    
     #Roman makes a sound like he's trying to hold back a laugh.
     ro "Hnnf."
     
@@ -1778,7 +1926,10 @@ label Scene13:
     
     s "Not seriously. These little bruises are nothing."
     
-    "He reaches out and just barely presses a finger to a bruise. His fingers are warm when they touch me, and the pain stops."
+    "He reaches out and just barely presses a finger to a bruise." 
+    #glow effect here
+    
+    "His fingers are warm when they touch me, and the pain stops."
     
     r "Whoa---you have some kind of healing power or somethin’?"
     
@@ -1787,44 +1938,41 @@ label Scene13:
     
     "I look to Roman."
     
-    #show ro sweat with fade
-    #hide ro sweat with fade
-    #show ro smile with fade
-    #hide ro smile with fade
+    #show ro sweat with dissolve
+    #show ro smile with dissolve
     
     ro "Well, first—here."
     
-#    --Receive map to Susa's estate.
-#    --Receive Ningenkai: Presence of Humans.
+    $ inventory.unlock_item("map")
+#    --Receive Ningenkai: Presence of Majin.
 #    --Receive Majin: Basic Biology.
     
-    ro "It’s a map of the whole place, and some basic information. You can just put it in your palm pilot if you want to read it later."
-    
-#    [Info Screen will pop up and explain the use of the palm pilot:
-    
+    ro "It’s a map of the whole place, and some basic information on Majin. You can just put it in your palm pilot if you want to read it later."
+        
 #    The palm pilot is how Riku keeps track of everything he owns and learns. If you receive items or journal entries, check them by clicking on your palm pilot and clicking on the correct icon.
-#    You can also use the palm pilot to save during a chapter, load a new chapter, return to the title menu, or access the options menu.]
-    
-    
+
     r "Majin? What’s that?"
     
     ro "That’s what you are. What we are."
     
     r "There’s a word for it?"
     
-    ro "Of course. We aren't human. /nRead that carefully. It will teach you about the main differences between us and humans, and how to avoid getting caught."
+    ro "Of course. We aren't human, after all." 
+    ro "Read that carefully. It will teach you about the main differences between us and humans, and how to avoid getting caught."
     
-    #show r neu with fade
+    #show r neu
     r "Okay. I got it."
     
-    ro "This place is a rescue for Majin. We come here to keep safe. Soume’s plants keep us completely hidden from the wrong people; it’s why he takes such good care of them. 
-    /nBut, Susa doesn’t just let us stay for free, you know? You get up, 4am--"
+    ro "This place is a rescue for Majin."
+    ro "Soume’s plants keep us completely hidden from the wrong people; it’s why he takes such good care of them." 
+    ro "But, Susa doesn’t just let us stay for free, you know? You get up, 4am--"
     
     r "FOUR FUCKING---"
     
     ro "Wai--"
     
     #play sound crashybang
+    #shake screen
     su "THE FUCK I TOLD YOU ABOUT FUCKIN’ CUSSIN’ IN MY FUCKIN’ HOUSE, YOU UNGRATEFUL SPROG."
     
     #Riku whispers, here.
@@ -1855,19 +2003,21 @@ label Scene13:
     
     r "Whoa."
     
-    #show ro neu with fade
+    show ro neu
     ro "Explains a lot, doesn’t it?"
     
-    r "YEAH! I was wondering, you know, ‘cause most boys my age, like...their junk descends and stuff, and my parents told me it was totally okay, but I was pretty sure it totally wasn’t, you know?
-    /nI only slept through half the biology classes; I figured I knew what I was talking about."
+    r "YEAH! I was wondering, you know, ‘cause most boys my age..." 
+    r "Like...their junk descends and stuff, and my parents told me it was totally okay, but I was pretty sure it totally wasn’t, you know?"
+    r "I only slept through half the biology classes; I figured I knew what I was talking about."
     
-    #hide ro neu with fade
-    #show ro sweat with fade
+    show ro sweat 
     ro "...that’s...an awful lot of information...all at once...so suddenly."
     
     r "Anyway, g’on and explain more."
     
-    ro "Most Majin are much older than they look. Soume is maybe 1,000. He refuses to tell me. I’m going to be a hundred myself in the coming year."
+    ro "Alright. Most Majin are much older than they look." 
+    ro "Soume is maybe 1,000. He refuses to tell me." 
+    ro "I’m going to be a hundred myself in the coming year."
     
     r "Oh, then the old bi---uhhh---lady is probably about a million."
     
@@ -1876,6 +2026,8 @@ label Scene13:
     r "80-year-old humans do NOT look like that."
     
     ro "Some of them do. I’m not sure what they’re called, really, but they all belong to that Church, the Church of the Acts."
+    
+    #stick journal entry Church of the Acts here
     
     r "That new popular thing that opened up in the country?"
     
@@ -1891,9 +2043,12 @@ label Scene13:
     
     r "Whoa. So I really was in trouble, huh?"
     
-    ro "Yes, but not anymore. They can’t find us here. The plants create a barrier between nearly all humans and ourselves. Even Miss Susa can’t really find the place again if she leaves, /n
-    but she doesn’t tend to go out very much. The expansion of the church has been a bit stressful for everyone; only Soume’s really excited about leaving the grounds."
-    r "You probably won’t be able to visit your parents for a little while, either."
+    ro "Yes, but not anymore. They can’t find us here." 
+    ro "The plants sort of guide anyone it doesn't want entering in the wrong direction."
+    ro "Even we have trouble finding the place if we leave without Soume's help."
+    ro "Well, he's the only one excited about leaving the grounds anyway."
+
+    ro "You probably won’t be able to visit your parents for a little while, either."
     
     r "Yeah, guess not."
     
@@ -1903,14 +2058,19 @@ label Scene13:
     
     ro "Or worse. They’ll keep you alive and use you as a science experiment, or a slave..."
     
-    r "Okay, okay, stop with all that. Where do we come from?"
+    r "Okay, okay, stop with all that. Let's talk about something nicer." 
+    r "Where do we come from?"
     
-    ro "We're not sure. There seems to be some sort of dimensional mess that brings us from wherever our true home is, our world, to here. There doesn't seem to be a rhyme or reason to it."
+    ro "We're not sure. There seems to be some sort of mess that brings us from wherever our true home is, our world, to here." 
+    ro "There doesn't seem to be a rhyme or reason to it."
+    ro "I hear our world is practically sitting on top of this one...but only a few of us can sense it."
     
     r "So we're like aliens. Jeez. Tell me something less depressing about all of this. Like about my---"
     
-    ro "Right, right—your powers. It's fairly simple, we're both elemental users. You use fire, I use ice, and Soume uses plants. All kinds, really."
+    ro "Right, right—your powers. Ours are self explanatory. We're elemental users."
+    ro "You use fire, I use ice. Soume can control plants."
     
+    #unlock majin: fire and ice users.
     r "Is it hard?"
     
     ro "Immensely. I’m still trying to get it right in the heat of battle, myself..."
@@ -1921,6 +2081,12 @@ label Scene13:
     ro "Not quite sure if it works that way, but possibly."
     
     r "Coooool."
+    
+    show bg riroom with dissolve
+    $renpy.pause(1.0)
+    show ro neu
+    show r happy
+    with dissolve
     
     ro "Well, this room’s yours. There’s a futon, blankets and pillows in the closet."
     
@@ -2928,7 +3094,6 @@ label Scene28:
     
     ro "Veal? That’s baby deer, isn’t it? I couldn’t."
     
-
     l "If you so wish..."
     
     ro "I do. I’m not even sure how you could eat a poor young thing..."
@@ -3795,7 +3960,6 @@ label Scene35:
     
     "Forget this. I’ll just follow him."
     
-
     r "Roman, here I commmmmmmme-"
     
     #play sound Crashing noises
@@ -4502,7 +4666,6 @@ label Scene41:
     r "It was just a mistake...you don't have to get so mad about something like that."
 
     "{size=17}He lets out this drawn out sigh and actually stops messing with the machine for a second. He rubs his eyes, and the way he talks to me I get the fucking 
-
     impression that this is the way he’d explain something to a brain-damaged brick.{/size}"
 
     k  "Because I’ve earned it, you understand?"
