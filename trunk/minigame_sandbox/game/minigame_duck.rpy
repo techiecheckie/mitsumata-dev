@@ -98,6 +98,10 @@ init python:
                           MEDIUM_BIRD_TYPE : 350,
                           HARD_BIRD_TYPE   : 600 }
 
+    # accuracy bonus.
+    HUNT_BASE_ACCURACY_BONUS  = 500
+    HUNT_EXTRA_ACCURACY_BONUS = 100
+
     # bird size in pixels.
     BIRD_ALIVE_SIZE = Size( 40, 40 )
     BIRD_DEAD_SIZE  = Size( 57, 57 )
@@ -139,9 +143,13 @@ init python:
                                                            level.time_limit )
 
             # setup game state.
-            self.state      = HUNT_GAME_STATE_BEGIN
-            self.time_limit = level.time_limit
-            self.base_score = 0
+            self.state          = HUNT_GAME_STATE_BEGIN
+            self.time_limit     = level.time_limit
+            self.base_score     = 0
+            self.accuracy_bonus = 0
+            self.number_clicks  = 0
+            self.number_hits    = 0
+            self.total_score    = 0
             self.bird_countdown = 1
 
 
@@ -302,6 +310,16 @@ init python:
             base_score["transform"].set_position( 185, 159 )
             self.stop_screen_hud.add_child( base_score )
 
+            accuracy_bonus             = GameObject()
+            accuracy_bonus["renderer"] = GameRenderer( GameText( self.get_accuracy_bonus ) )
+            accuracy_bonus["transform"].set_position( 185, 251 )
+            self.stop_screen_hud.add_child( accuracy_bonus )
+
+            total_score             = GameObject()
+            total_score["renderer"] = GameRenderer( GameText( self.get_total_score ) )
+            total_score["transform"].set_position( 185, 320 )
+            self.stop_screen_hud.add_child( total_score )
+
             self.score_hud             = GameObject()
             self.score_hud["renderer"] = GameRenderer( GameText( self.get_score ) )
             self.score_hud["transform"].set_position( 400, 10 )
@@ -309,6 +327,30 @@ init python:
             self.time_remaining_hud = GameObject()
             self.time_remaining_hud["renderer"] = GameRenderer( GameText( self.get_time_remaining ) )
             self.time_remaining_hud["transform"].set_position( 10, 10 )
+
+        def compute_accuracy_bonus( self ):
+            self.accuracy_bonus = 0
+            if self.number_clicks > 0:
+                hit_percentage = float(self.number_hits) / self.number_clicks
+
+                if hit_percentage >= 0.8:
+                    self.accuracy_bonus += HUNT_BASE_ACCURACY_BONUS
+                if hit_percentage >= 0.85:
+                    self.accuracy_bonus += HUNT_EXTRA_ACCURACY_BONUS
+                if hit_percentage >= 0.9:
+                    self.accuracy_bonus += HUNT_EXTRA_ACCURACY_BONUS
+                if hit_percentage >= 0.95:
+                    self.accuracy_bonus += HUNT_EXTRA_ACCURACY_BONUS
+                if hit_percentage >= 1:
+                    self.accuracy_bonus += (2 * HUNT_EXTRA_ACCURACY_BONUS)
+
+        def get_accuracy_bonus( self ):
+            if self.accuracy_bonus == 0:
+                return "%20d" % self.accuracy_bonus
+            elif self.accuracy_bonus < 1000:
+                return "%18d" % self.accuracy_bonus
+            else:
+                return "%16d" % self.accuracy_bonus
 
         def get_base_score( self ):
             if self.base_score < 1000:
@@ -323,6 +365,14 @@ init python:
 
         def get_time_remaining( self ):
             return "Time Remaining: %d" %  self.time_remaining.get_ceil_value()
+
+        def get_total_score( self ):
+            if self.total_score < 1000:
+                return "%20d" % self.total_score
+            elif self.total_score < 10000:
+                return "%18d" % self.total_score
+            else:
+                return "%16d" % self.total_score
 
         def is_out_of_bounds( self, bird ):
             bird_bounds    = bird["collider"].get_bounds()
@@ -513,6 +563,8 @@ init python:
                 # see if it's game over.
                 if self.time_remaining.get_value() <= 0:
                     self.state = HUNT_GAME_STATE_END
+                    self.compute_accuracy_bonus()
+                    self.total_score = self.base_score + self.accuracy_bonus
 
         def on_key_down( self, key ):
             if key == pygame.K_ESCAPE:
@@ -531,6 +583,7 @@ init python:
                 if self.state == HUNT_GAME_STATE_PLAY:
                     mx, my = self.transform_screen_to_world( mx, my )
                     self.spawn_boom( mx, my )
+                    self.number_clicks += 1
 
                     for bird in itertools.chain( self.easy_birds,
                                                  self.medium_birds,
@@ -538,6 +591,7 @@ init python:
                         if (bird["collider"].is_point_inside( mx, my ) and
                             not bird["behavior"].is_shot_down()):
                             bird["behavior"].shoot()
+                            self.number_hits += 1
 
         def on_mouse_up( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
