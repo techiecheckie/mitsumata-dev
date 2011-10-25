@@ -31,9 +31,12 @@ init python:
     
     # training button
     ui.frame(xpos=66,ypos=502, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/buttons/button_pda_generic.png", 
-                   "gfx/buttons/button_train_hover.png", 
-                   clicked=ui.returns(("minigame", "")))
+    if minigames:
+      ui.imagebutton("gfx/buttons/button_pda_generic.png", 
+                     "gfx/buttons/button_train_hover.png", 
+                     clicked=ui.returns(("minigame", "")))
+    else:
+      ui.image("gfx/buttons/button_train_disabled.png")
                    #clicked=renpy.curried_call_in_new_context("minigame"))
                    
     # bonus button
@@ -61,7 +64,7 @@ init python:
     if button == "inventory":
       items = inventory.get_inventory_items()
       
-      cols = 6
+      cols = 8
       rows = len(items)/cols + len(items) % cols
       
       for y in range(0, rows):
@@ -167,7 +170,6 @@ label pda_loop:
     renpy.transition(dissolve)
     renpy.show("pda_bg")
     renpy.show("pda_glow", at_list = [Position(xpos=159, ypos=9), Transform(anchor=(0.0, 0.0))])
-    #renpy.show("pda_gloss", at_list = [Position(xpos=197, ypos=46), Transform(anchor=(0.0, 0.0))], zorder=5)
     config.overlay_functions.append(pda_buttons)
   
     while (True):

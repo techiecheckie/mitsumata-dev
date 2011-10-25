@@ -39,6 +39,7 @@ init python:
   decision = "5"
   event_triggered = False
   pda = False
+  minigames = False
   
 #---------------------
 #KONAMI CODE
@@ -277,7 +278,9 @@ image bg blackscr = "gfx/backgrounds/blackscr.png"
 image bg redscr = "gfx/backgrounds/redscr.jpg"
 
 image map = "gfx/backgrounds/map.png"
-image textbox = "gfx/textbox.png"
+image textbox_l = "gfx/textbox.png"
+image textbox_m = "gfx/textbox_2.png"
+image textbox_s = "gfx/textbox_mini.png"
 
 #--------------------------------
 #DECLARE CG IMAGES
@@ -648,7 +651,10 @@ label start:
     $ renpy.pause(2.0)
     
 label Scene1:
-        scene bg blackscr with fade
+        scene bg blackscr 
+        $hide_main_ui()
+        with fade
+        
         $ renpy.pause(2.0)
         
         #scene bg mameat1
@@ -1171,11 +1177,22 @@ label Scene5:
    
     #We need a status message thinger here to declare items.
     $ unlock_item("pda")
-    if $ pda:
-        "You can now access the PDA menu."
-        #Stick an animation here that forces the PDA to blink.
-        "Let's click on it now to bring it up."
-    call pda_loop #I would like to put the pda_loop here, but turning it off returns to the main menu.
+    #if $ pda: 
+    $ pda = True
+    
+    "You can now access the PDA menu."
+    
+    #Stick an animation here that forces the PDA to blink.
+    
+    "Let's click on it now to bring it up."
+    
+    #call pda_loop #I would like to put the pda_loop here, but turning it off returns to the main menu.
+    
+    # Call pda_loop (and show the pda straight away) or wait for the user to 
+    # click on the pda icon? Now it'll wait for the user to click on it, but
+    # it also skips the pda part completely if the user clicks somewhere else. 
+    # We could use a loop here to force the player to press it before proceeding
+    # with the story...
    
     $ show_message("The PDA is how you keep track of your items and what you learn.", "medium")
     $ show_message("It has other uses, but those come up later.", "medium")
