@@ -1,10 +1,11 @@
 label show_map:
-  # A dict containing the rooms and their items
+  # A dict containing the rooms and their items (as mentioned in the GDD)
   $rooms = { 
     "riroom" : { "equipment" : None, "clothes" : None, "trophies" : None, "posters" : None },
-    #"roroom" : { "stash1" : None, "stash2" : None }, 
-    "soroom" : { "plants" : None, "vines" : None, "hairclips" : None, "jewelry" : None, "nailpolish" : None, "clothes" : None } 
-    #"suroom" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
+    "soroom" : { "plants" : None, "vines" : None, "hairclips" : None, "jewelry" : None, "nailpolish" : None, "clothes" : None }, 
+    "suroom" : { "tv" : None, "games" : None, "burner" : None, "scrolls" : None }, 
+    "roroom" : { "sculpture" : None, "plant1" : None, "plant2" : None }
+    
     #"hall1" : { "stash1" : None, "stash2" : None }, 
     #"hall2" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
     #"kitchen" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
