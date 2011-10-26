@@ -2,7 +2,8 @@
 #NOTES TO PROGRAMMERS FROM SEIRA
 #****************************************************
 
-#Currently at line 1538. Check Bad Endings for necessary animation creations.
+#Currently at line 2729 out of 6240. Check Bad Endings for necessary animation creations.
+#Go to "My species...type?"
 #Line 4484 contains a puzzle minigame. 
 #Don't forget Roman's "lock" minigame.
 
@@ -299,7 +300,7 @@ image r happy = "gfx/sprites/rhappy.png"
 #image r fight = ""
 #image r blush = ""
 #image r upset = ""
-#image r neutral = ""
+#image r neu = ""
 #image r mad = ""
 #image r confu = ""
 
@@ -311,8 +312,8 @@ image ro sad = "gfx/sprites/rosad.png"
 #image ro scare = ""
 #image ro fight = ""
 #image ro blush = ""
-image ro worried = "gfx/sprites/roworried.png"
-image ro neutral = "gfx/sprites/roneu.png"
+image ro worry = "gfx/sprites/roworried.png"
+image ro neu = "gfx/sprites/roneu.png"
 image ro pout = "gfx/sprites/ropout.png"
 
 #------------------------------------------------
@@ -502,6 +503,7 @@ label splashscreen:
 init:
    $ slow_dissolve = Dissolve(3.0)
    $ slow_fade = Fade(2, 2, 3)
+   $ flash = Fade(0.1, 0.0, 0.5, color="#fff")
 
 #***********************
 # ITEM LABELS
@@ -555,11 +557,14 @@ $ game = inventory.item_unlocked("game")
 $ strpot = inventory.item_unlocked("strpotion")
 $ magpot = inventory.item_unlocked("magpotion")
 
+$ sleep = hp+=20 and mp+=20
+
 #--------------------------------
 # GAME STARTS HURR
 #--------------------------------
 
 label start:    
+    $ sleep = False
     
     scene bg blackscr
     $ show_main_ui()
@@ -1176,29 +1181,23 @@ label Scene5:
     r "Hm---ahh!"
    
     #We need a status message thinger here to declare items.
-    $ unlock_item("pda")
+    $ unlock_item(pda)
     #if $ pda: 
     $ pda = True
     
-    "You can now access the PDA menu."
+    $ show_message("You can now access the PDA menu.", medium)
     
     #Stick an animation here that forces the PDA to blink.
     
-    "Let's click on it now to bring it up."
+    $ show_message("Let's bring it up.", medium)
     
-    #call pda_loop #I would like to put the pda_loop here, but turning it off returns to the main menu.
-    
-    # Call pda_loop (and show the pda straight away) or wait for the user to 
-    # click on the pda icon? Now it'll wait for the user to click on it, but
-    # it also skips the pda part completely if the user clicks somewhere else. 
-    # We could use a loop here to force the player to press it before proceeding
-    # with the story...
+    call pda_loop
    
-    $ show_message("The PDA is how you keep track of your items and what you learn.", "medium")
-    $ show_message("It has other uses, but those come up later.", "medium")
-    $ show_message("Remember to check your PDA often.","medium")
+    $ show_message("The PDA is how you keep track of your items and what you learn.", medium)
+    $ show_message("It has other uses, but those come up later.", medium)
+    $ show_message("Remember to check your PDA often.", medium)
     
-    $ inventory.unlock_item("wallet")
+    $ unlock_item(wallet)
     #This goes back in the regular box.
     r "Whoa, this is the latest tech! It’s awesome! Thanks!"
     
@@ -1341,18 +1340,18 @@ label getknife:
         
         #This goes in the regular textbox.
         "Might as well keep it. If I can’t use it, I can pawn it."
-        $ inventory.unlock_item("knife")
+        $ unlock_item(knife)
         jump Scene7
    
 label leaveknife:
         "You decided to leave the knife."
-        jump scene7
+        jump Scene7
     
     
 label Scene7:
-    #show r mad
+    show r mad with dissolve
     r "Assholes. I guess if I run the whole way, I’ll still be on time for class..."
-    #hide r mad
+    hide r mad with dissolve
     #play running sound
     
     "I start to run out of the alley when a wave of nausea hits."
@@ -1397,14 +1396,18 @@ label Scene7:
     
     r "OOMPH!"
     
+    show bg backalley with dissolve
+    
     "God, I’ve run into one of his friends, haven’t I? I’m gonna die, I’m gonna--"
     
     $ Soume = "Beautiful Person"
     
+    show s neu with dissolve
     s "Please stay here. I will handle him."
     
     "When I look up, a man who smells like flowers is hovering over me. Before I know it, I’m being surrounded by sweet-smelling vines that seem to be blocking me off." 
     "He smiles and nods, placing a finger over his lips, before the vines let him out and close."
+    hide s neu with dissolve
 
 menu:
     "Trust them.":
@@ -1425,8 +1428,10 @@ label dontrust:
 label Scene8:
     "I know I probably shouldn’t trust him, but I’m shaking so bad that I’ll take anyone who isn’t eating me. I sit down."
     
+    show m grin at left with dissolve
     m "Look what I found~"
     
+    show r scare at right with dissolve
     r "AAANGH!"
     
     m "Well, look at what we have here."
@@ -1436,22 +1441,29 @@ label Scene8:
     #Put a yank through vines effect.
     #play sound hissing of acid burned skin
     #Mamoru makes a sound of pain.
+    show m mad at left with dissolve
     m "Nngh." 
     #stop sound
     m "Oi. Chemical burns? How positively droll."
     
     $ Roman = "Awkward Kid"
+    hide r scare
+    show ro fight at right with dissolve
     ro "Hey---uh---you!"
     
+    show m neu at left with dissolve
     m "Really, this meal is becoming a bit too much."
    
     ro "Let him go, or I will...make you regret it!"
     
     "I don’t think this guy knows what he’s doing."
     
-    #Flash of light needed here?
+    $ flash
+    $ flash
+    $ flash
+    $renpy.pause(1.5)
     "A flash of blue light suddenly appears in his hand, before quickly dissipating."
-    
+    show ro surp at right with dissolve
     m "..."
     r "..."
     ro "..."
@@ -1460,10 +1472,14 @@ label Scene8:
     
     "Correction: he definitely has no clue what he’s doing. What’s the point of people coming to save me if they can’t even do it RIGHT!"
     
+    show m grin at left with dissolve
     m "Let me guess—you’re the new meat? Too bad. I suppose I can fit you both in."
     
-    r "Wai--wait--I’ll get it---"
-    #flash of light here too
+    ro "Wai--wait--I’ll get it---"
+    $ flash
+    $ flash
+    $ flash
+    $renpy.pause(1.5)
     #play sound false start magic attack
     
     "That’s it. I’m dead. I didn’t even get laid once."
@@ -1492,7 +1508,7 @@ label noknife:
         
 label useknife1:
     "I attack using the knife I picked up, sinking it into his wrist."
-    
+    show m neu at left with dissolve
     m "Tch." 
 
     "An odd, hot feeling bubbles up from deep inside. It’s familiar...it sort of reminds me of that dream."
@@ -1501,7 +1517,10 @@ label useknife1:
     
     "I don’t--"
     
-    #Blue light flashing here.
+    $ flash
+    $ flash
+    $ flash
+    $renpy.pause(1.5)
     ro "Damn it...damn it, why won’t it work..."
     
     #Mamoru yawns
@@ -1509,6 +1528,7 @@ label useknife1:
     
     #play sound The flare of fire.
     #Put some awesome fire effect here.
+    hide m neu with dissolve
     
 label Scene9:
     scene bg blackscr with fade
@@ -1517,14 +1537,17 @@ label Scene9:
     $show_main_ui()
     with slow_fade
     
+    show m mad at right with dissolve
     m "Aahhh! My hand--! You---"
     
+    show s smile at left with dissolve
     s "You’re done for today, aren’t you?"
 #Mamoru has a knowing, understand, amused voice here.
     m "...ahhh. You. I’ll be back. I suppose you already know that."
 #Soume has a calm, amused voice here.    
     s "I wouldn’t expect any less."
-#Mamoru sounds amused here, too.    
+#Mamoru sounds amused here, too.
+    show m grin at right with dissolve
     m "You live to grow more delicious another day, Riku-chan."
 
 label Scene10:
@@ -1534,9 +1557,9 @@ label Scene10:
     $show_main_ui()
     with slow_fade
     
-    show ro worried at left
-    #show r upset at right
-    
+    show ro worry at left
+    show r upset at right
+    with dissolve
     
     ro "Hey, are you okay? I’m really sorry about the malfunction back there...I’m still kind of new to this whole rescuing thing..."
     
@@ -1548,13 +1571,20 @@ label Scene10:
     
     r "...am I dreaming?"
     
+    hide ro worry
+    show s smile at left
+    with dissolve
+    
     #Soume chuckles
     s "I’m afraid not, Midorikawa Riku-san."
     
-    #hide ro upset
-    #hide r upset
-    #show bg firstview
+    hide r upset
+    hide s smile
+    $hide_main_ui()
+    with dissolve
+    show bg firstview with dissolve
     #Put wispy wind effect here.
+    $show_main_ui()
     
     "He smells powerfully of flowers. It’s making me dizzy."
     
@@ -1724,7 +1754,7 @@ label Scene12:
     
     ma "Riku, listen to me. No matter what happens, we’ll be here. You remember what I told you about staying safe. And take this."
     
-    $ inventory.unlock_item("redjewel")
+    $ unlock_item(redjewel)
     
     r "Yeah. Thanks, Mom."
     
@@ -1910,7 +1940,7 @@ label Scene13:
     r "Hey, ya ol’ bitch, don’t call me sho---AAA--HEY--QUI--YOU"
     
     #play sound Smacked Around
-    #scene bg suangry with fade
+    #scene bg suhit with fade
     #$hide_main_ui()
     #shaking screen effect
     #$show_main_ui()
@@ -1960,9 +1990,9 @@ label Scene13:
     
     ro "Well, first—here."
     
-    $ inventory.unlock_item("map")
-#    --Receive Ningenkai: Presence of Majin.
-#    --Receive Majin: Basic Biology.
+    $ unlock_item(map)
+    $ unlock_entry(Human World, 054)
+    $ unlock_entry(Majin, 043)
     
     ro "It’s a map of the whole place, and some basic information on Majin. You can just put it in your palm pilot if you want to read it later."
         
@@ -1977,7 +2007,7 @@ label Scene13:
     ro "Of course. We aren't human, after all." 
     ro "Read that carefully. It will teach you about the main differences between us and humans, and how to avoid getting caught."
     
-    #show r neu
+    show r neu
     r "Okay. I got it."
     
     ro "This place is a rescue for Majin."
@@ -2020,14 +2050,14 @@ label Scene13:
     
     r "Whoa."
     
-    show ro neu
+    show ro neu at right with dissolve
     ro "Explains a lot, doesn’t it?"
     
     r "YEAH! I was wondering, you know, ‘cause most boys my age..." 
     r "Like...their junk descends and stuff, and my parents told me it was totally okay, but I was pretty sure it totally wasn’t, you know?"
     r "I only slept through half the biology classes; I figured I knew what I was talking about."
     
-    show ro sweat 
+    show ro sweat at right with dissolve
     ro "...that’s...an awful lot of information...all at once...so suddenly."
     
     r "Anyway, g’on and explain more."
@@ -2044,7 +2074,9 @@ label Scene13:
     
     ro "Some of them do. I’m not sure what they’re called, really, but they all belong to that Church, the Church of the Acts."
     
-    #stick journal entry Church of the Acts here
+    $ unlock_entry(Church of the Acts, 038)
+    $ unlock_entry(Human World, 057)
+    $ unlock_entry(Church of the Acts, 041)
     
     r "That new popular thing that opened up in the country?"
     
@@ -2061,8 +2093,7 @@ label Scene13:
     r "Whoa. So I really was in trouble, huh?"
     
     ro "Yes, but not anymore. They can’t find us here." 
-    ro "The plants sort of guide anyone it doesn't want entering in the wrong direction."
-    ro "Even we have trouble finding the place if we leave without Soume's help."
+    ro "The plants sort of guide anyone it doesn't want entering in the wrong direction. Even we have trouble finding the place if we leave without Soume's help."
     ro "Well, he's the only one excited about leaving the grounds anyway."
 
     ro "You probably won’t be able to visit your parents for a little while, either."
@@ -2087,7 +2118,8 @@ label Scene13:
     ro "Right, right—your powers. Ours are self explanatory. We're elemental users."
     ro "You use fire, I use ice. Soume can control plants."
     
-    #unlock majin: fire and ice users.
+    $unlock_entry(Majin, 044)
+    $unlock_entry(Majin, 047)
     r "Is it hard?"
     
     ro "Immensely. I’m still trying to get it right in the heat of battle, myself..."
@@ -2101,8 +2133,8 @@ label Scene13:
     
     show bg riroom with dissolve
     $renpy.pause(1.0)
-    show ro neu
-    show r happy
+    show ro neu at right
+    show r happy at left
     with dissolve
     
     ro "Well, this room’s yours. There’s a futon, blankets and pillows in the closet."
@@ -2113,81 +2145,102 @@ label Scene13:
     
     r "Hm. Maybe I will..."
     
-#    Receive Ningenkai: Majin Rescue Facility.
+    $ unlock_entry(Human World, 055)
 
-#label Dec4:
-    #    DECISION
-    #    Hang with Soume
-    #    --Get 14A
+menu:
+    "Hang with Soume."
+        jump Scene14A
+    
+    "Hang with Roman."
+        jump Scene14B
     
 label Scene14A:
-        
-        "I decide to hang with Soume, since I already spoke with Roman. I head to his room. Roman wasn't kidding...it's covered in greenery"
-        
+        scene bg blackscr
+        $show_main_ui()
+        with slow_fade
+        "I decide to hang with Soume, since I already spoke with Roman. I head to his room. Roman wasn't kidding...it's covered in greenery."
+        show bg room3 with slow_dissolve
+        show s smile at right with dissolve
         s "Ahh, Riku-kun. How are you getting along here?"
-        
+        show r upset at left with dissolve
         r "A little smothered by your 'friends'." 
-        
+        show s gigg at right with dissolve
         #Soume giggles.
         s "Oh, they mean you no harm. Quite the opposite, in fact; they're our protectors~"
-        
-        r "So you say. Roman keeps talking about how hard it is to control these powers, but you make it look easy."
-        
+        show r neu at left with dissolve
+        r "Roman keeps talking about how hard it is to control these powers, but you make it look easy."
+        show s smile at right with dissolve
         s "Every Majin learns at their own pace~ There are many things at work. You seemed to take to your fire abilities quite well—I would hate to get on your bad side after a little proper training!"
-        
+        show r grin at left with dissolve
         r "And why is that? Afraid I'll singe the foliage?"
         
+        $unlock_entry(Soume, 010)
         "There he goes again, dancing around and being all fucking whimsical."
-        
+        show s gigg at right with dissolve
         #Soume giggles.
         s  "Ara, Riku-kun, you do have a way with words. No Majin abilities are perfect; each one has its weaknesses. /nMy own happen to include extreme temperatures...really, I’m a bit useless against you and Roman-kun. I try to fight from behind the scenes."
-        
+        show r confu at left with dissolve
         r "But...didn't that guy, uh...Akemiya, I think...use fire? He seemed pretty scared of you."
-        
+        show s upset at right with dissolve
+        $renpy.pause(1.0)
+        show r neu at left with dissolve
         "Whoa, think I struck a chord. This is the first time I've seen this guy's face drop."
-        
+        show s pens at right with dissolve
         s "Ah...well. Mamoru-kun merely miscalculated the situation. He’s not one to charge into situations he hasn’t properly prepared for. Next time, I don't think we'll be so lucky."
         
         r "So do you, uh...know him?"
-        
-        s "I’ve fought against him many times. You could say I know him as closely as one should know their worst enemy. -FE: Smile- Yes, I think that’d be the appropriate expression?"
+        show s neu at right with dissolve
+        s "I’ve fought against him many times. You could say I know him as closely as one should know their worst enemy." 
+        $renpy.pause(1.0)
+        show s smile at right with dissolve
+        s "Yes, I think that’d be the appropriate expression."
         
         r "Hm. I think I get it."
         
         "This guy’s pretty carefree. For someone who’s probably in mortal danger, and all. S’kind of weird."
         
-        #show s smile with fade
-        #Soume giggles.
-        s "Which is why you must train hard here. We start tomorrow."  
+        s "Get some rest. We start training tomorrow." 
         
+        show bg blackscr with dissolve
+        $hide_main_ui()
+        with slow_fade
+
+        jump dec1
         
-    #    Hang with Roman
-    #    --Get 14B
 label Scene14B:
-        
-        "Ten minutes. Ten minutes I've been trying to roast this yam (melt chocolate, whatever).  I can’t really remember how I called that fire the first time, but whatever I did, it’s not working."
-        
+        scene bg blackscr
+        $show_main_ui()
+        with slow fade
+        "Ten minutes. Ten minutes I've been trying to melt chocolate.  I can’t really remember how I called that fire the first time, but whatever I did, it’s not working."
+        show bg room2 with dissolve
+        show r upset at left with dissolve
+        $renpy.pause(1.0)
+        show r mad at left with dissolve
+        #shake effect
         r "What’s the point of powers if they’re this stupid to use!"
         
-        ro "What are you doing with that yam...?"
-        
+        show ro pout at right with dissolve
+        ro "What are you doing with that chocolate...?"
+        show r neu at left with dissolve
         r "I'm practicing."
         
-        ro "...with a yam?"
+        ro "...with...chocolate?"
         
-        r "I'm trying to roast it." 
-        
+        r "I'm trying to melt it." 
+        show ro neu at right with dissolve
         ro "Ah...wouldn't an oven be faster?"
         
         r "I’m trying to do it with my fire powers. I've been trying a long while, but I can’t get it to work. It came to me so easily before."
-        
+        show ro smile at right with dissolve
         ro "One thing you’ll find is that duress forces your body to do things it would never normally do. Soume’s going to be your teacher, I think, so he’ll train you to bring that out."
-        
+        show r grin at left with dissolve
         r "Ohhh, is that why you were so terrible at it when we were about to get roasted?"
         
-        #show ro flush with fade
+        show ro flush at right with dissolve
         ro "Ahem...well, erhm, I already explained it...I’m new to this sort of thing. And I’m of the ice element. He’d’ve murdered me slightly less quickly, I imagine..."
-        
+        show r neu at left 
+        show ro neu at right
+        with dissolve
         r "You mean your power’s stronger than mine? But can’t fire like, melt ice?"
         
         ro "I’m not really sure how it works myself, to be perfectly frank. Though...your powers seem quite similar to his. It’s rather rare from what I hear, actually."
@@ -2197,120 +2250,190 @@ label Scene14B:
         ro "Yes. I mean, dark like yours is, anyway. Usually, it’s normal-colored. Fire-colored."
         
         r "Yeah, I’ve never seen fire that was...uh...black."
-        
+        show ro smile at right with dissolve
         ro "You can ask Soume about it later. But fire’s a strong element, even against other fire."
-        
+        $unlock_entry(Riku,004)
+        show r grin at left with dissolve
         r "So next time I run into that guy, he's toast!"  
-        
+        show ro sweat at right with dissolve
         ro "I wouldn’t say that...you must be trained, after all..."
         
         r "Yeah, I’m gonna kick him in the -----, right before I shove his ------ down into his ----"
         
-        #show ro sweat with fade
-        ro "Oh, Riku-kun..."
+        ro "Oh, Riku..."
+        show bg blackscr with dissolve
+        $hide_main_ui()
+        with slow_fade
+        
+        jump dec1
 
-#* * * * * * *
+
+label dec1:
+    $show_message("This is your first nightly decision.", medium)
+    $show_message("Nightly decisions are a large part in determining the direction of your game.", medium)
+    $show_message("You should definitely try to save before each one, and make different choices.", medium)
+    
+    $ decision = "1"        
+    menu:   
+        "Sleep."
+                $ sleep = True
+                jump Scene16
+            
+        "Search."
+                #call show_map
+                jump Scene15 
+
 label Scene15:
-
+     scene bg blackscr
+     $show_main_ui()
+     with slow_fade
+    
     "Bored and hungry. Time for a little late-night snack."
     
+    show bg kitchen
+    show fx darkness
+    with dissolve
     "You know what’s hard? Holding a candle to a map because a certain old bat won’t letcha turn on the lights. I’d use a flashlight, but apparently she’s got something against--"
     
+    #shaking effect
+    show r upset
     r "UNF---"
+    hide r upset
     
-    "Effin’ chair. I kick it and it smashes something. Serves the bitc---bat right. No, I -don’t- dare to curse, even in my own head. I whispered a curse word before and got beat up."
+    "Effin’ chair. I kick it and it smashes something. Serves the bitc---bat right." 
+    "No, I don’t dare to curse, not even in my own head."
     
+    #show fx light
     "There’s a light coming from down the hall. What’s he doing up?"
     
+    show r neu with dissolve
     r "Hey Roman, it’s--"
     
-    #show ro surp with fade
+    hide r neu
+    show ro surp 
+    with dissolve
+    
+    #shake screen
     ro "AAAH!"
     
     #play sound SMASH CRASHY BANG
     
     "Well, whatever that was, we’re probably not going to want to eat it anymore. It’s bleeding all over the floor."
     
-    ro "Oh MY. Susa-san will be upset about this plate..."
+    show ro upset at right with dissolve
+    show r upset at left with dissolve
+    $renpy.pause(1.0)
+    hide fx darkness with slow_dissolve
+    ro "Oh MY. Miss Susa will be upset about this plate..."
     
     r  "You let that bi--old bat punch you around, too?"
     
     "I've never seen someone clean with such a purpose."
     
+    show ro neu at right with dissolve
     ro "She hasn’t ever hit me, actually, but she’s rather like that to everyone. You get used to it. It even gets rather charming, after a while!" 
     
-    r "Again with the words I’d probably never use... So what're you doing up? You wanted a midnight snack, too?"
+    show r neu at left with dissolve
+    r "Words I’d probably never use... So what're you doing up? You wanted a midnight snack, too?"
     
+    show ro smile at right with dissolve
     ro "This? Oh goodness no, I'd never eat this. I'm just checking the meat. My apologies; I'm always a little jumpy when I handle meat."
     
+    show r grin at left with dissolve
     r "Scared one of the dead things’ animal friends will take revenge on you?"
     
+    show ro pout at right with dissolve
     ro "Uhm. Well, actually, I used to be a cook back when I was a servant. I mostly prepared...us. Majin. It’s not fun to find out that your friend is your next meal."
+    $unlock_entry(Roman,008)
+    $renpy.pause(1.0)
     
+    show r neu at left with dissolve
     r  "...ooh."
     
+    show ro smile at right with dissolve
     ro "It’s...all right. You had no way of knowing any of---it’s fine. It was a long, long time ago."
     
     r "So you swore off meat?"
     
-    ro "That’s correct. I'm a vegan. Their animal friends may not exact revenge, but I just can't stand to think of eating a creature that can cry out in pain. /nTo humans, we're every bit an animal as any cow, chicken or lamb."
+    show ro neu at right with dissolve
+    ro "That’s correct. I'm a vegan."
+    $unlock_entry(Roman,006)
+ 
+    ro "Their animal friends may not exact revenge, but I just can't stand to think of eating a creature that can cry out in pain." 
+    ro "To humans, we're every bit an animal as any cow, chicken or lamb."
     
+    $unlock_entry(Humans,060)
+
+    show r upset at left with dissolve   
     r "Not...-all- humans."
     
-    ro "Oh, forgive me. I didn’t mean---I agree with you, I mean. Many are very kind people, and I also don’t support Majin eating humans either, and some do. /nSo I just like to check. For my own sake. Were...you hungry?"
+    show ro worry at right with dissolve
+    ro "Oh, forgive me. I didn’t mean---"
+    ro "I agree with you. Many are very kind people, and I also don’t support Majin eating humans either, and some do."
     
+    $unlock_entry(Majin,045)
+
+    show ro neu at right with dissolve
+    ro "I just like to check. For my own sake. Were...you hungry?"
+    
+    show r neu at left with dissolve
     r "Uh...no...not much, anymore."
     
     ro "Good night, then?"
     
     r "G’night."
+    show bg blackscr with dissolve
+    $hide_main_ui()
+    with slow_fade
 
 #* * * * * * *
 
 label Scene16:
+     scene bg blackscr
+     
+     scene bg maminpain
+     $show_main_ui()
+     with slow_fade
     m "Nngh..."
     
     m "Damned youko."
-    #U = Norah
-    u "Mamo-niichan~ The fox got ya, didn’t he?"
+    $ Norah = "Young Lady"
+    n "Brother~ The fox got ya, didn’t he?"
     
     m "Tch. I won’t make the same mistake again."
     
-    u "Ouchies! That burn looks like it hurts?"
+    n "Ouchies! That burn looks like it hurts?"
     
     m "Don’t you have anyone else in agony to mock? Like the children in the dungeons, perhaps?"
     
-    n "---I’m sorry, niichan. I didn't mean it."
+    n "---I’m sorry. I didn't mean it."
     
     #Mamoru makes a sound of agony.
-    m "No, it’s all right, Norah. Would you mind bringing me a glass of water? Aaghh--" 
+    m "No, it’s all right, \"Norah\". Would you mind bringing me a glass of water? Aaghh--" 
+    $ Young Lady = "Norah"
     #play sound Sound of sizzling flesh
     
     n "Okay. Hang in there."
     
     m "Nngh. Damn it...DAMN IT." 
     #play sound Sound of punching a wall
-    "Where did he even get that power from? I’ve never seen a technique this brutal before. I’m going to have to be extra careful. And that bastard will pay for ruining my hunting grounds."
     
     n "Niisan, I brought the water...have you checked with the doctors?"
     
-    m "No point. This is something of a level far beyond any of our doctors. Majin have a remarkable adaptive capacity. But, not as good as humans."
+    m "No point. This is something of a level far beyond any of our doctors. It's something new he drafted up just for me."
     
     n "Well, I brought some fire salve. I could at least wrap it for you, and bring you a meal?"
     
+    $unlock_item("salve")
+    
     m "You’re a good girl, Norah. My favorite sister."
     
-    n "I’m your ONLY sister."
-    
-    #Mamoru chuckles in between heavy, painful breaths.
-    m "True enough."
-    
-    n "It’s almost done, promise."
+    n "Always!"
+    n "Wrapping's almost done, promise."
     
     m "Thank you..."
-    
-    "Knock knock knock."
-    
+
+#play sound knocking on door    
     Maid "Mamoru-sama, I heard you called for me."
     
     n "Mhm! Right this way. Niichan needs your help with something. He’s very ill and we need some medicine."
@@ -2318,28 +2441,49 @@ label Scene16:
     Maid "I...understand. Shall I call upon the doctors?"
     
     n "Oh no. No need."
-    
+    show bg blackscr with slow_dissolve
+    Maid "Wait--wait!!"
     Maid "Please--please don’t---aaaah!"
-    
+    show bg redscr with dissolve
     #play sound horrible ravenous eating sounds
+    $renpy.pause(1.0)
+    show bg blackscr with slow_dissolve
     
     n "Are you satisfied? You ate so much!"
     
     #Mamoru says this gently, as if he is drifting to sleep.
     m "Thanks for the meal...Norah..."
     
-    n "Anything, Niisan."
-  
-#* * * * * * * * * *
-
+    n "Anything, big brother."
+    
+    $hide_main_ui()
+    with slow_fade
+ 
+label sleep1:
+    $show_main_ui()
+    if sleep = True
+                $update_main_ui()
+                $show_message("You had a great night's sleep, and got a little stronger.", medium)
+                jump Scene17
+    else
+        jump Scene17
+        
 label Scene17:
-#---Received Training---
+    $hide_main_ui()
+    $renpy.pause(2.0)
+    
+    scene bg blackscr
+    $show_main_ui()
+    with slow_fade
 
     "My first morning in this weird place. I roll around and groan. Don’t really want to get up."
     
+    show bg riroom with slow_dissolve
+    show r neu with dissolve
     r "Yawwwwwwwwwn. Wonder what time it is. No one’s bitc---uh, being loud, so I guess I didn’t have to get up and clean."
     
     r "Mmm. 8 am. That’s not bad, I guess."
+    hide r neu with dissolve
     
     "I peer inside the closet. I didn’t get a chance to bring too much from home. I guess it’s all hitting me just now."
     
@@ -2351,53 +2495,92 @@ label Scene17:
     
     "And this life has superpowers. How bad could it be?"
     
+    #play sound knocking
+    show ro neu at left with dissolve
     ro "Riku, you should head down to the training grounds. Soume would like to start with you today."
     
+    show r neu at left with dissolve
     #Riku makes a grown, as if tired.
     r "Unngh."
     
-    "I get up and put on my new slave wear, and following the map, I head out to the training grounds. Soume’s already there, talking to the flowers as if they could talk back."
+    hide ro neu
+    hide r neu
+    with dissolve
     
+    "I get up and put on my new slave wear."
+    show bg hall1 with dissolve
+    
+    show bg gar1 with dissolve
+       alpha 0.0
+       time 1.0
+       linear 1.0 alpha 1.0
+    "Following the map, I head out to the training grounds. Soume’s already there, talking to the flowers as if they could talk back."
+    
+    show bg souwithplants with dissolve
     "It’s only just then that I realize that the plants actually seem to like it. They’re all sort of shifting toward him."
     
     "Really weird, but...cool."
+    hide bg souwithplants
+    hide bg gar1
+    show bg traingr
+    with dissolve
     
+    show r neu at left with dissolve
     r "Hey Soume! I’m ready for training!"
-    
+    show s smile at right with dissolve
     s "Oh, good morning, Riku-san~ I was just chatting with my little friend. Are you prepared? We’ve got a long day ahead of us."
     
     r "Are you kidding? I’ve been waiting to figure these powers out for ages!"
     
     s "Uhm, well, why don’t we begin with a 10-mile run?"
     
+    show r confu at left with dissolve
     r "Awhuh?"
     
-    s "A sound body, a sound mind, and a sound spirit. All three are necessary to properly channel your Youki without any waste."
+    s "A sound body, a sound mind, and a sound spirit. All three are necessary to properly channel your ki without any waste."
     
-    r "Youki?"
+    r "Ki?"
     
-    s "Mmm, how to explain it...your demonic energy. When you sleep well, eat well, and feel well, your Youki is at its peak. When your mood is low, or you’re hungry or thirsty, or tired, your Youki drops. /nIt’s the product of a set of fine-tuned biological variables."
+    show s think at right with dissolve
+    s "Mmm, how to explain it...your demonic energy." 
+    s "When you sleep well, eat well, and feel well, your ki is at its peak. When your mood is low, or you’re hungry or thirsty, or tired, your ki drops."
+    s "It’s the product of a set of fine-tuned biological variables."
     
-    r "...oh. I have no idea what you just said (Aa. Yoku wakannee.)"
+    show r neu at left with dissolve
+    r "...oh. I have no idea what you just said."
     
     #Soume gives a gentle laugh.
+    show s smile at right with dissolve
     s "No worries, I’ll show you."
    
     #These begin instructions for the next minigame.
     #show bg minigame with dissolve.
     #Soume takes a deep breath.
+    $hide_main_ui()
+    scene bg soupowers 
+    with slow_dissolve
+    $renpy.pause(2.0)
+    $show_main_ui()
     s "Youki is channelled when you are balanced."
     
     #show Green glow with fade
     
     "As you get more used to the feeling of the channelling, you become better able to utilise it under duress; but to start, you should try to eat healthily, drink a lot of water and sleep 10 hours a night."
     
-    "Connect your body to your mind, your mind to your spirit, and release it all at one single point at the tip of your finger."
+    "Connect your body to your mind, your mind to your spirit, and release it all at one single point."
     
     "That is the secret of youki."
     
     "A small spindle of a green vine twines itself around Soume’s fingers and forms a bud."
     
+    $hide_main_ui()
+    scene bg traingr 
+    $show_main_ui()
+    with slow_dissolve
+    
+    show r confu at left
+    show s smile at right
+    with dissolve
     r "Whoa..."
     
     s "Did you understand all that?"
@@ -2408,39 +2591,45 @@ label Scene17:
     
     r "I mean, uh...how many of us can do that?"
     
-    #show s curious with fade
+    show s think at right with dissolve
     s "Erm, well."
     
+    show r neu at left with dissolve
     r "It’s rare?"
     
     s "It’s specific to my kind, but..."
     
     r "...if you don’t want to talk about it---"
     
+    show s smile at right with dissolve
     s "It’s fine. I just haven’t seen any others like me in a very long time; that’s all."
     
     r "How old are you, anyway?"
     
     s "Ohhh, a few thousand or so, give or take..."
     
+    show r confu at left with dissolve
     r "Whaaa--? No way!"
     
     s "I’m just kidding~ There’s no way I could be that old~"
     
+    show r neu at right with dissolve
     r "Aren’t you just a big joker."
     
     s "Sorry, sorry~ Come now. Try to channel your youki. We’ll spend a few days on this."
     
+    show r confu at left with dissolve
     r "Whaaa--? A few DAYS? You mean I’m not gonna be able to shoot a fireball by the end of the week?"
     
-    #show s neu with fade
+    show s neu at right with dissolve
     s "I suppose it’s possible, but the expenditure of energy would likely drain your life force and kill you."
     
+    show r grin at left with dissolve
     r "...got it. But I warn ya, I’m a major athlete, so I’ll probably get this in minutes."
     
     s  "No need to rush; holding it for a few minutes untrained is a feat by itself."
 
-#label minigame balance    
+#call minigame magic control   
     #Put a minigame here:
     
     #This is a balancing game. Channel Riku’s Youki so that it forms a ball at the tip of his finger, just like Soume showed you.
@@ -2456,41 +2645,52 @@ label Scene17:
 #label balance success:
     r "I did it--whoa."
     
-    #show r dizzy with fade
-    
+    show r dizzy at left with dissolve
+    show s ohmy at right with dissolve
     s "Are you all right, Riku-san?"
     
     r "Yeah, I just...dizzy, all of a sudden."
     
+    show s neu at right with dissolve
     s "That’s normal. You’ve never exercised this muscle, after all. Take a few minutes, and get some water and have a rest."
     
     "I settle down for a moment, but I really want to try it again. It takes a little while, but I can soon hold a steady flame."
     
+    show r grin at left with dissolve
     r "Hey, I think I’m getting the hang of it!"
     
-    s "Hey, Riku-san?"
+    show s distr at right with dissolve
+    s "Hm, oh, Riku?"
+    
+    show r neu at left with dissolve
     
     r "Hm?"
     
     "I look up and take a puff of pollen right to the face. My concentration drops."
     
+    show r confu at left with dissolve
     r "Aaahh!"
     
     "The flame disappears. Damn it!"
     
+    show s neu at right with dissolve
     s "Balance, Riku. You must fight to keep your internal balance in any circumstance, or the enemy could do something as simple as blow at you and leave you in a vulnerable state."
     
+    show r upset at left with dissolve
     r "Augh, yuck. What’s in this stuff?"
     
+    show s smile at right with dissolve
     s "Oh, just a few things of my own private recipe—doesn’t it smell lovely~?"
     
     r "Yeah, yeah, just like roses."
     
+    show s ohmy at right with dissolve
     s "Roses? No, that’s not right...I didn’t use any roses..."
     
+    show r neu at left with dissolve
     r "I mean---it smells good; that’s all."
     
-    #show s pout with fade
+    show s think at right with dissolve
     s "But if it smells like roses, then I must’ve mixed the blending up..."
     
     r "Soumeee..."
@@ -2499,12 +2699,14 @@ label Scene17:
     
     r "Training?"
     
-    s "Right, of course. My apologies---where was I...ah! Your enemies will use any number of surprising techniques to break your focus. /nFear that you haven’t properly channeled will induce the same effect on your youki, so you must be absolutely cognizant and never expect your enemy to allow you even a second to build an attack."
+    s "Right, of course. My apologies---where was I...ah! Your enemies will use any number of surprising techniques to break your focus."
+    s "Fear that you haven’t properly channeled will induce the same effect on your youki, so you must be absolutely cognizant and never expect your enemy to allow you even a second to build an attack."
     
     r "Okay. I got it."
     
     "The smell of the pollen is everywhere."
     
+    show r confu at left with dissolve
     r "What’s your pollen supposed to do, anyway?"
     
     s "I’m not sure anymore...if it smells like roses, you might turn purple, or your tongue might grow too large for your mouth..."
@@ -2519,15 +2721,20 @@ label Scene17:
     
     "I spend most of the day training. After that, I’m totally beat, so I head back to my room."
 
+    show bg blackscr with dissolve
+    $hide_main_ui()
+    with slow_fade
 #* * * * * * * * *
 
 label Scene18:
 
-    "I can still smell Soume’s pollen all over me. /nI guess I needed a shower anyway, but I’ve sort of gotten used to the scent. It really IS nice, and nothing weird happened, so that’s somethin’ at least." 
+    "I can still smell Soume’s pollen all over me."
+    "I guess I needed a shower anyway, but I’ve sort of gotten used to the scent. It really IS nice, and nothing weird happened, so that’s somethin’ at least." 
     
     ro "Ah, good evening, Riku-kun. How did your training go?"
     
-    r "Training was AWESOME. Soume's really great, isn't he? /nThose plant powers of his are ridiculous! He’d better not hold back in training me! I’m gonna take him down one day, with a left jab of fire right in his face--"
+    r "Training was AWESOME. Soume's really great, isn't he?"
+    r "Those plant powers of his are ridiculous! He’d better not hold back in training me! I’m gonna take him down one day, with a left jab of fire right in his face--"
     
     ro "Yes. Indeed. He...his plant abilities are something. I’m going to head to bed early. Good night."
     
@@ -2541,7 +2748,8 @@ label Scene18:
     
     "Roman doesn’t look like he trusts me that much. Which I guess makes sense."
     
-    ro "All right. Soume’s supposed to be my partner, but he makes me awfully nervous. /nI’ve known him a pretty long while, since the first day I came here, and I don’t feel as if I know any more about him now than I did then."
+    ro "All right. Soume’s supposed to be my partner, but he makes me awfully nervous."
+    "I’ve known him a pretty long while, since the first day I came here, and I don’t feel as if I know any more about him now than I did then."
     
     r "He's a little out there, but he seems like a nice enough guy. He might just be really private, you know?"
     
@@ -2549,7 +2757,8 @@ label Scene18:
     
     r "Difficult? Are you kiddin’? He’s INSANE in battle!"
     
-    ro "Believe me, I’m more than well aware of his prowess. He’s...so far above anyone I’ve ever seen. It’s unreal. He hasn’t been flustered in a single fight we’ve entered. /nI’m stuck in back, unable to call a weapon to save my own skin and he’s casually sauntering along while our enemies are falling around him. It’s fascinating, intensely so, but..."
+    ro "Believe me, I’m more than well aware of his prowess. He’s...so far above anyone I’ve ever seen. It’s unreal. He hasn’t been flustered in a single fight we’ve entered." 
+    ro "I’m stuck in back, unable to call a weapon to save my own skin and he’s casually sauntering along while our enemies are falling around him. It’s fascinating, intensely so, but..."
     
     r "It makes you look pretty bad?"
     
@@ -2836,7 +3045,8 @@ label Scene25:
     
     "Is it just me, or does the air smell really wonderful?"
     
-    s "I merely wanted to beg forgiveness. I...the shrine’s been going through some things lately...I lost a lot of very close friends and partners because they weren’t trained well enough. I didn’t want you to be the next one..."
+    s "I merely wanted to beg forgiveness. I...the shrine’s been going through some things lately...I lost a lot of very close friends and partners because they weren’t trained well enough. 
+    I didn’t want you to be the next one..."
     
     ro "Riku was right. He figured it was just like that. Don’t worry about it. I’m fine, and I appreciate it very much."
     
@@ -2943,7 +3153,8 @@ label Scene26:
     
     r "WHATEVER."
     
-    k "I’ll have you know that the things written in that research are potentially vital to your survival as a Majin in the human world. /nThe Church of the Three Acts may seem kindly on its surface, but the underbelly is worse than a rotted apple with red skin."
+    k "I’ll have you know that the things written in that research are potentially vital to your survival as a Majin in the human world.
+    The Church of the Three Acts may seem kindly on its surface, but the underbelly is worse than a rotted apple with red skin."
     
     "I decide to hold off getting pissed for a minute."
     
@@ -2956,7 +3167,9 @@ label Scene26:
     
     k "Nothing about anything, as I feared."
     
-    k "Ugh. I do NOT know why Miss Susa insists on bringing little miscreants like you in. You all just cause trouble. No better than humans, really. Listen carefully, child. Don’t assume that anyone is on your side. /nThe things that humans will do to a Majin could make your blood curdle in your veins and stink of the subsequent fermentation."
+    k "Ugh. I do NOT know why Miss Susa insists on bringing little miscreants like you in. You all just cause trouble. 
+    No better than humans, really. Listen carefully, child. Don’t assume that anyone is on your side. 
+    The things that humans will do to a Majin could make your blood curdle in your veins and stink of the subsequent fermentation."
     
     r "They...slavery? Wouldn’t we have heard of it?"
     
@@ -2968,8 +3181,10 @@ label Scene26:
     
     r "Special humans?"
     
-    k "The Church of Three Acts is a front for a small society of humans far beyond the capabilities of the normal...their strength, speed, agility and physical prowess are much more similar to Majin. /nThat is why they are able to capture us and hold us." 
-    k "With that front, they maintain political power as well as their wealth, and with their physical strength and superior numbers, their job is easy. /nOn occasion, they’re able to just lure our people in. Many of us have defected to that side...just for the peace of mind."
+    k "The Church of Three Acts is a front for a small society of humans far beyond the capabilities of the normal...their strength, speed, agility and physical prowess are much more similar to Majin.
+    That is why they are able to capture us and hold us." 
+    k "With that front, they maintain political power as well as their wealth, and with their physical strength and superior numbers, their job is easy. 
+    On occasion, they’re able to just lure our people in. Many of us have defected to that side...just for the peace of mind."
     
     r "...they’re like...some kind of freako cult. Why doesn’t anyone do anything?"
     
@@ -3036,7 +3251,8 @@ label Scene28:
     ro  "…Liza?  How did…?"
     
     #Liza gives a gentle laugh.
-    l "I may be old for the humans, and you, but I am quite proficient with modern technologies. /nThis Caller Identification thing is very useful. Besides, you’re the only one who ever calls me this late. Most know better."
+    l "I may be old for the humans, and you, but I am quite proficient with modern technologies.
+    This Caller Identification thing is very useful. Besides, you’re the only one who ever calls me this late. Most know better."
     
     #show ro flush with fade
     ro "I-I’m terribly sorry. It’s just with training and-"
@@ -3079,7 +3295,9 @@ label Scene28:
     
     l "Oh?"
     
-    ro "Just a little bit ago he tried to sneak out of cleaning duties and decided he was going to watch some television. Right in the middle of the lounge! Of course, Miss Susa found him, and she was so irate she broke her video game things right over his head. /nMajin might heal fast, but he had quite the lump on his head."
+    ro "Just a little bit ago he tried to sneak out of cleaning duties and decided he was going to watch some television. Right in the middle of the lounge! 
+    Of course, Miss Susa found him, and she was so irate she broke her video game things right over his head. 
+    Majin might heal fast, but he had quite the lump on his head."
     
     #Liza gives nostalgic laughter.
     l "I would say that sounds just like her."
@@ -3189,7 +3407,8 @@ label Scene29:
     
     a "Please…pl-please. I-I’ll give you anything. I’m special. I-I-I-"
     
-    m "You you you. Hmph. Contrary to popular belief, my dear, this isn’t about you, nor is it personal. And I already know what you are. I’d hardly consider you special. Your sister told us all about you two. /nYour lives have beeen hard, haven't they?"  
+    m "You you you. Hmph. Contrary to popular belief, my dear, this isn’t about you, nor is it personal. And I already know what you are. I’d hardly consider you special. Your sister told us all about you two. 
+    Your lives have beeen hard, haven't they?"  
     
     #Audra is whimpring in terror.
     a "No...no..."
@@ -3627,7 +3846,8 @@ label Scene33:
     
     r "...that’s...one way of looking at it."
     
-    "Ku-chan is nightmare fuel. Its head is a big, gaping, toothy mouth. Not big enough to swallow me whole, but I could easily lose an arm. Or a head. /nI definitely don’t like the look it’s giving me...and it doesn’t even have eyes!"
+    "Ku-chan is nightmare fuel. Its head is a big, gaping, toothy mouth. Not big enough to swallow me whole, but I could easily lose an arm. Or a head.
+    I definitely don’t like the look it’s giving me...and it doesn’t even have eyes!"
     
     s "Well, now that my little Ku-chan is old enough, meet your new sparring partner."
     
@@ -3739,7 +3959,8 @@ label Scene34:
     #Roman chuckles.
     ro "You’ll have to wait until we get there."
     
-    "It is nice to be out, though, and Roman is pretty cool to hang with. He’s never knocked my teeth out or had long talks with roses about their views on politics. /nActually, now that I think about it, I don’t know a whole lot about him."
+    "It is nice to be out, though, and Roman is pretty cool to hang with. He’s never knocked my teeth out or had long talks with roses about their views on politics. 
+    Actually, now that I think about it, I don’t know a whole lot about him."
     
     r "So...what’s your deal?"
     
@@ -3829,7 +4050,7 @@ label Scene34:
     r "Wow."
     
     #Roman whispers.
-    ro "And sometimes, he would take one of us from the cage, and none of us really knew what had gone on...but if that one returned, they would be...damaged, somehow. /n
+    ro "And sometimes, he would take one of us from the cage, and none of us really knew what had gone on...but if that one returned, they would be...damaged, somehow.
     It terrified me, so I used to practice making myself very small so he wouldn’t notice me."
     
     "This story is making me queasy. I think Roman notices."
@@ -3838,8 +4059,9 @@ label Scene34:
     
     r "So you did the veggie thing."
     
-    ro "Yes. No creature has a right to end another creature’s life like that. My own friends...my fellow kitchen mates...anyway, I ran away and was lucky enough to find some wonderful friends, other fellow Majin, in Germany. 
-    /nSomeone I met there suggested I come here when I tired of Europe."
+    ro "Yes. No creature has a right to end another creature’s life like that. 
+    My own friends...my fellow kitchen mates...anyway, I ran away and was lucky enough to find some wonderful friends, other fellow Majin, in Germany. 
+    Someone I met there suggested I come here when I tired of Europe."
      
     r "Susa?"
     
@@ -3863,7 +4085,7 @@ label Scene34:
     ro "I’m sure you are leaving something out! Hobbies? A long-lost love?"
     
     r "My hobbies? Sports and cutting class. Oh, and drinking. Long-lost love? Yeah, right. I’m seventeen. That’s barely enough time for a first love. 
-    /nThere is this one girl I want to ask out, but I dunno. I’m not really all that interested yet."
+    There is this one girl I want to ask out, but I dunno. I’m not really all that interested yet."
     
     ro "You are still you---"
     
@@ -3895,7 +4117,7 @@ label Scene34:
     
     ro "…erm, that is also rather complicated..."
     
-    r "Oh, gawddammit Roman. You’re like a hundred!"
+    r "Awww, DAMN, Roman. You’re like a hundred!"
     
     ro "Uh…ah…wait, I see our destination!"
     
@@ -4267,7 +4489,7 @@ label Scene38:
     na  "No, but I'm sure you will tell me."
     
     m  "Once, in a barnyard, there were two cats. Each day their master would bring them out a saucer of milk. Alas, the master was poor, so that was all they'd receive. 
-    /nThe foolish cat, he would gulp down his milk, and spend the rest of his day hungry."
+    The foolish cat, he would gulp down his milk, and spend the rest of his day hungry."
     
     m "The wise cat, he would only drink some of his milk. Each day, he would leave his saucer half full, bring it to the back of the barn, and then return after a nap."
         

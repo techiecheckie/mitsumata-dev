@@ -211,19 +211,19 @@ init -1 python hide:
     ## Transitions.
 
     ## Used when entering the game menu from the game.
-    config.enter_transition = dissolve
+    config.enter_transition = fade
 
     ## Used when exiting the game menu to the game.
-    config.exit_transition = dissolve
+    config.exit_transition = fade
 
     ## Used between screens of the game menu.
     config.intra_transition = fade
 
     ## Used when entering the game menu from the main menu.
-    config.main_game_transition = dissolve
+    config.main_game_transition = fade
 
     ## Used when returning to the main menu from the game.
-    config.game_main_transition = dissolve
+    config.game_main_transition = fade
 
     ## Used when entering the main menu from the splashscreen.
     config.end_splash_transition = fade
@@ -262,9 +262,9 @@ init -1 python hide:
 
     ## The default text speed in characters per second. 0 is infinite.
 
-    config.default_text_cps = 20
+    config.default_text_cps = 5
 
     #########################################
     ## More customizations can go here.
     
-    
+
