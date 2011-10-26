@@ -233,7 +233,9 @@ init python:
     
   def unlock_item(item_id):
     item = inventory.get_item(item_id)
-    item.unlock()
+    if not item.is_unlocked():
+      item.unlock()
+      update_stats(item.get_bonuses())
     
     # Box 1
     renpy.transition(dissolve)
@@ -286,5 +288,17 @@ init python:
     
     renpy.transition(dissolve)
     renpy.hide("textbox_m")
+    
+    return
+  
+  # Not supposed to be in ui.rpy, but it'll do for now.
+  def update_stats(bonuses):
+    if bonuses.has_key("hp"):
+      hp += bonuses["hp"]
+    if bonuses.has_key("mp"):
+      mp += bonuses["mp"]
+    # ... and any other stats to be updated
+      
+    # call update_main_ui() afterwards or let the script take care of that?
     
     return
