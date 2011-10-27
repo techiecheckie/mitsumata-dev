@@ -23,35 +23,95 @@ label run_event:
   return
   
 label riroom_events:
-  if decision == "X":
+  #if decision == "X":
     # add drama here, or mayhaps a call to some other label.
-    call dummy_label
+    #call dummy_label
     # And set event_triggered to True if an event occurred, so that the search
     # screen knows that it should break the loop and return to the script
-    $event_triggered = True
-  elif decision == "Y":
-    call other_dummy_label
-    $event_triggered = True
+    #$event_triggered = True
+  #elif decision == "Y":
+    #call other_dummy_label
+    #$event_triggered = True
     
   return
   
 label soroom_events:
+  #if decision == "X":
+    # add drama here, or mayhaps a call to some other label.
+    #call dummy_label
+    # And set event_triggered to True if an event occurred, so that the search
+    # screen knows that it should break the loop and return to the script
+    #$event_triggered = True
+  #elif decision == "Y":
+    #call other_dummy_label
+    #$event_triggered = True  
   return
   
-label suroom_events:  
+label suroom_events:
+   #if decision == "X":
+    # add drama here, or mayhaps a call to some other label.
+    #call dummy_label
+    # And set event_triggered to True if an event occurred, so that the search
+    # screen knows that it should break the loop and return to the script
+    #$event_triggered = True
+  #elif decision == "Y":
+    #call other_dummy_label
+    #$event_triggered = True
   return
   
 label hall1_events:
+  #if decision == "X":
+    # add drama here, or mayhaps a call to some other label.
+    #call dummy_label
+    # And set event_triggered to True if an event occurred, so that the search
+    # screen knows that it should break the loop and return to the script
+    #$event_triggered = True
+  #elif decision == "Y":
+    #call other_dummy_label
+    #$event_triggered = True  
   return
   
 label hall2_events:
+  #if decision == "X":
+    # add drama here, or mayhaps a call to some other label.
+    #call dummy_label
+    # And set event_triggered to True if an event occurred, so that the search
+    # screen knows that it should break the loop and return to the script
+    #$event_triggered = True
+  #elif decision == "Y":
+    #call other_dummy_label
+    #$event_triggered = True    
   return
   
 label kitchen_events:
-  return
+    if decision == "1":
+       call scene15
+    
+       $event_triggered = True
+    #elif decision == "2":
+    #    call boobs
+    return
   
 label bathroom_events:
+  #if decision == "X":
+    # add drama here, or mayhaps a call to some other label.
+    #call dummy_label
+    # And set event_triggered to True if an event occurred, so that the search
+    # screen knows that it should break the loop and return to the script
+    #$event_triggered = True
+  #elif decision == "Y":
+    #call other_dummy_label
+    #$event_triggered = True    
   return
   
 label lib_events:
+  #if decision == "X":
+    # add drama here, or mayhaps a call to some other label.
+    #call dummy_label
+    # And set event_triggered to True if an event occurred, so that the search
+    # screen knows that it should break the loop and return to the script
+    #$event_triggered = True
+  #elif decision == "Y":
+    #call other_dummy_label
+    #$event_triggered = True    
   return
