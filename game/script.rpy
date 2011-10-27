@@ -2,7 +2,7 @@
 #NOTES TO PROGRAMMERS FROM SEIRA
 #****************************************************
 
-#Currently at line 2729 out of 6240. Check Bad Endings for necessary animation creations.
+#Currently at line 2729 out of 6461. Check Bad Endings for necessary animation creations.
 #Go to "My species...type?"
 #Line 4484 contains a puzzle minigame. 
 #Don't forget Roman's "lock" minigame.
@@ -557,15 +557,11 @@ $ game = inventory.item_unlocked("game")
 $ strpot = inventory.item_unlocked("strpotion")
 $ magpot = inventory.item_unlocked("magpotion")
 
-$ sleep = hp+=20 and mp+=20
-
 #--------------------------------
 # GAME STARTS HURR
 #--------------------------------
 
-label start:    
-    $ sleep = False
-    
+label start:        
     scene bg blackscr
     $ show_main_ui()
     
@@ -1181,23 +1177,23 @@ label Scene5:
     r "Hm---ahh!"
    
     #We need a status message thinger here to declare items.
-    $ unlock_item(pda)
+    $ unlock_item("pda")
     #if $ pda: 
     $ pda = True
     
-    $ show_message("You can now access the PDA menu.", medium)
+    $ show_message("You can now access the PDA menu.", "medium")
     
     #Stick an animation here that forces the PDA to blink.
     
-    $ show_message("Let's bring it up.", medium)
+    $ show_message("Let's bring it up.", "medium")
     
     call pda_loop
    
-    $ show_message("The PDA is how you keep track of your items and what you learn.", medium)
-    $ show_message("It has other uses, but those come up later.", medium)
-    $ show_message("Remember to check your PDA often.", medium)
+    $ show_message("The PDA is how you keep track of your items and what you learn.", "medium")
+    $ show_message("It has other uses, but those come up later.", "medium")
+    $ show_message("Remember to check your PDA often.", "medium")
     
-    $ unlock_item(wallet)
+    $ unlock_item("wallet")
     #This goes back in the regular box.
     r "Whoa, this is the latest tech! It’s awesome! Thanks!"
     
@@ -1340,7 +1336,7 @@ label getknife:
         
         #This goes in the regular textbox.
         "Might as well keep it. If I can’t use it, I can pawn it."
-        $ unlock_item(knife)
+        $ unlock_item("knife")
         jump Scene7
    
 label leaveknife:
@@ -1668,17 +1664,9 @@ label Scene10:
     "Soume blows over the tiny bud and a thin powder flies into my face."
     #Some powder flying effect here.
     
-    #hide ro smile with fade
-    #show ro upset with fade
-    #hide r surp with fade
-    #show r blush with fade
-    
     ro "Nn--"
     
     "I feel wonderful. I feel comfortable. I feel relaxed and tired, and like I could sleep."
-    
-    #hide ro upset with fade
-    #show ro sweat with fade 
     
     ro "Is he going to be okay like that?"
     
@@ -1690,6 +1678,11 @@ label Scene10:
     
     ro "Okay."
 
+menu:
+        "Go home first."
+                jump label Scene12
+        "Leave without going home."
+                jump label Scene13
 #* * * * ** * * *
 
 label Scene12:
@@ -1750,11 +1743,11 @@ label Scene12:
     
     s "As far as school lessons, we have many on-grounds teachers, and we’ll have him call you the moment he arrives."
     
-    pa "It...sounds reasonable. -Coughing as if trying to hold himself in.-"
+    pa "It...sounds reasonable."
     
     ma "Riku, listen to me. No matter what happens, we’ll be here. You remember what I told you about staying safe. And take this."
     
-    $ unlock_item(redjewel)
+    $ unlock_item("redjewel")
     
     r "Yeah. Thanks, Mom."
     
@@ -2074,9 +2067,9 @@ label Scene13:
     
     ro "Some of them do. I’m not sure what they’re called, really, but they all belong to that Church, the Church of the Acts."
     
-    $ unlock_entry(Church of the Acts, 038)
-    $ unlock_entry(Human World, 057)
-    $ unlock_entry(Church of the Acts, 041)
+    $ unlock_entry("Church of the Acts", "038")
+    $ unlock_entry("Humans", "057")
+    $ unlock_entry("Church of the Acts", "041")
     
     r "That new popular thing that opened up in the country?"
     
@@ -2118,8 +2111,8 @@ label Scene13:
     ro "Right, right—your powers. Ours are self explanatory. We're elemental users."
     ro "You use fire, I use ice. Soume can control plants."
     
-    $unlock_entry(Majin, 044)
-    $unlock_entry(Majin, 047)
+    $unlock_entry("Majin", "044")
+    $unlock_entry("Majin", "047")
     r "Is it hard?"
     
     ro "Immensely. I’m still trying to get it right in the heat of battle, myself..."
@@ -2145,7 +2138,7 @@ label Scene13:
     
     r "Hm. Maybe I will..."
     
-    $ unlock_entry(Human World, 055)
+    $ unlock_entry("Humans", "055")
 
 menu:
     "Hang with Soume."
@@ -2252,7 +2245,7 @@ label Scene14B:
         r "Yeah, I’ve never seen fire that was...uh...black."
         show ro smile at right with dissolve
         ro "You can ask Soume about it later. But fire’s a strong element, even against other fire."
-        $unlock_entry(Riku,004)
+        $unlock_entry("Riku","004")
         show r grin at left with dissolve
         r "So next time I run into that guy, he's toast!"  
         show ro sweat at right with dissolve
@@ -2267,21 +2260,27 @@ label Scene14B:
         
         jump dec1
 
-
+label sleep:
+  $ hp += 20
+  $ mp += 20
+  $show_message("You have a long, peaceful night's sleep.", "small")
+  $update_main_ui()
+  return
+  
 label dec1:
-    $show_message("This is your first nightly decision.", medium)
-    $show_message("Nightly decisions are a large part in determining the direction of your game.", medium)
-    $show_message("You should definitely try to save before each one, and make different choices.", medium)
+    $show_message("This is your first nightly decision.", "medium")
+    $show_message("Nightly decisions are a large part in determining the direction of your game.", "medium")
+    $show_message("You should definitely try to save before each one, and make different choices.", "medium")
     
     $ decision = "1"        
     menu:   
         "Sleep."
-                $ sleep = True
+             call sleep  
                 jump Scene16
             
         "Search."
-                #call show_map
-                jump Scene15 
+             call show_map
+                  
 
 label Scene15:
      scene bg blackscr
@@ -2344,7 +2343,7 @@ label Scene15:
     
     show ro pout at right with dissolve
     ro "Uhm. Well, actually, I used to be a cook back when I was a servant. I mostly prepared...us. Majin. It’s not fun to find out that your friend is your next meal."
-    $unlock_entry(Roman,008)
+    $unlock_entry("Roman","008")
     $renpy.pause(1.0)
     
     show r neu at left with dissolve
@@ -2357,12 +2356,12 @@ label Scene15:
     
     show ro neu at right with dissolve
     ro "That’s correct. I'm a vegan."
-    $unlock_entry(Roman,006)
+    $unlock_entry("Roman","006")
  
     ro "Their animal friends may not exact revenge, but I just can't stand to think of eating a creature that can cry out in pain." 
     ro "To humans, we're every bit an animal as any cow, chicken or lamb."
     
-    $unlock_entry(Humans,060)
+    $unlock_entry("Humans","060")
 
     show r upset at left with dissolve   
     r "Not...-all- humans."
@@ -2371,7 +2370,7 @@ label Scene15:
     ro "Oh, forgive me. I didn’t mean---"
     ro "I agree with you. Many are very kind people, and I also don’t support Majin eating humans either, and some do."
     
-    $unlock_entry(Majin,045)
+    $unlock_entry("Majin","045")
 
     show ro neu at right with dissolve
     ro "I just like to check. For my own sake. Were...you hungry?"
@@ -2458,20 +2457,8 @@ label Scene16:
     
     $hide_main_ui()
     with slow_fade
- 
-label sleep1:
-    $show_main_ui()
-    if sleep = True
-                $update_main_ui()
-                $show_message("You had a great night's sleep, and got a little stronger.", medium)
-                jump Scene17
-    else
-        jump Scene17
         
 label Scene17:
-    $hide_main_ui()
-    $renpy.pause(2.0)
-    
     scene bg blackscr
     $show_main_ui()
     with slow_fade
@@ -6448,17 +6435,39 @@ label Scene53:
     "Doctor Osamu leaves my room and heads off. I finally have some FREE TIME!"
 
     "I could head to the lab and work with the Doctor..."
-    "Or I could go check in on Roman.  Make sure he’s doing all right and everything.  I haven’t talked to him much recently, and he’s always happy to see me."
+    "Or I could go check in on Roman.  Make sure he’s doing all right and everything.  I haven’t talked to him much recently, and he’s always happy to see me."\
+    "I could also talk to Miss Susa about everything."
 
     r  "Hmmm..."
+    
+    $ susa_arc = False
+    $ kazu_arc = False
+    $ main_arc = False
+menu:
+    "Visit Susa."
+        $ susa_arc = True
+        jump endarc
+    "Visit Doctor Osamu."
+        $ kazu_arc = True
+        jump endarc
+    "Visit Roman."
+       $ main_arc = True
+       jump endarc
 
-    #DECISION:
-    #Visit Susa
-    #  -Go to Susa branch
-    #Visit Doctor Osamu
-    #  -Go to Doctor Osamu branch
-    #Visit Roman
-      #-Got to Canon branch
+label endarc:
+    $show_message("You have completed the first half of the game. From here, the game will follow the story of the character you've chosen.", "medium")
+    $show_message("Saving is heavily advised.", "small")
+
+menu:
+        if susa_arc:
+            "Continue."
+            jump su1
+        elif kazu_arc:
+            "Continue."
+            jump kaz1
+        elif main_arc:
+            "Continue."
+            jump main1
 
 
 
