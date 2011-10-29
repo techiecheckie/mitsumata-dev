@@ -456,7 +456,7 @@ init python:
             return displayables
 
         def render( self, blitter ):
-            world_transform = GameTransform()
+            world_transform = self.get_world_transform()
             self.background["renderer"].render( blitter, world_transform )
 
             if self.state == HUNT_GAME_STATE_BEGIN:

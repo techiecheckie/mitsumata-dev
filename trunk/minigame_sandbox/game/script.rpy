@@ -7,7 +7,8 @@ init python:
 
     games = [
         ("minigame_mole", "Whack-A-Mole"),
-        ("minigame_duck", "Hunt Duck")
+        ("minigame_duck", "Hunt Duck"),
+        ("minigame_cell", "Cells")
         ]
 
 screen games:
@@ -65,6 +66,15 @@ label minigame_duck:
     window hide None
     python:
         run_minigame( DuckHunt,
+                      0, 0,
+                      game_width, game_height )
+    window show None
+    return
+
+label minigame_cell:
+    window hide None
+    python:
+        run_minigame( Cells,
                       0, 0,
                       game_width, game_height )
     window show None
