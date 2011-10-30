@@ -313,7 +313,7 @@ image ro sad = "gfx/sprites/rosad.png"
 #image ro fight = ""
 #image ro blush = ""
 image ro worry = "gfx/sprites/roworried.png"
-image ro neu = "gfx/sprites/roneu.png"
+image ro neu = "gfx/sprites/roneutral.png"
 image ro pout = "gfx/sprites/ropout.png"
 
 #------------------------------------------------
@@ -418,6 +418,11 @@ image st bmad = "gfx/sprites/boystumad.png"
 #-----------------------------------
 #DECLARE GAME CHARS
 #-----------------------------------
+#init python:
+
+    #if lang == "english":
+    #    style.default.font = "DejaVuSans.ttf"
+        
 define su = Character('Susa', show_two_window=False)
 define r = Character('Riku', show_two_window=False)
 define ro = Character('Roman', show_two_window=False )
@@ -426,7 +431,7 @@ define l = Character('Liza', show_two_window=False)
 define m = Character('Mamoru', show_two_window=False)
 define k = Character('Doctor Osamu', show_two_window=False)
 define n = Character('Norah', show_two_window=False)
-define u =Character('u',  show_two_window=False)
+define u =Character('Unknown',  show_two_window=False)
 define dg = Character('Demon Hunter 1', show_two_window=False)
 define db = Character('Demon Hunter 2', show_two_window=False)
 define sg = Character('Student 1', show_two_window=False)
@@ -447,6 +452,12 @@ define ob = Character('Older Boy 1', show_two_window=False )
 define ob1 = Character('Older Boy 2', show_two_window=False)
 define a = Character('Audra', show_two_window=False )
 define na = Character('Naomi', show_two_window=False )
+   # elif lang == "japanese":
+   #         style.default.font = "enksh.ttf"
+   #         style.default.language = "eastasian"
+   #         style.default.size = 19
+    
+   #         config.translations["Language"] = u"言語を選択"
 
 #*****************************************
 # DYNAMIC CHARACTER NAMING
@@ -482,6 +493,14 @@ init:
 
 # We'll comment it out for now.
 #
+#label splashscreen1:
+
+#    if not persistent.chose_lang:
+#        $ persistent.chose_lang = True
+#        jump language_chooser
+
+#    return
+
 label splashscreen:
      $ renpy.pause(0)
      scene bg redscr
@@ -496,6 +515,7 @@ label splashscreen:
      hide text with dissolve
 
      return
+    
 
 #*******************************
 # EFFECT COMMANDS
@@ -504,7 +524,59 @@ init:
    $ slow_dissolve = Dissolve(3.0)
    $ slow_fade = Fade(2, 2, 3)
    $ flash = Fade(0.1, 0.0, 0.5, color="#fff")
+   
+# The two pan commands do the following.
+# Panltr pans the screen from left to right 1600 pixels, taking 10 seconds to do so.
+# Panutd pans the screen from up to down 1600 pixels, taking 10 seconds to do so.
+# The $renpy.pause() command MUST be used to delay other programming while panning is going on.
+# There must always be a full screen's worth of pixels during the pan or it will cause a problem with rendering.
+   $ panltr = Pan((0, 0), (1600, 0), 10.0)
+   $ panutd = Pan((0,1600), (0, 0), 10.0)
 
+#The below all take with commands.   
+#For example, in "wiperight", a wipe from left to right, first the left edge of the image is 
+#revealed at the left edge of the screen, then the center of the image, and finally the 
+#right side of the image at the right of the screen.   
+   $ wiperight = CropMove(1.0, "wiperight")
+   $ wipeleft = CropMove(1.0, "wipeleft")
+   $ wipeup = CropMove(1.0, "wipeup")
+   $ wipedown = CropMove(1.0, "wipedown")
+
+#In a "slideright", the right edge of the image starts at the left edge of the screen, 
+#and moves to the right as the transition progresses.   
+   $ slideright = CropMove(1.0, "slideright")
+   $ slideleft = CropMove(1.0, "slideleft")
+   $ slideup = CropMove(1.0, "slideup")
+   $ slidedown = CropMove(1.0, "slidedown")
+
+#There are also slideaways, in which the old image moves on top of the new image.   
+   $ slideawayright = CropMove(1.0, "slideawayright")
+   $ slideawayleft = CropMove(1.0, "slideawayleft")
+   $ slideawayup = CropMove(1.0, "slideawayup")
+   $ slideawaydown = CropMove(1.0, "slideawaydown")
+
+   $ irisout = CropMove(1.0, "irisout")
+   $ irisin = CropMove(1.0, "irisin")
+
+   $ noise_dissolve = ImageDissolve(im.Tile("gfx/effects/noisetile.png"), 2.0, 1)
+   
+init:
+    image snow = Snow("gfx/effects/snowflake.png")
+
+#Shaky uses the at command    
+init:
+    $ shaky = Shake((0, 0, 0, 0), 2.5, dist=20)
+
+#Shorter dissolve command for teleport
+init:
+    $ sho_dis = Dissolve(0.2)
+
+#Teleport uses the with command    
+init:
+    $ teleport = MultipleTransition([False, sho_dis, "#fff", sho_dis, False, 
+                                     sho_dis, "#fff", sho_dis,
+                                     True, sho_dis, "#fff", sho_dis, True])
+   
 #***********************
 # ITEM LABELS
 #***********************
@@ -563,8 +635,33 @@ $ magpot = inventory.item_unlocked("magpotion")
 
 label start: 
     scene bg blackscr
-    $ show_main_ui()
+    $show_main_ui()
+     
+    show bg riroom at shaky with dissolve 
+    $renpy.pause(3.0)
     
+    show boom
+    $renpy.pause(3.0)
+    
+    show snow
+    $renpy.pause(9.0)
+    hide snow
+    
+    $ double_vision_on("bg suroom")
+    $renpy.pause(2.5)
+    $ double_vision_off()
+    
+    show r happy with noise_dissolve 
+    $renpy.pause(3.0)
+    hide r happy with noise_dissolve
+    $renpy.pause(5.0)
+    
+    show ro neu at right with teleport
+    $renpy.pause(2.0)
+    
+    show bg soroom with wipedown
+    $renpy.pause(2.0)
+
     #play music "music/mitsumata1.mp3"
     #show bg rikureading
     "Once upon a time, there was a prince who was not in any way different from other fairy tale princes."
