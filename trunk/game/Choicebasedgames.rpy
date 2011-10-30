@@ -22,17 +22,18 @@ label birthdaygame:
    
     if (gift and decor and loca and bircake and surp):
         jump birthdayresults
-    else:    
-        menu:
-            "Figure out a gift."
+    else:
+        "I need to figure all this stuff out."
+menu:
+            "Figure out a gift.":
                  jump bgift
-            "What kind of decorations...?"
+            "What kind of decorations...?":
                  jump bdecor
-            "Where to put this thing?"
+            "Where to put this thing?":
                  jump bloca
-            "What kind of cake?"
+            "What kind of cake?":
                  jump bcake
-            "A special surprise...?"
+            "A special surprise...?":
                  jump bsurp
     
 label bgift:
@@ -40,16 +41,16 @@ label bgift:
         jump diditalready
     else:    
         r "Okay. I need some kind of gift. Who should I ask about that?"
-        menu:
-            "Ask Doctor Osamu."
+menu:
+            "Ask Doctor Osamu.":
                 jump gosamu
-            "Ask Soume."
+            "Ask Soume.":
                 jump gsoume
-            "Ask Susa."
+            "Ask Susa.":
                 jump gsusa
-            "Ask Liza."
+            "Ask Liza.":
                 jump gliza
-            "Do it myself."
+            "Do it myself.":
                 jump gself
                 
 label diditalready:
@@ -61,11 +62,11 @@ label gosamu:
     r "Hey Doctor Osamu, I need a gift for Roman's birthday."
     k "Mmmm. How about a nice scientific text?"
     r "Hmmmm."
-    menu: 
-        "Accept gift."
+menu: 
+        "Accept gift.":
                 $ gift = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bgift
 label gsoume:
     show bg soroom with dissolve
@@ -74,11 +75,11 @@ label gsoume:
     r "Are they dangerous...?"
     s "...mmm, that is a curious question..."
     s "Define 'danger', exactly..."
-    menu: 
-        "Accept gift."
+menu: 
+        "Accept gift.":
                 $ gift = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bgift
 label gsusa:
     show bg suroom with dissolve
@@ -86,11 +87,11 @@ label gsusa:
     s "Isn't figuring that out YOUR job?"
     r "Yeah, but--"
     s "How about this? It's an old video game I'm not using."
-    menu: 
-        "Accept gift."
+menu: 
+        "Accept gift.":
                 $ gift = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bgift
     
 label gliza:
@@ -103,21 +104,21 @@ label gliza:
     r "Roman's birthday is coming up, and I'm not sure what to get him."
     l "......."
     l "I think a spice rack, with exotic spices already set up."
-   menu: 
-        "Accept gift."
+menu: 
+        "Accept gift.":
                 $ gift = True
                 $ corrgift = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bgift
 label gself:
     r "I can figure this out. What would Roman want for his birthday?"
     r "Maybe some good, powerful sake!"
-    menu: 
-        "Accept gift."
+menu: 
+        "Accept gift.":
                 $ gift = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bgift
     
 label bdecor:
@@ -126,16 +127,16 @@ label bdecor:
         
     else:    
         r "Okay. I need decorations. Who should I ask about that?"
-        menu:
-            "Ask Doctor Osamu."
+menu:
+            "Ask Doctor Osamu.":
                 jump dosamu
-            "Ask Soume."
+            "Ask Soume.":
                 jump dsoume
-            "Ask Susa."
+            "Ask Susa.":
                 jump dsusa
-            "Ask Liza."
+            "Ask Liza.":
                 jump dliza
-            "Do it myself."
+            "Do it myself.":
                 jump dself
 
 label dosamu:
@@ -145,11 +146,11 @@ label dosamu:
     k "And close the door when you leave, I'm busy!"
     #play sound doorslam
     r "Hmph."
-    menu: 
-        "Accept decor."
+menu: 
+        "Accept decor.":
                 $ decor = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bdecor
 label dsoume:
     show bg soroom with dissolve    
@@ -157,22 +158,22 @@ label dsoume:
     s "Hmmm. I have an idea..."
     r "Really?"
     s "How about an elaborate floral arrangement?"
-    menu: 
-        "Accept decor."
+menu: 
+        "Accept decor.":
                 $ decor = True
                 $ corrdec = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bdecor
 label dsusa:
     show bg suroom with dissolve
     r "Miss Susa, sorry to bug you, but I just wanted to figure out some decorations for Roman's party..."
     s "Video game themes are always perfect."
-    menu: 
-        "Accept decor."
+menu: 
+        "Accept decor.":
                 $ decor = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bdecor
 label dliza:
     show bg hall1 with dissolve
@@ -182,22 +183,22 @@ label dliza:
     l "Ahh, hello there."
     r "I can't figure out what kind of decorations to use for Roman's birthday party. What do you think he'd like?"
     l "Hmmm, how about colorful cloth?"
-    menu: 
-        "Accept decor."
+menu: 
+        "Accept decor.":
                 $ decor = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bdecor
 label dself:
     r "I'm a smart kid. Decorations should be easy!"
     r "..."
     r "............."
     r "The temple is already pretty decorative by itself."
-    menu: 
-        "Accept decor."
+menu: 
+        "Accept decor.":
                 $ decor = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bdecor
     
 label bloca:
@@ -206,16 +207,16 @@ label bloca:
         
     else:    
         r "Okay. I need someplace to put this. Who should I ask about that?"
-       menu:
-            "Ask Doctor Osamu."
+menu:
+            "Ask Doctor Osamu.":
                     jump losamu
-            "Ask Soume."
+            "Ask Soume.":
                     jump lsoume
-            "Ask Susa."
+            "Ask Susa.":
                     jump lsusa
-            "Ask Liza."
+            "Ask Liza.":
                     jump lliza
-            "Do it myself."
+            "Do it myself.":
                     jump lself
 
 label losamu:
@@ -223,11 +224,11 @@ label losamu:
     r "Hey Doc, where do you think I should have Roman's birthday party?"
     k "You can have it in the library if you clean it from top to bottom."
     "This place is pretty filthy..."
-    menu: 
-        "Accept location."
+menu: 
+        "Accept location.":
                 $ loca = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bloca
 label lsoume:
     show bg soroom with dissolve    
@@ -235,22 +236,22 @@ label lsoume:
     s "Well, holding it in this room might be fun!"
     s "We can play 'dodge the cake-eating plants' as a game!"
     s "Doesn't that sound like such fun?"
-    menu: 
-        "Accept location."
+menu: 
+        "Accept location.":
                 $ loca = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bloca
 label lsusa:
     show bg suroom with dissolve
     r "Miss Susa, I can't think of a good place to hold the party."
     s "Mmm. I guess you can use the main room. It's pretty big and people don't usually go in there."
-    menu: 
-        "Accept location."
+menu: 
+        "Accept location.":
                 $ loca = True
                 $ corrloc = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bloca
 label lliza:
     show bg hall1 with dissolve
@@ -262,20 +263,20 @@ label lliza:
     l "Hm. How about the kitchen?"
     l "As long as someone's cleaned it..."
     "I'm not sure if it's clean..."
-    menu: 
-        "Accept location."
+menu: 
+        "Accept location.":
                 $ loca = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bloca
 label lself:
     r "Alright, a location, location, location..."
     r "How about right in Roman's room? It's not that big, but that'll be surprising!"
-    menu: 
-        "Accept location."
+menu: 
+        "Accept location.":
                 $ loca = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bloca      
     
 label bcake:
@@ -284,16 +285,16 @@ label bcake:
         
     else:    
         r "Okay. I need a cake. Who should I ask about that?"
-        menu:
-            "Ask Doctor Osamu."
+menu:
+            "Ask Doctor Osamu.":
                     jump cosamu
-            "Ask Soume."
+            "Ask Soume.":
                     jump csoume
-            "Ask Susa."
+            "Ask Susa.":
                     jump csusa
-            "Ask Liza."
+            "Ask Liza.":
                     jump cliza
-            "Do it myself."
+            "Do it myself.":
                     jump cself
                 
 label cosamu:
@@ -304,33 +305,33 @@ label cosamu:
     k "Ta-da!"
     r "...what is it?"
     k "A cake made entirely from fungi!"
-    menu: 
-        "Accept cake."
+menu: 
+        "Accept cake.":
                 $ bircake = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bcake
 label csoume:
     show bg soroom with dissolve    
     r "Soume, I don't know where I should get a cake for Roman's birthday..."
     s "I'm not really knowledgeable about cakes..."
     s "But how about a cake from the place your mother got the one she sent you?"
-    menu: 
-        "Accept cake."
+menu: 
+        "Accept cake.":
                 $ bircake = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bcake
 label csusa:
     show bg suroom with dissolve
     r "Miss Susa, can you help me with Roman's birthday cake?"
     s "Ice cream cake."
     "...she's too absorbed in playing video games right now."
-    menu: 
-        "Accept cake."
+menu: 
+        "Accept cake.":
                 $ bircake = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bcake
 label cliza:
     show bg hall1 with dissolve
@@ -338,22 +339,22 @@ label cliza:
     l "Hello?"
     r "Hi there, Liza, I just had a quick question. What kind of cake do you think Roman would like at his party?"
     l "Oh my hm...perhaps decorative cupcakes?"
-    menu: 
-        "Accept cake."
+menu: 
+        "Accept cake.":
                 $ bircake = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bcake
 label cself:
     r "A cake."
     r "There are tons of recipe books in the kitchen."
     r "I bet I can find a vegan or whatever one and just make it."
-    menu: 
-        "Accept cake."
+menu: 
+        "Accept cake.":
                 $ bircake = True
                 $ corrcake = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bcake
     
 label bsurp:
@@ -362,16 +363,16 @@ label bsurp:
         
     else:    
         r "Okay. I need an extra surprise. Who should I ask about that?"
-        menu:
-            "Ask Doctor Osamu."
+menu:
+            "Ask Doctor Osamu.":
                     jump sosamu
-            "Ask Soume."
+            "Ask Soume.":
                     jump ssoume
-            "Ask Susa."
+            "Ask Susa.":
                     jump ssusa
-            "Ask Liza."
+            "Ask Liza.":
                     jump sliza
-            "Do it myself."
+            "Do it myself.":
                     jump sself
 
 label sosamu:
@@ -379,12 +380,12 @@ label sosamu:
     r "Doctor Osamu, I need a special surprise for Roman's party. I have no clue what to get."
     k "Hm. I have an idea."
     k "Invite his friend Liza over for the day."
-    menu: 
-        "Accept special surprise."
+menu: 
+        "Accept special surprise.":
                 $ surp = True
                 $ corrsur = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bsurp
 label ssoume:
     show bg soroom with dissolve    
@@ -393,21 +394,21 @@ label ssoume:
     s "...I could poison everyone..."
     s "That would be very surprising."
     r "...uh..."
-    menu: 
-        "Accept special surprise."
+menu: 
+        "Accept special surprise.":
                 $ surp = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bsurp
 label ssusa:
     show bg suroom with dissolve
     r "Miss Suuusaaaaa. I need help with the special surprise for Roman's birthdayyyyy!"
     s "Howsabout a punch to the face and extra chores for a month cause you keep bugging me?"
     menu: 
-        "Accept special surprise."
+        "Accept special surprise.":
                 $ surp = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bsurp
 label sliza:
     show bg hall1 with dissolve
@@ -416,20 +417,20 @@ label sliza:
     l "I...surprises aren't really my specialty..."
     l "How about a weapon he can train with?"
     menu: 
-        "Accept special surprise."
+        "Accept special surprise.":
                 $ surp = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bsurp
 label sself:
     r "If I just focus, it will be easy to figure out a special surprise for Roman's birthday."
     r "......."
     r "I COULD SPIKE THE PUNCH BOWL!"
     menu: 
-        "Accept special surprise."
+        "Accept special surprise.":
                 $ surp = True
                 jump birthdaygame
-        "Maybe something else..."
+        "Maybe something else...":
                 jump bsurp
 
                 
@@ -447,40 +448,39 @@ label birthdayresults:
         jump failparty
         
 label perfectparty:
-    "Woo this party rocks."
-    su  "Looks like I picked the right person for the job. Great job today.  Surprisingly good, in fact."
+    su  "Looks like I picked the right person for the job. Everything looks to be in order."
     
     r  "Hey.  Thanks.  Wasn’t really expecting that."
     
     su  "Yeah, well, don’t let it go to your head.  But still, next time I need something, I guess I know who to go to."
     
-    "I don’t know what to say.  I have to admit, I like the fact that Susa is trusting me with more stuff.  This is far better than when she used to just beat me with whatever she had in her hand."
+    "I don’t know what to say.  I have to admit, I like the fact that Susa is trusting me with more stuff."  
+    "This is way better than when she used to just beat me with whatever she had in her hand."
+    "Not too sure I want more work, though..."
     
-    "But still, this just sounds like I’ll have more work to do now.  Which isn’t something I really am looking forward to."
+    su  "Well here. Have that. For a job well done."
     
-    su  "Here…uh, take this.  For a job well done, and all that."
+    "Susa hands me SOMETHING HERE PLZ."
     
-    "Susa hands me some sort of dark looking stone on a chain.  I grab it from her, but I don’t really know what to do with it."
-    
-    r  "What…uh…what is this?"
+    r  "What's this?"
     
     su  "It's just supposed to help you out in battle. So don't say I never gave you anything."
     
     "Now I really don’t know what to say.  Susa has never given me anything before.  I look up at her, but no words are coming out."
     
-    su  "Aw fuck, don’t go getting all emotional on me now.  It’s just a stupid amulet.  I’ve got dozens.  No skin off my back, kid.  Just take it and be glad I gave it to ya."
+    su  "Aw fuck, don’t go getting all emotional on me now.  Just take it and be glad I gave it to ya."
     #$ unlock_item("boob")
     $ perparty = True
     return
 label decentparty:
-    "Hey this party is awlright."
+    su "Well, I guess this'll have to do."
     return
 label okparty:
-        "Good enough."
+     su "Good enough, I guess."
+     return
+label fehparty:
+        su "Could be better..."
         return
-label fehparty
-        "Could be better..."
-        return
-label failparty
-        "You suck, Riku."
+label failparty:
+        su "Ugh, I don't know why I bothered to trust you with something this easy."
         return
