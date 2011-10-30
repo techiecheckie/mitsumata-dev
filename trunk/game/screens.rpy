@@ -492,3 +492,57 @@ screen yesno_prompt:
 init -2 python:    
     style.yesno_button.size_group = "yesno"
     style.yesno_label_text.text_align = 0.5
+
+#This code is the language chooser.
+#label language_chooser:
+#    scene black
+    
+#    menu:
+#        "{font=DejaVuSans.ttf}English{/font}":
+#            $ persistent.lang = "english"
+#       "{font=enksh.ttf}日本語{/font}":
+#            $ persistent.lang = "japanese"
+
+#    $ renpy.utter_restart()
+    
+#This code changes the menu after reaching an ending.    
+#screen main_menu:
+#    tag menu
+#Must change these labels for Endings, here.
+#    if persistent.ending == "Ending 1":
+#        use main_menu_1
+#    else:
+#        use main_menu_default
+
+        
+        
+#------------------------------------------------------------------------------
+#Use the below code to declare the different kinds of menu
+#------------------------------------------------------------------------------
+
+#screen main_menu_default:
+#    tag menu
+
+#    imagemap:
+#        ground 'menu.png'
+#        hover 'menuhover.png'
+       
+#        hotspot (522, 251, 722, 300) action Start()
+#        hotspot (522, 315, 722, 363) action ShowMenu('load')
+#        hotspot (522, 378, 722, 426) action ShowMenu('preferences')
+#        hotspot (522, 443, 722, 492) action Help()
+#        hotspot (522, 506, 722, 554) action Quit(confirm=False)   
+        
+#screen main_menu_1:
+#    tag menu
+
+#    imagemap:
+#        ground 'menugood.png'
+#        hover 'menugoodhover.png'
+       
+#        hotspot (522, 251, 722, 300) action Start()
+#        hotspot (522, 315, 722, 363) action ShowMenu('load')
+#        hotspot (522, 378, 722, 426) action ShowMenu('preferences')
+#        hotspot (522, 443, 722, 492) action Help()
+#        hotspot (522, 506, 722, 554) action Quit(confirm=False)   
+        
