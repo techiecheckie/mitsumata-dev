@@ -32,14 +32,14 @@ init python:
     CELL_SPEED = 70
 
     # static locations and dimensions.
-    PETRI_DISH_X = 53
-    PETRI_DISH_Y = 41
+    PETRI_DISH_X = 17
+    PETRI_DISH_Y = 0
 
     GRID_CELL_WIDTH  = 48
     GRID_CELL_HEIGHT = 48
 
-    NUMBER_GRID_ROWS = 11
-    NUMBER_GRID_COLS = 11
+    NUMBER_GRID_ROWS = 12
+    NUMBER_GRID_COLS = 12
 
     def convert_grid_cell( grid_cell ):
         x = grid_cell[1] * GRID_CELL_WIDTH + GRID_CELL_WIDTH / 2
@@ -64,24 +64,11 @@ init python:
                                                     level.human_move_countdown[1] )
 
             # setup entities.
-            self.background      = None
             self.dish            = None
             self.human_cells     = []
             self.ai_cells        = []
             self.grid            = {}
-            # self.available_cells = [                      (0,4), (0,5), (0,6),
-            #                                 (1,2), (1,3), (1,4), (1,5), (1,6), (1,7), (1,8),
-            #                          (2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (2,7), (2,8), (2,9),
-            #                          (3,1), (3,2), (3,3), (3,4), (3,5), (3,6), (3,7), (3,8), (3,9),
-            #                          (4,1), (4,2), (4,3), (4,4), (4,5), (4,6), (4,7), (4,8), (4,9),
-            #                          (5,1), (5,2), (5,3), (5,4), (5,5), (5,6), (5,7), (5,8), (5,9),
-            #                          (6,1), (6,2), (6,3), (6,4), (6,5), (6,6), (6,7), (6,8), (6,9),
-            #                          (7,1), (7,2), (7,3), (7,4), (7,5), (7,6), (7,7), (7,8), (7,9),
-            #                          (8,1), (8,2), (8,3), (8,4), (8,5), (8,6), (8,7), (8,8), (8,9),
-            #                                 (9,2), (9,3), (9,4), (9,5), (9,6), (9,7), (9,8),
-            #                                             (10,4), (10,5), (10,6) ]
 
-            self.create_background()
             self.create_dish()
             self.create_cells()
 
@@ -93,10 +80,6 @@ init python:
             self.spawn_cell( HUMAN_CELL_TYPE )
             self.spawn_cell( HUMAN_CELL_TYPE )
             self.spawn_cell( HUMAN_CELL_TYPE )
-
-        def create_background( self ):
-            self.background             = GameObject()
-            self.background["renderer"] = GameRenderer( GameImage( "gfx/cells/background.png" ) )
 
         def create_dish( self ):
             self.dish             = GameObject()
@@ -121,57 +104,31 @@ init python:
             PrefabFactory.add_prefab( AI_CELL_TYPE, ai_cell )
 
         def build_grid( self ):
+            # the grid defines a mesh consisting of 48x48 px cells overlayed
+            # on the petri dish image.  the out of bounds cells below are
+            # those cells that are outside the area of the petri dish in
+            # which game cells can move about.  these are initially set as
+            # occupied and can never be unoccupied based on the current game
+            # rules.
             for row in xrange( NUMBER_GRID_ROWS ):
                 for col in xrange( NUMBER_GRID_COLS ):
                     self.grid[(row, col)] = GridCellState()
 
-            # the following locations are outside the list of grid cells that
-            # a game cell can occupy.
-            self.grid[(0,0)].occupied  = True
-            self.grid[(0,1)].occupied  = True
-            self.grid[(0,2)].occupied  = True
-            self.grid[(0,3)].occupied  = True
-            self.grid[(0,7)].occupied  = True
-            self.grid[(0,8)].occupied  = True
-            self.grid[(0,9)].occupied  = True
-            self.grid[(0,10)].occupied = True
+            occupied_cells = [ (0,0),  (0,1),  (0,2),  (0,3),  (0,4),  (0,5),  (0,6),  (0,7),  (0,8),  (0,9),  (0,10),  (0,11),
+                               (1,0),  (1,1),  (1,2),  (1,3),  (1,4),  (1,5),  (1,6),  (1,7),  (1,8),  (1,9),  (1,10),  (1,11),
+                               (2,0),  (2,1),  (2,2),  (2,3),                                          (2,9),  (2,10),  (2,11),
+                               (3,0),  (3,1),                                                                  (3,10),  (3,11),
+                               (4,0),  (4,1),                                                                           (4,11),
+                               (5,0),  (5,1),                                                                           (5,11),
+                               (6,0),                                                                                   (6,11),
+                               (7,0),  (7,1),                                                                           (7,11),
+                               (8,0),  (8,1),                                                                  (8,10),  (8,11),
+                               (9,0),  (9,1),  (9,2),                                                          (9,10),  (9,11),
+                               (10,0), (10,1), (10,2), (10,3), (10,4),                         (10,8), (10,9), (10,10), (10,11),
+                               (11,0), (11,1), (11,2), (11,3), (11,4), (11,5), (11,6), (11,7), (11,8), (11,9), (11,10), (11,11) ]
 
-            self.grid[(1,0)].occupied  = True
-            self.grid[(1,1)].occupied  = True
-            self.grid[(1,9)].occupied  = True
-            self.grid[(1,10)].occupied = True
-
-            self.grid[(2,0)].occupied  = True
-            self.grid[(2,10)].occupied = True
-
-            self.grid[(3,0)].occupied  = True
-            self.grid[(3,10)].occupied = True
-
-            self.grid[(4,0)].occupied  = True
-            self.grid[(4,10)].occupied = True
-
-            self.grid[(6,0)].occupied  = True
-            self.grid[(6,10)].occupied = True
-
-            self.grid[(7,0)].occupied  = True
-            self.grid[(7,10)].occupied = True
-
-            self.grid[(8,0)].occupied  = True
-            self.grid[(8,10)].occupied = True
-
-            self.grid[(9,0)].occupied  = True
-            self.grid[(9,1)].occupied  = True
-            self.grid[(9,9)].occupied  = True
-            self.grid[(9,10)].occupied = True
-
-            self.grid[(10,0)].occupied  = True
-            self.grid[(10,1)].occupied  = True
-            self.grid[(10,2)].occupied  = True
-            self.grid[(10,3)].occupied  = True
-            self.grid[(10,7)].occupied  = True
-            self.grid[(10,8)].occupied  = True
-            self.grid[(10,9)].occupied  = True
-            self.grid[(10,10)].occupied = True
+            for cell in occupied_cells:
+                self.grid[cell].occupied = True
 
         def spawn_cell( self, cell_type ):
             available_cells = []
@@ -202,7 +159,6 @@ init python:
 
         def get_displayables( self ):
             displayables = []
-            displayables.extend( self.background["renderer"].get_displayables() )
 
             for cell in itertools.chain( self.human_cells, self.ai_cells ):
                 displayables.extend( cell["renderer"].get_displayables() )
@@ -213,13 +169,12 @@ init python:
 
         def render( self, blitter ):
             world_transform = self.get_world_transform()
-            self.background["renderer"].render( blitter, world_transform )
+            self.dish["renderer"].render( blitter, world_transform )
 
             cell_transform = world_transform + self.dish["transform"]
             for cell in itertools.chain( self.ai_cells, self.human_cells ):
                 cell["renderer"].render( blitter, cell_transform )
 
-            self.dish["renderer"].render( blitter, world_transform )
 
         def update( self, delta_sec ):
             # update all cells.
