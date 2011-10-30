@@ -1,7 +1,8 @@
 #*************************
 # Kazutaka's Branch
 #*************************
-#Currently at 1778 out of 3509
+#Currently at 1900 out of 3542
+#Add scene where Kaz is on the phone with Liza.
 
 label kaz1:
     "I could go check on the doctor. He was the most shaken up."  
@@ -1776,93 +1777,125 @@ menu:
         $unlock_entry("something", "031")
         
 label kaz14:
-    k  "Riku, this reminds me, can you please come see me in my lab at some point tomorrow.  I have something I would like to talk to you about."
-    r  "Hrm?  What’s that?"    
-    k  "Hmph.  Great is a rather plebian way to describe it.  You shouldn’t use the same word to describe a nice pie and the honor I am about to bestow upon you."
+    "This morning is an unlucky morning, I think."
+    "I stepped on something really hard hiding under all my clothes when I got up."
+    "And now this..."
+   
+    k  "Riku, would you please come see me in my lab at some point this evening?  I have something I would like to talk to you about."
+    r  "...something like...?"    
+    k  "Stop talking back and just BE here tonight."
     
-    "I roll my eyes.  I try not to, but I can’t fucking help it.  Even when he’s being nice to me, he’s a complete asshole.  Sorry for not being more excited, Doc, but I am familiar with what you think is an honor."
+    "He probably just wants me so he can test his new strain of bacteria out."
     
-    "I’ll probably be the lucky guy that he tests his new strain of bacteria out on."
+    r "Can't you just gimme a hint? A little one?"
     
-    "I look around for something to excuse my self to go do, and while I’m desperately searching, Roman enters the room with Liza."  
-    "I turn to make up some shit about how I need to talk to Roman, but before I can Kazu is already up and wiping his face."
+    "...guess not, with the way he's looking at me."
     
-    k  "Look, it was “great” talking to you, Riku, but I have other matters to attend to now.  Just remember to come to my lab tomorrow sometime.  Please plan on arriving in the early afternoon."
+    r "Fine, fine. I'll be there."
     
-    r  "Uh, sure thing, Doc."
+    k "Much obliged."
     
-    "I’m positive he doesn’t hear me as he’s already a couple feet away by the time I get my response out."  
-    
-    r  "Unless I can think of some way out of it."
-    
-    "I mumble that last part, but it wouldn’t matter anyway.  I’ve lost him in the crowd, and, instead, I see Roman walking over to me.  He’s rummaging for something in his pocket."
-    
+    "Grrrr..."
     
 label kaz15:
     k  "I want to thank you for coming here to meet with me."
     
-    l  "I already told you, Doctor, I came here for Roman.  Meeting up with you was only a fortunate coincidence."
+    l  "I already told you, Doctor, I came here for Roman. Having the extra time to meet with you was only a fortunate coincidence."
     
-    k  "Well, regardless, you have received my messages then?"
+    k  "Well, regardless, you understand the situation at hand."
     
-    l  "Yes.  They have been forwarded to me.  I have to admit, I am a little confused as to why you don’t just bring this matter up to Susa.  She seems the most able to handle it."
+    l  "Perhaps, but I have to admit, I am a little confused as to why you don’t just bring this matter up to Susa. She is quite apt to handle it."
     
-    k  "Hmph.  I tried!  She’s too close to the situation.  She doesn’t believe me.  She won’t even listen to what I have to say."  
+    k  "Hmph. I tried!  She’s too close to the situation.  She doesn’t believe me.  She won’t even listen to what I have to say."  
     
-    l  "Well, even you must admit, this is a rather hard to believe accusation.  And, on top of that, you have no concrete proof to support your theory."  
+    l  "Well, even you must admit, this is a severe accusation. And you have no concrete proof to support your theory."  
     
-    k  "You have to trust me!  I know, perhaps, you are wary of me because of what you have heard in the past, but I know that there is a spy here.  In the rescue."
-    
-    l  "I can’t just go around assaulting people based on hunches.  I am not taking any action until you can present me with evidence as to what is happening."
+    k  "I need for you to trust my talent. I know, perhaps, you are wary of me because of what you have heard in the past..."
+    k "But there is no doubt in my mind. Soume is working as a double agent."
+    l "Mm."
+    $renpy.pause(1.0)
+    l  "I cannot move on a hunch, Doctor. I cannot take action without evidence."
     
     k  "So, even you-"
     
-    l  "I’m not saying I will not help you.  But not yet.  Build a case, find some evidence.  I will not risk angering Susa unless I am completely convinced as to what you are saying."
+    l  "I’m not saying I will not help you."  
+    l "But there are too many things at stake to risk being incorrect."
     
-    k  "Ngh.  But…this will prove difficult considering my sensory powers seem to have been blocked.  I have been having trouble lately, even in the sanctity of my lab."
+    k  "My sensory powers are being toyed with. I have been having trouble lately, even in the sanctity of my lab."
+    k "Is that not proof enough of something going on on temple grounds?"
     
-    l  "Well, this might be true, but if what I have heard from Susa is true, your powers of deduction are unrivaled amongst Majin."  
+    l  "But it is not proof that it is Soume."  
     
-    k  "Well, yes, that is certainly the case.  I would wager that even in comparison to humans, my reasoning would be considered elite."
+    k  "It MUST be him! There is no one else with that level of capability!"
     
-    l  "Well, then, if you cannot access your sensory powers, perhaps it is time to approach this problem differently."
+    l "And I am afraid that once more, I must ask for proof of this claim."
     
-    k  "Meaning?"
+    k "The circumstantial evidence is enough for a further look!"
     
-    l  "Find out what is interfering with your sensory powers, Doctor, and I believe we will be able to discover the spy.  If there, in fact, is one."
+    l "Then you must make that evidence concrete."
+    l "I am dealing with another issue that is extremely important..."
+    l "I cannot spare the time to examine this in your stead."
+       
+    k  "Damnit, what the hell do you expect me to do?"
+    k "I can't get near him."
     
-    k  "Ah.  Well, yes, of course I had thought of that.  It was something that occurred to me a while ago, actually.  However, I have been able to find nothing out of the ordinary."
+    l "Of course you cannot."
+    l "He is not stupid either."
     
-    l  "Well, I would recommend you think of something.  And quickly, if the problem is as urgent as you believe it to be."  
+    $renpy.pause(2.0)
+    l "Look."
+    l "I think that what you claim is not impossible."
+    l "But two people I hold in very high regard trust Soume with their lives."
+    l "If you can pin even one thing on Soume, I will personally face him."
+    l  "Find out what is interfering with your sensory powers, and we may be able to use that to make a case."
+    l "If there is one."
+    
+    k  "I have been able to find nothing out of the ordinary."
+    
+    l  "Well, I would recommend you think of something, quickly, if the problem is as urgent as you believe it to be."  
     l "I’ll do what I can from my end, but until we have an actual link to a suspect, I won’t be able to do anything substantial."
     
-    k  "And what about Miss Susa?  She told me to stop investigating matters, and that I would need to trust her judgment."
+    k  "And what about Miss Susa?  She told me to stop investigating matters, and that I should trust her judgement."
     
-    l  "Well then, it would be to your benefit to not get caught.  For now, I shall keep quiet about our dealings.  If the time comes that something needs to be done, I will speak to her directly."
+    l  "Well then, it would be to your benefit to not get caught."
+    l "I shall keep quiet about our dealings.  If the time comes that something needs to be done, I will speak to her directly."
     
-    k  "Liza, I cannot thank you enough!  I have felt so desperate, so alone, that I-"
+    k  "May I ask you something?"
     
-    l  "I have done nothing yet.  And I will not do anything until you find something."  
-    l "But be warned, whatever you are going to do, do not endanger anyone in the rescue."  
-    l "If I hear of you attacking someone, or experimenting on something dangerous, I will alert Susa to your actions immediately.  Understood?"
+    l "You may ask. I don't guarantee an answer."
     
-    k  "Ah.  Yes.  Yes, I understand.  Do not worry.  I will be cautious.  And I am grateful to have you on my side."
+    k "Why are you so open to this idea?"
     
-    l  "I am not 'on your side.'  I am currently merely entertaining the possibility that you might be right.  And I am only doing it because I worry about Roman’s safety here."
+    l  "Why indeed."
+    
+    k "Miss Susa dismissed me outright."
+    k "Many have said I am being unfair."
+    k "But you are at least listening to me."
+    
+    k "Why?"
+    
+    l "Don't mistake my intentions, Doctor."
+    l "I am not 'on your side' or anything of that sort."
+    l "I am merely entertaining the possibility that you are correct."
+    l "And, I worry about Roman's safety."
     
     k  "Of course.  You will forgive me, I suspect, if I misspoke."
     
-    l  "Yes, well…here.  This is my direct number.  You call this number immediately if you find anything out.  I will call you if I manage to discover anything."
+    l  "It is nothing."
+    l "Take this. It is my direct line."  
+    l "You may call this number immediately if you find anything out. I will call you if I manage to discover anything on my end."
     
-    k  "And how long do you think it might take you?"
+    k  "Do you believe you will?"
     
-    l  "I cannot say for certain.  There are a couple people I know that can look into stuff like this.  There might be other ways to discover what is happening here, beyond your sensory powers."
+    l  "I cannot say anything for certain."
     
-    k  "Right, well, keep in touch, if you don’t mind.  I would like to hear about your progress."
+    k  "Right, well, keep in touch, if you don’t mind."
     
-    l  "I’ll call when I feel like I have some information you need to know, and not before that.  Now, please, let us return to the party.  Roman will notice I have left soon."
+    l  "I’ll call when I feel like I have some information you need to know, and not before that."
     
-    k  "Go on without me.  I have a lot of work I need to do at the moment.  I hope to talk to you shortly."
+    k  "Understood."
+    
+    l "Then, Doctor, I bid you good evening."
     
 label kaz16:
     r  "Uh…hey, Doc?"
