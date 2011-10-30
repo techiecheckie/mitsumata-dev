@@ -267,3 +267,16 @@ init -50 python:
     def show_mouse():
         renpy.game.less_mouse = False
 
+    def almost_equal( a, b, tolerance=1e-3 ):
+        renpy.log( "Absolute error: %s " % abs( a - b ) )
+        if abs( a - b ) < tolerance:
+            return True
+
+        rerror =  abs( (a - b) / (b if abs(b) > abs(a) else a) )
+        renpy.log( "Relative error: %s" % rerror )
+        return rerror <= tolerance
+
+    def sign( number ):
+        if number == 0:
+            return 0
+        return 1 if number > 0 else -1

@@ -1,6 +1,16 @@
 init python:
     import itertools
 
+    class CellLevel( object ):
+        def __init__( self, ai_move_countdown, human_move_countdown ):
+            self.ai_move_countdown    = ai_move_countdown
+            self.human_move_countdown = human_move_countdown
+
+    CELL_LEVELS = [
+        CellLevel( ai_move_countdown    = (0.6, 0.85),
+                   human_move_countdown = (0.7, 0.9) )
+        ]
+
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####
 
     # animation names.
@@ -18,6 +28,9 @@ init python:
     AI_CELL_TYPE    = "ai_cell"
     HUMAN_CELL_TYPE = "human_cell"
 
+    # how fast a cell moves on either axis in pixels per second.
+    CELL_SPEED = 70
+
     # static locations and dimensions.
     PETRI_DISH_X = 53
     PETRI_DISH_Y = 41
@@ -28,11 +41,27 @@ init python:
     NUMBER_GRID_ROWS = 11
     NUMBER_GRID_COLS = 11
 
-    # those grid cells in the petri dish that can be occupied by game cells.
+    def convert_grid_cell( grid_cell ):
+        x = grid_cell[1] * GRID_CELL_WIDTH + GRID_CELL_WIDTH / 2
+        y = grid_cell[0] * GRID_CELL_HEIGHT + GRID_CELL_HEIGHT / 2
+        return (x, y)
 
     class Cells( Minigame ):
         def __init__( self, level_number=1 ):
             super( Cells, self ).__init__()
+
+            if level_number > len( CELL_LEVELS ) or level_number <= 0:
+                raise ValueError( "Invalid Cell level number %d.  Level "
+                                  "number must be between 1 and %d." %
+                                  (level_number, len( CELL_LEVELS )) )
+
+            # set up automated level difficulty parameters.
+            level = CELL_LEVELS[level_number - 1]
+
+            self.ai_move_countdown    = Randomizer( level.ai_move_countdown[0],
+                                                    level.ai_move_countdown[1] )
+            self.human_move_countdown = Randomizer( level.human_move_countdown[0],
+                                                    level.human_move_countdown[1] )
 
             # setup entities.
             self.background      = None
@@ -60,7 +89,10 @@ init python:
             self.build_grid()
 
             # XXX: remove me.
-            self.spawn_cell()
+            self.spawn_cell( HUMAN_CELL_TYPE )
+            self.spawn_cell( HUMAN_CELL_TYPE )
+            self.spawn_cell( HUMAN_CELL_TYPE )
+            self.spawn_cell( HUMAN_CELL_TYPE )
 
         def create_background( self ):
             self.background             = GameObject()
@@ -74,7 +106,6 @@ init python:
         def create_cells( self ):
             human_cell = GameObject()
             human_cell["renderer"] = GameRenderer()
-            human_cell["behavior"] = CellBehavior( self.grid )
             human_cell["renderer"].add_animation( CELL_ANIMATION_PULSE,
                                                   GameAnimation( [ GameImage( "gfx/cells/human/cell-human-%d.png" % frame_index, Anchor.CENTER )
                                                                    for frame_index in xrange( NUMBER_CELL_PULSE_FRAMES ) ],
@@ -83,7 +114,6 @@ init python:
 
             ai_cell = GameObject()
             ai_cell["renderer"] = GameRenderer()
-            ai_cell["behavior"] = CellBehavior( self.grid )
             ai_cell["renderer"].add_animation( CELL_ANIMATION_PULSE,
                                                GameAnimation( [ GameImage( "gfx/cells/ai/cell-ai-%d.png" % frame_index, Anchor.CENTER )
                                                                 for frame_index in xrange( NUMBER_CELL_PULSE_FRAMES ) ],
@@ -143,7 +173,7 @@ init python:
             self.grid[(10,9)].occupied  = True
             self.grid[(10,10)].occupied = True
 
-        def spawn_cell( self ):
+        def spawn_cell( self, cell_type ):
             available_cells = []
 
             # get all available cells.
@@ -156,12 +186,19 @@ init python:
                 return
 
             # get a random unoccupied cell and populate it.
-            grid_cell = renpy.random.choice( available_cells )
-            cell      = PrefabFactory.instantiate( HUMAN_CELL_TYPE )
-            cell["behavior"].set_grid_cell( *grid_cell )
+            grid_cell        = renpy.random.choice( available_cells )
+            cell             = PrefabFactory.instantiate( cell_type )
+            cell["behavior"] = CellBehavior( self.grid,
+                                             self.human_move_countdown
+                                             if cell_type == HUMAN_CELL_TYPE
+                                             else self.ai_move_countdown )
+            cell["behavior"].set_grid_cell( grid_cell )
             cell["renderer"].play_animation( CELL_ANIMATION_PULSE )
 
-            self.human_cells.append( cell )
+            if cell_type == HUMAN_CELL_TYPE:
+                self.human_cells.append( cell )
+            else:
+                self.ai_cells.append( cell )
 
         def get_displayables( self ):
             displayables = []
@@ -194,15 +231,92 @@ init python:
                 self.quit()
 
     class CellBehavior( GameComponent ):
-        def __init__( self, game_grid ):
+        def __init__( self, game_grid, move_countdown ):
             super( CellBehavior, self ).__init__()
-            self.game_grid = game_grid
+            self.game_grid        = game_grid
+            self.grid_cell        = None
+            self.target_grid_cell = None
+            self.move_countdown   = move_countdown
+            self.move_timeout     = self.move_countdown.get_value()
 
-        def set_grid_cell( self, row, col ):
-            x = col * GRID_CELL_WIDTH + GRID_CELL_WIDTH / 2
-            y = row * GRID_CELL_HEIGHT + GRID_CELL_HEIGHT / 2
+        def move_to_grid_cell( self, grid_cell ):
+            self.target_grid_cell              = grid_cell
+            self.game_grid[grid_cell].occupied = True
+
+        def set_grid_cell( self, grid_cell ):
+            x, y = convert_grid_cell( grid_cell )
             self.game_object["transform"].set_position( x, y )
-            self.game_grid[(row,col)].occupied = True
+            self.grid_cell                     = grid_cell
+            self.game_grid[grid_cell].occupied = True
+
+        def update( self, delta_sec ):
+            self.move_timeout -= delta_sec
+
+            if self.target_grid_cell:
+                tx, ty = convert_grid_cell( self.target_grid_cell )
+                sx     = self.game_object["transform"].x
+                sy     = self.game_object["transform"].y
+                dx     = tx - sx
+                dy     = ty - sy
+
+                renpy.log( "Delta sec %s" % delta_sec )
+
+                sx += sign( dx ) * delta_sec * CELL_SPEED
+                sy += sign( dy ) * delta_sec * CELL_SPEED
+
+                renpy.log( "Target: (%s, %s).  New place: (%s, %s)" %
+                           (tx,ty,sx,sy) )
+
+                if almost_equal( sx, tx ) and almost_equal( sy, ty ):
+                    sx = tx
+                    sy = ty
+                    self.game_grid[self.grid_cell].occupied = False
+
+                    self.grid_cell        = self.target_grid_cell
+                    self.target_grid_cell = None
+                    self.move_timeout     = self.move_countdown.get_value()
+                    renpy.log( "Reached target.  Moving again in %s seconds" % self.move_timeout )
+
+                self.game_object["transform"].set_position( sx, sy )
+            elif self.move_timeout <= 0:
+                renpy.log( "Moving" )
+                # look in all directions and see if we can move to any of the cells.
+                available_cells = []
+
+                # cell to the left.
+                row = max( 0, self.grid_cell[0] - 1 )
+                col = self.grid_cell[1]
+                if not self.game_grid[(row, col)].occupied:
+                    available_cells.append( (row, col) )
+
+                # cell to the right.
+                row = min( NUMBER_GRID_ROWS - 1, self.grid_cell[0] + 1 )
+                col = self.grid_cell[1]
+                if not self.game_grid[(row, col)].occupied:
+                    available_cells.append( (row, col) )
+
+                # cell above.
+                row = self.grid_cell[0]
+                col = max( 0, self.grid_cell[1] - 1 )
+                if not self.game_grid[(row, col)].occupied:
+                    available_cells.append( (row, col) )
+
+                # cell below.
+                row = self.grid_cell[0]
+                col = min( NUMBER_GRID_COLS - 1, self.grid_cell[1] + 1 )
+                if not self.game_grid[(row, col)].occupied:
+                    available_cells.append( (row, col) )
+
+                # do something only if we don't have a free cell.
+                if available_cells:
+                    target_cell = renpy.random.choice( available_cells )
+                    renpy.log( "Moving to %s" % (target_cell,) )
+                    self.move_to_grid_cell( target_cell )
+                else:
+                    # we're not moving, so reset the move timeout and try
+                    # moving again later.
+                    self.move_timeout = self.move_countdown.get_value()
+                    renpy.log( "Failed to move.  Moving again in %s seconds" % self.move_timeout )
 
     class GridCellState( object ):
         def __init__( self ):
