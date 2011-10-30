@@ -2,7 +2,7 @@
 #NOTES TO PROGRAMMERS FROM SEIRA
 #****************************************************
 
-#Currently at line 2729 out of 6461. Check Bad Endings for necessary animation creations.
+#Currently at line 2710 out of 6473. Check Bad Endings for necessary animation creations.
 #Go to "My species...type?"
 #Line 4484 contains a puzzle minigame. 
 #Don't forget Roman's "lock" minigame.
@@ -561,7 +561,7 @@ $ magpot = inventory.item_unlocked("magpotion")
 # GAME STARTS HURR
 #--------------------------------
 
-label start:        
+label start: 
     scene bg blackscr
     $ show_main_ui()
     
@@ -649,7 +649,7 @@ label start:
     "Good night, Riku."
 
     "Night, Mom."
-    $ renpy.pause(2.0)
+    $ renpy.pause(2.0)    
     
 label Scene1:
         scene bg blackscr 
@@ -1679,10 +1679,10 @@ label Scene10:
     ro "Okay."
 
 menu:
-        "Go home first."
-                jump label Scene12
-        "Leave without going home."
-                jump label Scene13
+        "Go home first.":
+                jump Scene12
+        "Leave without going home.":
+                jump Scene13
 #* * * * ** * * *
 
 label Scene12:
@@ -1983,9 +1983,9 @@ label Scene13:
     
     ro "Well, first—here."
     
-    $ unlock_item(map)
-    $ unlock_entry(Human World, 054)
-    $ unlock_entry(Majin, 043)
+    $ unlock_item("map")
+    $ unlock_entry("Humans", "054")
+    $ unlock_entry("Majin", "043")
     
     ro "It’s a map of the whole place, and some basic information on Majin. You can just put it in your palm pilot if you want to read it later."
         
@@ -2141,10 +2141,10 @@ label Scene13:
     $ unlock_entry("Humans", "055")
 
 menu:
-    "Hang with Soume."
+    "Hang with Soume.":
         jump Scene14A
     
-    "Hang with Roman."
+    "Hang with Roman.":
         jump Scene14B
     
 label Scene14A:
@@ -2203,7 +2203,7 @@ label Scene14A:
 label Scene14B:
         scene bg blackscr
         $show_main_ui()
-        with slow fade
+        with slow_fade
         "Ten minutes. Ten minutes I've been trying to melt chocolate.  I can’t really remember how I called that fire the first time, but whatever I did, it’s not working."
         show bg room2 with dissolve
         show r upset at left with dissolve
@@ -2259,13 +2259,6 @@ label Scene14B:
         with slow_fade
         
         jump dec1
-
-label sleep:
-  $ hp += 20
-  $ mp += 20
-  $show_message("You have a long, peaceful night's sleep.", "small")
-  $update_main_ui()
-  return
   
 label dec1:
     $show_message("This is your first nightly decision.", "medium")
@@ -2273,19 +2266,23 @@ label dec1:
     $show_message("You should definitely try to save before each one, and make different choices.", "medium")
     
     $ decision = "1"        
-    menu:   
-        "Sleep."
+menu:   
+        "Sleep.":
              call sleep  
-                jump Scene16
+             jump Scene16
             
-        "Search."
-             call show_map
+        "Search.":
+            $show_message("This is your first search!", "medium")
+            $show_message("Each evening, you can search the room for treasure. Sometimes you will unlock extra scenes.", "medium")
+            $show_message("Click on items to see if there is anything behind them.", "medium")
+            $show_message("However, you can't search all night, so keep an eye on how many clicks you have left.", "medium") 
+            call show_map
                   
 
 label Scene15:
-     scene bg blackscr
-     $show_main_ui()
-     with slow_fade
+    scene bg blackscr
+    $show_main_ui()
+    with slow_fade
     
     "Bored and hungry. Time for a little late-night snack."
     
@@ -2388,11 +2385,11 @@ label Scene15:
 #* * * * * * *
 
 label Scene16:
-     scene bg blackscr
+    scene bg blackscr
      
-     scene bg maminpain
-     $show_main_ui()
-     with slow_fade
+    scene bg maminpain
+    $show_main_ui()
+    with slow_fade
     m "Nngh..."
     
     m "Damned youko."
@@ -2409,7 +2406,7 @@ label Scene16:
     
     #Mamoru makes a sound of agony.
     m "No, it’s all right, \"Norah\". Would you mind bringing me a glass of water? Aaghh--" 
-    $ Young Lady = "Norah"
+    #$ Young Lady = "Norah"
     #play sound Sound of sizzling flesh
     
     n "Okay. Hang in there."
@@ -2498,9 +2495,6 @@ label Scene17:
     show bg hall1 with dissolve
     
     show bg gar1 with dissolve
-       alpha 0.0
-       time 1.0
-       linear 1.0 alpha 1.0
     "Following the map, I head out to the training grounds. Soume’s already there, talking to the flowers as if they could talk back."
     
     show bg souwithplants with dissolve
@@ -2831,19 +2825,12 @@ label Scene20:
     #[Instructions: Welcome to your nightly decision. Like most students, Riku’s evenings are free to do as he pleases around the shrine. 
     #You can choose to explore or get an early night’s rest. Both have benefits and detriments, so choose carefully!]
 
-#label dec5:    
-    #DECISION
-    #Rest.
-    #--Receive training.
-    #--Skip 21A.
-    "You decide to sleep early...it’s late and you’re exhausted..."
-    
-    #Explore.
-    #--Receive [item]
-    #--Receive 21A.
-    
-    "You decide to explore the shrine. Susa is a bit ornery about people wandering the shrine after hours, so you only have time to explore a room or two." 
-    "Sometimes you’ll find important items or events in the room, and sometimes you’ll come up empty handed! Choose wisely!"
+menu:
+    "Search.":
+        call show_map
+    "Sleep.":
+        call sleep
+
 
 label Scene21:
 
@@ -2899,7 +2886,8 @@ label Scene22:
 
     "If there’s one thing I’ve noticed, it’s that I get much better sleep here. I haven’t had that wacky dream in a while."
     
-    "I’ve also sort of been forced to quit my vices...there’s nowhere to buy smokes, and I haven’t yet been able to find any liquor, not even for shrine ceremonies! /nWhat kind of old lady doesn’t have alcohol around?"
+    "I’ve also sort of been forced to quit my vices...there’s nowhere to buy smokes, and I haven’t yet been able to find any liquor, not even for shrine ceremonies!"
+    "What kind of old lady doesn’t have alcohol around?"
     
     "Bet she’s hiding it in some secret cupboard or something."
     
@@ -2932,9 +2920,6 @@ label Scene22:
     "Everyone suddenly stops brushing and turns to me, at attention."
     
     r "Wai-wai---WHAT?"
-
-#label minigame BeatUp
-#Minigame "Don't Get Beat Up!" Hit the key that pops up onto the screen! If you get it in time, you will block the blow. If not, you’ll take a smack to the face!
 
 label Scene23:
     r "Yaaaaaaaaaaaawn."
@@ -3190,7 +3175,16 @@ label Scene26:
     k "You’ll learn eventually. Now please remove yourself from my library. Your ignorance is starting to leak everywhere."
     
     "Oh, screw that guy. What an as---a grump. Still, what he says sticks with me. Human laws only apply to humans?"
-
+menu:
+    "Search.":
+        call show_map
+    "Sleep.":
+        call sleep
+    "Research.":
+        $show_message("From now on, you will be allowed to research with Kazutaka.", "medium")
+        $show_message("You will be able to learn a lot about the world from the information you receive here.", "medium")
+        call research_loop
+        $unlock_entry("something", "031")    
 
 label Scene27:
 
@@ -3479,15 +3473,11 @@ label Scene30a:
     "I never did get around to checking the package, though. Inside, there’s an envelope and a box."
     
     "Which should I open first?"
-    
-#label dec7:    
-    #DECISION:
-    #Open Envelope
-    #-Continue to 30 a
-    #-Continue to 30 b
-    #Open Present
-    #-Continue to 30 b
-    #-Continue to 30 a
+menu:
+        "Open Envelope.":
+                jump Scene30
+        "Open Present.":
+            jump Scene30b
 
 label Scene30:
     "Might as well see what’s in here. Probably some sappy card Mom got from the store. Never read these things, but-"
@@ -3504,32 +3494,37 @@ label Scene30:
     
     "Ugh. Fuuuuu…fudge. I completely forgot about the old crab’s stupid toy gun. I guess I could use this to get a new one. Or I could just blow it on liquor and other junk I actually want. Hmmm…"
 
-#label dec8:
-#Decision:
-#Use Money On Yourself
-#-Bad End 2
-#Purchase Susa a new Hunt Duck gun
-#-Continue
-
+menu:
+        "Use money on yourself.":
+            jump badend2
+        "Agree to purchase Susa a new gun.":
+            jump Scene30_1
+            
+label Scene30_1:
     r  "Ugh. Can’t believe I’m going to do this."
     
     "Just so you know, I'm doing this because I feel like it. Not because I owe her. Not cause I’m afraid of her, either. It’s just…uh, screw it, I AM afraid of her."
-
+    jump Scene32
 label Scene30b:
     "I’m opening the box first. Envelopes are for chumps."
     
     "The scent creeping out and working its way through my nose means only one thing: Mom got me a cake."  
     
     "It’s a fucking strawberry shortcake. It’s the biggest fucking strawberry shortcake I’ve ever seen. I might actually manage to leave some until tomorrow!"
+    $unlock_item("cake")
+    
+menu:
+    "Share cake with Soume and Roman.":
+        jump Scene31
+    
+    "Eat by yourself.":
+        jump Scene30c
 
-#label dec9:    
-    #DECISION:
-    #Share with Soume and Roman.
-    #-Continue to Scene 31
-    #Eat by yourself
-    #-r "What the heck was I thinking? This is the first treat I’ve had since I got here. Let THEIR parents send THEM cake."
-    #-Receive training boost
-    #-Skip Scene 31
+label Scene30c:
+    r "What the heck was I thinking? This is the first treat I’ve had since I got here. Let THEIR parents send THEM cake."
+    $hp+=20
+    $mp+=20
+    jump Scene32
 
 label Scene31:
 
@@ -4593,6 +4588,16 @@ label Scene39:
     
     m "You’re forgiven, but into the bath before it starts to smell!"
 
+menu:
+    "Search.":
+        call show_map
+    "Sleep.":
+        call sleep
+    "Store.":
+        call shop_loop
+    "Research.":
+        call research_loop
+        $unlock_entry("something", "031")        
 label Scene40:
 #Soume whispers. His voice sounds a bit harsh.
 
@@ -6444,13 +6449,13 @@ label Scene53:
     $ kazu_arc = False
     $ main_arc = False
 menu:
-    "Visit Susa."
+    "Visit Susa.":
         $ susa_arc = True
         jump endarc
-    "Visit Doctor Osamu."
+    "Visit Doctor Osamu.":
         $ kazu_arc = True
         jump endarc
-    "Visit Roman."
+    "Visit Roman.":
        $ main_arc = True
        jump endarc
 
@@ -6459,14 +6464,12 @@ label endarc:
     $show_message("Saving is heavily advised.", "small")
 
 menu:
+    "Continue.":
         if susa_arc:
-            "Continue."
             jump su1
         elif kazu_arc:
-            "Continue."
             jump kaz1
         elif main_arc:
-            "Continue."
             jump main1
 
 

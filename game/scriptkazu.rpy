@@ -1,7 +1,7 @@
 #*************************
 # Kazutaka's Branch
 #*************************
-#Currently at 1366 out of 3514
+#Currently at 1778 out of 3509
 
 label kaz1:
     "I could go check on the doctor. He was the most shaken up."  
@@ -109,7 +109,7 @@ label kaz1:
     
     k "Ah, well, I guess I better explain it to you."
 
-label minigame 10
+label minigame10:
     #Minigame!  Help Doctor Kazutaka regrow his cells.  His cells need heat to grow.  Be sure to apply heat when a colony shaped like (whatever shape) shows up.  
     #However, be wary; other bacterial strains can also grow.  Be sure to apply cold to them when they do or they will use up all of the nutrients.
     
@@ -202,11 +202,16 @@ label minigame 10
     
     r "See ya later, Doc."
 
-#Decision
-#Search
-#Sleep
-#Research: Get Scene54
-#Store
+menu:
+    "Search.":
+        call show_map
+    "Sleep.":
+        call sleep
+    "Store.":
+        call shop_loop
+    "Research.":
+        call research_loop
+        $unlock_entry("something", "031")    
 label kaz2:
     ro "Doctor Osamu!"
         
@@ -594,11 +599,16 @@ label kaz3b:
     
     ro "You're special to me too."
 
-#DECISION
-#Search
-#Store
-#Research
-#Sleep
+menu:
+    "Search.":
+        call show_map
+    "Sleep.":
+        call sleep
+    "Store.":
+        call shop_loop
+    "Research.":
+        call research_loop
+        $unlock_entry("something", "031")    
 
 label kaz4:
     
@@ -630,10 +640,10 @@ label kaz4:
     s "What’s wrong with them?"
     
 menu:
-    "They're too girly..."
+    "They're too girly...":
          jump toogirly
     
-    "You need more color variety." 
+    "You need more color variety.": 
          jump colorvar
 label toogirly:
     ro "They're too girly."
@@ -789,9 +799,9 @@ label kaz4b:
     Clerk "I'm afraid not. He's just a bit too tall for our tallest size...perhaps try the store a little farther down..."
 
 menu:
-    "Try the kimono store, like Soume wanted."
+    "Try the kimono store, like Soume wanted.":
         jump kaz5
-    "Try to convince Soume to try another suit store."
+    "Try to convince Soume to try another suit store.":
         jump kaz5a
         
 label kaz5a:
@@ -799,6 +809,8 @@ label kaz5a:
     ro "Soume...let's try the other suit store..."
     
     s "I'd rather not. Can we just go home?"
+    
+    ro "...oh...of course..."
     jump kaz6
     
 label kaz5:
@@ -1005,7 +1017,18 @@ label kaz6:
     na "With you."
     
     m "Very well then. Here is the new plan..."
-
+    
+menu:
+    "Search.":
+        call show_map
+    "Sleep.":
+        call sleep
+    "Store.":
+        call shop_loop
+    "Research.":
+        call research_loop
+        $unlock_entry("something", "031")    
+        
 label kaz7:
     k  "No.  No, that can’t be right…"
     k  "I’m sure I checked all the variables."
@@ -1347,186 +1370,186 @@ label kaz10:
     
 label kaz10b:
     
-    su  "Now, get off to bed. Wake your ass up early tomorrow and make sure Roman stays in his room until at least nine."
+    su  "Hurry up and get off to bed. Wake your ass up early tomorrow and make sure Roman stays in his room until at least nine."
     
     r  "Got it."
     
-    "I head off to my room."
-$ decision = "7"    
+    $ decision = "7"    
 menu:
-    "Search."
+    "Search.":
         call show_map
-    "Sleep."
+    "Sleep.":
         call sleep
-    "Store."
+    "Store.":
         call shop_loop
-    "Research."
+    "Research.":
         $unlock_entry("something", "031")
 
 label kaz11:
-    "Set the alarm like an hour early today.  Had to make sure that I actually got up on time.  Still just barely got up.  I throw on my clothes as quick as I can and run out the door."
+    "I set my alarm extra early today for Roman's party."
+    "Roman's a super morning person, and if I don't beat him, I'll be pissed at myself."
+    "I don't even bother to shower, just throw some clothes on and head for his room."
     
-    "Gotta hurry over to Roman’s room.  That guy always gets up early, and if he’s already out the door, I’m fucking dead.  And I’m sort of attached to this whole being alive thing."
+    "I turn the corner just in time to catch him."
+    r "Yo, Roman!"
     
-    "I turn the corner, and as I do I see Roman exiting his room.  He’s closing his door, and just as he’s about to he must hear me coming because he turns around."
-    
-    ro  "Hey!  Riku, so nice to see you!  Excuse me for asking, but…uh…why are you running."
+    ro  "Ahh, good morning, Riku!  Excuse me for asking, but today is Sunday. Why are you running?"
     
     r  "Oh…huff huff…just, y’know…huff…exercising.  Gotta…huff…stay in shape!"
     
     ro  "Ah.  Well, you must have been running rather fast if you are winded."
     
-    r  "Yeah, well, extreme training and all that.  Susa’s orders.  For…mission…uh-preparation."  
+    r  "Yeah, well, extreme training and all that. Miss Susa’s orders.  For…mission…uh-preparation."  
     
-    ro  "Hm.  Strange.  Oh well.  If you’re done training, you are more than welcome to come with me to breakfast, I was just heading-"
+    ro  "Hm. Strange. Oh well. If you’re done training, you are more than welcome to come with me to breakfast, I was just heading-"
     
-    r  "NOO!"
+    r  "NO!"
     
-    ro  "Ah!  Ahem.  Alright.  No breakfast then.  Well, we can meet up later then.  Now, if you excuse me-"
+    ro  "...excuse me?"
     
-    r  "NO!  I…uh…really need to see the inside of your room!  It is an emergency."
+    r  "No---breakfast yet. I…uh…really need to talk to you. I need a tour of your bedroom!"
     
-    ro  "What?  Riku, can’t this wait?  I didn’t eat much last night and I am starving."
+    ro  "Perhaps this could wait...I'm awfully hungry."
     
-    r  "Please, Roman!  I’ll-I’ll come with you after.  Yeah, we can get breakfast together.  At nine.  Just wait until then.  C’mon, I haven’t seen your room yet."
+    r  "Awww c'mon, we'll eat in a little bit, lemme see your room!"
     
-    ro  "Well…I suppose.  Might I inquire as to why though?  This seems rather irregular."  
+    ro  "Well…I suppose. This is all rather sudden though, isn't it?"  
     
-    r  "Uh…I’m just curious.  Y’know?  We been friends for a couple of months now and I never seen it."
+    r  "I’m just curious. We been friends for a while now and I've never REALLY seen inside."
     
-    ro  "Okaaaay.  Come in then.  Let me…uh, show you around I guess."
+    ro  "I see... Come in then."
     
     "Roman opens the door back up and ushers me inside.  I step in, and I immediately feel a change of temperature of like twenty degrees."
     
-    r  "Dang, Roman.  What the heck is this?  Why is it so cold in here?"
+    r  "Whoa! Why is it so cold in here?"
         
-    ro  "It is my ice powers, Riku.  What else did you really expect?  I do prefer it to be a bit colder than most prefer, perhaps."
+    ro  "Oh, I forgot...I prefer it to be a bit colder than most, perhaps."
     
-    "I look around his room.  There are ice sculptures everywhere.  The walls look like they are covered in a thin sheet of ice."  
-    "In fact, the entire damn room looks like it is covered in ice, except for one little piece of counter where there are a couple of plants growing."
-    
+    "There are ice sculptures of different kinds everywhere."
+    "Books, and some other things from Europe or Russia or something, probably."
+    "In one corner are a few straggling plants, growing."
+    $renpy.pause(1.5)
     "Poorly."
     
     r  "Uh…those plants over there alright?"
     
-    ro  "Hmph.  Unfortunately, I don’t think so.  I keep trying to move the plants I’ve grown back into my room, but they never seem to handle the transition well."
+    ro  "I'm afraid not...I just don't have a green thumb like Soume does."
     
-    r  "Might have something to do with the sub-zero temperature.  I don’t think I’m handling the transition well."
+    r  "Might have something to do with the sub-zero temperature in here..."
        
-    ro  "Perhaps you are right!  I am working on growing plants that are more resistant to the cold, but I’m afraid my progress thus far has been minimal."
+    ro  "But Soume said that these were resistant to the cold, I must be doing something else wrong."
     
-    "Roman sort of gives me a tour of his room, which I work hard to draw out as long as possible by asking questions about everything."  
-    "This is harder than you might imagine, as his entire living quarters is literally just a room, and everything is covered in ice."
+    "Roman gives me the tour of his room, which I draw out as long as possible by asking questions about everything."  
+    "This is harder than you might imagine."
     
-    r  "Isn’t that cold?"
-    
-    "That is my most common question.  I ask it like six times, and each time he goes on to tell me that it isn’t cold to him and blah blah blah.  He’s patient, if nothing else."
-    
-    "I try to keep this going for half an hour, but fail spectacularly.  He finishes the tour in ten minutes, so I try to waste the rest of the time with small talk."  
-    "I ask him about how he cooks, which lets him go off on a ten minute tangent about all the newest recipes he is planning to try out."
-    
-    ro  "You won’t even be able to tell I’m not using meat!  I swear, Riku, you’re going to love it.  I just-hey, are you alright?"
+    r  "Man, it is really cold in here."
+    "Probably about the fortieth time I've repeated that."
+        
+    ro  "Yes, you mention---hey...are you alright?"
     
     r  "Hm?  Yeah, I just…"
     
-    "I was hoping to not draw attention to myself, but something about Roman’s room is starting to get to me.  I don’t want to make a big deal about it, in case he decides we should leave."  
+    "I think the temperature in Roman’s room is starting to get to me, but it's odd."
     
     r  "I dunno.  My head just feels kinda weird."
     
-    ro  "Weird?  How do you mean weird?"
+    ro  "Weird? In what way?"
+    ro "It's because you're a flame user, isn't it? The cold is too much."
     
-    r  "Uh…I don’t even know how to describe it.  It is like, I dunno, I just woke up from a daze."
+    r  "No, it's not that..."
+    r "I don't really know how to describe it...it's like I just woke up."
+    r "I don't feel sick, I feel better, if that makes sense. Like I was walking through fog and just got into the open."
     
-    ro  "A daze?  Are you sure you’re alright?"
+    ro  "Perhaps we should see the doctor..."
     
-    r  "Yeah.  It hurt a little bit at first…but I feel fine now.  Great, actually!"
+    r  "NO. No way. I'm fine now. Great, actually!"
     
-    "That part is only sort of true.  My head did hurt at first, but I do feel pretty normal again.  I was only holding my head for a couple of seconds, but Roman somehow noticed."
+    "I do feel pretty good physically, but something in my gut tells me that whatever just happened wasn't right."
+    "I feel like the happy's been sucked out of me. Like I'm depressed all of a sudden."
     
-    "Still, I don’t really feel great.  I feel a little…depressed, or something.  I dunno."  
-    "I had heard something in class one time that lack of sunlight could do this to people.  Not sure if it is true or not."  
-    "If it was just the room, Roman would have to be the most depressed person in the entire rescue, but he doesn’t seem to be."
+    r  "...do you feel...sad all of a sudden?"
     
-    r  "Maybe it is just the room?  I dunno, you ever feel a little sick?  Sad…or something?"
+    ro  "Sad?"
+    ro "No. Why?"
     
-    ro  "Well, I have been sad in the past, but I hardly think my room has anything to do with it!  You’re probably just not used to it yet.  The temperature might not be the best thing for your body."
+    r  "N-nothing. I'm just being weird."
+        
+    ro  "Well, I still think you're having a reaction to the cold, so let's head to the kitchen. I'm really hungry now."
     
-    r  "Yeah…"
+    "I look down at my watch. Just about 9. Good, I can’t take being in this room much longer."
     
-    "I have to admit, I am shivering now.  I feel like I have to sneeze, but everything in my nose is frozen."  
+    r  "Sure! C'mon, follow me."
     
-    ro  "Come on, Riku.  We should really leave.  You aren’t feeling well and I am starving!"
-    
-    "I look down at my watch.  I think I just about made it.  We might be a couple minutes early, but I’m sure Susa already has everything set up by now.  I can’t take being in this room much longer."
-    
-    r  "Uh, yeah.  That’s a good idea.  C’mon.  Follow me."
-    
-    "I quickly head out of Roman’s room.  I also make a mental note to myself to never visit his room again.  At least not without a portable heater."
+    "I quickly head out of Roman’s room, and make a mental note to avoid it in the future."
 
 label kaz12:
     ro  "Riku, I think you must be lost.  This isn’t the way to the dining area."
 
     r  "Uh…yeah, I forgot something.  Just come with me for a sec.  We’ll head over to the dining area together after the…after I find the thing."
 
-    "I don’t know where Riku is taking me."  
-    "He left my room in a rush, but ever since we left it he’s been slowly plodding through the hallways, looking back every couple of steps to make sure I’m still following him."
+    "Riku is acting awfully strange this morning."
 
     ro  "Can’t you just find it and meet up with me later?"
 
-    r  "NO!  Er…I mean no.  Just, c’mon…walk with me a bit longer.  I swear we’re almost there."
+    r  "C'mon, we're almost there! Race ya to the end of the hall!"
+    
+    "He takes off running, and my head droops."
+    "I just want to get some breakfast!"
 
-    "I can hear my stomach rumbling, but I try to ignore it as I follow Riku up some staircase.  I’m barely over in this area of the rescue, but I know this isn’t where Riku’s room is located."
+    r  "Here we are..."
+    
+    "We're in front of one of the rooms in the temple."
+    "No one really goes in here, so I don't have a clue why Riku's would have lost something in this room."
+    "Something is really fishy..."
+    
+    r "Go on in!"
 
-    "My stomach starts making noise again.  I would feel rather embarrassed at how loud it is if I wasn’t so hungry."  
-    "I would just take off towards the dining area on my own, but Riku keeps on insisting that I come with him, and I don’t want to be rude."
+    ro  "Huh? You're the one who's lost something! Go and get it so I can eat!"
+    
+    r "Okay okay, fiiiiiiiine."
+    
+    "Come to think of it..."
+    "The temple is awfully quiet today, as well..."
+    
+    ro "Aaah!"
+    
+    "Riku shoves me inside the room. It's dark."
 
-    r  "Here we are.  Ah, go ahead and open the door for me."
+    ro  "Riku, what the heck is going---"
 
-    ro  "Huh?  Why don’t you open it yourself?"
-
-    "Riku scratches the back of his head for a second.  His eyebrow furrows and he clears his throat several times."  
-    "I might not have Doctor Kazutaka’s powers of perception, but even I can clearly tell he is stalling for some reason."
-
-    r  "I just…uh…my hands are dirty.  And I don’t want to touch the knob.  Just open the door, and then I swear we can get some lunch."
-
-    "I am about to argue with Riku, but it would probably be quicker if I just opened the door so he can get what he needs."
-
-    ro  "Alright.  You are acting so strangely today."
-
-    #play sound  Door opening-
+    #play sound light switch click
 
     "SURPRIIIIIIIIIIIIIIIIISE!"
 
     ro  "Ah!"
 
-    "I almost fall over from the shock."
-
     su  "Happy birthday, Roman!"
 
     ro  "Miss Susa?  Riku, is this…?"
 
-    r  "Yeah, yeah.  Happy birthday, pal.  Sorry to lead you around everywhere like that, but Susa here forced me to."
+    r  "Yeah, yeah.  Happy birthday, pal.  Sorry to lead you around everywhere like that, but Miss Susa made me."
 
     su  "Oi.  Sprog, get inside and get to the table.  I’ve prepared a breakfast feast for you, Roman.  All vegan, of course."
 
-    ro  "Miss Susa!  You shouldn’t have…this is amazing."
+    ro  "You shouldn’t have…this is amazing."
 
-    su  "Yeah, I do alright, I know.  C’mon and sit with us at the table.  We’ve got a full day pretty much planned out for you."
+    su  "Yeah yeah, hurry up and take a seat."
 
-    "I walk in and head towards the head table.  It looks like everyone in the shrine is there, and all of them are giving me birthday wishes as I pass."  
+    "All of the students are here."
     "Even Doctor Kazutaka looks in my direction and grunts something that sounds remarkably similar to happy birthday."
+    "And of course..."
 
-    s  "Rooooooman~!  Happy birthday!"
+    s  "Happy birthday, Roman!"
     
-    ro  "Thank you, Soume.  It isn’t my birthday for another week though, you realize."
+    "I blush. I can't help myself."
+    ro  "S-Soume...you were in on it too..."
 
-    s  "Well of course I know that.  It is just so much easier to say “happy birthday” rather than “happy birthday next week but enjoy your party today!”  Don’t you think?"
+    s  "Naturally. Do you like the decorations?"
     
-    #Soume giggles. He just does. Happy birthday Roman Soume is GIGGLING.
-
-    "I nod my head and laugh.  Honestly, he could have said just about anything and I would have agreed with him.  I was just happy to have him around."  
-
-    su  "If I would have waited til next week for this you would have known something was up.  I’m surprised the brat didn’t give it away already."
+    ro "I love them."
+    "I love everything he does for me."
+    
+    su  "Well, you look surprised enough. I'M surprised that brat didn't blow everything."
     
     ro  "No, no!  Riku played his part excellently!"  
 
@@ -1534,192 +1557,227 @@ label kaz12:
 
     su  "Yeah, that’ll be the fucking day.  C’mon, Roman, dig in.  Don’t tell me you’re not hungry."
 
-    "She doesn’t have to repeat herself.  I grab a little bit of everything from the plates in front of me."  
-    "Everything tastes excellent, and I talk with Soume and Susa throughout the entire meal.  I’m having a great time, and it doesn’t look like I’m alone.  Everyone in the room is smiling."
-
-    "Well, except for Doctor Kazutaka.  He is eyeing the food suspiciously and keeps scanning each piece with some sort of gadget before he eats it."
-
-    "After breakfast, Susa has Riku clear the tables out of the way, and she starts playing some music."  
-    "Soume and I dance to a couple of songs, and I can’t remember being happier, even if Soume keeps stepping on my feet."
-
-    "We finish lunch later in the day, and it is somehow even better than breakfast." 
-    "All of my favorite sandwiches and a couple of soups I’m particularly fond of are on the menu, and by the time the course is finished I feel like I can barely move."
-
-    ro  "Miss Susa, I really must thank you.  I can’t remember ever having a better time.  I don’t remember last year’s celebration being half this enjoyable."
+    "She doesn’t have to tell me twice!"
+    $renpy.pause(2.0)
+    
+    "It's evening now. We've been partying most of the day."
+    ro  "Miss Susa, I really must thank you.  I can’t remember having a better time."
 
     su  "Hrm?  Oh, well, I suppose that has more to do with the company you’re keeping these days, huh?"
 
     "She looks down and checks her watch."  
     "She’s been checking her watch all day, and taking time out to go and adjust her hair in the mirror every couple of minutes."  
-    "She always keeps a nice appearance, but I’ve never seen her obsess over it like this."
+    "I wonder..."
 
-    ro  "Are you alright, Miss Susa?  You keep checking your watch."
+    su  "There's one more surprise for you. I'll go get it."
 
-    su  "Huh?  Oh…uh, well I do have one more surprise for you.  I think it is about time I go to pick it up.  If you excuse me.  I won’t be gone more than a couple of minutes."
-
-    ro  "Alright.  Sure.  Just make sure you hurry back."
-
-    su  "Yeah yeah.  Don’t stop having fun just because I’m leaving for a bit.  Hey!  Sprog, you’re in charge of making sure Roman is having fun while I’m gone."  
-
-    "Susa turns and practically runs out the door, while Riku comes over, looking slightly puzzled and somewhat agitated."
-
+    $renpy.pause(2.0)
     r  "Where she off to in such a hurry?"
     
     ro "I’m not sure.  She says it is a surprise, so I would gather you might know more about it than me."
 
-    r  "Pfft.  Fat chance.  If it didn’t involve manual labor she didn’t really clue me in on all the details for the party."
+    r  "Pfft. I never know with that lady."
     
-    ro  "Ah, Riku.  She must like you to be giving you all this attention.  Perhaps she is impressed by what you’ve been able to accomplish in such a short time."
+    ro  "But you know, Riku, she must like you to be giving you all this attention."  
+    ro "You’ve been able to accomplish much in a very short time."
 
-    r  "If that is true I’d rather she was less impressed with me.  It would make my life easier.  ‘Nuff about me though.  How you enjoying your party?"
+    r  "I think it was better when she wasn't impressed..."
 
-    ro  "Oh, I’m loving it!  I can’t believe all the effort you all went through just for me.  You really shouldn’t have!"
+    ro  "She isn't hitting you nearly as much now, though."
 
-    r  "Aw c’mon man.  You’re like everyone’s favorite person here.  Just an all around great guy.  Was the least we could do, y’know?"
+    r  "That IS true..."
+    $renpy.pause(2.0)
+    r "Hahahaha, look at Soume dancing!"
     
-    ro  "Well, this is certainly one way to show someone they’re well liked!"
-
-    r  "Yeah, well.  Susa doesn’t seem to do anything half-way.  Hey, why don’t you go dance with Soume?  He’s looking pretty lonely out there on the dance floor."
-
-    "I turn to where Riku is pointing.  Soume is awkwardly dancing with one of the younger students, looking around very confused."  
-    "His method of dancing involves a lot of arm moving and very little movement from his waste down."  
-    "You would think he would have mastered this at some point, but I think the fact he hasn’t makes him even cuter."
-
-    "I start heading over in that direction, when I hear a voice that is extremely familiar."
-
-    l  "Oh, leaving already?  This is hardly a way to great an old friend, I would think."
-
-    "I turn around.  Miss Susa has returned, and she has brought Liza with her.  They’re both smiling.  More than I’ve ever remembered them doing so when in each other’s vicinity."
-
-    "I try to keep my composure, but everything is just too much for me.  I run over to her as quickly as I can, and throw my arms around the two of them."
-
-    l  "Ack!  Now this is more the greeting I was expecting!  Happy birthday, Roman!"
-
+    "Soume is dancing fairly awkwardly with one of the younger students."  
+    "He's awfully good at it."
+    "I don't have any rhythm at all."
+    $renpy.pause(1.0)
+    "Maybe he'll teach me."
+    "Maybe I should ask him."
+    "I..."
+    if perparty:
+        jump kaz13
+    else: 
+        jump kaz13d    
 label kaz13:
+    l  "Oh, leaving already?  This is hardly a way to great an old friend, I would think."
+    
+    ro "Liza!"
+    
+    "I throw my arms around her and hold her tightly."
+    
+    l  "Happy birthday, Roman."
+    ro "Thank you, Liza. I know it is difficult for you to take time out..."
+    l "Nonsense. You're a dear friend. I had to make an appearance."
+    l "Why don't you show me around a little?"
+
+
     l  "Hmm…so this is your room?"
     
-    ro  "And why, might I ask, do you sound so disappointed?  I rather like my living area."
+    ro  "Yes. I put all the ice sculptures I've made here, so I can test my growth."
 
-    l  "Oh, I mean no disrespect.  It is nice.  Just rather…on the small side."
-
-    ro  "Yes, well, I really only sleep in here.  During most of the day I’m out in the rescue, training or spending time with the other pupils."
-
-    l  "I see.  Well, it is an interesting set up.  Taking time to grow some plants I see?"  
-    l "I hate to inform you, but perhaps conditions that allow ice to accumulate on the walls are not the best environment for keeping flora."
-
-    ro  "Yes, sadly this is something I’m beginning to realize as well.  Here, let me show you the rest of the rescue."
-
-    "I lead Liza out of the door.  She had asked for a little tour of the grounds, and I started with the most logical starting place."
-
-    ro  "So, is this your first time visiting the rescue?"
-
-    l  "Well, not exactly.  I used to visit it rather frequently, but that was many years ago.  It has changed drastically in that time.  The basic layout is pretty close to the same though."
+    l  "I see."
+    l "You have certainly improved your craft."
+    ro "I practice very hard."
     
-    ro  "Thank you again so much for coming.  I really never imagined you would be visiting me here.  "
+    "Liza wanders over to my paltry looking plants."
+    l "And taking up gardening, I see."
     
-    l  "Yes, well, Susa managed to talk me into it.  I couldn’t refuse her after she told me what the purpose of my visit would be."
+    ro  "A little...I'm not very good at it."
+    l "Well, we can't all have every talent."
+    ro "That's true. Come on, I want to show you outside."
+    ro  "Is this your first time actually visiting the rescue?"
+
+    l  "Not quite. I used to visit it rather frequently, many years ago." 
+    l "It has changed quite a lot since then."
+    
         
-    ro  "Yes, well, still…I do appreciate it.  It is nice to see you-oh, this here is the entrance to the training facility.  You can see Soume’s garden from here as well."
+    ro  "Oh, how so? ---this here is Soume's garden. Isn't it lovely?"
     
-    l  "Yes, this area I am familiar with.  The garden is new though.  Wow…impressive array of plants, to say the very least."  
-    l "I would think all that security Susa has installed would be rather moot with Soume’s army of plants down there."
+    l  "This garden is certainly new. A rather impressive array of plants, to say the very least."  
+    l "I should think all that security Susa has installed would be rather moot with Soume’s army of plants down there."
     
-    ro  "Well, the plants are more of a backup plan.  Sort of in case of emergency; if we are somehow found we at least should have a chance to fight back."
+    ro  "Well, the plants are more of a backup plan. Sort of in case of emergency; if we are somehow found we at least should have a chance to fight back."
     
-    l  "I’d say you would have more than a chance.  I wouldn’t be surprised if they didn’t just turn tail and run, after seeing those things."
+    l  "Indeed."
     
-    "We walk for a little while longer, I point out some important rooms and Liza makes small talk with me.  It is really quite relaxing, being able to talk to Liza like this."
+    "We walk for a little while longer." 
+    "It is really quite relaxing, being able to talk to Liza like this."
     
-    ro  "So, how did Susa manage to talk you into coming out here?  I didn’t really think the two of you were on…ahem…speaking terms."
+    ro  "So, how did Miss Susa manage to talk you into coming out here?  I didn’t really think the two of you were on…ahem…speaking terms."
     
-    l  "Ah.  Well, we had some business to discuss anyway.  Something…important has come up.  See brought it up during the course of one of our discussions."
-    
-    ro  "Important?  What was so important that it could put the two of you back on speaking terms?"
-    
-    l  "Roman, normally, I would tell you.  Please don’t take my reluctance to answer here as rudeness."  
-    l "Just…I can’t say right now, really.  I don’t want to get my hopes up.  I’m afraid if I start speaking it aloud, I’ll jinx it.  Silly superstition, I know, but please, just humor me for now."
-    
-    "I start thinking about what it could be.  I mean, I have an idea, but that would be entirely absurd."  
-    "The only thing that could bring them together again is also one thing that can’t possibly happen.  So I’m at a loss."  
-    "I start my tour again, but I am not entirely focused now and I’m afraid I’m not covering everything as well as I should."
-    
-    ro  "And this is Doctor Kazutaka’s lab.  His office is just down the hallway."  
-    ro "I’d take you inside, but I’m afraid what he might do if he found out I did so.  He does love his privacy, and really doesn’t like people going into his lab."
+    l  "Ah. Well, we had some business to discuss anyway."
+
+    ro "Ahh, you don't have to tell me if it's private."
+    l "It is in fact private, and I had no intention of telling you."
+    ro "Oh..."    
+    l "Don't feel bad. It's not as if I'm leaving only you out of the loop."
+    $renpy.pause(3.0)
+    ro  "And this is the library. It doubles as Doctor Osamu's laboratory.  His office is just down the hallway."  
+    ro "I’d take you inside, but he'd likely get angry..."
     
     l  "Oh, don’t worry about it.  I’m fairly familiar with his work, and I’m sure he’d show it to me if I asked him to."  
         
     ro "I think you overestimate his good nature..."  
-    ro "If he offered to show you his lab, I would insist that we examine his head immediately, because I think that would be the first time he let someone in that wasn’t on Susa’s orders."
     
-    l  "Well, you might be surprised."
+    l  "You might be surprised."
     
-    ro  "Hm?  How so?"
+    ro  "Why's that?"
     
-    l  "Ah, it is nothing really.  Look, Roman, I wanted to ask you something.  Well, offer you something, really."
+    l  "Ah--nothing, really.  Look, Roman, I wanted to ask you something.  Well, offer you something, actually."
     
-    ro  "And what would that be?"
+    ro  "Such as?"
     
     l  "I was just wondering...well, would you like to move in with me?"
     
-    ro  "…move in with you?  Liza…what is-"
+    ro  "…move in with you?"
+    l "Yes. I have a very large place, and I would personally oversee your continued training."
     
-    l  "Don’t worry about saying no, if you want." 
-    l "I would understand, and I can assure you my feelings would not be hurt.  I just thought I would offer."  
-    l "Your training seems nearly complete, and I just thought you might be looking for a place to stay."
+    ro "Why...would you ask that now?"
+    l "Well, we don't get to see each other very much anymore...it would just be easier if we lived together."
     
+    "Why would Liza ask me that question?"
+   
+menu:
+    "I...can't, Liza. There's...someone...":
+        jump kaz13a
+    "I'm helping out here...it's best if I stayed.":
+        jump kaz13b
+    
+label kaz13a:
+    l "...someone?"
+    ro "...it's hard to explain."
+    l "Ah. I see. Little Roman has found love."
+    ro "No...it's nothing like that...he doesn't even--"
+    l "It's okay, I understand. I won't ask again."
+    ro "I'm sorry, Liza. I'd move in with you in a moment otherwise..."
+    l "Just be careful, Roman. Be careful."
+    ro "I will. I promise."
+    jump kaz13c
+label kaz13b:    
     ro  "Liza…I would love to.  But I can’t.  Not now, at least.  Miss Susa is starting to depend on me to assist in the training."  
-    ro "And while I have gotten stronger, my formal training isn’t finished yet.  I still have so far to go."
-    
-    l  "Yes, well…and you’re happy here?"
-    
+    l  "…and you’re happy here?"
     ro  "Oh, I absolutely love it!  I can’t remember being happier."
     
     l  "And you are certain of this?  Your decision, that is?"
-        
-    ro "Liza, I am not turning you down.  But certainly, I cannot leave yet."  
-    ro "I have much left to accomplish.  And, who knows, perhaps I will stay here indefinitely.  I could work as a mentor, like Soume, if Miss Susa would have me."
+    ro "Yes. I want to help others, like this place has helped me."
+    l "Well, I can't argue with that, can I?"
+    ro "I'd move in with you in a moment otherwise!"
+    l "It's not a problem."
+    jump kaz13c
     
-    l  "Hmm.  And how is he.  Soume, that is.  You two…are getting along well still, I assume."
+label kaz13c:    
+    l "I'll need to go have my conference with Susa, but I did want to give you this."
     
-    ro  "Ohhh…that is….positively delightful.  I’m just happy whenever I’m with him.  He makes me feel like I haven’t in a long time.  It is so hard to describe, but when-"
+    $unlock_item("something or other")
     
-    l  "Yes, yes.  Well.  That certainly is good for you."
-    
-    "She cuts me off, and clears her throat.  I get the feeling she didn’t really like where the conversation was going, but I cannot for the life of me figure out why."
-    
-    l  "We really must get back to the party.  I’m sorry to have taken up so much of your time."  
-    l "Dinner should be coming soon, and I would think your friends might be irked at me if I kept the man of the hour to myself for so long."
-    
-    ro  "I’m sure they would understand.  But I’ll lead us back in the right direction."
-    
-    l  "Oh, here, I wanted to give you this."
-    
-    "She reaches into her pocket, and pulls out a little box, which has been wrapped neatly"
-    
-    ro  "Oh, Liza, you shouldn’t have.  You coming all the way out here was more than enough."
-    
-    l  "Please Roman, you should know better than anyone that I wanted to come out here, so there really is not need to keep on thanking me.  Go ahead and open it."
-    
-    "I unwrap the box, and inside is a little picture frame.  The picture is of Liza and myself from maybe twenty years ago."
-    
-    ro  "Oh…Liza.  I love it."
+    ro "Oh Liza, you didn't have to."
+    l "But I wanted to, so take it and keep it."
    
-#Nightly options
-
+    "With that, we head back inside, and Susa and Liza rush off to talk."
+    "I'm sad that evening fell so quickly, there's not much time left to enjoy my birthday."
+    "What should I spend the last few hours doing?"
+menu:
+        "Talking to Soume.":
+            jump sobirtalk
+        "Talking to Riku.":
+            jump ribirtalk
+   
+label sobirtalk:
+    "Some sappy SoRo scene here."
+    jump kaz13e
+    
+label ribirtalk:
+    r "Heeeeeeey...you ever realize how when you get reaaaaaaaaaaaally close to Soume...he smells really good."
+    ro "Oh my yes...he smells like heaven..."
+    r "Right? I thought it was just me..."
+    ro "No...not just you..."
+    r "...how does he do that? You think it’s a special soap or something?"
+    ro "I don’t THINK so...sometimes it seems to just come out of nowhere..."
+    r "You noticed that too, huh...?"
+    ro "Oh, and! Have you noticed how startlingly attractive he is? I mean, just awfully attractive, for a man."
+    r "...sort of. I guess, yeah. For a man."
+    ro "I mean, it’s amazing, isn’t it? He’s probably the most perfect sort of person I’ve ever seen. Sometimes I can’t stop staring."
+    r "...uh..."
+    ro "Ahem. I mean, you know. For a man."
+    r "...I dunno. What you said just now sounded...you know. Like you’re interested."
+    ro "No way. I’m not. I’m NOT. He’s--just...special."
+    r "I mean, I get what you’re saying. He’s pretty hot. If he---if he was a girl, I’d be ALL OVER THAT, you know?"
+    ro "Yeaaaaaaah, all over. Wait---how can YOU be all over something? You’ve not even hit puberty yet."
+    r "Right right okay, but. I’m just sayin’. If I HAD. And Soume was a chick? All mine."
+    ro "It doesn’t even matter to me...he’s just...the most wondrous...fantastic...amazing person I’ve ever met."
+    r "...are youuuuuuuu gay?"
+    ro "What?! No...no way, whe--no!"
+    r "Just sayin’ man, I know we’re drunk right now and stuff, but that sounded pretty gay from over here."
+    ro "I’m just talking. Drunk talking. That’s all. I mean...erm..."
+    r "Man whatever, I gotta pee and I’m goin’ to bed. Think I might get a hangover this time, heh."
+    ro "Okay. Yes. You should...yes, the bathroom."
+    r "Night, Romannnnnn."
+    ro "Night, Riku."
+    jump kaz13e
+    
+label kaz13d:
+    "I can't. I'm such an idiot."    
+    "Put some more stuff here."
+    
+label kaz13e:
+     "It's really late now. Time for bed."
+     $ decision = "8"
+menu:
+    "Search.":
+        call show_map
+    "Sleep.":
+        call sleep
+    "Store.":
+        call shop_loop
+    "Research.":
+        call research_loop
+        $unlock_entry("something", "031")
+        
 label kaz14:
-    "I really wish Roman would hurry back."  
-    "Without him here, and with Soume dancing around like he’s having a fucking seizure, Kazu managed to corner me and has been talking to me non-stop for the past half and hour or so."
-    
-    "I guess talking at me would be closer to what is actually happening.  This guy just doesn’t know when to shut his face."
-    
     k  "Riku, this reminds me, can you please come see me in my lab at some point tomorrow.  I have something I would like to talk to you about."
-    
-    r  "Hrm?  What’s that?"
-    
-    k  "I…uh…don’t feel it best to discuss in detail here.  Suffice to say, it is an honor, and you should be excited."
-    
-    r  "Oh.  Great."
-    
+    r  "Hrm?  What’s that?"    
     k  "Hmph.  Great is a rather plebian way to describe it.  You shouldn’t use the same word to describe a nice pie and the honor I am about to bestow upon you."
     
     "I roll my eyes.  I try not to, but I can’t fucking help it.  Even when he’s being nice to me, he’s a complete asshole.  Sorry for not being more excited, Doc, but I am familiar with what you think is an honor."
@@ -1739,69 +1797,6 @@ label kaz14:
     
     "I mumble that last part, but it wouldn’t matter anyway.  I’ve lost him in the crowd, and, instead, I see Roman walking over to me.  He’s rummaging for something in his pocket."
     
-    ro  "Riku!  I really haven’t had a chance to thank you for all of this yet!  This is amazing."
-    
-    r  "I am a pretty fantastic party thrower.  It would have been much better if Susa had let me do everything I wanted to, but I think it still turned out pretty good.  Could use some alcohol, though."
-        
-    ro "Riku, it really couldn’t have been improved.  Here, I want to give you this as a sign of my appreciation."
-    
-    "He puts a plant down on the table.  I can tell it is one of the ones from his room, because it looks like it is about to fucking die on me."
-    
-    r  "Another plant?  You sure you should keep on giving these away?  Don’t you want to keep ‘em?"
-        
-    ro  "I can assure you that I am becoming quite proficient at growing this variety.  I can always grow more!  Besides, I feel like I should give you something for all your work."
-    
-    r  "…Riiiiight.  Are you sure this has nothing to do with the fact that these plants are dying in your room?"
-    
-    ro  "I…uh, ahem.  That has nothing to do with it."
-    
-    "Knew it.  Roman is just afraid his plants are going to die if he keeps them in his room.  Ah well, I can’t really turn the guy down.  It would feel weird refusing to take a present from him."
-    
-    r  "Heh.  Just messing around.  Thanks again.  I’ll be sure to put this next to the other one."
-    
-    "I think Kazu has the other one.  His lab seems like a good place for ‘em.  If it is anything like the last one Roman gave me, this is just going to make me sneeze anyway."
-    
-    ro  "Just let me know if you would like anymore!  I should have another crop ready to be repotted by as early as next week."
-    
-    r  "Ah…yeah.  Can do.  Let me just…make sure I have all the space for ‘em."
-    
-    "Roman pats my shoulder and turns to sit next to me."
-    
-    r  "Whoa, whoa.  What do you think you’re doing?"
-    
-    ro  "I was just going to sit for a while.  My feet are a little sore."
-    
-    r  "Nuh uh.  No chance, get back up there and start dancing.  Susa is going to kill me if she finds you just sitting down in the corner."
-    
-    ro  "Ugh.  Please, Riku, just give me a couple of minutes to recuperate.  I swear I will talk to Miss Susa and explain if she yells at you."
-    
-    r  "Aw, c’mon man.  It is your birthday party!  Celebrate a bit here.  Look, go dance with Soume.  He looks like he could use some help."
-    
-    "I’m just trying to get Roman to go have some fun, but it is true.  Soume is not the best dancer and has spent the better part of the night accidentally slapping any one who comes near him."
-    
-    ro  "Soume?" 
-        
-    ro "I suppose he does look like he requires some assistance."
-    
-    "Knew that would work.  Roman has a soft spot for the guy."
-    
-    r  "See, go help him out.  Look, the music just changed.  Perfect time to teach him how to slow dance."
-    
-    ro  "Well, I mean I probably should, shouldn’t I?  It would be rather rude to leave him out there dancing like that by himself."
-    
-    r  "That’s what I’m saying!"  
-    
-    "Roman smiles at me and excuses himself from the table.  He walks over to Soume, who is dancing much faster than anyone else on the dance floor."
-    
-    "Seems like he is enjoying himself more, too.  Not sure everyone he’s bumping into feels the same way, but no one is going to stop a guy who is smiling that widely."  
-    
-    "Roman goes over to him, and grabs him by the hand.  Even from here, I can tell Roman is blushing."  
-    "He looks like he’s explaining to Soume where their hands are supposed to go, and he’s pointing to his feet and explaining something else."
-    
-    "He backs up and begins to mine like he’s dancing with someone, showing Soume how he’s supposed to move."  
-    "It takes him a while to teach him the entire routine, but by the end it looks like Soume finally understands, because he’s doing it right."
-    
-    "I can’t help but laugh.  Roman and Soume both look happy, and Kazu and Susa are nowhere to be seen.  Looks like it’s gonna be a good night."
     
 label kaz15:
     k  "I want to thank you for coming here to meet with me."
@@ -2022,7 +2017,7 @@ label kaz17:
     
     "She divides half the stack to Soume, and they both start handing out the list to people in the front."
     
-    Girl:  "Miss Susa, what is the prize this year?"
+    gir  "Miss Susa, what is the prize this year?"
     
     su  "Woops, thank you.  I almost forgot.  First prize this year is an extra thousand to spend as you wish."
     
@@ -2436,7 +2431,7 @@ label kaz22:
     "I’m hoping it was him in there."  
     "I heard crashing and screaming from the other end of the hallway, so either it was him or he’s doing some sort of experiment on whatever unfortunate sod he talked into coming into his lab."
     
-    -play sound Knocking-
+    #play sound Knocking
     
     r  "Doc?  C’mon, say something if you’re in there."
     
@@ -2546,7 +2541,7 @@ label kaz23:
     
     r  "Ngh…ah!"
     
-    -play sound flashing-
+    #play sound flashing
     
     r  "Hmm…that was close.  Almost was able to get it that time."
     
@@ -2660,7 +2655,7 @@ label kaz23:
 label kaz24:
     k  "Hmm…shame I broke some of this.  I really must learn to control my temper.  It really is unbecoming for-"
     
-    -play sound Footsteps-
+    #play sound Footsteps
     
     k  "Hrm?  Who is-"
     

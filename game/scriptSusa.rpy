@@ -237,10 +237,10 @@ label su2:
     "Maybe I should just look around?"
 
 menu:
-        "Look around the room."
-        jump looksuroom
-        "No way, I'll get in trouble."
-        jump nolook
+        "Look around the room.":
+            jump looksuroom
+        "No way, I'll get in trouble.":
+            jump nolook
     
 label looksuroom:        
     "Besides video game stuff, there isn't much else."  
@@ -336,7 +336,7 @@ label su2b:
         #"store"
         
 label su3:
-     pa "Susanoo. It is time to wake up. Laziness like this is an embarrassment to our family."
+    pa "Susanoo. It is time to wake up. Laziness like this is an embarrassment to our family."
     "My full name is Kamiya Susanoo."
     "I was named by my father, after a male god."
     "I hate the name, always have."
@@ -861,9 +861,9 @@ label su10:
     "What should I do?"
     
 menu:
-        "Eat somewhere else."
+        "Eat somewhere else.":
                 jump su10a
-        "Deal with dinner."
+        "Deal with dinner.":
                 jump su10b
                 
 label su10a:        
@@ -957,7 +957,7 @@ label su12:
     
     #play sound creak"
     su "(FUUUUUUCK.  Stupid board.  Told Iza he should have fixed this weeks ago.  How the fuck am I supposed to sneak in here if this damn board is giving away my position?)"
-    su "(Hmm...didn't hear anything though.  I guess I might be-")
+    su "(Hmm...didn't hear anything though.  I guess I might be-)"
     db "Susanoo?  Is that you?  What are you doing here so late?"
     su "(Fuck fuck double fuck.  So much for my stealth skills.  Liza was always better at sneaking in places.  Probably should of asked for some tips.)"
     su "(Not that she'd really help me with this.)"
@@ -1409,7 +1409,7 @@ label su19:
     su "Liza, think back.  Remember.  Remember what we were."  
     su "I...I don't think I was ever happier.  Those first nights together...they were the first time I was ever truly happy.  Don't tell me you don't feel the same."
     l "...I cannot deny what I felt."
-    ***
+    #***
     su "You were absolutely fuckin' amazing today.  I've never seen any one round up so many Majin."
     l "It was nothing.  You just need to be able to round them up and the rest is rather easy."
     su "Yeah, well, still.  Try telling that to the rest of the demon hunters.  Any more than two Majin and they're fucking lost.  Just running around and they end up failing to get even one."
@@ -1432,7 +1432,7 @@ label su19:
     l "No.  Don't apologize.  Come closer."
     su "Mm.  Ohhh.  Come with me.  There is more privacy in my quarters."
     l "Of course...Susanoo."
-    ***
+    #***
     su "We were in love. I felt invincible."
     l "We were young.  We've both grown since then.  We can evaluate our relationship later.  For now, the only thing that matters is Oskar."
     su "I know that...I just thought...y'know.  Who knows what could happen to us from here."
