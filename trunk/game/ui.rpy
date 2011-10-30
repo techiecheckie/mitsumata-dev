@@ -233,7 +233,7 @@ init python:
     
   def unlock_item(item_id):
     item = inventory.get_item(item_id)
-    if not item.is_unlocked():
+    if item.is_locked():
       item.unlock()
       update_stats(item.get_bonuses())
     
@@ -293,6 +293,9 @@ init python:
   
   # Not supposed to be in ui.rpy, but it'll do for now.
   def update_stats(bonuses):
+    if bonuses == None:
+      return
+      
     if bonuses.has_key("hp"):
       hp += bonuses["hp"]
     if bonuses.has_key("mp"):
