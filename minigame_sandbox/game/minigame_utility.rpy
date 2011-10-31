@@ -253,6 +253,29 @@ init -50 python:
             self.width  = width
             self.height = height
 
+    class StagedValue( object ):
+        def __init__( self, stages ):
+            super( StagedValue, self ).__init__()
+            self.stages       = stages
+            self.elapsed_time = 0
+
+        def update( self, delta_sec ):
+            self.elapsed_time += delta_sec
+
+        def get_value( self ):
+            current_value = None
+
+            for cutoff, value in self.stages:
+                if self.elapsed_time >= cutoff:
+                    current_value = value
+                else:
+                    break
+
+            if not current_value:
+                raise ValueError( "No staged value defined at time %s." %
+                                  self.elapsed_time )
+            return current_value
+
     def get_blitter( displayable ):
         return renpy.render( displayable, renpy.config.screen_width,
                              renpy.config.screen_height, 0, 0 )
@@ -267,14 +290,12 @@ init -50 python:
     def show_mouse():
         renpy.game.less_mouse = False
 
-    def almost_equal( a, b, tolerance=1e-3 ):
-        renpy.log( "Absolute error: %s " % abs( a - b ) )
+    # low tolerance picked for use in game object movements per frame.  this
+    # is accurate enough for pixel locations.
+    def almost_equal( a, b, tolerance=1e-2 ):
         if abs( a - b ) < tolerance:
             return True
-
-        rerror =  abs( (a - b) / (b if abs(b) > abs(a) else a) )
-        renpy.log( "Relative error: %s" % rerror )
-        return rerror <= tolerance
+        return abs( (a - b) / (b if abs(b) > abs(a) else a) ) <= tolerance
 
     def sign( number ):
         if number == 0:

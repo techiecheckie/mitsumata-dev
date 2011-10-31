@@ -76,8 +76,15 @@ init -50 python:
                     return self.get_game_result()
 
             # prod Ren'Py so that we continually draw and update the game.
+            #
+            # NOTE: previously timeout was set to 0 just like the redraw
+            #       command, but apparently this causes MAJOR contention with
+            #       renpy when the number of items to render and update on the
+            #       screen at once.  like, so much that it causes renpy to
+            #       never do any subsequent rendering.  to fix this, peg the
+            #       logic update at 60 fps, and just draw as fast as possible.
             renpy.redraw( self, 0 )
-            renpy.timeout( 0 )
+            renpy.timeout( 1.0 / 60.0 )
 
         def get_game_result( self ):
             return self.game.get_result()
