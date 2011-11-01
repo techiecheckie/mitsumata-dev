@@ -137,7 +137,7 @@ init -50 python:
         def __init__( self, default_frame=None, animations=None,
                       initial_animation=None ):
             super( GameRenderer, self ).__init__()
-            self.current_frameset         = "default"
+            self.current_frameset         = GameRenderer.DEFAULT_FRAMESET
             self.frames                   = { GameRenderer.DEFAULT_FRAMESET : default_frame }
             self.animator                 = GameAnimator()
             self.collider_color           = Color( 0, 255, 255, 100 )
@@ -165,6 +165,9 @@ init -50 python:
                                   "frameset name." )
             self.current_frameset = frameset
 
+        def set_animation_frameset( self, frameset ):
+            self.animator.set_frameset( frameset )
+
         def flip( self ):
             self.is_flipped = not self.is_flipped
 
@@ -178,9 +181,9 @@ init -50 python:
             return self.animator.get_current_frame() is not None
 
         def play_animation( self, name, loop_animation=True,
-                            on_animation_end=None ):
+                            on_animation_end=None, frameset=None ):
             self.animator.play_animation( name, loop_animation,
-                                          on_animation_end )
+                                          on_animation_end, frameset )
 
         def get_displayables( self ):
             displayables = []
