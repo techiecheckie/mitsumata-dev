@@ -44,6 +44,11 @@ init python:
     INFECTED_STAGE1_GROWTH_RATE_DURATION = 20
     INFECTED_STAGE2_GROWTH_RATE_DURATION = 40
 
+    # how long an infection takes
+    INFECT_DURATION        = 1.0
+    NUMBER_INFECT_TOGGLES  = 15
+    INFECT_TOGGLE_DURATION = INFECT_DURATION / NUMBER_INFECT_TOGGLES
+
     # how fast a cell moves on either axis in pixels per second.
     CELL_SPEED = 70
 
@@ -389,17 +394,18 @@ init python:
         def __init__( self, cell_type, grid, idle_time, growth_rate,
                       spawn_cell, state=None ):
             super( CellBehavior, self ).__init__()
-            self.state        = state or CELL_STATE_IDLE
-            self.type         = cell_type
-            self.grid         = grid
-            self.slot         = None
-            self.target_slot  = None
-            self.parent       = None
-            self.spawn_cell   = spawn_cell
-            self.idle_time    = idle_time
-            self.growth_rate  = growth_rate
-            self.move_timeout = self.idle_time.get_value()
-            self.grow_timeout = self.growth_rate.get_value()
+            self.state          = state or CELL_STATE_IDLE
+            self.type           = cell_type
+            self.grid           = grid
+            self.slot           = None
+            self.target_slot    = None
+            self.parent         = None
+            self.spawn_cell     = spawn_cell
+            self.idle_time      = idle_time
+            self.growth_rate    = growth_rate
+            self.infect_timeout = 0
+            self.move_timeout   = self.idle_time.get_value()
+            self.grow_timeout   = self.growth_rate.get_value()
 
         def reset_grow_timeout( self ):
             self.grow_timeout = self.growth_rate.get_value()
@@ -479,9 +485,11 @@ init python:
             return at_target
 
         def infect( self, idle_time, growth_rate ):
-            self.state       = CELL_STATE_INFECTED
-            self.idle_time   = idle_time
-            self.growth_rate = growth_rate
+            self.state          = CELL_STATE_INFECTED
+            self.type           = INFECTED_CELL_TYPE
+            self.idle_time      = idle_time
+            self.growth_rate    = growth_rate
+            self.infect_timeout = INFECT_DURATION
 
         def on_grow_complete( self ):
             self.state = CELL_STATE_IDLE
@@ -526,11 +534,19 @@ init python:
                     self.state = CELL_STATE_IDLE
                     self.reset_move_timeout()
             elif self.state == CELL_STATE_INFECTED:
-                self.game_object["renderer"].set_animation_frameset( INFECTED_FRAMESET )
-                self.state = CELL_STATE_IDLE
-                self.type  = INFECTED_CELL_TYPE
-                self.reset_move_timeout()
-                self.reset_grow_timeout()
+                self.infect_timeout -= delta_sec
+
+                toggle_number = math.trunc( self.infect_timeout / INFECT_TOGGLE_DURATION )
+
+                if toggle_number % 2 == 0:
+                    self.game_object["renderer"].set_animation_frameset( INFECTED_FRAMESET )
+                else:
+                    self.game_object["renderer"].set_animation_frameset( HEALTHY_FRAMESET )
+
+                if self.infect_timeout <= 0:
+                    self.state = CELL_STATE_IDLE
+                    self.reset_move_timeout()
+                    self.reset_grow_timeout()
             elif self.state == CELL_STATE_CHILD_GROWING:
                 # move towards the target.
                 if self.move_towards_target( delta_sec ):
