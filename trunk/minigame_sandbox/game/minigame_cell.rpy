@@ -52,6 +52,9 @@ init python:
     CELL_STATE_MOVING         = "moving"
     CELL_STATE_PARENT_GROWING = "parent_growing"
     CELL_STATE_CHILD_GROWING  = "child_growing"
+    CELL_STATE_INFECTED       = "infected"
+    CELL_STATE_INFECTING      = "infecting"
+    CELL_STATE_RETRACTING     = "retracting"
 
     # static locations and dimensions.
     PETRI_DISH_X = 17
@@ -62,6 +65,9 @@ init python:
 
     GRID_CELL_WIDTH  = 48
     GRID_CELL_HEIGHT = 48
+
+    CELL_COLLIDER_WIDTH  = 38
+    CELL_COLLIDER_HEIGHT = 38
 
     NUMBER_GRID_ROWS = 9
     NUMBER_GRID_COLS = 10
@@ -116,6 +122,10 @@ init python:
             self.slots[index].cells.remove( cell )
             self.free_slots.append( (row, col) )
 
+        def get_cells( self, row, col ):
+            index = col + row * NUMBER_GRID_COLS
+            return self.slots[index].cells
+
         def get_free_neighbors( self, row, col ):
             neighbors = []
             slots     = self.slots
@@ -154,6 +164,69 @@ init python:
 
 #            renpy.log( "Free neighbords for (%s, %s): %s" % (row, col, neighbors) )
             return neighbors
+
+        # non-infected neighbors are either free slots or slots that have
+        # healthy cells in the idle state.  we make the rule that you can't
+        # infect something that's currently completing an action (growing or
+        # moving).
+        def get_noninfected_neighbors( self, row, col ):
+            neighbors = []
+            slots     = self.slots
+
+            # up.
+            if row > 0:
+                up_row   = row - 1
+                up_col   = col
+                up_index = up_col + up_row * NUMBER_GRID_COLS
+                if slots[up_index].is_valid:
+                    for cell in slots[up_index].cells:
+                        if (cell.type == INFECTED_CELL_TYPE or
+                            cell.state != CELL_STATE_IDLE):
+                            break
+                    else:
+                        neighbors.append( (up_row, up_col) )
+
+            # right.
+            if col < (NUMBER_GRID_COLS - 1):
+                right_row   = row
+                right_col   = col + 1
+                right_index = right_col + right_row * NUMBER_GRID_COLS
+                if slots[right_index].is_valid:
+                    for cell in slots[right_index].cells:
+                        if (cell.type == INFECTED_CELL_TYPE or
+                            cell.state != CELL_STATE_IDLE):
+                            break
+                    else:
+                        neighbors.append( (right_row, right_col) )
+
+            # down.
+            if row < (NUMBER_GRID_ROWS - 1):
+                down_row   = row + 1
+                down_col   = col
+                down_index = down_col + down_row * NUMBER_GRID_COLS
+                if slots[down_index].is_valid:
+                    for cell in slots[down_index].cells:
+                        if (cell.type == INFECTED_CELL_TYPE or
+                            cell.state != CELL_STATE_IDLE):
+                            break
+                    else:
+                        neighbors.append( (down_row, down_col) )
+
+            # left.
+            if col > 0:
+                left_row   = row
+                left_col   = col - 1
+                left_index = left_col + left_row * NUMBER_GRID_COLS
+                if slots[left_index].is_valid:
+                    for cell in slots[left_index].cells:
+                        if (cell.type == INFECTED_CELL_TYPE or
+                            cell.state != CELL_STATE_IDLE):
+                            break
+                    else:
+                        neighbors.append( (left_row, left_col) )
+
+            return neighbors
+
 
         def get_free_slot( self ):
             return renpy.random.choice( self.free_slots ) if self.free_slots else None
@@ -213,8 +286,8 @@ init python:
 
             cell             = GameObject()
             cell["renderer"] = GameRenderer()
-            cell["collider"] = GameBoxCollider( Size( GRID_CELL_WIDTH,
-                                                      GRID_CELL_HEIGHT ),
+            cell["collider"] = GameBoxCollider( Size( CELL_COLLIDER_WIDTH,
+                                                      CELL_COLLIDER_HEIGHT ),
                                                 Anchor.CENTER )
             cell["renderer"].add_animation( CELL_ANIMATION_PULSE, pulse_animation )
             cell["renderer"].set_collider_visible( False )
@@ -365,18 +438,32 @@ init python:
             self.target_slot = target_slot
 
         def move_towards_target( self, delta_sec ):
-            at_target              = False
-            target_row, target_col = self.target_slot
+            at_target = False
+
+            # get the appropriate target depending on whether we're retracting
+            # or just moving/infecting.  if we're retracting, we're moving
+            # back towards our original slot.
+            if self.state == CELL_STATE_RETRACTING:
+                target_row, target_col = self.slot
+            else:
+                target_row, target_col = self.target_slot
 
             # figure out which we have to go to reach our target and update
             # our position.
             tx, ty  = get_slot_position( target_row, target_col )
             sx      = self.game_object["transform"].x
             sy      = self.game_object["transform"].y
-            dx      = tx - sx
-            dy      = ty - sy
-            sx     += sign( dx ) * delta_sec * CELL_SPEED
-            sy     += sign( dy ) * delta_sec * CELL_SPEED
+
+            # adjust our target if we're infecting.  in this case, we're
+            # moving only halfway towards the target slot.
+            if self.state == CELL_STATE_INFECTING:
+                tx = (tx + sx) / 2
+                ty = (ty + sy) / 2
+
+            dx  = tx - sx
+            dy  = ty - sy
+            sx += sign( dx ) * delta_sec * CELL_SPEED
+            sy += sign( dy ) * delta_sec * CELL_SPEED
 
             if almost_equal( sx, tx ) and almost_equal( sy, ty ):
                 # we're pretty much on our target destination.  set the new
@@ -390,6 +477,11 @@ init python:
             # set the new position and return whether we reached our target.
             self.game_object["transform"].set_position( sx, sy )
             return at_target
+
+        def infect( self, idle_time, growth_rate ):
+            self.state       = CELL_STATE_INFECTED
+            self.idle_time   = idle_time
+            self.growth_rate = growth_rate
 
         def on_grow_complete( self ):
             self.state = CELL_STATE_IDLE
@@ -405,6 +497,7 @@ init python:
             # perform actions in this order of importance:
             #
             #   * moving
+            #   * infecting
             #   * growing
             #   * chilling
             if self.state == CELL_STATE_MOVING:
@@ -419,6 +512,25 @@ init python:
                     self.state       = CELL_STATE_IDLE
                     self.grid.remove_cell( self, row, col )
                     self.reset_move_timeout()
+            elif self.state == CELL_STATE_INFECTING:
+                # move halfway towards the target
+                if self.move_towards_target( delta_sec ):
+                    # we reached as far as we need to go for infecting.  now
+                    # retract back to our original cell.
+                    self.target_slot = None
+                    self.state       = CELL_STATE_RETRACTING
+            elif self.state == CELL_STATE_RETRACTING:
+                # move back towards our original slot after infecting.
+                if self.move_towards_target( delta_sec ):
+                    # we reached our original slot.  go to the idle state.
+                    self.state = CELL_STATE_IDLE
+                    self.reset_move_timeout()
+            elif self.state == CELL_STATE_INFECTED:
+                self.game_object["renderer"].set_animation_frameset( INFECTED_FRAMESET )
+                self.state = CELL_STATE_IDLE
+                self.type  = INFECTED_CELL_TYPE
+                self.reset_move_timeout()
+                self.reset_grow_timeout()
             elif self.state == CELL_STATE_CHILD_GROWING:
                 # move towards the target.
                 if self.move_towards_target( delta_sec ):
@@ -456,17 +568,49 @@ init python:
                         # again later.
                         self.reset_grow_timeout()
                 elif self.move_timeout <= 0:
-                    # figure out which slots we can move to.
+                    # we do different things depending on whether we are a
+                    # healthy or infected cell.
                     row, col  = self.slot
-                    neighbors = self.grid.get_free_neighbors( row, col )
 
-                    # do something only if we have a free slot.
-                    if neighbors:
-                        target_slot = renpy.random.choice( neighbors )
-                        self.state  = CELL_STATE_MOVING
-                        self.set_target_slot( target_slot )
+                    if self.type == HEALTHY_CELL_TYPE:
+                        # healthy cells simply move to a free cell near them.
+                        neighbors = self.grid.get_free_neighbors( row, col )
+
+                        # do something only if we have a free slot.
+                        if neighbors:
+                            target_slot = renpy.random.choice( neighbors )
+                            self.state  = CELL_STATE_MOVING
+                            self.set_target_slot( target_slot )
+                        else:
+                            # we can't move because all neighbor slots are
+                            # occupied.  reset the move timeout and try to
+                            # move again later.
+                            self.reset_move_timeout()
                     else:
-                        # we can't move because all neighbor slots are
-                        # occupied.  reset the move timeout and try to move
-                        # again later.
-                        self.reset_move_timeout()
+                        # infected cells will either try to move to a free
+                        # cell or infect a neighboring healthy cell.
+                        neighbors = self.grid.get_noninfected_neighbors( row, col )
+
+                        # do something only if we can move or infect.
+                        if neighbors:
+                            trow, tcol = renpy.random.choice( neighbors )
+                            cells      = self.grid.get_cells( trow, tcol )
+
+                            if cells:
+                                # there should be EXACTLY one healthy cell in
+                                # the target we picked.
+                                renpy.log( "Cells: %s" % cells[0].type )
+                                cells[0].infect( self.idle_time, self.growth_rate )
+                                cells[0].set_parent( self )
+                                self.state       = CELL_STATE_INFECTING
+                                self.target_slot = (trow, tcol)
+                            else:
+                                # we picked an empty slot.  just move to it
+                                # like we would if we were healthy.
+                                self.state = CELL_STATE_MOVING
+                                self.set_target_slot( (trow, tcol) )
+                        else:
+                            # we can't move or infect because all neighbor
+                            # slots are occupied by our friends.  reset the
+                            # move timeout and try to move again later.
+                            self.reset_move_timeout()
