@@ -193,6 +193,7 @@ init python:
 
             # XXX: remove me.
             self.spawn_cell( HEALTHY_CELL_TYPE )
+            self.spawn_cell( INFECTED_CELL_TYPE )
 
         def create_dish( self ):
             self.dish             = GameObject()
@@ -212,7 +213,11 @@ init python:
 
             cell             = GameObject()
             cell["renderer"] = GameRenderer()
+            cell["collider"] = GameBoxCollider( Size( GRID_CELL_WIDTH,
+                                                      GRID_CELL_HEIGHT ),
+                                                Anchor.CENTER )
             cell["renderer"].add_animation( CELL_ANIMATION_PULSE, pulse_animation )
+            cell["renderer"].set_collider_visible( False )
             PrefabFactory.add_prefab( CELL_TYPE, cell )
 
         def spawn_cell( self, cell_type, slot=None, state=None ):

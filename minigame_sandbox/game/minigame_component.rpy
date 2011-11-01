@@ -209,15 +209,16 @@ init -50 python:
                     renderer.render( blitter, transform )
 
             if self.is_collider_visible:
-                self.render_collider( blitter )
+                self.render_collider( blitter, world_transform )
 
-        def render_collider( self, blitter ):
+        def render_collider( self, blitter, world_transform ):
             collider = self.game_object["collider"]
 
             if isinstance( collider, GameBoxCollider ):
                 bounds = collider.get_bounds()
                 blitter.canvas().rect( self.collider_color,
-                                       (bounds.left, bounds.top,
+                                       (bounds.left + world_transform.x,
+                                        bounds.top + world_transform.y,
                                         bounds.right - bounds.left + 1,
                                         bounds.bottom - bounds.top + 1) )
 
