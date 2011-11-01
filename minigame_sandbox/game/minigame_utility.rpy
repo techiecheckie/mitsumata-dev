@@ -101,7 +101,6 @@ init -50 python:
 
         def get_displayables( self ):
             displayables = []
-            renpy.log( "%s" % self.frames )
             for frameset in self.frames:
                 for frame in self.frames[frameset]:
                     displayables.extend( frame.get_displayables() )
@@ -142,7 +141,6 @@ init -50 python:
                             self.on_animation_end()
 
         def get_current_frame( self ):
-            renpy.log( "%s" % self.current_frameset )
             frames = self.frames[self.current_frameset]
             return frames[self.current_frame]
 
