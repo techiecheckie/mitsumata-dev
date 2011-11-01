@@ -212,7 +212,7 @@ menu:
         call shop_loop
     "Research.":
         call research_loop
-        $unlock_entry("something", "031")    
+        $journal.unlock_entry("something", "031")    
 label kaz2:
     ro "Doctor Osamu!"
         
@@ -609,7 +609,7 @@ menu:
         call shop_loop
     "Research.":
         call research_loop
-        $unlock_entry("something", "031")    
+        $journal.unlock_entry("something", "031")    
 
 label kaz4:
     
@@ -1028,7 +1028,7 @@ menu:
         call shop_loop
     "Research.":
         call research_loop
-        $unlock_entry("something", "031")    
+        $journal.unlock_entry("something", "031")    
         
 label kaz7:
     k  "No.  No, that can’t be right…"
@@ -1384,7 +1384,7 @@ menu:
     "Store.":
         call shop_loop
     "Research.":
-        $unlock_entry("something", "031")
+        $journal.unlock_entry("something", "031")
 
 label kaz11:
     "I set my alarm extra early today for Roman's party."
@@ -1711,7 +1711,7 @@ label kaz13b:
 label kaz13c:    
     l "I'll need to go have my conference with Susa, but I did want to give you this."
     
-    $unlock_item("something or other")
+    $inventory.unlock_item("something or other")
     
     ro "Oh Liza, you didn't have to."
     l "But I wanted to, so take it and keep it."
@@ -1774,7 +1774,7 @@ menu:
         call shop_loop
     "Research.":
         call research_loop
-        $unlock_entry("something", "031")
+        $journal.unlock_entry("something", "031")
         
 label kaz14:
     "This morning is an unlucky morning, I think."

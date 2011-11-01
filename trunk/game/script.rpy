@@ -634,33 +634,41 @@ $ magpot = inventory.item_unlocked("magpotion")
 #--------------------------------
 
 label start: 
+menu:
+        "Jump ahead for a test.":
+                jump Scene5
+        "Start from beginning.":
+                jump Scene1
+                
+label otherstuff:    
     scene bg blackscr
     $show_main_ui()
-     
-    show bg riroom at shaky with dissolve 
-    $renpy.pause(3.0)
     
-    show boom
-    $renpy.pause(3.0)
+# All of the below commented out effects have proven to work.     
+    #show bg riroom at shaky with dissolve 
+    #$renpy.pause(3.0)
     
-    show snow
-    $renpy.pause(9.0)
-    hide snow
+    #show boom
+    #$renpy.pause(3.0)
     
-    $ double_vision_on("bg suroom")
-    $renpy.pause(2.5)
-    $ double_vision_off()
+    #show snow
+    #$renpy.pause(9.0)
+    #hide snow
     
-    show r happy with noise_dissolve 
-    $renpy.pause(3.0)
-    hide r happy with noise_dissolve
-    $renpy.pause(5.0)
+    #$ double_vision_on("bg suroom")
+    #$renpy.pause(2.5)
+    #$ double_vision_off()
     
-    show ro neu at right with teleport
-    $renpy.pause(2.0)
+    #show r happy with noise_dissolve 
+    #$renpy.pause(3.0)
+    #hide r happy with noise_dissolve
+    #$renpy.pause(5.0)
     
-    show bg soroom with wipedown
-    $renpy.pause(2.0)
+    #show ro neu at right with teleport
+    #$renpy.pause(2.0)
+    
+    #show bg soroom with wipedown
+    #$renpy.pause(2.0)
 
     #play music "music/mitsumata1.mp3"
     #show bg rikureading
@@ -1274,8 +1282,7 @@ label Scene5:
     r "Hm---ahh!"
    
     #We need a status message thinger here to declare items.
-    $ unlock_item("pda")
-    #if $ pda: 
+    $inventory.unlock_item("pda") 
     $ pda = True
     
     $ show_message("You can now access the PDA menu.", "medium")
@@ -1433,7 +1440,7 @@ label getknife:
         
         #This goes in the regular textbox.
         "Might as well keep it. If I can’t use it, I can pawn it."
-        $ unlock_item("knife")
+        $inventory.unlock_item("knife")
         jump Scene7
    
 label leaveknife:
@@ -1551,9 +1558,6 @@ label Scene8:
     
     "I don’t think this guy knows what he’s doing."
     
-    $ flash
-    $ flash
-    $ flash
     $renpy.pause(1.5)
     "A flash of blue light suddenly appears in his hand, before quickly dissipating."
     show ro surp at right with dissolve
@@ -1569,9 +1573,7 @@ label Scene8:
     m "Let me guess—you’re the new meat? Too bad. I suppose I can fit you both in."
     
     ro "Wai--wait--I’ll get it---"
-    $ flash
-    $ flash
-    $ flash
+
     $renpy.pause(1.5)
     #play sound false start magic attack
     
@@ -1609,10 +1611,7 @@ label useknife1:
     "I don’t want to die."
     
     "I don’t--"
-    
-    $ flash
-    $ flash
-    $ flash
+   
     $renpy.pause(1.5)
     ro "Damn it...damn it, why won’t it work..."
     
@@ -1675,7 +1674,7 @@ label Scene10:
     hide s smile
     $hide_main_ui()
     with dissolve
-    show bg firstview with dissolve
+    #show bg firstview with dissolve
     #Put wispy wind effect here.
     $show_main_ui()
     
@@ -1844,7 +1843,7 @@ label Scene12:
     
     ma "Riku, listen to me. No matter what happens, we’ll be here. You remember what I told you about staying safe. And take this."
     
-    $ unlock_item("redjewel")
+    $inventory.unlock_item("redjewel")
     
     r "Yeah. Thanks, Mom."
     
@@ -1877,7 +1876,7 @@ label Scene13:
     #show ro frown 
     ro "Don’t say that; he’s just not used to going much of anywhere. He’s always like this when we get out. I think it’s sort of endearing."
     
-    r "Sure. Endearing. Right. (Aa sou.)"
+    r "Sure. Endearing. Right."
     
     "I guess, at the very least, there isn’t really anyone around. In fact---"
     
@@ -2080,9 +2079,9 @@ label Scene13:
     
     ro "Well, first—here."
     
-    $ unlock_item("map")
-    $ unlock_entry("Humans", "054")
-    $ unlock_entry("Majin", "043")
+    $inventory.unlock_item("map")
+    $inventory.unlock_entry("Humans", "054")
+    $journal.unlock_entry("Majin", "043")
     
     ro "It’s a map of the whole place, and some basic information on Majin. You can just put it in your palm pilot if you want to read it later."
         
@@ -2164,9 +2163,9 @@ label Scene13:
     
     ro "Some of them do. I’m not sure what they’re called, really, but they all belong to that Church, the Church of the Acts."
     
-    $ unlock_entry("Church of the Acts", "038")
-    $ unlock_entry("Humans", "057")
-    $ unlock_entry("Church of the Acts", "041")
+    $journal.unlock_entry("Church of the Acts", "038")
+    $journal.unlock_entry("Humans", "057")
+    $journal.unlock_entry("Church of the Acts", "041")
     
     r "That new popular thing that opened up in the country?"
     
@@ -2208,8 +2207,8 @@ label Scene13:
     ro "Right, right—your powers. Ours are self explanatory. We're elemental users."
     ro "You use fire, I use ice. Soume can control plants."
     
-    $unlock_entry("Majin", "044")
-    $unlock_entry("Majin", "047")
+    $journal.unlock_entry("Majin", "044")
+    $journal.unlock_entry("Majin", "047")
     r "Is it hard?"
     
     ro "Immensely. I’m still trying to get it right in the heat of battle, myself..."
@@ -2235,7 +2234,7 @@ label Scene13:
     
     r "Hm. Maybe I will..."
     
-    $ unlock_entry("Humans", "055")
+    $journal.unlock_entry("Humans", "055")
 
 menu:
     "Hang with Soume.":
@@ -2264,7 +2263,7 @@ label Scene14A:
         show r grin at left with dissolve
         r "And why is that? Afraid I'll singe the foliage?"
         
-        $unlock_entry(Soume, 010)
+        $journal.unlock_entry(Soume, 010)
         "There he goes again, dancing around and being all fucking whimsical."
         show s gigg at right with dissolve
         #Soume giggles.
@@ -2342,7 +2341,7 @@ label Scene14B:
         r "Yeah, I’ve never seen fire that was...uh...black."
         show ro smile at right with dissolve
         ro "You can ask Soume about it later. But fire’s a strong element, even against other fire."
-        $unlock_entry("Riku","004")
+        $journal.unlock_entry("Riku","004")
         show r grin at left with dissolve
         r "So next time I run into that guy, he's toast!"  
         show ro sweat at right with dissolve
@@ -2437,7 +2436,7 @@ label Scene15:
     
     show ro pout at right with dissolve
     ro "Uhm. Well, actually, I used to be a cook back when I was a servant. I mostly prepared...us. Majin. It’s not fun to find out that your friend is your next meal."
-    $unlock_entry("Roman","008")
+    $journal.unlock_entry("Roman","008")
     $renpy.pause(1.0)
     
     show r neu at left with dissolve
@@ -2450,12 +2449,12 @@ label Scene15:
     
     show ro neu at right with dissolve
     ro "That’s correct. I'm a vegan."
-    $unlock_entry("Roman","006")
+    $journal.unlock_entry("Roman","006")
  
     ro "Their animal friends may not exact revenge, but I just can't stand to think of eating a creature that can cry out in pain." 
     ro "To humans, we're every bit an animal as any cow, chicken or lamb."
     
-    $unlock_entry("Humans","060")
+    $journal.unlock_entry("Humans","060")
 
     show r upset at left with dissolve   
     r "Not...-all- humans."
@@ -2464,7 +2463,7 @@ label Scene15:
     ro "Oh, forgive me. I didn’t mean---"
     ro "I agree with you. Many are very kind people, and I also don’t support Majin eating humans either, and some do."
     
-    $unlock_entry("Majin","045")
+    $journal.unlock_entry("Majin","045")
 
     show ro neu at right with dissolve
     ro "I just like to check. For my own sake. Were...you hungry?"
@@ -2503,7 +2502,7 @@ label Scene16:
     
     #Mamoru makes a sound of agony.
     m "No, it’s all right, \"Norah\". Would you mind bringing me a glass of water? Aaghh--" 
-    #$ Young Lady = "Norah"
+    $ Norah = "Norah"
     #play sound Sound of sizzling flesh
     
     n "Okay. Hang in there."
@@ -2517,7 +2516,7 @@ label Scene16:
     
     n "Well, I brought some fire salve. I could at least wrap it for you, and bring you a meal?"
     
-    $unlock_item("salve")
+    $inventory.unlock_item("salve")
     
     m "You’re a good girl, Norah. My favorite sister."
     
