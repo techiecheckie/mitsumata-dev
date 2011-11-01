@@ -536,6 +536,7 @@ init python:
             elif self.state == CELL_STATE_INFECTED:
                 self.infect_timeout -= delta_sec
 
+                # do a cheesy flash effect while we're being infected.
                 toggle_number = math.trunc( self.infect_timeout / INFECT_TOGGLE_DURATION )
 
                 if toggle_number % 2 == 0:
@@ -544,6 +545,7 @@ init python:
                     self.game_object["renderer"].set_animation_frameset( HEALTHY_FRAMESET )
 
                 if self.infect_timeout <= 0:
+                    self.game_object["renderer"].set_animation_frameset( INFECTED_FRAMESET )
                     self.state = CELL_STATE_IDLE
                     self.reset_move_timeout()
                     self.reset_grow_timeout()
@@ -615,7 +617,6 @@ init python:
                             if cells:
                                 # there should be EXACTLY one healthy cell in
                                 # the target we picked.
-                                renpy.log( "Cells: %s" % cells[0].type )
                                 cells[0].infect( self.idle_time, self.growth_rate )
                                 cells[0].set_parent( self )
                                 self.state       = CELL_STATE_INFECTING
