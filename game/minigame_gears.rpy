@@ -1,66 +1,80 @@
 init python:
-    import collections
-    import itertools
     import math
     import pygame
-    
+
+    # Replace with whatever the real gears are.
     GEAR_L_SIZE = Size(133,131)
     GEAR_M_SIZE = Size(106,105)
     GEAR_S_SIZE = Size(85,84)
     
+    # From an image I quickly cropped from one of the complete images
     AXLE_WIDTH  = 23
     AXLE_HEIGHT = 24
     
+    # The (starting point of) gear area on the right side of the screen.
     GEAR_AREA = (400, 40)
     GEAR_AREA_SPACING = (65, 65)
     
+    # How far a released (mouse up) gear can be for it to snap to an axle.
     SNAP_DISTANCE = 35
     
+    # (x, y, required gear size to complete, (optinal flag) locked)
+    #
+    # The order doesn't really matter here, but having them in a descending order
+    # (top to bottom) makes it easier to find and adjust the correct coordinates
     LEVELS = [
         [
-         (312,  96, GEAR_M_SIZE, "locked"),
-         (237, 118, GEAR_S_SIZE),
-         (257, 202, GEAR_L_SIZE),
-         (170, 249, GEAR_M_SIZE),
-         (190, 318, GEAR_S_SIZE),
+         (257, 202, GEAR_L_SIZE),         
          (105, 345, GEAR_L_SIZE),
-         (131, 436, GEAR_M_SIZE, "locked")          
+
+         (312,  96, GEAR_M_SIZE, "locked"),
+         (131, 436, GEAR_M_SIZE, "locked"),
+         (170, 249, GEAR_M_SIZE),         
+
+         (237, 118, GEAR_S_SIZE),
+         (190, 328, GEAR_S_SIZE)
         ],
         [
-         ( 90,  99, None),
+         (295, 296, GEAR_L_SIZE),         
+         ( 80, 328, GEAR_L_SIZE),
+
          (306,  95, GEAR_M_SIZE, "locked"),
+         (126, 453, GEAR_M_SIZE, "locked"),
          (236, 154, GEAR_M_SIZE),
-         (139, 175, None),
-         (317, 198, GEAR_M_SIZE),
-         ( 67, 231, None),
+         (317, 198, GEAR_M_SIZE),         
+         (169, 378, GEAR_M_SIZE),
+
          (215, 249, GEAR_S_SIZE),
          (157, 283, GEAR_S_SIZE),
-         (295, 296, GEAR_L_SIZE),
-         (212, 316, None),
-         ( 80, 328, GEAR_L_SIZE),
-         (169, 378, GEAR_M_SIZE),
+         
+         ( 90,  99, None),    
+         (139, 175, None),     
+         ( 67, 231, None),         
+         (212, 316, None),  
          (338, 408, None),
-         (126, 453, GEAR_M_SIZE, "locked"),
          (248, 457, None)
         ],
         [
-         (145, 100, GEAR_M_SIZE),
-         (213, 102, None),
-         (305,  98, GEAR_M_SIZE, "locked"),
-         ( 82, 158, GEAR_S_SIZE),
-         (204, 165, GEAR_S_SIZE),
+         (126, 236, GEAR_L_SIZE, "locked"),         
          (323, 198, GEAR_L_SIZE),
-         (235, 224, GEAR_S_SIZE),
-         (126, 236, GEAR_L_SIZE, "locked"),
-         ( 60, 282, None),
-         (278, 291, None),
-         (202, 320, GEAR_M_SIZE),
          (101, 346, GEAR_L_SIZE),
-         (276, 349, GEAR_S_SIZE),
-         (168, 378, None),
-         (308, 407, GEAR_S_SIZE),
          (222, 432, GEAR_L_SIZE),
-         (123, 457, GEAR_M_SIZE, "locked"),
+
+         (305,  98, GEAR_M_SIZE, "locked"),
+         (123, 457, GEAR_M_SIZE, "locked"),         
+         (145, 100, GEAR_M_SIZE),
+         (202, 320, GEAR_M_SIZE),         
+         
+         ( 82, 158, GEAR_S_SIZE),
+         (204, 165, GEAR_S_SIZE),         
+         (235, 224, GEAR_S_SIZE),
+         (276, 349, GEAR_S_SIZE),
+         (308, 407, GEAR_S_SIZE),
+
+         (213, 102, None),         
+         ( 60, 282, None),         
+         (278, 291, None),         
+         (168, 378, None),         
          (317, 489, None)
         ],
         [
@@ -84,8 +98,7 @@ init python:
          ( 70, 105, None),
          (278, 164, None),
          (170, 187, None),
-         (347, 220, None),
-         (170, 187, None),
+         (347, 220, None),         
          ( 51, 278, None),
          (249, 349, None),
          (147, 387, None)
@@ -110,7 +123,6 @@ init python:
          (201,  90, None),
          ( 80, 114, None),
          (268, 157, None),
-         (201,  90, None),
          ( 60, 217, None),
          (186, 281, None),
          (199, 400, None),
@@ -188,12 +200,15 @@ init python:
     class Gears( Minigame ):                
         def __init__( self, level_number=1 ):
             super( Gears, self ).__init__()
-            
+            self.level_number = level_number
+            self.create_game()
+
+        def create_game(self):
             self.selected_gear = None
             self.axles = []
             self.gears = []
             
-            level = LEVELS[level_number-1]
+            level = LEVELS[self.level_number-1]
 
             self.create_background()            
             self.create_axles(level)
@@ -227,7 +242,7 @@ init python:
                         img = "gear_s"
 
                     axle.set_gear(gear)                    
-                    #gear.set_locked(True)
+                    gear.set_locked(True)
                     gear.set_axle(axle)
                     gear["transform"].set_position(x - size.width/2, y - size.height/2)
                     gear["renderer"] = GameRenderer(GameImage("gfx/gears/" + img + "_.png"))
@@ -237,9 +252,8 @@ init python:
                 self.axles.append(axle)
 
         
-        
         def create_gears(self, level):
-            # "grid" placement
+            # initial placement
             accum_x = 0
             accum_y = 0
 
@@ -265,7 +279,7 @@ init python:
                     gear = Gear(x, y, data[2])
                     gear["renderer"] = GameRenderer(GameImage("gfx/gears/" + img + ".png"))
                     gear["transform"].set_position(x, y)
-                    gear["collider"] = GameBoxCollider(data[2], Anchor.CENTER)
+                    gear["collider"] = GameBoxCollider(data[2])
                     self.gears.append(gear)
                     
                     
@@ -322,8 +336,11 @@ init python:
                             size = another_gear.get_size()
                             distance = math.sqrt(dx*dx + dy*dy)
                             
-                            distance -= (0.75*size.width)/2
-                            distance -= (0.75*self.selected_gear.get_size().width)/2
+                            # Note: multiplying by 0.76 takes care of the invisible
+                            # areas around the test images I've used here. The 
+                            # final version shouldn't have to do this. 
+                            distance -= (0.76*size.width)/2
+                            distance -= (0.76*self.selected_gear.get_size().width)/2
                             
                             if distance < 0:
                               enough_space = False
@@ -346,25 +363,44 @@ init python:
                       
                       return
                       
-                # Toss the gear back to the grid area (though now they just stack there)
-                self.selected_gear.clear_axle()
-                self.selected_gear.set_position((400, 40))
-                self.selected_gear["transform"].set_position(400, 40)
+                # Toss the gear back to the area on the right side
+
+                if mx < GEAR_AREA[0] or mx > GEAR_AREA[0] + 200:
+                  x = GEAR_AREA[0]
+                else:
+                  x = mx
+
+                if my > 500 or my < 0:
+                  y = GEAR_AREA[1]
+                else:
+                  y = my
+
+                x -= self.selected_gear.get_size().width/2
+                y -= self.selected_gear.get_size().height/2
+
+                self.selected_gear.set_position((x, y))
+                self.selected_gear["transform"].set_position(x, y)
+                self.selected_gear.clear_axle()                
                 self.selected_gear = None
                 
                 return
+
             
         def on_mouse_move( self, mx, my ):
             if self.selected_gear:
                 mx, my = self.transform_screen_to_world(mx,my)
                 gear = self.selected_gear
+                gear.clear_axle()
                 gear["transform"].set_position(mx - gear.get_size().width/2, my - gear.get_size().height/2) 
             
+
         def check_if_complete(self):
             for gear in self.gears:
               axle = gear.get_axle()
               if axle == None or axle.get_required_size() != gear.get_size():
                 return
                     
-            print "You won!"
+            # testing
+            self.level_number += 1
+            self.create_game()
 
