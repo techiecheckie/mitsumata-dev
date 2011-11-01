@@ -79,12 +79,21 @@ init -50 python:
                                     bounds.bottom - bounds.top + 1) )
 
     class GameAnimation( object ):
-        def __init__( self, frames, frame_rate=0 ):
+        DEFAULT_FRAMESET = "default"
+
+        def __init__( self, default_frames=None, frame_rate=0 ):
             super( GameAnimation, self ).__init__()
-            self.frames           = ( [ frames ]
-                                      if not isinstance( frames, collections.Sequence )
-                                      else (frames or []) )
+            if default_frames:
+                if isinstance( default_frames, collections.Sequence ):
+                    default_frames = default_frames
+                else:
+                    default_frames = [ default_frames ]
+            else:
+                default_frames = []
+
+            self.frames           = { GameAnimation.DEFAULT_FRAMESET : default_frames }
             self.frame_duration   = 1.0 / frame_rate if frame_rate > 0 else 0
+            self.current_frameset = GameAnimation.DEFAULT_FRAMESET
             self.current_frame    = 0
             self.elapsed_time     = 0
             self.loop_animation   = True
@@ -92,9 +101,20 @@ init -50 python:
 
         def get_displayables( self ):
             displayables = []
-            for frame in self.frames:
-                displayables.extend( frame.get_displayables() )
+            renpy.log( "%s" % self.frames )
+            for frameset in self.frames:
+                for frame in self.frames[frameset]:
+                    displayables.extend( frame.get_displayables() )
             return displayables
+
+        def set_frames( self, frameset, frames ):
+            self.frames[frameset] = frames
+
+        def set_frameset( self, frameset ):
+            if frameset not in self.frames:
+                raise ValueError( "Invalid frameset %s.  Not a recognized "
+                                  "frameset name." )
+            self.current_frameset = frameset
 
         def set_looping( self, loop_animation ):
             self.loop_animation = loop_animation
@@ -107,26 +127,31 @@ init -50 python:
             self.current_frame = 0
 
         def update( self, delta_sec ):
+            number_frames = len( self.frames[self.current_frameset] )
+
             if self.frame_duration > 0:
                 self.elapsed_time += delta_sec
                 while self.elapsed_time >= self.frame_duration:
                     self.elapsed_time  -= self.frame_duration
                     self.current_frame  = self.current_frame + 1
-                    if self.current_frame >= len( self.frames ):
-                        self.current_frame = (self.current_frame % len( self.frames )
+                    if self.current_frame >= number_frames:
+                        self.current_frame = (self.current_frame % number_frames
                                               if self.loop_animation
-                                              else len( self.frames ) - 1)
+                                              else number_frames - 1)
                         if self.on_animation_end:
                             self.on_animation_end()
 
         def get_current_frame( self ):
-            return self.frames[self.current_frame]
+            renpy.log( "%s" % self.current_frameset )
+            frames = self.frames[self.current_frameset]
+            return frames[self.current_frame]
 
     class GameAnimator( object ):
         def __init__( self ):
             super( GameAnimator, self ).__init__()
             self.animations            = {}
             self.current_animation     = None
+            self.current_frameset      = GameAnimation.DEFAULT_FRAMESET
             self.user_on_animation_end = None
 
         def get_displayables( self ):
@@ -140,14 +165,21 @@ init -50 python:
             self.animations[name] = animation
 
         def play_animation( self, name, loop_animation=True,
-                            user_on_animation_end=None ):
+                            user_on_animation_end=None, frameset=None ):
+            frameset                   = frameset or self.current_frameset
             self.user_on_animation_end = user_on_animation_end
             self.current_animation     = self.animations[name]
             self.current_animation.reset()
             self.current_animation.set_looping( loop_animation )
+            self.current_animation.set_frameset( frameset )
 
         def stop_animation( self ):
             self.current_animation = None
+
+        def set_frameset( self, frameset ):
+            self.current_frameset = frameset
+            if self.current_animation:
+                self.current_animation.set_frameset( frameset )
 
         def on_animation_end( self ):
             if not self.current_animation.loop_animation:

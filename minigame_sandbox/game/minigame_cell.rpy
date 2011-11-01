@@ -2,16 +2,20 @@ init python:
     import itertools
 
     class CellLevel( object ):
-        def __init__( self, ai_idle_time, human_idle_time ):
-            self.ai_idle_time    = ai_idle_time
-            self.human_idle_time = human_idle_time
+        def __init__( self, infected_idle_time, healthy_idle_time ):
+            self.infected_idle_time = infected_idle_time
+            self.healthy_idle_time  = healthy_idle_time
 
     CELL_LEVELS = [
-        CellLevel( ai_idle_time    = (0.6, 0.85),
-                   human_idle_time = (0.7, 0.9) )
+        CellLevel( infected_idle_time = (0.6, 0.85),
+                   healthy_idle_time  = (0.7, 0.9) )
         ]
 
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####
+
+    # frameset names.
+    HEALTHY_FRAMESET  = "healthy"
+    INFECTED_FRAMESET = "infected"
 
     # animation names.
     CELL_ANIMATION_PULSE = "pulse"
@@ -25,17 +29,20 @@ init python:
     NUMBER_CELL_PULSE_FRAMES = 3
 
     # prefab names.
-    AI_CELL_TYPE    = "ai_cell"
-    HUMAN_CELL_TYPE = "human_cell"
+    CELL_TYPE = "cell"
+
+    # cell types.
+    HEALTHY_CELL_TYPE  = "healthy"
+    INFECTED_CELL_TYPE = "infected"
 
     # how fast cells multiply.
-    HUMAN_GROWTH_RATE     = 2
-    AI_STAGE1_GROWTH_RATE = 0.5
-    AI_STAGE2_GROWTH_RATE = 0.3
-    AI_STAGE3_GROWTH_RATE = 0.1
+    HEALTHY_GROWTH_RATE         = 2
+    INFECTED_STAGE1_GROWTH_RATE = 0.5
+    INFECTED_STAGE2_GROWTH_RATE = 0.3
+    INFECTED_STAGE3_GROWTH_RATE = 0.1
 
-    AI_STAGE1_GROWTH_RATE_DURATION = 20
-    AI_STAGE2_GROWTH_RATE_DURATION = 40
+    INFECTED_STAGE1_GROWTH_RATE_DURATION = 20
+    INFECTED_STAGE2_GROWTH_RATE_DURATION = 40
 
     # how fast a cell moves on either axis in pixels per second.
     CELL_SPEED = 70
@@ -163,51 +170,29 @@ init python:
             # set up automated level difficulty parameters.
             level = CELL_LEVELS[level_number - 1]
 
-            self.ai_idle_time      = Randomizer( level.ai_idle_time[0],
-                                                 level.ai_idle_time[1] )
-            self.human_idle_time   = Randomizer( level.human_idle_time[0],
-                                                 level.human_idle_time[1] )
-            self.ai_growth_rate    = StagedValue( [ (0,                              AI_STAGE1_GROWTH_RATE),
-                                                    (AI_STAGE1_GROWTH_RATE_DURATION, AI_STAGE2_GROWTH_RATE),
-                                                    (AI_STAGE2_GROWTH_RATE_DURATION, AI_STAGE3_GROWTH_RATE) ] )
-            self.human_growth_rate = StagedValue( [ (0, HUMAN_GROWTH_RATE) ] )
+            self.infected_idle_time   = Randomizer( level.infected_idle_time[0],
+                                                    level.infected_idle_time[1] )
+            self.healthy_idle_time    = Randomizer( level.healthy_idle_time[0],
+                                                    level.healthy_idle_time[1] )
+            self.infected_growth_rate = StagedValue( [ (0,                                    INFECTED_STAGE1_GROWTH_RATE),
+                                                       (INFECTED_STAGE1_GROWTH_RATE_DURATION, INFECTED_STAGE2_GROWTH_RATE),
+                                                       (INFECTED_STAGE2_GROWTH_RATE_DURATION, INFECTED_STAGE3_GROWTH_RATE) ] )
+            self.healthy_growth_rate  = StagedValue( [ (0, HEALTHY_GROWTH_RATE) ] )
 
             # setup game state.
             self.elapsed_time = 0
 
             # setup entities.
-            self.dish        = None
-            self.human_cells = []
-            self.ai_cells    = []
-            self.grid        = Grid()
+            self.dish           = None
+            self.healthy_cells  = []
+            self.infected_cells = []
+            self.grid           = Grid()
 
             self.create_dish()
             self.create_cells()
 
             # XXX: remove me.
-            self.spawn_cell( HUMAN_CELL_TYPE )
-            # self.spawn_cell( HUMAN_CELL_TYPE )
-            # self.spawn_cell( HUMAN_CELL_TYPE )
-            # self.spawn_cell( HUMAN_CELL_TYPE )
-            # self.spawn_cell( HUMAN_CELL_TYPE )
-
-            # self.spawn_cell( HUMAN_CELL_TYPE )
-            # self.spawn_cell( HUMAN_CELL_TYPE )
-            # self.spawn_cell( HUMAN_CELL_TYPE )
-            # self.spawn_cell( HUMAN_CELL_TYPE )
-            # self.spawn_cell( HUMAN_CELL_TYPE )
-
-            # self.spawn_cell( HUMAN_CELL_TYPE )
-            # self.spawn_cell( HUMAN_CELL_TYPE )
-            # self.spawn_cell( HUMAN_CELL_TYPE )
-            # self.spawn_cell( HUMAN_CELL_TYPE )
-            # self.spawn_cell( HUMAN_CELL_TYPE )
-
-            # self.spawn_cell( HUMAN_CELL_TYPE )
-            # self.spawn_cell( HUMAN_CELL_TYPE )
-            # self.spawn_cell( HUMAN_CELL_TYPE )
-            # self.spawn_cell( HUMAN_CELL_TYPE )
-            # self.spawn_cell( HUMAN_CELL_TYPE )
+            self.spawn_cell( HEALTHY_CELL_TYPE )
 
         def create_dish( self ):
             self.dish             = GameObject()
@@ -215,21 +200,20 @@ init python:
             self.dish["transform"].set_position( PETRI_DISH_X, PETRI_DISH_Y )
 
         def create_cells( self ):
-            human_cell = GameObject()
-            human_cell["renderer"] = GameRenderer()
-            human_cell["renderer"].add_animation( CELL_ANIMATION_PULSE,
-                                                  GameAnimation( [ GameImage( "gfx/cells/human/cell-human-%d.png" % frame_index, Anchor.CENTER )
-                                                                   for frame_index in xrange( NUMBER_CELL_PULSE_FRAMES ) ],
-                                                                 NUMBER_CELL_PULSE_FRAMES / CELL_ANIMATION_PULSE_DURATION ) )
-            PrefabFactory.add_prefab( HUMAN_CELL_TYPE, human_cell )
+            pulse_animation = GameAnimation( frame_rate=(NUMBER_CELL_PULSE_FRAMES /
+                                                         CELL_ANIMATION_PULSE_DURATION) )
 
-            ai_cell = GameObject()
-            ai_cell["renderer"] = GameRenderer()
-            ai_cell["renderer"].add_animation( CELL_ANIMATION_PULSE,
-                                               GameAnimation( [ GameImage( "gfx/cells/ai/cell-ai-%d.png" % frame_index, Anchor.CENTER )
-                                                                for frame_index in xrange( NUMBER_CELL_PULSE_FRAMES ) ],
-                                                              NUMBER_CELL_PULSE_FRAMES / CELL_ANIMATION_PULSE_DURATION ) )
-            PrefabFactory.add_prefab( AI_CELL_TYPE, ai_cell )
+            pulse_animation.set_frames( HEALTHY_FRAMESET,
+                                        [ GameImage( "gfx/cells/human/cell-human-%d.png" % frame_index, Anchor.CENTER )
+                                          for frame_index in xrange( NUMBER_CELL_PULSE_FRAMES ) ] )
+            pulse_animation.set_frames( INFECTED_FRAMESET,
+                                        [ GameImage( "gfx/cells/ai/cell-ai-%d.png" % frame_index, Anchor.CENTER )
+                                          for frame_index in xrange( NUMBER_CELL_PULSE_FRAMES ) ] )
+
+            cell             = GameObject()
+            cell["renderer"] = GameRenderer()
+            cell["renderer"].add_animation( CELL_ANIMATION_PULSE, pulse_animation )
+            PrefabFactory.add_prefab( CELL_TYPE, cell )
 
         def spawn_cell( self, cell_type, slot=None, state=None ):
             # if a slot wasn't given, get a random available one.  return
@@ -240,26 +224,30 @@ init python:
                     return
 
             # create the new cell.
-            cell = PrefabFactory.instantiate( cell_type )
+            cell = PrefabFactory.instantiate( CELL_TYPE )
 
             # set the appropriate behavior depending on whether this is a
-            # human or AI cell.
-            if cell_type == HUMAN_CELL_TYPE:
+            # healthy or infected cell.
+            if cell_type == HEALTHY_CELL_TYPE:
                 cell["behavior"] = CellBehavior( cell_type,
                                                  self.grid,
-                                                 self.human_idle_time,
-                                                 self.human_growth_rate,
+                                                 self.healthy_idle_time,
+                                                 self.healthy_growth_rate,
                                                  self.spawn_cell,
                                                  state )
-                self.human_cells.append( cell )
+                cell["renderer"].play_animation( CELL_ANIMATION_PULSE,
+                                                 frameset=HEALTHY_FRAMESET )
+                self.healthy_cells.append( cell )
             else:
                 cell["behavior"] = CellBehavior( cell_type,
                                                  self.grid,
-                                                 self.ai_idle_time,
-                                                 self.ai_growth_rate,
+                                                 self.infected_idle_time,
+                                                 self.infected_growth_rate,
                                                  self.spawn_cell,
                                                  state )
-                self.ai_cells.append( cell )
+                cell["renderer"].play_animation( CELL_ANIMATION_PULSE,
+                                                 frameset=INFECTED_FRAMESET )
+                self.infected_cells.append( cell )
 
             # if the state of the cell being created is the child growing
             # state, then we don't want to call set_slot() because that will
@@ -274,13 +262,12 @@ init python:
             else:
                 cell["behavior"].set_slot( slot )
 
-            cell["renderer"].play_animation( CELL_ANIMATION_PULSE )
             return cell
 
         def get_displayables( self ):
             displayables = []
 
-            for cell in itertools.chain( self.human_cells, self.ai_cells ):
+            for cell in itertools.chain( self.healthy_cells, self.infected_cells ):
                 displayables.extend( cell["renderer"].get_displayables() )
 
             displayables.extend( self.dish["renderer"].get_displayables() )
@@ -297,7 +284,7 @@ init python:
                                             world_transform.y +
                                             self.dish["transform"].y +
                                             GRID_OFFSET_Y )
-            for cell in itertools.chain( self.ai_cells, self.human_cells ):
+            for cell in itertools.chain( self.infected_cells, self.healthy_cells ):
                 cell["renderer"].render( blitter, cell_transform )
 
         def update( self, delta_sec ):
@@ -305,10 +292,10 @@ init python:
 #            renpy.log( "Start update (%s)" % self.elapsed_time )
 
             # update the growth rate.
-            self.ai_growth_rate.update( delta_sec )
+            self.infected_growth_rate.update( delta_sec )
 
             # update all cells.
-            for cell in itertools.chain( self.ai_cells, self.human_cells ):
+            for cell in itertools.chain( self.infected_cells, self.healthy_cells ):
                 cell.update( delta_sec )
 
 #            renpy.log( "End update\n\n" )
