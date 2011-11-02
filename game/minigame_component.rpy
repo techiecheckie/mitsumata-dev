@@ -87,16 +87,24 @@ init -50 python:
             return left <= x <= right and top <= y <= bottom
 
         def get_bounds( self ):
+            scale  = self.game_object["transform"].scale
+            width  = self.size.width * scale
+            height = self.size.height * scale
+            anchor = self.anchor
+
+            if anchor.type:
+                anchor = Anchor.create( anchor.type, Size( width, height ) )
+
             if self.is_flipped:
-                left   = self.game_object["transform"].x + self.anchor.x - self.size.width + 1
-                top    = self.game_object["transform"].y + self.anchor.y - self.size.height + 1
-                right  = left + self.size.width - 1
-                bottom = top + self.size.height - 1
+                left   = self.game_object["transform"].x + anchor.x - width + 1
+                top    = self.game_object["transform"].y + anchor.y - height + 1
+                right  = left + width - 1
+                bottom = top + height - 1
             else:
-                left   = self.game_object["transform"].x - self.anchor.x
-                top    = self.game_object["transform"].y - self.anchor.y
-                right  = left + self.size.width - 1
-                bottom = top + self.size.height - 1
+                left   = self.game_object["transform"].x - anchor.x
+                top    = self.game_object["transform"].y - anchor.y
+                right  = left + width - 1
+                bottom = top + height - 1
 
             return Bounds( left, top, right, bottom )
 
@@ -120,13 +128,16 @@ init -50 python:
                     my_bounds.top <= their_bounds.bottom and
                     my_bounds.bottom >= their_bounds.top)
 
+        def set_size( self, size ):
+            self.size = size
+
     class GameRenderer( GameComponent ):
         DEFAULT_FRAMESET = "default"
 
         def __init__( self, default_frame=None, animations=None,
                       initial_animation=None ):
             super( GameRenderer, self ).__init__()
-            self.current_frameset         = "default"
+            self.current_frameset         = GameRenderer.DEFAULT_FRAMESET
             self.frames                   = { GameRenderer.DEFAULT_FRAMESET : default_frame }
             self.animator                 = GameAnimator()
             self.collider_color           = Color( 0, 255, 255, 100 )
@@ -154,6 +165,9 @@ init -50 python:
                                   "frameset name." )
             self.current_frameset = frameset
 
+        def set_animation_frameset( self, frameset ):
+            self.animator.set_frameset( frameset )
+
         def flip( self ):
             self.is_flipped = not self.is_flipped
 
@@ -167,9 +181,9 @@ init -50 python:
             return self.animator.get_current_frame() is not None
 
         def play_animation( self, name, loop_animation=True,
-                            on_animation_end=None ):
+                            on_animation_end=None, frameset=None ):
             self.animator.play_animation( name, loop_animation,
-                                          on_animation_end )
+                                          on_animation_end, frameset )
 
         def get_displayables( self ):
             displayables = []
@@ -195,33 +209,37 @@ init -50 python:
                     renderer.render( blitter, transform )
 
             if self.is_collider_visible:
-                self.render_collider( blitter )
+                self.render_collider( blitter, world_transform )
 
-        def render_collider( self, blitter ):
+        def render_collider( self, blitter, world_transform ):
             collider = self.game_object["collider"]
 
             if isinstance( collider, GameBoxCollider ):
                 bounds = collider.get_bounds()
                 blitter.canvas().rect( self.collider_color,
-                                       (bounds.left, bounds.top,
+                                       (bounds.left + world_transform.x,
+                                        bounds.top + world_transform.y,
                                         bounds.right - bounds.left + 1,
                                         bounds.bottom - bounds.top + 1) )
 
     class GameTransform( GameComponent ):
-        def __init__( self, x=0, y=0, angle=0 ):
+        def __init__( self, x=0, y=0, scale=1.0 ):
             super( GameTransform, self ).__init__()
             self.x     = x
             self.y     = y
-            self.angle = angle
+            self.scale = float( scale )
 
         def __add__( self, other ):
             return GameTransform( self.x + other.x,
                                   self.y + other.y,
-                                  self.angle + other.angle )
+                                  self.scale )
 
         def translate( self, dx, dy ):
             self.x += dx
             self.y += dy
+
+        def set_scale( self, scale ):
+            self.scale = scale
 
         def set_position( self, x, y ):
             self.x = x
