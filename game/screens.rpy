@@ -95,6 +95,9 @@ init -2 python:
     style.menu_choice_button.set_parent(style.button)
     style.menu_choice_button.xminimum = int(config.screen_width * 0.75)
     style.menu_choice_button.xmaximum = int(config.screen_width * 0.75)
+    style.menu_choice_button.yminimum = 79
+    style.menu_choice_button.background = Frame("gfx/Choicebox.png", 609, 79)
+    style.menu_choice_button.hover_background = Frame("gfx/Choicebox_hover.png", 609, 79)
 
 
 ##############################################################################
