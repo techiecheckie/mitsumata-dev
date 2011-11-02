@@ -110,8 +110,9 @@ init python:
     COUNTDOWN_FRAMESET_THREE = "countdown-3"
     MOLE_FRAMESET_DEAD       = "dead"
 
-    # animation durations.  the inverse of these are the animations frames per
-    # second value passed to the GameAnimation constructor.
+    # animation durations.  these divided into the number of frames that are
+    # in the corresponding animation are the frames per second value passed to
+    # the GameAnimation constructor.
     MOLE_ANIMATION_DEAD_DURATION     = 0.2
     MOLE_ANIMATION_EMERGE_DURATION   = 0.7
     MOLE_ANIMATION_SUBMERGE_DURATION = 0.35
@@ -167,8 +168,8 @@ init python:
     BOX_OVERLAY_COLOR = Color( 0, 0, 255, 100 )
 
     class WhackAMole( Minigame ):
-        def __init__( self, origin_x=0, origin_y=0, level_number=1 ):
-            super( WhackAMole, self ).__init__( origin_x, origin_y )
+        def __init__( self, level_number=1 ):
+            super( WhackAMole, self ).__init__()
 
             if level_number > len( MOLE_LEVELS ) or level_number <= 0:
                 raise ValueError( "Invalid Whack-a-Mole level number %d.  "
@@ -458,10 +459,6 @@ init python:
             mole_lists[mole_type].append( mole )
             self.occupied_cells.append( cell )
 
-        def update_moles( self, moles, delta_sec ):
-            for mole in moles:
-                mole.update( delta_sec )
-
         def get_displayables( self ):
             displayables = []
             displayables.extend( self.background["renderer"].get_displayables() )
@@ -502,9 +499,12 @@ init python:
                 self.mole_duration.update( delta_sec )
 
                 # update all moles.
-                self.update_moles( self.easy_moles, delta_sec )
-                self.update_moles( self.medium_moles, delta_sec )
-                self.update_moles( self.hard_moles, delta_sec )
+                moles = itertools.chain( self.easy_moles,
+                                         self.medium_moles,
+                                         self.hard_moles )
+
+                for mole in moles:
+                    mole.update( delta_sec )
 
                 # see if it's time to add a mole.
                 self.mole_countdown -= delta_sec
@@ -545,8 +545,7 @@ init python:
                     self.total_score = self.base_score + self.accuracy_bonus
 
         def render( self, blitter ):
-            origin_x, origin_y = self.get_origin()
-            world_transform    = GameTransform( origin_x, origin_y )
+            world_transform = self.get_world_transform()
             self.background["renderer"].render( blitter, world_transform )
 
             self.time_remaining_hud["renderer"].render( blitter, world_transform )
@@ -560,13 +559,11 @@ init python:
             elif self.state == MOLE_GAME_STATE_COUNTDOWN:
                 self.countdown_hud["renderer"].render( blitter, world_transform )
             elif self.state == MOLE_GAME_STATE_PLAY:
-                for mole in self.easy_moles:
-                    mole["renderer"].render( blitter, world_transform )
+                moles = itertools.chain( self.easy_moles,
+                                         self.medium_moles,
+                                         self.hard_moles )
 
-                for mole in self.medium_moles:
-                    mole["renderer"].render( blitter, world_transform )
-
-                for mole in self.hard_moles:
+                for mole in moles:
                     mole["renderer"].render( blitter, world_transform )
             elif self.state == MOLE_GAME_STATE_END:
                 self.stop_screen_hud["renderer"].render( blitter, world_transform )
@@ -599,19 +596,17 @@ init python:
 
                 self.number_clicks += 1
 
-                if mole and mole["behavior"].is_alive():
+                if mole and not mole["behavior"].is_whacked():
                     mole["behavior"].hit()
                     self.number_hits += 1
 
         def on_mouse_down( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
                 if self.state == MOLE_GAME_STATE_PLAY:
-                    # XXX: there really needs to be a way to properly factor this.
-                    origin_x, origin_y  = self.get_origin()
-                    mole                = self.get_mole_at_position( mx - origin_x,
-                                                                     my - origin_y )
+                    mx, my = self.transform_screen_to_world( mx, my )
+                    mole   = self.get_mole_at_position( mx, my )
                     self.number_clicks += 1
-                    if mole and mole["behavior"].is_alive():
+                    if mole and not mole["behavior"].is_whacked():
                         mole["behavior"].hit()
                         self.number_hits += 1
 
@@ -647,12 +642,12 @@ init python:
 
     class MoleBehavior( GameComponent ):
         def __init__( self, number_hit_points, duration, score_value,
-                      kill_callback ):
+                      on_death_callback ):
             super( MoleBehavior, self ).__init__()
             self.state             = MOLE_STATE_BURIED
             self.idle_remaining    = duration
             self.dead_countdown    = 0
-            self.kill_callback     = kill_callback
+            self.on_death_callback = on_death_callback
             self.number_hit_points = number_hit_points
             self.score_value       = score_value
 
@@ -661,7 +656,7 @@ init python:
             self.game_object["renderer"].play_animation( MOLE_ANIMATION_DEAD,
                                                          loop_animation=False,
                                                          on_animation_end=self.on_dead_end )
-            self.kill_callback( self.score_value )
+            self.on_death_callback( self.score_value )
 
         def emerge( self ):
             self.state = MOLE_STATE_EMERGING
@@ -674,8 +669,8 @@ init python:
             if self.number_hit_points == 0:
                 self.die()
 
-        def is_alive( self ):
-            return self.state != MOLE_STATE_DEAD or self.state != MOLE_STATE_DYING
+        def is_whacked( self ):
+            return self.state == MOLE_STATE_DEAD or self.state == MOLE_STATE_DYING
 
         def on_dead_end( self ):
             self.state          = MOLE_STATE_DEAD
