@@ -277,6 +277,7 @@ image bg backalley = "gfx/backgrounds/streetalley2.png"
 
 image bg blackscr = "gfx/backgrounds/blackscr.png"
 image bg redscr = "gfx/backgrounds/redscr.jpg"
+image bg whitescr = "gfx/backgrounds/whitescr.jpg"
 
 image map = "gfx/backgrounds/map.png"
 image textbox_l = "gfx/textbox.png"
@@ -503,7 +504,7 @@ init:
 
 label splashscreen:
      $ renpy.pause(0)
-     scene bg redscr
+     scene bg whitescr
      show text "rosegold games presents..." with dissolve
      $ renpy.pause(5.0)
      hide text with dissolve
@@ -1297,7 +1298,7 @@ label Scene5:
     $ show_message("It has other uses, but those come up later.", "medium")
     $ show_message("Remember to check your PDA often.", "medium")
     
-    $ unlock_item("wallet")
+    $inventory.unlock_item("wallet")
     #This goes back in the regular box.
     r "Whoa, this is the latest tech! It’s awesome! Thanks!"
     
@@ -1435,12 +1436,11 @@ menu:
         
 label getknife:
         #Message box should go here, too...
-        "You picked up the knife."
-        "The knife has been recorded in your PDA."
+        $show_message("You picked up the knife.", "medium")
+        $inventory.unlock_item("knife")
         
         #This goes in the regular textbox.
         "Might as well keep it. If I can’t use it, I can pawn it."
-        $inventory.unlock_item("knife")
         jump Scene7
    
 label leaveknife:
@@ -1531,7 +1531,7 @@ label Scene8:
     show m grin at left with dissolve
     m "Look what I found~"
     
-    show r scare at right with dissolve
+    #show r scare at right with dissolve
     r "AAANGH!"
     
     m "Well, look at what we have here."
@@ -1547,8 +1547,8 @@ label Scene8:
     m "Oi. Chemical burns? How positively droll."
     
     $ Roman = "Awkward Kid"
-    hide r scare
-    show ro fight at right with dissolve
+    #hide r scare
+    #show ro fight at right with dissolve
     ro "Hey---uh---you!"
     
     show m neu at left with dissolve
@@ -1560,12 +1560,12 @@ label Scene8:
     
     $renpy.pause(1.5)
     "A flash of blue light suddenly appears in his hand, before quickly dissipating."
-    show ro surp at right with dissolve
+    #show ro surp at right with dissolve
     m "..."
     r "..."
     ro "..."
     
-    "..."
+    "....................."
     
     "Correction: he definitely has no clue what he’s doing. What’s the point of people coming to save me if they can’t even do it RIGHT!"
     
@@ -1577,7 +1577,8 @@ label Scene8:
     $renpy.pause(1.5)
     #play sound false start magic attack
     
-    "That’s it. I’m dead. I didn’t even get laid once."
+    "That’s it. I’m dead." 
+    "I didn’t even get laid once."
     
     m "Good show, really, but I’ve had enough dinner interruptions for one day."
     
@@ -1592,7 +1593,7 @@ menu:
         jump noknife
         
 label useknife:
-    if $ knife:
+    if inventory.item_unlocked("knife"):
         "Thank god I picked up that knife!"
         jump useknife1
     else:
@@ -1723,7 +1724,7 @@ label Scene10:
     
     show s neu at right
     
-    s "{size =17}That’s the good side to all of it—you have a few special abilities. You must be terribly stressed, but please listen to me carefully. You are in a lot of danger. Those people will not stop coming after you.{/size}"
+    s "{size=17}That’s the good side to all of it—you have a few special abilities. You must be terribly stressed, but please listen to me carefully. You are in a lot of danger. Those people will not stop coming after you.{/size}"
     
     r "...oh god, I really fucked up this time..."
     
@@ -2263,7 +2264,7 @@ label Scene14A:
         show r grin at left with dissolve
         r "And why is that? Afraid I'll singe the foliage?"
         
-        $journal.unlock_entry(Soume, 010)
+        $journal.unlock_entry("Soume", "010")
         "There he goes again, dancing around and being all fucking whimsical."
         show s gigg at right with dissolve
         #Soume giggles.
@@ -2373,112 +2374,6 @@ menu:
             $show_message("Click on items to see if there is anything behind them.", "medium")
             $show_message("However, you can't search all night, so keep an eye on how many clicks you have left.", "medium") 
             call show_map
-                  
-
-label Scene15:
-    scene bg blackscr
-    $show_main_ui()
-    with slow_fade
-    
-    "Bored and hungry. Time for a little late-night snack."
-    
-    show bg kitchen
-    show fx darkness
-    with dissolve
-    "You know what’s hard? Holding a candle to a map because a certain old bat won’t letcha turn on the lights. I’d use a flashlight, but apparently she’s got something against--"
-    
-    #shaking effect
-    show r upset
-    r "UNF---"
-    hide r upset
-    
-    "Effin’ chair. I kick it and it smashes something. Serves the bitc---bat right." 
-    "No, I don’t dare to curse, not even in my own head."
-    
-    #show fx light
-    "There’s a light coming from down the hall. What’s he doing up?"
-    
-    show r neu with dissolve
-    r "Hey Roman, it’s--"
-    
-    hide r neu
-    show ro surp 
-    with dissolve
-    
-    #shake screen
-    ro "AAAH!"
-    
-    #play sound SMASH CRASHY BANG
-    
-    "Well, whatever that was, we’re probably not going to want to eat it anymore. It’s bleeding all over the floor."
-    
-    show ro upset at right with dissolve
-    show r upset at left with dissolve
-    $renpy.pause(1.0)
-    hide fx darkness with slow_dissolve
-    ro "Oh MY. Miss Susa will be upset about this plate..."
-    
-    r  "You let that bi--old bat punch you around, too?"
-    
-    "I've never seen someone clean with such a purpose."
-    
-    show ro neu at right with dissolve
-    ro "She hasn’t ever hit me, actually, but she’s rather like that to everyone. You get used to it. It even gets rather charming, after a while!" 
-    
-    show r neu at left with dissolve
-    r "Words I’d probably never use... So what're you doing up? You wanted a midnight snack, too?"
-    
-    show ro smile at right with dissolve
-    ro "This? Oh goodness no, I'd never eat this. I'm just checking the meat. My apologies; I'm always a little jumpy when I handle meat."
-    
-    show r grin at left with dissolve
-    r "Scared one of the dead things’ animal friends will take revenge on you?"
-    
-    show ro pout at right with dissolve
-    ro "Uhm. Well, actually, I used to be a cook back when I was a servant. I mostly prepared...us. Majin. It’s not fun to find out that your friend is your next meal."
-    $journal.unlock_entry("Roman","008")
-    $renpy.pause(1.0)
-    
-    show r neu at left with dissolve
-    r  "...ooh."
-    
-    show ro smile at right with dissolve
-    ro "It’s...all right. You had no way of knowing any of---it’s fine. It was a long, long time ago."
-    
-    r "So you swore off meat?"
-    
-    show ro neu at right with dissolve
-    ro "That’s correct. I'm a vegan."
-    $journal.unlock_entry("Roman","006")
- 
-    ro "Their animal friends may not exact revenge, but I just can't stand to think of eating a creature that can cry out in pain." 
-    ro "To humans, we're every bit an animal as any cow, chicken or lamb."
-    
-    $journal.unlock_entry("Humans","060")
-
-    show r upset at left with dissolve   
-    r "Not...-all- humans."
-    
-    show ro worry at right with dissolve
-    ro "Oh, forgive me. I didn’t mean---"
-    ro "I agree with you. Many are very kind people, and I also don’t support Majin eating humans either, and some do."
-    
-    $journal.unlock_entry("Majin","045")
-
-    show ro neu at right with dissolve
-    ro "I just like to check. For my own sake. Were...you hungry?"
-    
-    show r neu at left with dissolve
-    r "Uh...no...not much, anymore."
-    
-    ro "Good night, then?"
-    
-    r "G’night."
-    show bg blackscr with dissolve
-    $hide_main_ui()
-    with slow_fade
-
-#* * * * * * *
 
 label Scene16:
     scene bg blackscr
@@ -2777,7 +2672,7 @@ label Scene17:
     r "Training?"
     
     s "Right, of course. My apologies---where was I...ah! Your enemies will use any number of surprising techniques to break your focus."
-    s "Fear that you haven’t properly channeled will induce the same effect on your youki, so you must be absolutely cognizant and never expect your enemy to allow you even a second to build an attack."
+    s "{size=17}Fear that you haven’t properly channeled will induce the same effect on your youki, so you must be absolutely cognizant and never expect your enemy to allow you even a second to build an attack.{/size}"
     
     r "Okay. I got it."
     
@@ -2897,7 +2792,8 @@ label Scene20:
 
     r "...ow. He ran your hand through?"
     
-    ro "It’s completely healed, not even a scar, but...I didn’t see it coming. I called my attack, and he merely had a flower in his hand and the next thing I knew I was laid flat, /nabout to be run through by a bunch of sharp vines."
+    ro "It’s completely healed, not even a scar, but...I didn’t see it coming." 
+    ro "I called my attack, and he merely had a flower in his hand and the next thing I knew I was laid flat, about to be run through by a bunch of sharp vines."
     
     r "...cool."
     
@@ -2918,66 +2814,13 @@ label Scene20:
     
     ro "You’re right; I apologize. I’m just overthinking it. I’ll talk to him."
     
-    #[Instructions: Welcome to your nightly decision. Like most students, Riku’s evenings are free to do as he pleases around the shrine. 
-    #You can choose to explore or get an early night’s rest. Both have benefits and detriments, so choose carefully!]
-
+$ decision = "2"
 menu:
     "Search.":
         call show_map
     "Sleep.":
         call sleep
-
-
-label Scene21:
-
-    "I don’t even know why I bothered to go looking around in the hallway. It’s a hallway. The hell was I expecting? Like, vases and shit?"
     
-    s "Nngh--"
-    
-    #play sound Sound of slumping to the floor.
-    
-    r "Hm?"
-    
-    s "…"
-    
-    r "Someone there?"
-    
-    s "It’s ah---me. I’m a bit peckish...I--I just wanted to get some water, but I suddenly found myself here."
-    
-    r "Soume? Are you all right? Stay there...I can get you the water."
-    
-    s "You’re too kind."
-    
-    "I rush to the kitchen to get the water for him, and bring it to his lips. He sips it hungrily, and I notice, just then, how bony his wrist is."
-    
-    r "Soume...your ha--"
-    
-    s "So why are you awake at this hour, Riku?"
-    
-    "I guess he doesn’t want to talk about it."
-    
-    r "Just couldn’t sleep. You know how it is, being in a new place..."
-    
-    s "Yes. It’s so very difficult. Roman was similar when he first arrived. You get used to the atmosphere quickly, though, I find."
-    
-    r "Actually, uh...while we’re talking about Roman...he said that he’s kind of scared of you. And that he doesn’t really like when you just use your plants on him." 
-    r "I think you should talk with him a little...he seems like a nice guy."
-    
-    #show s smile with fade
-    s "Thank you, Riku, for telling me. I will patch things up with him as quickly as possible."
-    
-    r "Cool. You need help getting back to your room?"
-    
-    s "Ah, no. I shall be all right."
-    
-    r "You sure? It sounded like you landed pretty hard..."
-    
-    s "The water was all I needed—thank you again. Good night, Riku."
-    
-    r "G’night, Soume."
-    
-    "If he has a last name, he’s keeping that as secret as the rest of him. I wonder if I’ll ever understand him, really."
-
 label Scene22:
 
     "If there’s one thing I’ve noticed, it’s that I get much better sleep here. I haven’t had that wacky dream in a while."
@@ -3016,13 +2859,15 @@ label Scene22:
     "Everyone suddenly stops brushing and turns to me, at attention."
     
     r "Wai-wai---WHAT?"
+    
+    r "AAAAAAAAAAAAAAAAAAAAAGHHHHHDLFS--"
 
 label Scene23:
-    r "Yaaaaaaaaaaaawn."
+    r "Ow ow ow ow..."
     
     ro "Wasn’t this morning’s training exercise invigorating, Riku?"
     
-    r "Yeah, yeah, sure. I can’t believe I’m still awake enough for evening training. The people here are more brutal than I thought."
+    r "Yeah, yeah, sure. I can’t believe I’m still alive to DO evening training. The people here are more brutal than I thought."
     
     ro "Yes, but you enjoy this sort, right? The elemental training."
     
@@ -3032,9 +2877,7 @@ label Scene23:
     ro "Ahaha."
     
     s "Welcome, you two."
-    
-    "Ah, it’s Soume. I didn’t tell anyone about the other evening, but he doesn’t seem to feel too sick now, eh?"
-    
+        
     ro "Hey Soume!"
     
     r "I hope you’re teaching us something good tonight!"
@@ -3064,7 +2907,8 @@ label Scene23:
     ro "All right...I guess..."
 
 #label minigame Manifestation
-    #  "Lesson 2: manifestation. One must keep a steady stream of ki to manifest properly. The difficulty then comes in holding that perfect balance and keeping it for an extended period of time at its full power to use as an effective weapon."
+    #  "Lesson 2: manifestation. One must keep a steady stream of ki to manifest properly. The difficulty then comes in holding that 
+    # perfect balance and keeping it for an extended period of time at its full power to use as an effective weapon."
     #  [Minigame here? Focus Riku’s ki into a steady manifestation of his fire power and hold it for as long as you can. Instructions------]
 
 #label manifestation fail:    
@@ -3078,29 +2922,36 @@ label Scene23:
     "For all the sensitive whining Roman does, he’s grinning like a fool at Soume right now."
     
     "We work on it until bedtime."
-    
+    if Scene21:
+        jump Scene25
+    else:
+        jump Scene26
 label Scene25:    
     s "Roman-kun, would you mind staying a bit late to chat with me?"
     
     ro "Ah...sure, Soume, whatever you’d like."
     
     "Hm. Didn’t invite me. Though that doesn’t necessarily mean anything..."
-    
-#label dec6: 
-    #DECISION
-    #--Eavesdrop
-    #"I stick around to listen in for just a bit. No harm, no foul, right?"
+
+menu:
+        "Eavesdrop.":
+                jump eavesdrop
+        "Stay out of it.":
+                jump stayout
+                
+label eavesdrop:
+    "I stick around to listen in for just a bit. No harm, no foul, right?"
     
     s "You did really wonderfully today, Roman."
     
     #show ro flush with fade
     ro "I--thank you. It means a lot, coming from someone like you..."
     
-    s "-Chuckle- Please, I’m not worth flattering."
+    s "Please, I’m not worth flattering."
     
-    ro "What are you talking about? You’re amazing. I think so, Susa-san thinks so...even Riku thinks so. He told me himself."
+    ro "What are you talking about? You’re amazing. I think so, Miss Susa thinks so...even Riku thinks so. He told me himself."
     
-    s "Roman-kun...I..."
+    s "Roman...I..."
     
     ro "What is it, Soume?"
     
@@ -3124,7 +2975,7 @@ label Scene25:
     
     "Yeah...the air smells really, really beautiful..."
     
-    #--Leave
+label stayout:
     "If I eavesdrop, and that rabid bat catches me, I’m screwed. Better to just move along."
 
 label Scene26:
@@ -3158,27 +3009,27 @@ label Scene26:
     #play sound Books falling to the ground, dust making loud noises, papers crinkling all over.
     
     r "WHOA!"
-    
-    u "You there, child! Have some more cognizance! You nearly destroyed my research!"
+    $ Kazutaka = "Uptight Man"
+    k "You there, child! Have some more cognizance! You nearly destroyed my research!"
     
     r "Your “research” nearly crushed me!"
     
-    u "Is that so? Ah well, no harm done."
+    k "Is that so? Ah well, no harm done."
     
     "What an as--mean...guy. I hate this no cursing rule."
     
-    r ":Uh...excuse me?"
+    r "Uh...excuse me?"
     
-    u "What IS it? Can’t you see I’m busy? I have a lot of experiments to finish, and there’re the updates to write, and the spores to add to the inoculum..."
+    k "What IS it? Can’t you see I’m busy? I have a lot of experiments to finish, and there’re the updates to write, and the spores to add to the inoculum..."
     
-    r "Susa-baachan sent me? For the doctor?"
+    r "Miss Susa sent me? For the doctor?"
     
-    u "Hm."
+    k "Hm."
     
     r "...so...?"
     
-    u "I am Dr. Osamu Kazutaka. You must be Riku...I should’ve told by your stature, the way your jaw is so positively narrow. Barely above an infant, I’d wager."
-    
+    k "I am \"Dr. Osamu Kazutaka.\" You must be Riku...I should’ve told by your stature, the way your jaw is so positively narrow. Barely above an infant, I’d wager."
+    $ Kazutaka = "Doctor Osamu"
     r "You always this great with patients?"
     
     k "Enough speech. Come, sit up here."
@@ -3201,9 +3052,9 @@ label Scene26:
     
     k "All right, you are hereby given a clean bill of health. But, to make sure it stays that way, take this literature on Majin, your species type, and our enemies."
     
-    #--Receive Majin: History
-    #--Receive Church of the Three Acts: Religious Tenets
-    #--Church of Three Acts: Cult.
+    $journal.unlock_entry("Majin", "050")
+    $journal.unlock_entry("Church of the Three Acts","039")
+    $journal.unlock_entry("Church of Three Acts", "040")
     
     r "My...species type?"
     
@@ -3221,8 +3072,8 @@ label Scene26:
     
     r "WHATEVER."
     
-    k "I’ll have you know that the things written in that research are potentially vital to your survival as a Majin in the human world.
-    The Church of the Three Acts may seem kindly on its surface, but the underbelly is worse than a rotted apple with red skin."
+    k "I’ll have you know that the things written in that research are potentially vital to your survival as a Majin in the human world."
+    k "The Church of the Three Acts may seem kindly on its surface, but the underbelly is worse than a rotted apple with red skin."
     
     "I decide to hold off getting pissed for a minute."
     
@@ -3235,13 +3086,14 @@ label Scene26:
     
     k "Nothing about anything, as I feared."
     
-    k "Ugh. I do NOT know why Miss Susa insists on bringing little miscreants like you in. You all just cause trouble. 
-    No better than humans, really. Listen carefully, child. Don’t assume that anyone is on your side. 
-    The things that humans will do to a Majin could make your blood curdle in your veins and stink of the subsequent fermentation."
+    k "Ugh. I do NOT know why Miss Susa insists on bringing little miscreants like you in. You all just cause trouble." 
+    k "No better than humans, really. Listen carefully, child. Don’t assume that anyone is on your side." 
+    k "The things that humans will do to a Majin could make your blood curdle in your veins and stink of the subsequent fermentation."
     
     r "They...slavery? Wouldn’t we have heard of it?"
     
-    k "Would you, prior to us finding you, have believed in the slavery of a mythical being unless you saw it with your own eyes? Would your friends and extended family?"
+    k "Would you, prior to us finding you, have believed in the slavery of a mythical being unless you saw it with your own eyes?"
+    k "Would your friends? Your family?"
     
     r "I guess not."
     
@@ -3249,10 +3101,10 @@ label Scene26:
     
     r "Special humans?"
     
-    k "The Church of Three Acts is a front for a small society of humans far beyond the capabilities of the normal...their strength, speed, agility and physical prowess are much more similar to Majin.
-    That is why they are able to capture us and hold us." 
-    k "With that front, they maintain political power as well as their wealth, and with their physical strength and superior numbers, their job is easy. 
-    On occasion, they’re able to just lure our people in. Many of us have defected to that side...just for the peace of mind."
+    k "The Church of Three Acts is a front for a small society of humans far beyond the capabilities of the normal...their strength, speed, agility and physical prowess are much more similar to Majin."
+    k "That is why they are able to capture us and hold us." 
+    k "With that front, they maintain political power as well as their wealth, and with their physical strength and superior numbers, their job is easy." 
+    k "On occasion, they’re able to just lure our people in. Many of us have defected to that side...just for the peace of mind."
     
     r "...they’re like...some kind of freako cult. Why doesn’t anyone do anything?"
     
@@ -3271,6 +3123,8 @@ label Scene26:
     k "You’ll learn eventually. Now please remove yourself from my library. Your ignorance is starting to leak everywhere."
     
     "Oh, screw that guy. What an as---a grump. Still, what he says sticks with me. Human laws only apply to humans?"
+    $ decision = "3"
+    
 menu:
     "Search.":
         call show_map
@@ -3280,7 +3134,7 @@ menu:
         $show_message("From now on, you will be allowed to research with Kazutaka.", "medium")
         $show_message("You will be able to learn a lot about the world from the information you receive here.", "medium")
         call research_loop
-        $unlock_entry("something", "031")    
+        $journal.unlock_entry("something", "031")    
 
 label Scene27:
 
@@ -3321,15 +3175,15 @@ label Scene28:
     
     # play sound phone ringing
     
-    ro  "I hope I haven’t missed her again. It is rather late, but-"
+    ro  "I hope I haven’t missed her again. It is rather late, but--"
     
-    u  "Roman?"
+    l  "Roman?"
     
     ro  "…Liza?  How did…?"
     
     #Liza gives a gentle laugh.
-    l "I may be old for the humans, and you, but I am quite proficient with modern technologies.
-    This Caller Identification thing is very useful. Besides, you’re the only one who ever calls me this late. Most know better."
+    l "I may be old for the humans, and you, but I am quite proficient with modern technologies."
+    l "This Caller Identification thing is very useful. Besides, you’re the only one who ever calls me this late. Most know better."
     
     #show ro flush with fade
     ro "I-I’m terribly sorry. It’s just with training and-"
@@ -3350,7 +3204,8 @@ label Scene28:
     
     l "Excellent! I’m happy to hear that."
     
-    ro "That’s actually why I called. I just…well, I wanted to thank you. Again. I mean, for helping me find the rescue. Without you I don’t know what would have happened to me. I’m not sure I can express how-"
+    ro "That’s actually why I called. I just…well, I wanted to thank you. Again. I mean, for helping me find the rescue." 
+    ro "Without you I don’t know what would have happened to me. I’m not sure I can express how--"
     
     #Liza laughs.
     l "You owe me nothing, Roman. I merely led you to someone I knew could help."
@@ -3372,9 +3227,9 @@ label Scene28:
     
     l "Oh?"
     
-    ro "Just a little bit ago he tried to sneak out of cleaning duties and decided he was going to watch some television. Right in the middle of the lounge! 
-    Of course, Miss Susa found him, and she was so irate she broke her video game things right over his head. 
-    Majin might heal fast, but he had quite the lump on his head."
+    ro "Just a little bit ago he tried to sneak out of cleaning duties and decided he was going to watch some television. Right in the middle of the lounge!" 
+    ro "Of course, Miss Susa found him, and she was so irate she broke her video game things right over his head." 
+    ro "Majin might heal fast, but he had quite the lump on his head."
     
     #Liza gives nostalgic laughter.
     l "I would say that sounds just like her."
@@ -3406,7 +3261,7 @@ label Scene28:
     
     ro "Veal? That’s baby deer, isn’t it? I couldn’t."
     
-    l "If you so wish..."
+    l "If you insist..."
     
     ro "I do. I’m not even sure how you could eat a poor young thing..."
     
@@ -3420,6 +3275,7 @@ label Scene28:
     
     #Liza chuckles.
     l "I’m afraid not."
+    $ journal.unlock_entry("Liza", "031")
 
 label Scene29:
     #play sound Forest medley
@@ -3484,13 +3340,18 @@ label Scene29:
     
     a "Please…pl-please. I-I’ll give you anything. I’m special. I-I-I-"
     
-    m "You you you. Hmph. Contrary to popular belief, my dear, this isn’t about you, nor is it personal. And I already know what you are. I’d hardly consider you special. Your sister told us all about you two. 
-    Your lives have beeen hard, haven't they?"  
+    m "You you you."
+    m "Contrary to anything you think, my dear, this isn’t about you, nor is it personal." 
+    m "And I already know what you are. I’d hardly consider you special. Your sister told us everything..."
+    $renpy.pause(2.0)
+    m "You're mediocre, at best."
+    $renpy.pause(3.0)
+    m "Your lives have beeen hard, haven't they?"  
     
     #Audra is whimpring in terror.
     a "No...no..."
     
-    m "Trust me. I’m doing you a favor."
+    m "I’m really only doing you a favor."
     
     a "STOOOOOOOOOOOOOOOOP!!!"
     
@@ -3501,7 +3362,9 @@ label Scene29:
     
     a "Please…"
     
-    m "I was wrong, Audra. You are indeed quite special."
+    m "Hehehe."
+    m "It seems I was wrong."
+    m "You are more special than I thought."
     
     a  "NOOOOOOOOOOOOOOOOOOOOOOOO!"
     
@@ -3511,6 +3374,15 @@ label Scene29:
     
     #show screen flash 
     #play sound lightning
+    $ decision = "4"
+menu:
+    "Search.":
+        call show_map
+    "Sleep.":
+        call sleep
+    "Research.":
+        call research_loop
+        $journal.unlock_entry("something", "031")    
 
 label Scene30a:
 
@@ -3571,7 +3443,7 @@ label Scene30a:
     "Which should I open first?"
 menu:
         "Open Envelope.":
-                jump Scene30
+            jump Scene30
         "Open Present.":
             jump Scene30b
 
@@ -3607,7 +3479,7 @@ label Scene30b:
     "The scent creeping out and working its way through my nose means only one thing: Mom got me a cake."  
     
     "It’s a fucking strawberry shortcake. It’s the biggest fucking strawberry shortcake I’ve ever seen. I might actually manage to leave some until tomorrow!"
-    $unlock_item("cake")
+    $inventory.unlock_item("cake")
     
 menu:
     "Share cake with Soume and Roman.":
@@ -3777,8 +3649,18 @@ label Scene31:
     "Roman runs off in the same direction as Soume. I can hear him gagging as he practically gallops to the bathroom."
     
     r "…this is the last time I share my food with ANYONE."
-
+    
 label Scene32:
+    $ decision = "5"       
+    menu:
+        "Search.":
+            call show_map
+        "Sleep.":
+            call sleep
+        "Research.":
+            call research_loop
+            $jourhnal.unlock_entry("something", "031")   
+label Scene32a:
 
     "Really, really hate wakin’ up early. If the sun doesn’t fucking have to be up at this time, why do I?"
     
@@ -3899,7 +3781,7 @@ label Scene32:
 
 
 label Scene33:
-    "Time when you’re demon training goes pretty fast. Soume says I’m a natural, and we’re done with all the bored little stuff...finally."
+    "Time when you’re demon training goes pretty fast. Soume says I’m a natural, and we’re done with all the boring little stuff...finally."
     
     "Training today is supposed to be extra special, Soume was practically shaking me he was so excited."
     
@@ -4353,14 +4235,17 @@ label Scene36:
     w "Unghanteelerentflaf. BONK BONK BONK! Heh heh heh."
     
     "Something tells me she knows more than she’s letting on."
+    $inventory.unlock_item("gun")
     
     r "Uh, yeah, I’ll take that. Hmm…well, now what?"
     
     ro "Look around! You've passed the lock, so you can come back at any time."
     
-    r "Hmm…I do have some cash left. Why not?"
+    $show_message("'Shop' has now been added to your nightly options." "medium") 
+    $show_message("You may shop by selecting that choice.", "medium") 
+    $show_message ("Inventory changes frequently, so be sure to check back as often as you can!","medium")
     
-    "'Shop' has now been added to your nightly options. You may shop by selecting that choice. Inventory changes frequently, so be sure to check back as often as you can!"
+    r "Hmm…I do have some cash left. Maybe I will."
 
 label Scene37:
     "Roman and I run back to the rescue. I spent too much time at the shop. Susa won’t be happy."
@@ -4442,117 +4327,27 @@ label Scene37:
     
     r "Um. Later...then?"
     
-    "No response. I could go check in on her. See what the hell is up."
-    
-    r "Hmmm…"
-
-label dec8:
-    #DECISION:
-    #Eavesdrop on Susa
-    #-Continue to 36a
-    #Return to room
-    #-Continue, skip 36a
-    
-    r "Forget it. I’m not taking any chances. I’ll just head back to my room."
-    
-    #play sound Something falling to the floor loudly
-    
-    #Riku whispers
-    r "Crap."
-    
-    su "YOU RUDE LITTLE TAINT I AM ON THE MOTHERFUCKING PHONE. DO NOT EMBARRASS ME."
-    
-
-label Scene37a:
-    su "What the hell is going on?"
-    
-    "I creep up as close as I can to the door. She’s kind of muffled, but I can still hear her."
-    
-    su "Yes, I gathered that from your message, and I-"
-    
-    su "No, Liza, I-"
-    
-    "Liza? The woman Roman was telling me about?"
-    
-    su "Yeah, I get that, but-"
-    
-    su "LIZA. Spare me the fucking pleasantries for once and fucking TELL me if the intel was confirmed or not."
-    
-    "Her voice sounds strange. Less…harsh?"
-    
-    "She’s quiet for a really long time."
-    
-    su "Oh god. No, no, the where doesn’t matter right now, Liza."
-    
-    "Her voice is almost completely different now."
-    
-    su "If he’s there, I will find him without a doubt."
-    
-    "Find who? Who is she talking about?"
-    
-    "Shit. She moved or something. I can’t quite make out what she’s saying. Maybe if I just move a little-"
-    
-    #This is Kazu.
-    u "AHEM."
-    
-    "I jump back into the wall and trip over myself. Great. I’m dead. I look up and see-"
-    
-    r "Mister Osamu---"
-    
-    k "YOU WILL REFER TO ME AS DOCTOR OSAMU. Always. Never by my first name."
-    
-    r "Man, what the hell are you doing creeping around out here?"
-    
-    k "I could ask you the same."
-    
-    "I don’t like the way he’s smiling at me. I start to say something, but some heavy breathing is coming from behind me and my brain loses its ability to communicate with my mouth."
-    
-    su "Just what the hell are you doing out here, you clumsy little buffoon. I’m on the GODDAMN PHONE!"
-    
-    k "Oh, we were just leaving. Riku had volunteered to help me with some…experiments."
-    
-    r "I did--"
-    
-    "Doctor Osamu is smiling at me. He looks like he just got a new toy."
-    
-    k "Or, was something else happening out here, Riku?"
-    
-    r "No, I…uh, I mean, Mist-"
-    
-    k "Doctor."
-    
-    r  "…"
-    
-    k "What’s that?"
-    
-    r "Nngh."
-    
-    k "Ah, Miss Susa, funny story-"
-    
-    r "I agreed to help Doctor Osamu! Yes, he’s doing some experiments on-"
-    
-    k  "Limb regeneration."
-    
-    r "LIMB REGENERATION?!"
-    
-    k "And Riku here was so kind as to volunteer."
-    
-    su "About time he made himself useful. Don’t forget to clean the doctor’s lab for him when you’re all done."
-    
-    k "Of course he will. He actually said he’d be on cleaning duty for the next month."
-    
-    su "Hn. Finally some initiative."
-    
-    k "If you'll excuse us, Miss Susa. Come along, assistant."
-    
-    r "Heeeeelp."
+    "No response. Fine then!"
+    $ decision = "6"
+menu:
+    "Search.":
+        call show_map
+    "Sleep.":
+        call sleep
+    "Store.":
+        call shop_loop
+    "Research.":
+        call research_loop
+        $journal.unlock_entry("something", "031")
 
 label Scene38:
     #This is Naomi
-    #Naomi chuckles.    
-    u  "Look at all these delectable little morsels. Still, are you sure he’s reliable? I don’t fancy getting myself all worked up for a meal that isn’t going to happen."
+    #Naomi chuckles.
+    $ Naomi = "Cruel-eyed Woman"        
+    n  "Look at all these delectable little morsels. Still, are you sure he’s reliable? I don’t fancy getting myself all worked up for a meal that isn’t going to happen."
     
-    m  "You can trust him, Naomi."
+    m  "You can trust him, \"Naomi.\""
+    $ Naomi = "Naomi"
     
     #Naomi makes a resigned sigh.
     na  "I want to eat already. Prime meat like this isn't exactly running around freely."
@@ -4566,10 +4361,10 @@ label Scene38:
     
     na  "No, but I'm sure you will tell me."
     
-    m  "Once, in a barnyard, there were two cats. Each day their master would bring them out a saucer of milk. Alas, the master was poor, so that was all they'd receive. 
-    The foolish cat, he would gulp down his milk, and spend the rest of his day hungry."
+    m  "Once, in a barnyard, there were two cats. Each day their master would bring them out a saucer of milk. Alas, the master was poor, so that was all they'd receive. "
+    m "The foolish cat, he would gulp down his milk, and spend the rest of his day hungry."
     
-    m "The wise cat, he would only drink some of his milk. Each day, he would leave his saucer half full, bring it to the back of the barn, and then return after a nap."
+    m "The wise cat would only drink some of his milk. Each day, he would leave his saucer half full, bring it to the back of the barn, and then return after a nap."
         
     m  "The foolish cat follow his brother to the barn and he saw many mice sharing in the milk." 
     m "'Brother!' he yelled out, 'Why would you share your food with lesser creatures?'"
@@ -4683,7 +4478,7 @@ label Scene39:
     n "I’m sorry. I tried, I did!"
     
     m "You’re forgiven, but into the bath before it starts to smell!"
-
+    $ decision = "7"
 menu:
     "Search.":
         call show_map
@@ -4693,7 +4488,8 @@ menu:
         call shop_loop
     "Research.":
         call research_loop
-        $unlock_entry("something", "031")        
+        $journal.unlock_entry("something", "031")
+        
 label Scene40:
 #Soume whispers. His voice sounds a bit harsh.
 
@@ -4762,7 +4558,8 @@ label Scene40:
     ro "You don’t mind? I mean, if it isn’t too much trouble…"
     
     s "It’s not. Now, watch carefully: I’ll show you how to set the pot up..."
-    # MAYBE -Put in minigame here?  Help Roman grow his first plant?  Maybe give access to a garden; allow players to come back and grow other plants for use in battles or to give items-
+    $inventory.unlock_item("ios")
+    #Farming minigame.
     
     #Roman chuckles.
     ro "Wow, that was easier than I thought!"
@@ -4834,7 +4631,8 @@ label Scene40a:
 
     r  "...him?"
 
-    "Great. Miss Susa and Doctor Osamu. The tag-team from hell. Yeah, I’m sure they’ll be really excited to let me go out and do something that doesn’t involve me cleaning the damn toilets."
+    "Great. Miss Susa and Doctor Osamu. The tag-team from hell." 
+    "It's like they want me to clean toilets forever."
 
     #Soume giggles.
     s  "I think you might be ready though! You certainly are the most capable of all the trainees."
@@ -4843,7 +4641,8 @@ label Scene40a:
     
     s "Well...there are always...doubts..."
     
-    "I can see Susa walking over toward us. She looks like she has something important to talk about. This is probably the best time to talk to her."
+    "Miss Susa walking over toward us." 
+    "This is probably the best time to talk to her."
 
     su  "Soume, I was wondering if-"
 
@@ -4853,30 +4652,34 @@ label Scene40a:
 
     r  "Right, Soume? Didn’t you say Miss Susa should let me come?"
 
-    su  "Y’know, I’m not sure if I should knock some respect into you, or pity you because you’ve apparently suffered some sort of fuckin’ head trauma."
+    su  "Y’know, I’m not sure if I should knock some respect into you, or pity you, since you've clearly suffered some sort of fuckin’ head trauma."
 
-    r  "...scuze me?"
+    r  "--huh?"
 
     su  "You heard me talking to Soume, and you just fucking barge in like some delirious bull?"
 
-    r "Oh, I didn't, I mean er..."
+    r "N-no, I didn't mean to---"
 
-    su  "So I’m just s'posed to let you go the fuck out with Soume? This isn’t a goddamn game, kid, and you’re nowhere near ready."
+    su  "If you're too dumb not to interrupt, how am I just s'posed to let you go the fuck out on missions?" 
+    su "This isn’t a goddamn game, kid, and you’re nowhere near ready."
 
     r  "I am though! Just ask Soume!"
 
-    su  "I’m not talking ‘bout your skills, kid. I honestly don’t give a shit about how many yams you’ve fried with your little fire power. You start acting like a fucking adult, and then maybe I’ll consider it."
+    su  "I don’t give a shit how many yams you’ve fried with your little fire power." 
+    su "You start acting like a fucking adult, and maybe I’ll consider it."
 
-    r  "I’m ready now!"
-
-    "Susa has finally looked over my way. She looks irate, but hasn’t hit me yet. I take this as a good sign."
-
+    r  "But I’m ready now!"
+    su "....."
+    "She looks pretty mad...but I gotta push it."
+    $renpy.pause(1.0)
+    
     r  "I am! Look, maybe I’m not as powerful as Soume or as smart as Roman, but I want to help!"
 
     "Susa slowly lets her gaze drift over toward Soume. He gives her a little nod, which I think is his way of vouching for me."
-    "I’d prefer if he put the same passion into it as he does for his damn plants, but at this point I’ll take what I can get."
+    "Wish he'd put the same passion into this as he does for his plants."
 
-    r  "Please. Miss Susa, whatever you want me to call you. There are a lot of Majin out there that I know need help, and all I’m asking is for a chance."
+    r  "Please. Miss Susa, Lady Susa, Queen Susa...whatever!" 
+    r "There are a lot of Majin out there that I know need help, and all I’m asking is for a chance."
 
     su  "..."
 
@@ -4888,20 +4691,29 @@ label Scene40a:
 
     r  "Deal; that’s totally fine. I’ll do whatever, I’m just so-"
 
-    su  "But first, you need to complete one final test."
+    su  "But first, a test."
 
     r  "Test?"
 
-    su  "Of course. We don't just let any baby out on rescue missions. You'll probaby fail, but in the .1% chance that you don't, you'll have my clearance. It's a 700 day challenge."
+    su  "Of course. We don't just let any baby out on rescue missions." 
+    su "You'll probaby fail, but in the .1% chance that you don't, you'll have my clearance. It's a 7 day challenge."
 
-    r  "700 Day Challenge, eh? I’ll complete it in two!"
+    r  "7 Day Challenge, eh? I’ll complete it in two!"
+    $renpy.pause(1.0)
+    su ".........."
 
     su  "Soume, how do you put up with this idiot?"
+    
+    r "---what did I do NOW?"
 
     #Soume giggles.
     s  "Oh, he isn’t so bad, Miss Susa!"
 
-    su  "Whatever. We usually give out this test after the trainees have been here for at least that long." 
+    su  "Whatever."
+    su "Look dumbass, if the challenge could be completed in two days, I wouldn't waste my time calling it a 7 day challenge, got it?"
+    r "...got it."
+    $renpy.pause(1.0)
+    su "We usually give out this test after the trainees have been here a full year." 
     su "You pass it now, I’ll let you go out on a mission. You fail, and I don’t have to hear shit about this again until you turn 20."
 
     r  "Hrm...well, how about-"
@@ -4913,22 +4725,19 @@ label Scene40a:
     su  "I’ll give you a bit of time to go get ready, if you want. Some last minute training. Don’t say I never did anything for you, brat."
 
     "Hmm...it might be a good idea to go train a little bit. Dunno what the hell she has in store for me, but a little extra preparation couldn’t hurt."
+menu:
+    "I need a bit more training.":
+        call pda_loop
+    "I'm ready right now!":
+        jump daychal2
+label daychal2:
+    r  "All right, I think I’m ready."
 
-    
-#label minigame daychal
-    #OPTION:
-    #-I need a bit more training
-    #This option takes you to the palm pilot screen where you can do training.
-    #-I’m ready now
-    #You immediately start the next challenge.
+    su  "You sure there, twerp? You don’t get another shot at this."
 
-    #r  "All right, I think I’m ready."
+    r  "I won’t need it."
 
-    #su  "You sure there, twerp? You don’t get another shot at this."
-
-    #r  "I won’t need it."
-
-    #su  "Cocky. As always. That’s fine with me; it’ll just be more enjoyable when you fail."
+    su  "Cocky. As always. That’s fine with me; it’ll just be more enjoyable when you fail."
 
     #Put the Day challenge minigame here.
 
@@ -4944,35 +4753,35 @@ label Scene40a:
     
     #r "Just great..."
 
-    #Succeed –
+label daychal2suc:
 
-    #r  "YES! Wooo! A bit trickier than I guessed, but at least I passed, right?"
+    r  "YES! Wooo! A bit trickier than I guessed, but at least I passed, right?"
 
-    #su "Feh. I guess you did. Barely."
+    su "Feh. I guess you did. Barely."
 
-    #r  "I guess that means I’m ready for missions now, huh Susa?"
+    r  "I guess that means I’m ready for missions now, huh Susa?"
 
-    #su  "..."
+    su  "..."
 
-    #"Susa is clenching her hands and glaring at me. Very strange way to congratulate someone, but it is Susa, so as long as she’s not hitting me, I’d consider it a win."
+    "Susa is clenching her hands and glaring at me. Very strange way to congratulate someone, but it is Susa, so as long as she’s not hitting me, I’d consider it a win."
 
-    #r  "Uh...Miss Susa, I meant."
+    r  "Uh...Miss Susa, I meant."
 
-    #su  "..."
+    su  "..."
 
-    #r  "Ahem. Soooooooo...my mission. When should we-"
+    r  "Ahem. Soooooooo...my mission. When should we-"
     
-    #su "Hn. I'll think about it."
+    su "Hn. I'll think about it."
 
-    #r "H-hey! That's not fair! Awwwww..."
+    r "H-hey! That's not fair! Awwwww..."
 
-#[Scene 41]
 label Scene41:
 
-    k  "Honestly, I don’t know how I can make this any more clear that need to hold still, or I will not be able to collect the blood sample I need."
+    k  "Honestly, I don’t know how I can make this any clearer."
+    k "HOLD STILL, or I will not be able to collect the blood sample I need."
 
-    "{size=17}I try to stop my face from twisting into a scowl, but I can’t help it. 
-    This asshole has been stabbing the same needle into my arm for about five goddamn minutes now and can’t seem to hit the fucking vein.{/size}"
+    "I try to stop my face from twisting into a scowl, but I can’t help it." 
+    "This asshole has been stabbing the same needle into my arm for about five goddamn minutes now and can’t seem to hit the fucking vein."
 
     r  "I don’t know how this is my fault, Mr. Osamu. Just hurry up so I can get out of here."
 
@@ -4992,8 +4801,8 @@ label Scene41:
 
     r "It was just a mistake...you don't have to get so mad about something like that."
 
-    "{size=17}He lets out this drawn out sigh and actually stops messing with the machine for a second. He rubs his eyes, and the way he talks to me I get the fucking 
-    impression that this is the way he’d explain something to a brain-damaged brick.{/size}"
+    "He lets out this drawn out sigh and actually stops messing with the machine for a second." 
+    "He rubs his eyes, and the way he talks to me I get the fucking impression that this is the way he’d explain something to a brain-damaged brick."
 
     k  "Because I’ve earned it, you understand?"
 
@@ -5002,47 +4811,73 @@ label Scene41:
     k  "The average IQ for Majin is 87 on the human scale. Eighty-seven, Riku. Did you know that?"
 
     r  "No. Issat bad?"
+    $journal.unlock_entry("Majin", "054")
 
+    k "............"
     #Doctor Osamu sighs.
+    $renpy.pause(2.0)
     "He’s back to messing with the machine again, but I get the feeling he just doesn’t want to look at me."
 
-    k  "Of course you didn’t know that. It's in the information I gave you the first day, but you didn’t read it, did you? Nobody ever does. No one wants to better themselves." 
+    k  "Of course you didn’t know that." 
+    k "It's in the information I gave you the first day, but you didn’t read it, did you?" 
+    k "Nobody ever does. No one wants to better themselves." 
     k "No one wants to learn WHY our side keeps losing, why we have to hide out and be forced to do things...terrible things..."
 
     "I don't say anything. I have a feeling I'll know what going on soon enough."
 
-    k  "Most Majin are just fine to go through life, completely ignorant of the world around them. They fight, they eat, and they fornicate. And that’s it. That is all they do."
+    k  "Most Majin are just fine to go through life, completely ignorant of the world around them." 
+    k "They fight, they eat, and they fornicate. And that’s it. That is all they do."
 
     "He laughs. Sneers back at me."
 
-    k  "That’s why they see us as food, you know. As slaves. As whores. Why they think we’re animals. We act like animals." 
+    k  "That’s why they see us as food, you know." 
+    k "As slaves. As whores. Why they think we’re animals. We act like animals." 
     k "If we quack and walk and swim like ducks, why should they treat us any differently from a duck?"
 
     "If I punched him through the skull, would anyone blame me?"
 
     k  "I'm not like you, though."
-    k "I’ve gone through my studies, worked at trying to survive in this world, and I became the first recognized Majin doctor. The ONLY accepted Majin doctor." 
-    k "None of you little pigs, while you were rabidly sexing on human streets, thought that there may be merit to learning your own biology."
+    k "I’ve gone through my studies, worked at trying to survive in this world, and I became the first recognized Majin doctor." 
+    k "The ONLY accepted Majin doctor." 
+    k "None of you little pigs, while you were rabidly feasting and fucking in the streets, thought that there may be merit to even learning your own biology."
 
     r  "Congrats, Doctor."
+    "I can't help but be sarcastic. What the hell is his problem?"
     
     k  "Right. Doctor. You see? You see what we can do?" 
+    k "What we're capable of?"
     k "We’re not just food, or lab rats to be tested on and discarded." 
     k "Doctors, scientists, philosophers; there are so many thing we could do if we just tried. We aren’t food or slaves or breeding toys."
+    "I'm getting tired of all this crap, but what should I say?"
     
-    r "That sounds great and all, but maybe we are just supposed to be what we're supposed to be." 
-    r "Why do we have to do what humans do to live, when we aren't made for it?"
-    r "Seems to me like you should stop hating yourself and aiming for what humans think is good and like what you are." 
+menu:
+    "What's wrong with Majin and humans just being different?":
+        jump majhumdiff
+    "I guess you're right...":
+        jump urite   
+        
+label majhumdiff:    
+    r "Learning is great and all, but maybe we're just supposed to be what we are." 
+    r "Why do we have to do what humans do to live when we aren't made for it?"
     
-    k "..."
-
-    "Is he speechless?"
+    k "...excuse me?"
+    $renpy.pause(1.0)
+    r "Seems to me like..." 
+    r "You should stop hating yourself and your own kind and trying to do what humans do..."
+    r "And just accept yourself for what you are."
+    
+    k "........."
+    
+    "Huh. I think I made him speechless."
     
     k "Kch! You don't understand anything, you churlish little paramecium!"
     
-    "Yeah, right."
-
-    r  "Whatever! I’d like to go out and help Susa rescue some other Majin, but I can’t until you give her the okay. Can I go or what?"
+    $renpy.pause(3.0)
+    "...can't say I didn't try."
+    
+label urite:
+    r  "Fine, whatever."
+    r "I’d like to go out and help Susa rescue some other Majin, but I can’t until you give her the okay. Can I go or what?"
 
     k  "Let me see, I’ll just need to-"
 
@@ -5075,29 +4910,43 @@ label Scene41:
 
     r  "What the heck am I supposed to do with this?"
 
-    k  "I always keep the spare parts around just in case of emergencies like this, but they get rather large if they're completely assembled, so I break them up."
+    k  "I always keep the spare parts around just in case of emergencies like this, but they make the room so very cluttered if I just leave them..."
 
     r  "...lemme guess, you expect me to put them back together."
     
-    k "Indeed. We'll see if your mind is ready for a mission, and then we'll return to your physical condition."
+    k "Ehehehe."
+    k "We'll see if your mind is ready for a mission, and then we'll test your physical condition."
 
     "He goes back to fiddling with his instruments and messing around with the big screen in front of him."
 
-    r  "No, I’m not doing this. I’ve got other stuff to be doin’. I don’t have time for your chores, Doc."
-
+menu:
+    "Do what he says.":
+        jump dowhatkazsays
+    "Resist.":        
+        jump notgonnahappen
+   
+label notgonnahappen:        
+    r  "No. No way. I'm not gonna let you push ME around."
+    k ".................."
+    k "Ah."
     k  "It's just as well. I’m not in any rush to have you sent out on your first mission." 
     k "In fact, I'm relieved that you aren't either. Dangerous things lurk out there, you know? Better to be here, where Miss Susa can have you clean and help me around the lab."
 
+label dowhatkazsays:    
     #Riku frowns.
     r  "FINE."
 
     k  "Oh, what an excellent attitude! I knew I could count on you." 
     k "The quicker you fix everything, the faster I can clear you and the sooner you can go out and get yourself killed."
 
-    #Put a few levels of a puzzle game here. Riku needs to assemble the parts correctly!
+#gear minigame here
 
-#Success in the puzzle game.
-label Scene42:
+#label gearfail:
+    #r "............I can't do this stupid thing."
+    #k "Well, if that's the case, I can't give you your 'stupid' clearance."
+    #r "FINE I'll try again!"
+    #minigame here
+label gearsuc:
     r  "There. The stupid thing is working again. Thanks to me."
 
     "I glare over at Doctor Osamu. He didn’t bother to help me at all, and now he’s just sitting at his console, grinning at the screen."
@@ -5105,36 +4954,47 @@ label Scene42:
     k  "Ah! Yes! Excellent, this is truly excellent."
 
     "A 'thank you' would have been nice. Or a 'good job'. Hell, I would have even taken a fucking grunt in my direction from this guy."
-    "Too busy fiddling on his machines, but if I get to go on missions, it's worth it."
+    "Still, if I get to go on missions, it's worth it."
     "Sorta."
 
     r  "So...what’s it say? Am I good to go, or what?"
 
-    k  "Hrm? Oh yes, I almost forgot about you."
+    k  "Hrm?" 
+    k "Oh yes, I almost forgot about you."
 
-    r  "Yeah, me. The guy who just fixed your dumb machine. That guy. So, does it clear me, or what?"
+    r  "Yeah, me. The guy who just fixed your dumb machine. So, does it clear me, or what?"
 
-    k  "Oh, this wasn’t going to clear you."
+    k  "Oh, this machine doesn't do that."
 
-    r  "Excuse me?"
+    r  "........"
+    r "WHAT?"
 
-    k  "No, no, no. You have misinterpreted the situation. This was for something else entirely. Call it professional curiosity. I had heard about your power..."
+    k  "No, no, no. You must have misinterpreted the situation." 
+    k "This is for something else entirely. Call it professional curiosity. I had heard about your power..."
 
     r  "W-what do you mean this isn’t going to clear me? Why the hell did I hafta fix it for?"
 
-    "Doctor Osamu continues like he didn’t even hear my question. I can barely understand the jumble of words coming out of his mouth."
+    "Doctor Osamu continues like he didn’t even hear my question." 
+    "I can barely understand the jumble of words coming out of his mouth."
 
-    k  "You are quite unique, even amongst Majin. Dark flames and all that, strong enough to ward off one of the most...troublesome...of our enemies."
+    k  "You are quite unique, even amongst Majin."
+    k "Dark flames and all that, strong enough to ward off one of the most...troublesome...of our enemies."
     k "Remarkable, really. I've never seen that sort of manifestation in any Majin. I haven't even heard of it."
 
     r "I'm not your guinea pig! What the hell're you talkin' about?"
 
-    k  "Imagine that? I have never heard of it before. Me! Ooooh, to feel ignorant about something, I mean truly ignorant; it "
+    k  "Imagine that!"
+    k "Me, not having heard of something before!" 
+    k "Ooooh, to feel ignorant about something, I mean truly ignorant; it's delightful!"
+    k "The learning opportunity---"
 
     r  "Yeah, that’s great Doc, but what I’m interested in-"
 
-    k  "I had almost forgotten what this feels like. The thrill of the unknown, the tension one feels during the chase of the answer, the satisfying climax of discovering something new, I--"
+    k  "I had almost forgotten what that feels like." 
+    k "The thrill of the unknown, the tension one feels during the chase of the answer, the satisfying climax of discovering something new, I--"
 
+    "...does he get off on science, or what?"
+    $journal.unlock_entry("Doctor Osamu", "028")
     r  "Hey, Doc! Yo, I’m still here. You need to clear me."
 
     k  "Ah yes, quite. My mistake."
@@ -5142,18 +5002,21 @@ label Scene42:
     "He looks me up and down quickly."
 
     k  "You’re in fine shape. Tell Miss Susa I say you’re cleared to go."
-
-    "He turns right back around to his monitor and begins writing something else down."
-
+    r "..................."
     r  "Wait, are you freakin’ kidding me? That’s it?"
 
     k  "I can make it more invasive, if you’d prefer. I haven’t performed a rectal cavity search in years, but I'm sure for you..."
 
-    r  "No, no! That’s fine! I’m good. Was just expecting something, uh, more I guess. Not complaining!"
+    r  "N-NO! No. That’s fine! I’m good."
+    r "Was just expecting something, uh, more I guess. Not complaining!"
 
     k  "Well, get out of my lab then. Your ignorance is fogging up my machinery."
 
-    r  "Yeah, great to see you too, Doc. I have to go talk to Soume anyway so-"
+    r "I'm goin' already!"
+    # if, some scene where Soume is acting weird, then you get Scene42
+    # else: jump Scene43
+label Scene42:    
+    r  "I have to go talk to Soume anyway so-"
 
     "Doctor Osamu has finally turned around from his data, and for the first time since I’ve been down here he seems like he’s actually paying attention to me."
 
@@ -5199,18 +5062,45 @@ label Scene42:
     r  "Thanks again, Doctor Osamu."
 
     "I walk out of the lab and head back upstairs. I don't really wanna mess with that guy."
-
-#[Scene 43]
+    $ Scene42 = True
+    
 label Scene43:
-    ro  "So, Riku, what was Doctor Osamu’s verdict? Will you be accompanying us during our next rescue?"
+    ro  "So, Riku, what was Doctor Osamu’s verdict? Have you passed?"
 
-    r  "Yeah. Think so at least, so long as Susa doesn’t change her mind again."
+    r  "With flying colors!"
 
     #Roman chuckles.
-    ro "Oh, she’ll be fine! This is excellent news, Riku! We can always use more help out in the field."
+    ro "Excellent! And even more so because..."
 
-    r  "Mm hmm."
-
+    r  "What?"
+    
+    ro "Miss Susa has just issued a mission and if you'd passed, you'd be allowed to go!"
+    
+    r "Awwwwwwwlright!"
+    r "So what is it? Fighting that Mamoru guy head on, or taking on a giant horde of hunters..."
+    
+    ro "...nothing like that..."
+    
+    r "Oh, so we're gonna bust into the enemy base, ambush them and save someone?"
+    
+    ro "...no."
+    r "......."
+    ro "It's a very good one for your first mission, don't give me that look..."
+    ro "We're picking up a Majin in the forest and bringing her here."
+    r "............"
+    ro "You know, for a better life!"
+    r "................"
+    ro "Well, what DID you expect?"
+    r "Fiiiiiiine. I guess it's okay."
+    ro "You'll enjoy it, I promise."
+    r "Get some rest tonight, we leave tomorrow morning, early!"
+    
+    if Scene42:
+        jump Scene43b
+    else:
+        jump Scene43c
+        
+label Scene43b:    
     "I just sort of nod in Roman’s direction. He’s smiling, but for some reason I can’t get excited. All that stuff the doctor was talking about is still bugging me."
 
     ro  "Great timing, too. Soume just mentioned to me that Susa recently received word of another Majin in need of rescue."
@@ -5311,6 +5201,7 @@ label Scene43:
 
     ro  "Well, as I said, he’s a sensory demon. So he can sense things like paths to take or imminent danger. He is quite good at it too; I don’t think we’ve ever been ambushed when he accompanies us."
 
+    $journal.unlock_entry("Majin","053")
     r  "So?"
 
     ro  "Well, he really only gets flashes of what’s going on. He knows if danger is incoming, but not exactly who or what it is. He can tell what paths to take, but doesn’t know what’s on the other paths."
@@ -5338,6 +5229,7 @@ label Scene43:
     r  "He drank my blood!?"
 
     ro  "SSSSHHHHHH!"
+    $journal.unlock_entry("Doctor Osamu", "030")
 
     "Roman clasps his hand over my mouth while looking around again."
 
@@ -5372,11 +5264,28 @@ label Scene43:
 
     "Roman heads down the hall. I gotta learn to stop asking questions I really don’t want the answer to."
 
-#[Scene 44]
+label Scene43c:    
+    $ decision = "8"
+    
+menu:
+    "Search.":
+        call show_map
+    "Sleep.":
+        call sleep
+    "Store.":
+        call shop_loop
+    "Research.":
+        call research_loop
+        $journal.unlock_entry("something", "031")
+        
 label Scene44:
-    su  "Now the point of extraction is...Oi! You listening, sprog?"
+    
+    su  "Now the recon point is...Oi! You listening, sprog?"
 
-    "Susa keeps on interrupting herself to make sure I'm paying attention. I dunno why—I haven’t nodded off once during her whole lecture, which is something of a miracle for me."
+    "Susa keeps on interrupting herself to make sure I'm paying attention." 
+    "I dunno why—I haven’t nodded off once during her whole lecture, which is kind of a miracle for me."
+    "I'm not very good at paying attention."
+    $journal.unlock_entry("Riku","064")
 
     r  "Yeah, yeah. I’m listening."
 
@@ -5465,13 +5374,14 @@ label Scene44:
 
     r  "You want me to have this?"
 
-    ro  "Yes. Consider it a gift in celebration of your first successful mission! Or perhaps a good luck charm."
+    ro  "Yes. Consider it a gift in celebration of your first successful mission!"
+    $inventory.unlock_item("rose")
 
-    r  "Either way, thanks Roman. What’s this guy’s name, anyway?"
+    r  "Thanks, Roman."
+    
+    ro "You're welcome. His name is Svetlana."
 
-    ro  "Uhh...Svetlana."
-
-    r  "Svetlana?"
+    r  "...Svetlana?"
 
     ro  "...ahem. Well, put him somewhere safe and then come join us at the entrance."
 
@@ -5593,24 +5503,32 @@ label Scene45:
 
     s  "What about him?"
 
-    r  "Yeah, what if the hunters show up back at the safe zone? Will he be safe?"
+    r  "What if the hunters show up back at the safe zone? Will he be safe?"
 
-    s  "Riku, the Doctor will be fine. Well, probably at least. It is sort of hard to tell in these situations. I’m sure he’s at least alert. As long as he didn’t fall asleep..."
+    s  "Well..."
+    s "...probably."
+    s "It is sort of hard to tell in these situations. I’m sure he’s at least alert. As long as he didn’t fall asleep..."
 
+    r "..........."
+    
     ro  "He did look like he was ready to doze off."
 
-    s  "Hrm. Well, Riku, I leave it up to your judgement. Either wait here or go warn Doctor Osamu. I leave the decision to you."
+    s  "Hrm. Riku, I leave it up to your judgement. Either wait here or go warn Doctor Osamu. I leave the decision to you."
 
-    #DECISION:
-    #Stay with Soume and Roman
-      #-Continue
-    #Head back to Doctor Osamu
-      #-Skip to Scene 45 after
-      #-r  I suppose I should go warn the Doc. Even if he is kind of a dick, I’d rather he not get eaten.
-      #-s  Fair enough, Riku. Move as quickly and silently as you can.
-
-    "I take off through the forest. As I leave, I hear the start of the battle between them and the hunters."
-    "It's weird, but I'm kind of jealous. I did join them so I could fight." 
+menu:
+        "Stay with Soume and Roman.":
+            jump Scene46a
+        "Head back to Doctor Osamu.":
+            r "I should go warn the Doc...we probably don't want him to get eaten."
+            s "Fair enough. Move as quickly and silently as you can."
+            jump Scene46b
+                
+label Scene46a:    
+    "I settle down and wait for them to come back." 
+    #play sounds battle
+    "I can hear the fight starting..."
+    "I'm kind of jealous." 
+    "The whole reason I wanted to go on missions in the first place was so I could fight." 
     "Lucky bastards."
 
     #This is a hunter.
@@ -5635,9 +5553,9 @@ label Scene45:
 
     ro  "Riku!"
 
-    "Roman came running in my direction. I don't see Soume anywhere."
+    "Roman comes running in my direction. I don't see Soume anywhere."
 
-    r  "Roman, I just got fuckin’ ambushed. A couple of those little things snuck up on me."
+    r  "Roman, I just got ambushed. A couple of those little things snuck up on me."
 
     ro  "Soume wants you to fall back. There are too many of these things out here right now. Head back to the safe zone with the Doctor. Wait for us to return."
 
@@ -5645,60 +5563,77 @@ label Scene45:
 
     ro  "Riku, this isn’t up for debate! Return immediately; this area is no longer safe!"
 
-    "Roman takes off running in the direction he came from. Well shit. This was a rather inauspicious end to my first mission. Sent off because a couple of little goblins showed up. How embarrassing."
+    "Roman takes off running in the direction he came from. Well shit."
+    "Maybe though, if I try, I could take em..."
+    "Or maybe I'd just get killed..."
+menu:
+        "Ignore the warning and try to help.":
+                jump badend3
+        "Head back to the safe spot.":
+                jump Scene46b
 
-#[Scene 46]
-label Scene46:
+label Scene46b:
     "I’m practically in a full sprint as I head back to the safe spot."
 
     "Doctor Osamu is lounging on the tree stump, reading some paper he brought with him.  He glances up over the top of the paper briefly when he sees me coming."
 
     k  "Oh, what happened?  Did they kick you out already?  Were they tired of babysitting?"
 
-    "He laughs to himself and goes back to reading.  Apparently he doesn’t realize I’m out of breath or covered in sweat, or any of the other indication that might tip him off that something was up."  
+    r "............."
+    "He laughs to himself and goes back to reading."
+    "He doesn't seem to have the slightest clue what's going on."
+    $renpy.pause(1.0)
     "For a sensory demon, he sucks."
 
-    r  "Uh Doc, don't you sense anything weird round here?"
+    r  "Uh Doc, don't you sense anything?"
 
-    "Doctor Osamu sighs deeply and rubs his eyes."
-
-    k  "Is that why they sent you back here?  Everything is fine. There is no danger in the area.  Now, scoot on back to the others and let me get back to my work, please."
+    k "....?"
+    k  "Is that why they sent you back here?"  
+    k "Everything is clear. There is no danger around for miles."  
+    k "Now, scoot on back to the others and let me get back to my work, please."
 
     r  "Well, your sensing pretty fucking screwed up, or you have a weird idea of what danger is.  We were just attacked by demons."
 
+    k "........."
     k "...what?"
 
-    "He finally puts his paper down and looks up at me."
-
-    r  "Roman and Soume are still battling the hunters as we speak."
+    r  "You didn't know?"
+    r "Roman and Soume are still out there fighting them!"
 
     "Now he looks like he's going to have a heart attack."
 
     k  "No, no. That is impossible. I’d be able to tell. You must be mistaken."
 
-    r  "Look, I know what I saw.  Maybe you just weren’t paying attention or somethin’. There were hunters.  Decent amount of them."
-
-    "Doctor Osamu gets up and starts pacing around, looking around wildly."
-
+    r  "Look, I know what I saw.  Maybe you just weren’t paying attention or somethin’." 
+    r "There were hunters.  Dozens of them."
+    k "............."
     k  "No, no.  That can’t be!  It can’t!  I’d be able to tell. I’d-"
+    k ".............."
+    
+    "He looks like he's going to blow the little vein on his forehead."
 
-    "He stops moving around and seems to be focusing again.  He’s grasping his head and clenching down on his scalp."
+    k  "Ngh." 
+    k "I don't sense a thing. Not a single thing. This is IMPOSSIBLE."
 
-    k  "Ngh.  I don't sense a thing. Not a thing. This is IMPOSSIBLE."
+    r  "I don't know! Maybe your sensors are on the fritz!"
+    r "Cause I KNOW what I saw."
 
-    r  "I dunno, maybe your sensors are on the fritz.  You gotta get those tuned up every once in a while, or what?"
-
-    k  "It's NOT POSSIBLE. I don’t know how I could have missed it. I must have been drugged! Yes, that fox...if it were him...that is almost certainly what has occurred."
+    k  "It's NOT POSSIBLE, DAMN YOU!"
+    k "I must have been drugged!" 
+    k "........"
+    k "Yes...drugged...that must be it..."
 
     "I roll my eyes.  This guy just can’t admit when he made a mistake."
 
-    r  "Right, well, whatever happened I’m back now.  I’m supposed to keep you safe."
+    r  "Whatever it is, I’m back now.  I’m supposed to keep you safe."
 
-    k  "You?  That is rich.  You’re still a child, barely out of your mother’s womb. I'll be MURDERED without a fight."
+    k  "You?  That is rich.  You’re still a child, barely out of your mother’s womb." 
+    k "Oh lords of science..."
+    k "I'll be MURDERED without a fight."
 
-    r  "Whatever."
 
-    "Couldn’t Soume have sent me off to guard something a little more charming?  Like some maggots or a slug or a garbage bin."
+    "Couldn’t Soume have sent me off to guard something a little more charming?"  
+    "Like some maggots or a slug or a garbage bin full of horse shit."
 
     k  "It is rather odd that Soume sent you off like that though, don’t you think."
 
@@ -5712,24 +5647,27 @@ label Scene46:
 
     "I take the place on the stump he vacated.  If I have to listen to him, I might as well make myself comfortable."
 
-#[Scene 47]
+
 label Scene47:
     s  "Roman, are you alright?"
 
-    ro  "Yes.  Quite fine.  Those hunters were rather weak, weren't they?"
+    ro  "Yes. Those hunters were rather weak, weren't they?"
 
     #Soume giggles.
     s  "I do feel a bit silly for sending Riku away now.  Even Doctor Osamu could have handled this bunch."
 
-    m  "Ahhhh, well...I hope I might provide a more suitable challenge."
+    m  "Is that so?" 
+    m "Well...I hope I might provide a more suitable challenge."
 
     ro  "---ah--"
-
+    
     #Soume should sound a little condescending when he talks to Mamoru, as if Mamoru is a 3 year old child that is disobedient.
-    s  "Ahhh. Things did smell a bit odd, Mamoru-kun."
+    s  "Ahhh. The air did smell a bit foul, Mamoru."
 
-    m  "I really do apologize for my opening act.  I was hoping it might provide you with a suitable warm up, but it appears my pets failed at even doing that." 
-    m "Tsk tsk.  Rather embarrassing.  I assure you, I’ll be sure to make note of this during their performance reviews!"
+    m  "I really do apologize for my opening act.  I was hoping it might provide you with a rigorous warm up, but it appears they were unworthy of you."
+    m "As usual, Soume."
+    $renpy.pause(1.0)
+    m "I'm quite embarrased. But I assure you, I’ll be sure to make note of this during their performance reviews!"
     "His laugh is so chilly."
 
     s  "So to what do we owe the pleasure of your company?"
@@ -5756,19 +5694,22 @@ label Scene47:
     ro  "You, you...monster!"
 
     #Mamoru laughs gleefully.
-    m  "Ahaha~ A monster? Oh Roman, you wound me!  A monster! Oh no no no. The monsters are you."
+    m  "Ahaha..."
+    m "A monster? Oh Roman, you wound me."
 
-    r "Y-you’ve been warned, Mamoru! You cannot defeat the both of us!"
+    r "Y-you’ve been warned, Mamoru! You can't defeat both of us!"
 
     #For this, I think use "Roman-chan" for extra effect.
     m  "Come now, Roman, don’t flatter yourself. Any difficulty I had here would not have anything to do with you."
 
-    s  "Mamoru-kun."
+    s  "Mamoru."
     
-    "His face suddenly changes. He really is afraid of Soume."
+    "Mamoru's face suddenly changes." 
+    "He really is afraid of Soume."
 
-    m  "How trite, Soume." 
-    m "{size=17}But it's fine. I wasn’t looking for you two, anyway.  I had heard that an old friend had come to visit me. Riku, I believe you know him. I don’t suppose there’s any chance you two might point me in the right direction?{/size}"
+    m  "How trite." 
+    m "But it's fine. I wasn’t looking for you two, anyway."  
+    m "I had heard that an old friend had come to visit me. Riku, I believe you know him. I don’t suppose there’s any chance you two might point me in the right direction?"
 
     s  "Not tonight, I'm afraid."
 
@@ -5788,7 +5729,8 @@ label Scene47:
 
     ro  "Demon hunters--b-but how?"
 
-    s  "Ngh. We’re surrounded. You've gotten a litle smarter, Mamoru."
+    s "....."
+    s  "It seems we’re surrounded. You've gotten a litle smarter, Mamoru."
 
     m  "...tch! I'll leave them to you, Naomi."
 
@@ -5811,9 +5753,9 @@ label Scene47:
 
     ro  "But he’s going after Riku and-"
 
-    s  "They’ll be fine.  And we won’t be able to do them any good if we wind up dead."
+    s  "They’ll be fine.  We won’t be able to do them any good if we wind up dead."
 
-    na "We~ll. Who wants to dir first?"
+    na "We~ll. Who wants to die first?"
 
     s  "Roman, I will try to distract the leader and lead a good portion of them off this way.  Try to handle the lighter ones until I return."
 
@@ -5833,36 +5775,44 @@ label Scene47:
 
     #play sound Swords clashing
 
-    #Battle goes here; Roman against demon hunters.
+#Battle goes here; Roman against demon hunters.
 
     db "Hurk!"
 
     m  "Ahhh, so easily dispatched. Perhaps I will make a more worthy opponent?"
 
-    ro  "M-Mamoru!"
+    ro  "M-M-M-Mamoru!"
 
     m  "M-m-m-m-me!  You really should get that stutter checked."
 
-    ro  "No, but-"
+    ro  "No, but--"
 
     m  "I wouldn’t look around for your precious Soume right now.  Last I saw he had his hands quite full with Naomi."
 
     ro  "H-he's not---Soume and I---"
 
     #Mamoru should sound very mean here, very different from him usually sounding very good-natured.
-    m "Shut up. I know everything that youko thinks, and I can see it in your eyes."
+    m "Shut up." 
+    
+    ro "........"
+    
+    "This is bad. I've never seen him get seriously angry before."
+    
+    m "I know everything that youko thinks, and I can see it in your eyes."
     
     ro  "..."
 
     #Riku should be referred to as "Riku-chan".
     m  "Oh, and I might have lied just a bit.  You see, the target today wasn’t actually Riku."
 
-    ro  "What--"
+    ro "........"
+    ro  "What...?"
 
     #He should be called Roman-chan again.
-    m  "Yes! Lucky you, Roman."
-    m "You're not really to my tastes. Ugly. Scrawny. Whiny. Pale." 
-    m "But, you're edging in on my territory. And so your life shall end."
+    m  "Oh yes. Lucky you, Roman."
+    m "You're not really to my personal tastes. Ugly. Scrawny. Whiny. Pale."
+    m "........."
+    m "But, you're edging in on my territory. I really don't like that."
 
     #Roman is being strangled.
     ro  "Ngh--"
@@ -5880,6 +5830,7 @@ label Scene47:
 
     #Mamoru-kun.
     s  "Mamoru."
+    m "........"
 
     m  "Ah, Soume, back so soon? Those idiots couldn't even keep you for ten minutes. I should have known."
 
@@ -5888,30 +5839,47 @@ label Scene47:
     ro  "...Soume...run..."
 
     s  "Roman, please keep quiet."
+    
+    m ".........."
 
-    m  "Soume, you really favor this little thing so much? Touching really. I'll leave your little Riku, in exchange for him."
+    m  "Why do you favor this trash?"
+    
+    s "I have no idea what you might be referring to."
+    m "......"
+    m "How touching."
+    m "........"
+    m "How about a trade?" 
+    m "I'll leave your little Riku, in exchange for this one."
+    m "You must know the importance."
 
-    s  "I'm afraid not."
+    s "......."
+    s  "I'm afraid my answer is no."
+    
+    m "How about if I throw in the doctor, for good measure?"
+    s "...."
+    s "The answer is still no."
+    
+    "What is going on? Is Mamoru trying to BARGAIN my life?"
 
     #Mamoru sounds a bit whiny here, as if Soume were being a mean parent and he were a petulant child.
-    m  "Eh?  Really Soume, you aren’t thinking rationally here." 
-    m "Three go free and all I want is this useless powerless denier."  
-    m "Plants won't stop me forever."
-
+    m  "Ehhhh? Really?" 
+    m "Soume, you aren’t being very rational here." 
+    m "Two go free and all I want is this useless powerless denier."  
     #-SFX sizzling noises-
     
     #Soume sounds nearly amused, but perfectly calm.
     s  "This is your last warning."
+    s "I am starting to get angry."
 
     ro  "Soume...just leave me...save the others..."
 
-    m  "'Save the others, Soume'. Listen to him. He knows what he's talking about."
+    m  "'Save the others, Soume'. Listen to this guy. He knows what he's talking about."
 
-    s  "Time's up~"
+    s  "Time's up."
 
     #play sound plants blooming and attacking.
 
-    m  "AUUUUUUUUGH!"
+    m  "---AUUUUUUUUUUUUUUUGH!"
 
     #-SFX cracking noises-
 
@@ -5921,17 +5889,29 @@ label Scene47:
 
     na "--y-yes, Chief."
 
-    m  "And you...what did you do to me?"
+    m  "And as for you, Soume...you are extremely lucky."
 
     s  "I did warn you, if you can recall."
 
+    m "Ehehehehe..."
     m  "Indeed. Next time I'll be much more prepared."
     
     s "Until then."
     
+    m "........."
+    m "Call a retreat."
+    na "Chief, what about the doctor guy---are we just gonna let everyone go?"
+    na "This wasn't the pl---"
+    m "If you want to live another night, you'll call the retreat."
+    na "........."
+    
+    "........................"
+    
     ro "...Soume..."
 
-    s "Shh. Rest."
+    s "Shhhhh. You should rest. Your arm is pretty badly broken."
+    
+    "....................."
     
 #[Scene 48]
 label Scene48:
@@ -5943,7 +5923,8 @@ label Scene48:
 
     r  "I heard...I dunno...it sounded like a scream.  Or something."
 
-    k  "A scream?  How absurd.  I would be able to tell if there was trouble, remember.  Sometimes I wonder if you just say things for the attention of it all."
+    k  "A scream?  How absurd.  I would be able to tell if there was trouble, remember?"  
+    k "Sometimes I wonder if you just say things for the attention of it all."
 
     r  "No, I’m positive I heard something."
 
@@ -5957,7 +5938,7 @@ label Scene48:
 
     "Another noise."
 
-    r  "Did you hear it that time!  It sounds like a voice."
+    r  "Did you hear it that time!  It sounded like a voice."
 
     "Kazutaka sits up and looks around.  It seems he heard it this time too.  Something faint a little ways away."
 
@@ -5967,13 +5948,16 @@ label Scene48:
 
     r  "Holy fucking shit---"
 
-    s  "Ssh.  Back up a bit.  Give me some space.  He’ll be fine, I can heal him."
+    s  "Be quiet. Back up a bit. Give me some space."
+    
+    "I back away, covering my mouth. I feel sick."
 
     k  "No..."
+    k "This can't..."
 
-    r  "What happened?"
+    r  "What the hell HAPPENED out there?"
 
-    s  "Ambush.  Mamoru and some demon hunters.  There were at least a half dozen or so."
+    s  "Mamoru."
 
     "Soume doesn’t look up from Roman.  He’s doing something to his arm, and Roman doesn’t particularly seem to be liking it.  His face is twisted in pain."
 
@@ -5983,49 +5967,37 @@ label Scene48:
 
     "Doctor Osamu is pacing back and forth, running his hands through his hair and mumbling things to himself.  He looks wild, and a little fucking frightening."
 
-    r  "Relax, Doc."
+    r  "...this...this isn't the time to freak out..."
+    
+    "His freaking out is making ME want to freak out."
 
     k  "No.  NO!  I WILL NOT RELAX! Why couldn’t I sense the danger?"
 
-    r  "Be quiet!  You’re going to attract attention if you keep on yelling like a fucking psycho."
-
+    s "I TOLD YOU to be quiet." 
+    
+    "Now I'm really scared."
+    "I've never heard Soume raise his voice."
+    "Ever."
+    
     "Doctor Osamu is wringing his hands together and closes his eyes, tightly.  It seems like he’s really fucking concentrated on something.  Or that he’s constipated."
 
     k  "This isn't possible, it's just not--"
-
-    "I look back over at Soume and he’s still working on Roman."
-    "I try to be useful and check around the clearing. With all the fucking racket Doctor Osamu is making I wouldn’t be surprised if the whole group of Demon Hunters knows where we are."
-
     k  "How can this be happening..."
 
-    "I turn, because I want to yell something at him, but there's something darting out of the forest."
+    "I turn, because I want to yell something something horrible at him, but there's something darting out of the forest."
 
     r  "LOOK OUT!"
 
-    "Doctor Osamu turns but before he can do anything the hunter is already on top of him.  He draws back his spear.  I feel something start to burn within me." 
+    "Doctor Osamu turns, but Akiko is already on top of him." 
+    "I feel something start to burn within me." 
     "What should I do? He's going to die!"
-    
-    #DECISION
-    #-Use your skills
-      #Continue, bad end x
-    #-Use your instincts
-      #-Skip to Scene 49
 
-    "As quickly as I can, I manage to summon a fireball and send it in the hunter’s direction.  He sees me and avoids it."
+menu:
+        "Use your skills.":
+                jump badend4
+        "Use your instincts.":
+                jump Scene49
 
-    "In one swift motion he runs Doctor Osamu through with his spear.  Doctor Osamu is yelling something, but I can’t hear him.  I turn to run back towards Soume, who is finally turning around."
-
-    "But then I feel something in my back.  Something cold and sharp."
-
-    "I look down.  The end of a spear is sticking out through my shirt."
-
-    "I look up at Soume.  I try to mouth I’m sorry, that it isn’t his fault.  I try to say anything, but the spear is twisting its way deeper into me and I can’t feel anything anymore."
-
-    "Soume runs past me and I think I hear bones breaking.  Or leaves crinkling.  Something.  I can’t tell.  I don’t care."
-
-    "I close my eyes and go into darkness.  A nice warm darkness.  Everything else fades away."
-
-#[Scene 49]
 label Scene49:
 
     "I run over in front of Doctor Osamu.  I have no idea what I’m doing.  It’s like my body is moving on its own."
@@ -6037,16 +6009,20 @@ label Scene49:
     r  "Stop!"
 
     "I can feel my body glowing.  An intense power, one I’ve never felt before is pulsating inside of me."
+    
+    "My vision goes white."
 
-    "Somewhere, far away, I think hear someone scream.  It’s an awful sound.  It sounds terrified and painful.  I just wish it would stop."
+    "Somewhere, far away, I think hear someone scream."  
+    "It’s hurting my ears. I just wish it would stop."
 
-    "The flames finally stop coming.  I collapse on the floor, exhausted.  I look up, and I realize where the screams were coming from."
+    "The flames finally stop coming, and I collapse on the floor, exhausted."  
+    "My vision slowly returns, and I look up." 
+    "Now I know where the screams were coming from."
 
     r  "Ah--"
-
-    "I manage to choke it out.  In front of me, where the hunter was standing, is nothing more than a melted pile of what used to be a man."
-
-    # ?
+    
+    "Where Akiko was standing is now just a charred corpse."
+    
     r "No---no, I didn't mean to---"
 
     "I just killed a man."
@@ -6057,23 +6033,25 @@ label Scene49:
 
     ro  "Riku, are you okay?"
 
-    "Roman manages to limp over.  He looks weak, but Soume seems to have at least gotten his arm fixed somewhat, and in a sling."
+    "Roman places his hand...his good hand...on my shoulder."
+    "Soume seems to have at least gotten his arm fixed somewhat, and in a sling."
 
-    r  "I-I didn’t mean to!  I don’t know what happened!  I just-"
+    r  "I-I didn’t mean to!  I don’t know what happened!  I just--"
 
     s  "Calm yourself, Riku."
 
-    r  "I-I-I....I fucking killed him, Soume!  He’s dead!"
+    r  "I-I-I....I fucking killed her, Soume!"
+    r "We were supposed to save her, now she’s dead!"
 
     s "Shhh..."
 
-    "Roman is staring at what used to be a demon hunter. He looks green."
+    "Roman is staring at what used to be Akiko. He looks green."
 
     "Soume crushes something in his hand and blows it in my face, in Roman's face and around the clearing."
 
     s  "You can’t blame yourself for this.  You saved Doctor Osamu’s life. He would have died."
 
-    "I know all of this.  I know they were going to kill Doctor Osamu. I know what I did was in self-defense. I---"
+    "I know that. I know she was going to kill Doctor Osamu. I know what I did was in self-defense. I---"
 
     "I'm calm...the pollen is doing its work."
 
@@ -6083,14 +6061,14 @@ label Scene49:
     
     k  "They found me--they knew I was here...they’re coming for me."
 
-    s  "Doctor, please.   There might be others in the area, and making more noise will only draw them closer."
+    s  "Doctor, please."
 
     "Doctor Osamu drops his volume, sitting down in a pile of upset."
 
     k  "I knew we shouldn’t have split up."
     k  "I'm a dead man..."
 
-    ro  "Doctor Osamu, Mamoru himself said he had come here for me.  Soume isn’t-"
+    ro  "Doctor Osamu, Mamoru himself said he had come here for me.  Soume isn’t--"
 
     k  "Why would he come here for you? You’re worthless! There are dozens of yous out there. You’re nothing!  It is me they want. How can you not see that, you simpleton?"
 
@@ -6105,11 +6083,13 @@ label Scene49:
 
     s  "He’s fine."
 
-    ro  "What was that?"
+    ro  "What's going on...?"
+    ro "Why would Akiko attack us...?"
+    
+    s "I'm...not sure."
 
-    s  "I...well, actually I’m not sure.  I’ve never seen anything like that."
-
-    k  "Luckily he was there.  I would’ve been dead, if it was up to you two incompetent apes."
+    k "Thank god Riku DID something!"
+    k  "I would’ve been dead, if it was up to you two incompetent apes."
 
     s  "Doctor, please, calm yourself.  I need you and Roman to escort Riku back to the rescue.  Make sure he gets back to Miss Susa and let her know what has happened."
 
@@ -6118,14 +6098,19 @@ label Scene49:
     s  "There are numerous dead bodies here. Someone has to clean up or there will be issues."
 
     k  "I'm sure. Not setting another trap, are you?"
-
-    s  "If I was, I trust you will actually warn them of it this time."
+    s "..........."
+    k "Speechless, are you?"
+    
+    ro "DOCTOR!"
+    
+    s "It is fine, Roman."
+    s  "If I was planning another trap, I trust you would actually warn for it, this time."
 
     k  "I--that isn’t..."
 
     s  "I need to take care of all of the bodies.  We cannot allow them to be discovered. Please return home. I will join with you shortly."
 
-    k  "..."
+    k  "................"
 
     s  "Are we clear?"
 
@@ -6133,26 +6118,30 @@ label Scene49:
 
     ro  "Be careful, Soume."
 
-    s  "You be careful. I'll come back to you shortly."
+    s  "You be careful. I'll come back to you soon."
 
     k  "Let’s go.  I’m in no mood to stick around."
 
-#[Scene 50]
 label Scene50:
     #The narrator here is Roman, now.
     "I’m having that dream again.  The one I always have when I’m nervous or exhausted.  I’m back in Russia.  Enslaved and scared."
 
-    "There a Majin boy in a cage in front of me." 
-    "He's telling me about his dreams, and about what he wants to do with his life.  He tries desperately to connect with me, to make a friend."
+    "There's a boy in the cage next to me." 
+    "He's trying to talk to me. He's trying desperately to connect with me, to make a friend."
+    "I don't answer him."
+    "I know better."
+    
     "And then the man comes."
 
-    "I steel my heart against it."
+    "I move all the way to the back of the cage, where the candle light doesn't touch."
+    "Don't pick me."
+    "Pick him."
+    "Don't pick me."
 
-    "I used to always hum the first movement of Borodin’s Symphony No. 2 at times like this.  I had heard it once when I was really young, before I came to be here."
-
-    "In the dream I hear it. It grows louder and louder until I cannot hear the footsteps anymore."
-    "He's calling for me, asking me to help him, but if I don't hide, the man might choose to take me, instead."
-    "I can't let him. I don't want to leave my friend, but I have to---"
+    "He picks the boy next to me."
+    "The boy calls for me, calls out to me for help."
+    "I don't reply."
+    "I can't risk them taking me, instead."
 
     ro  "AHHHHHHHHHHHH!"
 
@@ -6165,26 +6154,31 @@ label Scene50:
 
     ro  "I'm alright...you’re back already?"
 
-    s  "Oh yes, I’ve been back for quite some time now.  I came in to check on you.  When you were asleep, I figured I could make your room a little more cheery!  It is sorely missing of some nice flora."
+    s  "Oh yes, I’ve been back for quite some time now."  
+    s "I came in to check on you. Maybe make your room a little more cheery! It could use some more flora."
 
     "He smiles and backs away from my dresser to show me several plants he just finished potting."
 
     "My face is hot. It's always like this when Soume is around."
     ro  "I---you didn't have to..."
 
-    "My room smells amazing. Soume knows his way around plants...I feel like I'm floating, and Soume looks so--"
+    "My room smells wonderful. Soume knows his way around plants...I feel like I'm floating, and Soume looks so--"
 
-    s  "Shh. Someone needs to worry about your health when you won't. I'll be your nurse."
+    s  "Shhhhh. Someone needs to worry about your health when you won't. I'll be your nurse."
     
-    "He smiles at me, and I can feel my body melting."
+    "He smiles at me."
+    "I can feel my body melting."
 
     ro  "Right.  Ah, well...ahem.  Yes, thank you. I-I...appreciate your company."
 
-    s  "It's no trouble"
+    s  "It's no trouble at all."
 
-    "He’s back to working with his plants. I want to say something else, but I end up holding it in." 
+    "He’s back to working with his plants." 
+    "I want to say something else, but I end up holding it in." 
     "I don’t know why...the time just doesn’t feel right."
-    "I'll tell him. One day...I'll tell him how I feel."
+    "I'll tell him eventually."
+    "One day."
+    "I'll tell him how I feel."
 
     ro  "How is Riku doing?  He was just coming to last time I saw him."
 
@@ -6201,7 +6195,7 @@ label Scene50:
 
     s  "No, no, you stay here."
 
-    "He puts his hand on my shoulder, and my body's on fire."
+    "He puts his hand on my shoulder, and my body suddenly feels like it's on fire."
 
     s  "Get a little more rest. Please."
 
@@ -6209,18 +6203,19 @@ label Scene50:
     
     s "I absolutely do."
     
-    "I suck in a breath. I can't breathe while his hand is still touching me."
+    "I try to take in a breath." 
+    "It's hard to...while his hand is still touching me."
     
-    "He suddenly pulls back. He must notice my flush."
+    "He suddenly pulls back. He must've notice me blushing."
+    "How embarrassing."
     
     ro "N--what is it?"
 
-    s "You...should go and get that rest. I'll pay Riku a visit and come back in a little while to check on you."
+    s "You...should get that rest. I'll pay Riku a visit and come back in a little while to check on you."
     
-    ro "Oh...yes."
+    ro "Oh...yes. I will. Thank you."
     #play sound  Door closing
 
-#[Scene 51]
 label Scene51:
     k  "Ah.  Soume.  So nice to run into you."
 
@@ -6228,7 +6223,6 @@ label Scene51:
 
     k  "Yes.  I was monitoring his progress.  I would prefer it if you did not interfere by trying any of your little parlor tricks."
 
-    #Soume giggles.
     s   "Doctor, you always manage to make me laugh with your teasing."
 
     k  "I can assure you, Soume, I am completely serious with my warning."
@@ -6237,62 +6231,68 @@ label Scene51:
 
     k  "Do we?"
 
+    s "............"
     s  "I'm not sure of your implications."
 
     k  "No need to play stupid, Soume.  You might be oblivious, but you’re smarter than I'd prefer to give you credit for."
-    k "We all know why you're really here."
-
+    
     s  "Excuse me?"
 
-    k  "Keep your plants and silly shamanism away from him.  Only one of us is an actual doctor, and I can assure you that I don’t need your help."
+    k "Hn."
+    k "It's no matter."
+    k  "Just keep your plants and silly shamanism away from him."  
+    k "Only one of us is an actual doctor, and I can assure you that I don’t need your help."
 
-    s  "With all due respect, Doctor-"
+    s  "With all due respect, Doctor--"
 
     k  "With all due respect, Soume, I honestly don’t care for your opinion." 
     k "I am a medical professional, and I know exactly what I am doing."
 
-    s  "Doctor, I only want---"
+    s  "Doctor, I only want--"
 
     k  "What you want is irrelevant. Miss Susa has put me in charge of Riku’s wellbeing and I don’t want you interfering with my medicine."
 
+    s "..........."
     s  "I understand."
 
     k  "Good."
     k "And when the time is right, Soume...I'll reveal you for what you really are."
     k "Now, if you excuse me-"
 
-    s  "What exactly is your problem with me? There is an awful lot of undue animosity."
+    s  "May I ask, Doctor Osamu, what your problem is with me?"
 
-    k  "Oh, is there?  Well you are the perceptive one! Your sensory abilities clearly rival even my own!"
+    k  "Oh, you've noticed, have you? Well you are the perceptive one! Your sensory abilities clearly rival even my own!"
 
     s  "..."
 
     k  "Listen carefully. The others here might be stupid enough to buy into your whole act, but I can assure you I am not that dense."
 
-    s  "You've always been unnaturally paranoid, however~"
+    s  "You've always been unnaturally paranoid, however this is too m---"
 
-    k  "I know you’re up to something, you pathetic little cretin.  And I-"
+    k  "I know you’re up to something, you pathetic little cretin.  And I--"
 
     s  "I can assure you that you don’t know what you’re talking about. Even considering our past...incident."
 
+    k "....................."
     k  "Kch. I should've known you'd never let me live that down."
 
-    s  "How could I possibly?"
+    s  "All things considered, Doctor, how could I possibly?"
     
     k "...rgh..."
-
     k  "I will expose you.  It is only a matter of time.  You will find that engaging me in a battle of wits will leave someone of your capacity sorely outmatched."
 
-    s  "You may be right. Have a lovely day, Doctor."
+    s "............."
+    s  "You may be right. Do have a lovely day, Doctor."
 
-# ***
+label Scene52:
 
     "I finish taking whatever gross thing Doctor Osamu just gave me."
 
     #Riku is gargling something here.
     r  "Ugh, that’s gross."
 
-    "It tastes like raw eggs and old fish.  Doctor Osamu tried to explain to me what it was.  Something about replacing something and increasing my something with something something."
+    "It tastes like raw eggs and old fish." 
+    "He tried to explain to me what it was...something about replacing something and increasing my something with something something."
 
     #play sound knocking
 
@@ -6302,9 +6302,9 @@ label Scene51:
 
     r  "Come in. I guess."
 
-    s  "Riku!  Is this a bad time?  You don’t sound very well."
+    s  "Is this a bad time?"
 
-    r  "Oh, hey Soume! No, come in. I just thought you were Doctor Osamu again, is all."
+    r  "Oh, Soume, it's you. No, come in. I just thought you were Doctor Osamu again, is all."
 
     #Soume giggles.
     s  "Ah! Then I guess I can’t blame you."
@@ -6330,7 +6330,8 @@ label Scene51:
     s  "No, that’s what I wanted to talk to you about before you started.  It is a...different meat."
 
     r  "Hm...I’ve had bison before, so I know it isn’t that...hmm....I give up.  What’s this?"
-
+    
+    s "..........."
     s  "It is...lamb."
 
     r  "Lamb burger, huh?"
@@ -6340,12 +6341,12 @@ label Scene51:
     r "You're a great chef."
     
     #Soume says thank you nervously.
-    s  "Yes...thank you...erm at any rate, Riku, I really wanted to talk to you more about your training."
+    s  "Yes...thank you...at any rate, Riku, I really wanted to talk to you more about your training."
 
     r  "Awww....I thought I was finished with that."
 
     #Soume chuckles.
-    s  "Training never ends, Riku. There is always something to learn. And new abilities of yours keep popping up."
+    s  "Training never ends, Riku. There is always something to learn."
 
     r  "Yeah...I don’t know how I did it, and I felt like I wasn’t even in control of it.  It just...happened."
 
@@ -6357,14 +6358,21 @@ label Scene51:
 
     "I guess I won't mind training more. I’d rather not explode and take out a city block."
 
+    r "Well, thanks for the burger. I feel much better."
+    s "........."
+    s "I'm glad."
     s  "Now that you're full, lie back down. I’m sure Doctor Osamu will be back to check in on you shortly."
 
     r  "Ugh, I should hide from him, instead."
 
-    s  "At the very least, try to take it easy, Riku. You’re more important to this rescue that you realize."
+    # Soume giggles.
+    s  "Try to take it easy, Riku. You’re more important to this rescue that you realize."
+    r "What do you mean?"
+    s "Well...we'll see."
+    
+    "No less cryptic, that guy."
 
-#[Scene 52]
-label Scene52:
+label Scene53:
     ro  "Hey Riku!  Hold on!"
 
     "I am on my way over to the phone."
@@ -6377,7 +6385,7 @@ label Scene52:
 
     r  "Yup.  How about yourself?"
 
-    ro  "Please don’t worry about me.  I’m afraid Soume made a bigger deal over my arm than he should have."
+    ro  "Don’t worry about me.  I’m afraid Soume made a bigger deal over my arm than he should have."
 
     ro  "Anyway...I just though I'd ask because you seemed a bit shaken."
 
@@ -6426,7 +6434,7 @@ label Scene52:
 
     ma  "That’s good, then.  Still, I think this is too early for you to be going out and doing things so dangerous..."
 
-    r  "I’ll tell Miss Susa that."
+    r  "I’ll tell Miss Susa."
 
     ma  "So, when are you coming to visit?"
 
@@ -6450,18 +6458,18 @@ label Scene52:
 
     ma  "And don’t give them too much trouble."
 
-    r  "Right..."
+    r  "I--I won't..."
 
     ma  "And...be safe."
 
-    r  "...love you, Mom."
+    r  "...I love you, Mom."
 
-    ma  "Love you too, Riku. See you soon."
+    ma "............."
+    ma  "I love you too, Riku. See you soon."
 
     "I hang up the phone. I don't think it helped, much."
 
-#[Scene 53]
-label Scene53:
+label Scene54:
     su  "So, how is the little sprog, Doctor?"
 
     r  "I keep telling you, I’m-AH-fine."
@@ -6473,9 +6481,10 @@ label Scene53:
 
     r  "Aw come on, this wan’t my fault.  I didn’t know it was gonna happen like that."
 
-    su  "Hmph.  I bet you fucking did this just to get out of mopping.  You’ll be pulling double shifts next week just to make up for it!"
+    su  "You’ll be pulling double shifts next week just to make up for it!"
 
-    "Weeeell, at least Miss Susa never changes."
+    "Miss Susa never changes."
+    "It's kind of comforting."
 
     k  "Well, I believe he is back at nearly full health.  I’ll be taking him off of bed rest starting tomorrow."
 
@@ -6483,31 +6492,34 @@ label Scene53:
 
     "Susa frowns and stares at me.  She's almost being nice to me, today."
 
-    su  "You sure you’re all right? I don’t want you passing out and getting blood on the linoleum cause someone's gonna hafta clean that."
+    su  "You sure you’re all right? I don’t want you passing out and getting blood on the linoleum, cause someone's gonna hafta clean that."
 
     r  "Yeah, yeah.  I’m fine.  Don’t worry.  Your floors will be sparkling."
 
     su  "Good.  Good.  Just worried about the floors, you see."
 
     r  "I get it."
-    
-    k "And er...Riku?"
+        
+    k "Ahem...Riku?"
     
     r "Yeah?"
 
-    k  "Ahem. Ah, thanks again.  For...saving my life."
+    k  "Ah, thank you.  For...saving my life."
 
     r  "Yeah.  Don’t mention it."
 
+    k "........"
+    su ".........."
+    su "Riku..."
     su  "You know you didn’t do anything wrong?"
 
-    r  "..."
+    r  "..........."
 
     su  "So don't look like that. There will be others, and they will need you at your best, and sometimes...there will be sacrifices."
 
-    r  "Heh.  Thanks, Susa."
+    r  "Heh.  Thanks, Miss Susa."
 
-    "Nice to know she believes in me, at least. Makes me question myself a bit less."
+    "Nice to know she believes in me. Makes me question myself a bit less."
 
     su  "Well. Yeah. Get ready to get back to fucking work, you hear me? No more freeloading if you want to eat. Now get some rest. I’ll be around if you need to talk."
 
@@ -6519,24 +6531,25 @@ label Scene53:
 
     "Did Doctor Osamu just tell me he was sorry?  Doctor Osamu?  That was one word I thought was missing from his vocabulary."
 
-    k  "Ahem. Yes, well, I’ll be around in my lab. If you’d like to help me. I could use an assistant, and you do seem less dumb than most of the people I run into."
+    k  "Ahem. Yes, well, I’ll be around in my lab. If you’d like to help me. I could use an assistant, and you do seem less moronic than most of the people I run into."
 
     r  "Uh...thanks."
 
-    "Doctor Osamu nods his head at me at gives a really weak looking smile that looks like is causing him physical pain."
+    "He nods his head at me at gives a really weak looking smile that looks like is causing him physical pain."
 
     r  "So...I can go?  I’m not required to sit around in my room any longer?"
 
-    k  "No, I have now officially cleared you. Too late to start training or whatever else silly thing Soume would have you doing, but you can at least leave your room for the day."
+    k  "Yes, I have now officially cleared you. Too late to start training or whatever else silly thing Soume would have you doing, but you can at least leave your room for the evening."
 
-    r  "Yes!  I have been going crazy just sitting around. About time!"
+    r  "Finally. Getting cabin fever just sitting here like this."
 
-    k  "Right.  I’ll be back down in my lab if you need me.  Otherwise, feel free to stop by later if you need anything."
+    k  "Right. Well..." 
+    k "I’ll be back down in my lab if you need me. Feel free to stop by later if you need anything."
 
     "Doctor Osamu leaves my room and heads off. I finally have some FREE TIME!"
 
     "I could head to the lab and work with the Doctor..."
-    "Or I could go check in on Roman.  Make sure he’s doing all right and everything.  I haven’t talked to him much recently, and he’s always happy to see me."\
+    "Or I could go check in on Roman.  Make sure he’s doing all right and everything.  I haven’t talked to him much recently, and he’s always happy to see me."
     "I could also talk to Miss Susa about everything."
 
     r  "Hmmm..."
@@ -6556,8 +6569,9 @@ menu:
        jump endarc
 
 label endarc:
-    $show_message("You have completed the first half of the game. From here, the game will follow the story of the character you've chosen.", "medium")
-    $show_message("Saving is heavily advised.", "small")
+    $show_message("You have completed the first half of the game.", "medium")
+    $show_message("From here, the game will follow the story of the character you've most clicked with.", "medium")
+    $show_message("Saving is heavily advised.", "medium")
 
 menu:
     "Continue.":

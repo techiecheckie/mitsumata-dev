@@ -1,3 +1,6 @@
+######################
+# Roman's Birthday Game
+######################
 label birthdaygame: 
     $show_message("You are in charge of throwing Roman a great coming-of-age party.", "medium") 
     $show_message("To throw the best possible party, you will need to get the right gift, fitting decorations, pick the best place in the temple to have the party, a delicious cake, and a special surprise to top it all off.", "large")
@@ -484,3 +487,8 @@ label fehparty:
 label failparty:
         su "Ugh, I don't know why I bothered to trust you with something this easy."
         return
+
+######################
+# Kazu's Quiz Game
+######################
+#label kazuquiz        
