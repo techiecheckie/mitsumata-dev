@@ -24,17 +24,4 @@ label research_loop:
     k "We'll study this tonight."
     return
 
-#----------------------------------------------
-# MENU FOR NIGHTLY OPTIONS
-#----------------------------------------------
-
-menu:
-    "Search.":
-        call show_map
-    "Sleep.":
-        call sleep
-    "Store.":
-        call shop_loop
-    "Research.":
-        call research_loop
-        $unlock_entry("something", "031")    
+ 

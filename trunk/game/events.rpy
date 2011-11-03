@@ -48,24 +48,20 @@ label soroom_events:
   return
   
 label suroom_events:
-   #if decision == "X":
-    # add drama here, or mayhaps a call to some other label.
-    #call dummy_label
-    # And set event_triggered to True if an event occurred, so that the search
-    # screen knows that it should break the loop and return to the script
-    #$event_triggered = True
-  #elif decision == "Y":
+   if decision == "6":
+       call Scene37a
+    
+       $event_triggered = True
+   #elif decision == "Y":
     #call other_dummy_label
     #$event_triggered = True
-  return
+   return
   
 label hall1_events:
-  #if decision == "X":
-    # add drama here, or mayhaps a call to some other label.
-    #call dummy_label
-    # And set event_triggered to True if an event occurred, so that the search
-    # screen knows that it should break the loop and return to the script
-    #$event_triggered = True
+  if decision == "2":
+    call Scene21
+
+    $event_triggered = True
   #elif decision == "Y":
     #call other_dummy_label
     #$event_triggered = True  

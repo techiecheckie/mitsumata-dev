@@ -2,6 +2,7 @@
 # Kazutaka's Branch
 #*************************
 #Currently at 1900 out of 3542
+# was editing at 3365 (11/3/11)
 #Add scene where Kaz is on the phone with Liza.
 
 label kaz1:
@@ -3002,60 +3003,66 @@ label kaz27:
     
     k  "Ngh…"
     
-    ro  "Move no further!"
+label kaz27a:    
     
-    na  "Ah fuck, now look what you done did.  The damn cavalry showed up."  
+    ro  "Stop right there!"
     
-    r  "You alright, Kazu?"
+    na  "Ah fuck. The damn cavalry showed up."  
     
-    k  "Eh…fine for now.  Although next time if you could come a little bit quicker, by heart would certainly appreciate it."
+    r  "You alright, Doctor Osamu?"
     
-    r  "Sure, no problem.  Next time we show up to save your life, I’ll be sure to speed up the whole process."
+    k  "Barely!"
+    k "Next time if you could come a little bit quicker, my heart would certainly appreciate it."
     
-    na  "Wait, is that it?  Just the two of ya?  Fuck, I almost started to get worried."
+    r  "Just for that, I'm gonna make sure you lose at least one body part before we come save you next time."
     
-    na  "Look, here’s what I’m gonna do, Osamu.  I’m going to kill these two and I am going to use their intestines to decorate the tree behind us."  
-    na "Then we’ll see if you change your mind, and if you don’t, fuck, it looks like I’ll be able to decorate the tree next to it."
+    na  "Oh, is it just the two of you? I was all worried for nothing."
     
-    ro  "Doctor, stand behind us.  We can take it from hear."
+    na  "Look, here’s what I’m gonna do, Osamu."  
+    na "I’m going to kill these two."
+    na "And then I am going to use their intestines to decorate the tree behind us."  
+    na "If you change your mind, excellent. And if you don’t, well, I'll decorate two trees"
+    
+    ro  "Doctor, stand behind us.  We can take it from here."
     
     na  "Bold words, kid.  How about we see how well you can talk after I rip the tongue from your mouth."
     
     na  "HAAAAAAAAAAAA!"
     
-    #Battle scene here.  Riku and Roman (and Kazutaka?) must defeat Naomi in battle.  Failure to do so will result in a bad ending.  Success will continue the scene.-
+#Battle scene here.  Riku and Roman (and Kazutaka?) must defeat Naomi in battle.  Failure to do so will result in a bad ending.  Success will continue the scene.-
     
-    na  "Eh…urk.  This…this can’t fucking be."
+    na  "Eh…urk.  This…this can’t--"
     
     #Riku huffs. Not as kinky as you'd think.
     
-    r  "-huff- Not as tough as you -huff- look, huh?"  
-    
-    ro  "Careful, Riku.  I don’t think she’s done yet."
-    
-    k  "What are you waiting for?  One of you two, finish her off now!  Before she has a chance to regroup."
+    r  "Not as tough as you look, huh?"  
+        
+    k  "What are you waiting for?  Finish her off now!  Before she pulls out some trickery!"
     
     r  "…"
     
     ro  "…"
     
-    k  "Excuse me?  One of you two need to finish her off before her recovery is complete!"
+    k  "HELLO! Kill her already!"
     
-    ro  "…I leave the choice to you, Riku."
+    ro  "...I--I can't make decisions like this..."
+    ro "You do it, Riku."
     
-    "Naomi stares up at me.  She moves for her spear, but she’s too weak to pick it up.  She tries to pull herself up against a rock, but fails at that as well."  
-    "She just looks pathetic.  Completely beaten, and completely vulnerable."
+    r "...WHAT?"
+    
+    "Naomi stares up at me.  She moves for her dagger, but she’s too weak to pick it up.  She tries to pull herself up against a rock, but fails at that as well."  
     
     r  "I…I can’t."
     
-    k  "I must have misheard you.  Riku, please, end her.  I promise you she would show you now mercy if the situation was reversed."
+    k  "She would show you now mercy if the situation was reversed! Hurry! Kill her now!"
     
     na  "Ngh."
     
-    r  "No.  No, I can’t.  You’re probably right, Kazu.  She would kill me in an instant.  But I am not like her.  I can’t just kill someone."  
-    r "We…we will take her back with us.  Perhaps we can get some information from her."
+    r  "No.  No, I can’t.  You’re probably right."  
+    r "She would kill me in an instant.  But I--I can’t just kill someone."  
+    r "We…we will take her back with us.  Maybe we can get some information outta her."
     
-    ro  "A sensible solution.  "
+    ro  "Good idea."
     
     k  "Are you two mad?  Here, give me your weapon; I shall finish the job myself."
     
@@ -3066,95 +3073,100 @@ label kaz27:
     "I was caught up in what Roman was saying, but during that time Naomi has managed to prop herself up against that rock she was trying to use earlier.  And she is smiling at us.  It makes me uneasy."
     
     na  "Nyeh heh heh heh!"
+    na  "You idiots. I'll never tell you anything."
+    na "Not even the little piece of information you've been dyyyyyyyying to know."
     
-    ro  "This…is an odd reaction."
-    
-    k  "Why is she laughing at a time like this?"
-    
-    na  "Because…DOCTOR…I know something you don’t know."
-    
-    k  "And what would that be?"
-    
-    na  "Oh…now, I really shouldn’t tell.  It is too fucking good."
+    k "............"
     
     r  "Ignore her; she’s fucking nuts.  Someone restrain her and we can get her to talk back at the rescue."
     
-    na  "Nyeh heh heh!  Oh, I highly doubt I’ll be staying there long enough!"
+    na  "Nyeh heh heh!"
+    na "In your dreams, you bed-wetting infant."
     
-    r  "Just shut your-"
+    r "Ohhhh that's IT!"
     
-    k  "Hush!  Why is that?  How can you be so sure?"
+    k  "You two, hold her down. I might have be able to make her talk."
     
-    na  "Nyeh heh heh!  It really is too fucking good!  Should I spoil the surprise?  Nah…but, then again, it isn’t like you three can fucking do anything about it now."
+    ro  "How?"
     
-    k  "Roman, hold her down.  I might have something with me capable of making her talk."
+    k  "A truth serum. Highly experimental, but--"
     
-    ro  "What is that?"
+    m  "Oh, Doctor Osamu, I thought you had given experimentation up?"
     
-    k  "A chemical.  Highly experimental, but-"
+    "The air goes cold."
+    "Why is he here?"
+    "Of all people, when Soume isn't around, why is he HERE?"
     
-    u  "Oh, Doctor Osamu, I thought you had given that up?"
+    k  "............."
     
-    k  "Eh…NO!  No!  Everyone run!"
-    
-    m  "Testing experimental substances on poor helpless individuals…so highly unethical.  And the reason I fell in love with your work in the first place."
+    m  "Testing possibly poisonous substances on poor helpless Majin…"
+    m "How unethical."  
+    m "And the reason we desired your special brand of expertise in the first place."
     
     ro  "Mamoru!"
     
-    m  "Yes, I am terribly sorry to break up this little party.  It was just about to become interesting.  I’m afraid I will be taking the good doctor with me, though.  Duty calls."
+    m  "Yes, yes, I am terribly sorry to break up this little party."
+    m "I will be taking the good doctor with me, though.  Duty calls."
     
     k  "No!  Roman, Riku, follow me!"
     
-    m  "Tut tut tut.  I can assure you, I am faster than you, stronger than you, and I have twenty other demon hunters closing in on this area as we speak."  
-    m "I shall, however, let the two of you go if you just let Kazutaka come with me."
+    m  "Will you run?"
+    m "I love it when they run."
     
-    ro  "No!  No we can’t-"
+    ro  "No! We can't just run--he's---"
     
-    m  "Hush.  I wasn’t finished.  The doctor and I have something of a business arrangement, one that he didn’t exactly fulfill his end of the bargain on."  
-    m "I’m only seeking restitution for the service he denied me.  Surely you won’t stop me from that?"
+    m  "You really have such an irritating mouth, Roman."
+    m "The doctor and I have something of a business arrangement, one that he didn’t exactly fulfill his end of the bargain on."  
+    m "I’m only seeking restitution for the service he denied me. Surely you won’t stop me from that?"
     
     k  "No…that was slavery!  I’m not going back!"
     
-    m  "I’m afraid you don’t understand.  Your choice here isn’t going or not going.  Your choice is coming with me in one piece, or in several."
+    m  "Your choice here isn’t to go or not go. It is to go in a single, living piece, or in several dead ones."
+    m "It's simply how I've learned to operate with those who don't pay their due."
     
-    na  "Nyeh heh heh.  Sorry there, Doctor K.  Look like you-HURK!"
+    na  "Ehehehehehe, I told you---HHHHHRK!"
     
-    "So quick that I could barely tell what had happened, Mamoru has gripped Naomi by the neck and is now lifting her above his head."
+    "Mamoru grabs Naomi by the neck with one single hand."
     
-    m  "And you…you chattering little idiot.  I gave you one task.  One!  Get the doctor to come with you.  And do you do it?"
+    m  "And you…you chattering little idiot."
+    m "I gave you one task. One!  Get the doctor to come with you." 
+    m "And could you do it?"
     
     #Naomi is choking.
     
-    na  "I…was…about…"
+    na  "I…was…"
     
-    m  "Not what I asked, dear.  All I want to know is if you did it or not?"
-    
-    na  "Ngh…"
-    
-    m  "Naomi…I can tell when you’re lying."
-    
-    na  "…no."
-    
-    m  "No.  That is what I thought.  I mean, the doctor is still over there right?  How could the answer really be otherwise?"
+    m  "No. You didn't, did you?" 
+    m "I mean, the doctor is still over there."
+    m "That much should be obvious even to your limited mental capacity."
     
     "Naomi’s face is starting to turn purple.  Her feet kick uselessly at the ground, but can’t quite make contact with it."
     
-    m  "And…instead, what do you do?  Come this close to revealing the plan to two people that absolutely cannot know about it."
+    m  "Instead, what ends up happening?"
+    m "You came this close to revealing our master plan."
+    m "I can't really just allow things like that to go on."
+    m "You know?"
     
-    na  "Ngh…can’t…breath…"
+    na  "Ngh----one---more chance--"
     
-    m  "See, Naomi.  Now, this not only makes you useless…you’ve suddenly become a liability.  And do you know what I do with liabilities?"
+    m  "Oh, Naomi. I would love to give you another chance."
+    m "But we have a problem."
+    m "Now, you are not only useless…you’ve become a liability."  
+    m "And you know what happens to liabilities, don't you?"
     
     #Naomi is still choking.
     
-    na  "NO!  NOOOOO!"
+    na  "--please---no---"
+    m "That's right."
     
     "Electricity starts to crackle out of the ends of Mamoru’s fingers.  I begin to smell the scent of something burning, and before long, I notice that scent is coming from Naomi."  
     "She is trying to scream, but nothing is coming out.  Her face contorts in agony and her hands claw desperately and Mamoru’s fist."
     
-    "Right as her kicks start to slow, Mamoru turns to the nearest tree and slams Naomi’s body headfirst into the thickest part of the trunk.  She spasms one last time, then falls motionless."
-    
+    "And then...her head just melts away."
+        
     k  "Ngh…"
+    ro "........"
+    r "........."
     
     m  "Right, now where were we?"
     
@@ -3162,58 +3174,115 @@ label kaz27:
     
     "The three of us just stare at Mamoru for a while.  He is smiling at us, like he just told us the punchline of a joke and was waiting for a response."
     
-    m  "Oh, come now.  No need to be so tense.  I truly am sorry for that bit of unpleasantness.  You must believe me what I tell you I did not wish you to see that."
+    m  "Oh, come now.  No need to be so tense."  
+    m "I apologize for all that unpleasantness, it was just business."
+    m  " I hope you three don’t let a little thing like a failed deal sour our good mood."
     
-    m  "Good help is just so hard to find, you know?  Finding someone you can trust, and depend on.  Ugh.  I hope you three don’t let that little thing sour the mood."
+    "My mind is blank. We're all going to die."
     
-    "I try to think of something to say, but nothing comes to mind.  It would be like trying to talk to a tornado, or trying to reason with an earthquake."
-    
-    m  "Ah, yes, that’s right.  Kazutaka, now come with me.  Roman, Riku, you two may return to the rescue.  For now."
+    m  "Now where were we? Ah yes." 
+    m "Doctor, I will need you to come with me."
     
     "He smiles at us.  Opens his mouth wide, and I can see what looks like dried blood on this teeth."
     
     ro  "N-No.  We won’t let you take him."
     
-    m  "Hm?  Can you repeat that one more time?"
+    m  "Hmmmmm? I'm sorry, I believe I am going a bit deaf in the one ear." 
+    m "Could you repeat that one more time?"
     
     "Roman is shaking.  He doesn’t even look like he’s believing what he’s saying.  He eventually steadies himself again, and manages to make eye contact with Mamoru.  He draws up an ice sword."
     
-    ro  "No, you can’t-URK."
+    ro "You two, hurry up and get out of here."
     
-    "Before Roman can even draw up his sword, Mamoru closes in on him and breaks it with his bare hands.  He then lifts Roman up using the same hand he did on Naomi."
+    k "......."
     
-    m  "Oh heh heh heh.  It looks like I’m going to be much busier than I thought today.  See, I had secretly hoped you would put up some resistance."
+    "Doctor Osamu runs. Coward."
+    "But I don't want to die either."
     
-    r  "Roman!"
+    ro "Riku, GO!"
     
-    m  "Stay put, boy!  In fact, if you wish to see tomorrow, this is when you should start running.  Not you, Doctor!  Heh, thought you could slip away."
+    "I start to run."
+    "And for the first time in my life, I start to pray."
     
-    "Again, lighting starts coming from his fingers, and Roman starts to sizzle.  He slams Roman on the ground."  
-    "Hard.  He manages to gurgle something, but his words are incomprehensible.  I want to move…but I can’t.  I’m frozen to the ground."
+label kaz28b:    
+    m "You realize that you're just delaying the inevitable."
+    ro  "No, you can’t-----I won't let you---"
     
-    "Mamoru lifts Roman high up, and slams him back into the ground."
+    "Before I can even draw up his sword, Mamoru closes in and breaks it with his bare hands, lifting me by his neck, just like he did Naomi."
     
-    ro  "EHHHHHHHHHHHHH!"
+    m "Yes, good."
+    m  "I had secretly hoped you would put up some resistance."
+    m "I wanted so badly to have an excuse to devour you whole."
     
-    "This time, I hear something crack.  His left leg is bent backwards, and it looks like it got caught at a weird position against his back as it was coming down."  
-    "Tears are streaming down his face, which mix with the blood coming from his nose and mouth and drip slowly to the ground."
+    "This is it."
+    "I'm done for."
+
+    ro "...do...whatever you want."
+    m "Oh, I don't need your permission for that."
+    m "Won't you squirm? Won't you scream?"
     
-    m  "Still kicking, huh?  Wow, tougher than I gave you credit for.  I thought one would get the job done.  Two, at the absolute most.  Well, how about we give it another go?"
+    ro  "Go to hell."
     
-    s  "NOOOOOO!!!"
+    m "I've been. It was dull."
     
-    "Out of nowhere, Soume dashes past the clearing we came through on our way here."  
-    "Mamoru turns to him before he can slam Roman to the ground, and drops his body on the ground next to him."  
-    "He lays there, barely moving.  He looks as if he is trying to crawl somewhere on using his arms, but his body just doesn’t have the strength."
+    ro "Nngh--"
     
-    m  "Oh, you would have to show up and ruin the fun, wouldn’t you?  You know, I am getting rather sick and-HURK"
+    m "Any last words?"
     
-    "A giant tree branch sprouts from the ground and impales Mamoru on the end of it.  He goes flying through the air before connecting with a loud thud against a tree.  He scrambles to his feet."
+    ro "................gck."
     
-    "Soume is still sprinting at him.  He looks nothing like he usually does.  Irate, crazed, and yelling something that I can’t understand."  
-    "Mamoru looks up, and for the first time I witness a look of panic across his face.  He emits a cloud of smoke, and by the time it clear up, he is gone."
+    "I somehow manage to call up an ice sword, but before I can hit him, he breaks my arm."
     
-    "Soume looks around briefly before running over to Roman."
+    ro "AGGHHHHHHHHHHHHHH."
+    
+    m "Ahhh, there we are, a good old fashioned scream of terror never hurt anyone, did it?"
+    
+    ro "..........."
+    
+    "He's broken my arm so badly that it hangs limply from my shoulder."
+    
+    m  "I'll say it again."
+    m "Any last words?"
+    
+    ro "...tell...Soume...sorry..."
+    
+    m "............."
+    m "Heh. I will relay that message with glee."
+    
+    "I'm already fading in an out." 
+    "It won't be too much longer, now."
+    
+    "A sharp pressure at the base of my neck, and then blood all over my front."
+    "He's going to devour me."
+    
+    "My life ends as food."
+    
+    "Out of nowhere, Soume dashes into the clearing."
+    "I hardly recognize him...he's in the youko form."
+    
+    "Before I know it, I'm looking directly into his eyes."
+    
+    m  "You."
+    s "I warned you."
+    
+    "A giant tree branch sprouts from the ground and impales Mamoru on the end of it."
+    
+    m "HRRKKKK---"
+    
+    "He goes flying through the air before connecting with a loud thud against a tree.  He scrambles to his feet."
+    
+    "Soume is still sprinting at him. The youko form moves so calmly, but even like this I can tell that Soume is extremely angry."
+
+    "Is he angry because Mamoru hurt me?"
+    "Isn't it too dangerous for me to think like this?"
+    
+    "For the first time, I see true panic flash across Mamoru's face."
+    
+    m "Can't we...discuss this?"
+    s "Fight or die."
+    m "...well then. I can't argue with that, can I, Soume?"
+    
+label kaz28d:    
     
     s   "Roman~!  Oh, please Roman be alright!"
     
@@ -3275,24 +3344,26 @@ label kaz28:
     
     r  "Huh?  Soume?"
     
-    k  "Yes.  My master before Mamoru, he had captured Soume and forced me to experiment on him.  I…tested what temperatures Majin could withstand.  I…I castrated him."
+    k  "Yes. I didn't want---I was forced to experiment on him. They threatened my life!"
+    r "...what did you do?"
     
-    r  "…castrate?"
+    k "They...wanted to test regrowth of limbs and organs."
+    k "I tried to convince them to do otherwise, but they wouldn't---"
+    r "What did you do to him?"
+    k "I removed his genitals. And the other part."
     
-    "I was afraid to know the answer.  I wish I hadn’t even said anything."
+    r  "..........."
+    k "He never forgave me. I know he didn't."
     
-    k  "Removed his genitals.  His…uh…well, everything…really."
-    
-    r  "I-I don’t…but…"
-    
-    k  "They grew back, if you’re curious.  I…I know so much about the Majin body, but only because I was forced to torture even unfortunate Majin my masters captured."
+    k  "They grew back, but he just never..." 
+    k "I…I know so much about so many various Majin bodies...because of those experiments."
     
     "A look of extreme sadness flashes over his face, and for a second he freezes.  He shakes his head, mumbles something to himself, and then immediately gets back to what he was working on."
     
-    k  "That was a long time ago though.  Soume eventually broke out, and my master was killed at the hands of Mamoru."  
-    k "I eventually escaped and spent some time hiding in Japan before Susa managed to rescue me."
+    k  "That was a long time ago. Miss Susa released Soume from capture twenty years ago."  
+    k "And she rescued me."
     
-    r  "…"
+    r  "…............"
     
     k  "There, now you know everything you could ever need to know about me.   You’re the first person I’ve ever told that story to willingly.  You should feel honored."
     
@@ -3409,129 +3480,177 @@ label kaz28:
     "Guess I’ll go give Liza a call.  Not fucking sure what I’ll say to her, but I guess I can figure that out if she actually picks up the phone."
     
 label kaz29:
-    s  "Roman…Roman, can you hear me?"
+    s  "Roman…"
+    s "Roman, can you hear me?"
     
     ro  "Nngh…"
     
-    s  "Roman, please, respond.  I’m begging you…just…just open your eyes."
+    s  "Roman…open your eyes."
+    "It takes me a little while...everything is blurry, but there are warm hands grasping me."
     
-    "I try to.  I try to open my eyes, but I can’t see anything.  I hear a squeal though, and suddenly someone is gripping me tightly around the neck."
-    
-    s  "Roman~!  You had me so worried!  I was afraid I was going to lose you."
+    s  "Roman! You--you worried me."
+    s "I was afraid...I was going to lose you."
     
     "I’m frightened.  I…I only sort of remember what happened to me.  I have vague memories of Mamoru grabbing my neck.  Did I die?"
     
-    s  "Roman, you are in my room right now.  I have you on my bed, and I am currently working with my plants to heal you."  
-    s "I have stopped the bleeding.  Your leg is broken pretty badly and you had a lot of internal bleeding.  You also most likely had a concussion."  
-    s "I’ve done all I can for now, but there are some aspects I have been unable to fix as of yet.  Does what I said make sense to you?"
+    ro "...So...me...what's...happened?"
+    s  "You were...attacked."  
+    s "I've already done all the emergency surgery, and now that you're awake, I can fix the rest."  
     
-    ro  "Y-yeaaaaaaah.  Ngh."
+    ro  "Oh...I--I'm alive."
     
-    s  "Good.  Try not to talk too much right now.  Your jaw was just recently set and I’m not positive how well I was able to repair it.  I might need to do a little more work."
+    s  "Yes. Try not to talk too much right now."
     
-    ro  "S-Sooooume.  T-thaaaank y-yoooou."
+    ro  "--t-thank you."
     
-    "I can barely move my lips.  I can only force the sounds out of my throat.  I don’t even know if Soume can understand me."
+    "My face and head feel so stiff. I don’t even know if Soume can understand me."
     
-    s  "Roman…Roman, I don’t know what I would have done without you.  I am so glad you are alright.  This is…this is a miracle."
+    s "It was nothing. Truly."
+    s  "I don’t know what I would have done..."
     
-    "I know this isn’t the place to say what I’m about to say.  But I don’t know how hurt I am.  I don’t know when I will recover, or if I will.  I need to say it though."
+    "I know this isn’t a good time for me to say something like this."  
+    "But I don't know, with everything that's happened, if I will be able to do this later."
     
-    ro  "S-Sooooume.  I l-l-loooove yoooou."
+    ro  "S-soume..."
+    s "Shhhhh. You need to rest."
+    ro "...I--love you. I've loved you for--so long now."
     
-    s  "Roman~!  Roman, I…I…"
+    s  "..........."
     
-    "It is silent for a moment.  Then I hear Soume start to cry."
+    "It's quiet."
+    "I've ruined everything, haven't I? Everything!"
+    if socompletion:
+        jump loveconfession
+    else: 
+        jump sorrybutno
+        
+label loveconfession:    
+    "Then there is a warm breath at my ear."
     
-    s  "I love you too.  More than I ever remember loving anything else.  I am so grateful that you came into my life.  Someday, we can leave here.  Just the two of us…we can go away together."
+    s  "I love you too." 
     
-    ro  "Ngh…"
+    "...did that just happen?"
     
-    s  "Please don’t try to talk anymore yet.  I promise, there will be time for all of this later.  You will be healed within a day.  I just need to perform a couple more…hmmm."
+    s "I am so grateful that you came into my life."
+    s "You're so unlike anyone I've known." 
     
-    "I don’t know what is happening now, but it sounds like Soume is searching for something."
+    ro  "--a--"
     
-    s  "Oh…oh no.  I…must have…oh.  Roman, I promise you, I shall return shortly.   I need to go find something rather important though."
+    s  "Please don’t try to talk anymore. There will be time for all of this later."
+    s "I'll finish healing you within the day."
     
-    "He puts his hand on my shoulder."
+    "I'm not sure what's happening, but it seems like Soume is searching for something."
     
-    s  "Just rest.  Rest for now.  I will be back within ten minutes.  I promise."
+    ro "...Soume...?"
     
-    "He kisses my forehead, and I feel like I could run a marathon.  I want to do something, anything back, but my body has other ideas."  
+    s "Mm, so he's found it."
+    
+    ro "...mm...?"
+    "Soume leans down and presses a kiss to my forehead."
+    
+    s  "Rest, my little Roman."
+    s "I must run a little errand. I will return to you soon."
+    
     "I hear the door close, and as I think about what Soume and I just talked about, I fall peacefully into sleep."
     
 label kaz30:
-    k  "Hmm…and what is this?  A transmitter of some sort, it appears?  But for what?"  
+    k  "I've got it. I've got you now, youko scum."  
     
     #play sound  Static-
     
-    k  "A radio transmitter?  But why would…"
+    k  "This plant collects energy and transmits it through pollen...a biological walkie-talkie!"
     
-    k "AH!  Ahaha!  And now everything makes sense!"
-    
-    k  "This will go down as my greatest accomplishment!  The time that I outsmarted-"
+    k  "He's likely been sneaking the enemy in here, gallivanting about however he pleases, setting traps..."
+    k "I must get contact to MIss Susa, immediately..."
     
     #play sound Door opening-
     
-    k  "Ah, Riku, about time that you-"
+    k  "Ah, Riku, about time that you--"
     
-    s  "No…sorry Doctor Kazutaka.  It is only me."
+    s  "I'm sorry, Doctor Kazutaka. It is only me."
     
-    k  "Ah.  Ahahaha!  Look who walks in here with his tail in between his legs!  I told you it was only a matter of time!  And now where look where we are.  I have all the evidence I will ever need."
+    k  "Ah. Ahahaha!  Look who walks in here with his tail in between his legs!  I told you it was only a matter of time!"
+    k "You're finished! I have all the evidence I will ever need."
     
-    s  "I know…and I want you to know I am really sorry.  I had hoped it wouldn’t come to this."
+    s  "I know…you've caught me."
     
-    k  "Well, you unfortunately took part in a battle of wits against a man that has you quite outmatched.  I just ran a quick analysis on this little plants of yours.  The pollen I had already figured out."
+    k "........."
     
-    s  "…"
+    s "Though...I had hoped it wouldn’t come to this."
+    
+    k "........"
+    k  "W-well, you unfortunately took part in a battle of wits against a man that has you quite outmatched."  
+    k "I just ran a quick analysis on this little plants of yours. The pollen I figured out before."
+    
+    s  ".............."
+    s "I see..."
     
     k  "Using this to block my sensory abilities?  Quite brilliant on your part."  
     k "They are all over the shrine, and Riku even managed to sneak one into my lab!  Not his fault mind you, as he was fooled like the rest of them into thinking you were harmless."
     
-    k  "And then, it was really my fault leaving my bamboo charcoal around in the lab."  
-    k "I use it to purify my water supply, but little did I know it was purifying the air around it!  Ha!  No wonder my powers have been growing weaker for some time!"
+    s  "Yes, you are correct."
     
-    s  "Yes…the pollen works as you think it does."
+    k  "But the pheromones! No, I didn't see those coming."
+    k "The way you always smell so sickeningly powerful."
+    k "No wonder everyone has such an intense affinity for you! You’ve stacked the deck in your favor!"
     
-    k  "But the pheromones!  Oh, what a brilliant little touch.  No wonder everyone here loves you!  You’ve stacked the deck in your favor!"
+    s  "Not exactly. I can't quite help those as much as I'd like."
     
-    s  "That…that isn’t quite how it works."
+    k  "Oh, I'm sure!"
+    k "No wonder Roman is falling over himself for you."
+    k "I'll make sure he knows first."
     
-    k  "Oh, sure it does!  No wonder Roman is falling over himself to impress you.  Wonder what he’ll think when I tell him?"
-    
-    s  "I…I am so sorry."
+    s  ".........."
+    s "I really am very sorry..."
     
     k  "Sorry?  You are sorry?  Hahaha!  I somehow doubt that will make everyone feel better.  Especially when I show them this!"
     
-    s  "My transmitter.  I knew you must have gotten your hands on it…"
+    s  "My transmitter."
     
-    k  "Left it behind in your hurry to get back here, didn’t you?  Well, I don’t know for sure who you are contacting with this, but if it is who I think it is, not even Susa will be willing to forgive you!"
+    k  "Left it behind in your hurry to get back here, didn’t you? Well, I don’t know for sure who you are contacting with this, but if it is who I think it is, your game is over!"
     
-    s  "…yes.  This will be problematic."
+    s  "…yes.  That would be problematic."
     
-    k  "You could indeed say that!  You have played a great trick on everyone here, Soume, but you made a mistake in doing it when I was around."
+    k  "You could indeed say that!  You---"
     
-    s  "It…it would appear so.  I have underestimated you.  You are brilliant.  And I am truly, truly sorry."
+    k "............"
     
-    k  "Sorry?  Again I don’t-HURK!  Your…plants?"
+    s  "I really would prefer not to have to kill you."
+    s "You forced my hand a little sooner than I was planning. And what a waste of talent and surgical skill, beisdes."
     
-    s  "I…I really don’t want to do this.  You forced my hand, sooner than I was planning.  And what a waste of talent." 
-    s "You are without a doubt the smartest Majin I have ever encountered.  I’m not just saying that.  Your intelligence is unparalleled in our community."
+    k "...stay away...don't get any closer!"
     
-    k  "Ngh…no…Soume…NGH!"
+    s "You are without a doubt the smartest Majin I have ever encountered. Truly."
     
-    s  "I am sorry, Doctor.  My plants shall finish the job shortly.  I expect you will be crushed.  They are releasing some pollen that should make this whole process painless."
+    k  "Ngh…no…Soume--"
     
-    k  "But…how did…how could I miss…the…oh.  My…my experiment.  I forgot to stop the release of the pollen."
+    s  "Again, Doctor, I am deeply apologetic about this." 
+    s "My plants will clean up the area."
+    s "Out of respect, they are releasing a drug that should make it swift and painless."
     
-    s  "Luckily for me, otherwise you would have sensed this coming.  Now, I really must get back to Roman, he needs some immediate medical attention."  
-    s "Please, do not take this personally.  You truly are remarkable.  But this is for the greater good."
+    k  "But…how did…how could I miss…the…danger signs--ah." 
+    k "The jamming pollen. I forgot to stop the release of the jamming pollen."
+    
+    s "That turned out lucky for me."
+    s "Your clairvoyance is rather annoying. It is exceptionally difficult to catch you off guard." 
+    s "I had to work very hard to perfect the pollen."
+    
+    k "..............."
+    
+    s "...well."
+    s "I really must get back to Roman, he needs medical attention."  
+    s "Please, do not take this personally."
     
     k  "HURK!"
     
-    s  "Goodbye, Doctor Osamu Kazutaka.  You shall be remembered forever.  You have my word."
+    s "Well...perhaps a little personally."
+    s "I did never forgive you for that little experiment on my genitals."
     
-    #play sound  Door closing-
+    k "---acchh---"
+    
+    s  "Goodbye, Doctor Osamu Kazutaka."
+    
+    #play sound  Door closing
     
     k  "Ngh…huff…huff…so…this is death…"
     
