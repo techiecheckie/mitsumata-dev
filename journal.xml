@@ -8,7 +8,7 @@
 
 
       <entry id="002">
-        <title>The Basics</title>
+        <title>T: The Basics</title>
         <content>Midorikawa Riku is a 17 year old kid who attends BlahBlah High School. He dislikes sitting still, and rarely does any homework, but his amazing memory allows him to do well on tests as long as he pays any attention. He is the school's sports star and MVP in track, soccer, and football. </content>
       </entry>
 
@@ -20,12 +20,12 @@
 
 
       <entry id="004">
-        <title>Rare Ability?</title>
+        <title>T: Rare Ability?</title>
         <content>Supposedly no one at the rescue has seen this ability before. Is it that rare?</content>
       </entry>
 
 	<entry id="064">
-        <title>Disability?</title>
+        <title>T: Disability?</title>
         <content>So i herd Riku got ADD.</content>
       </entry>
 
@@ -45,8 +45,8 @@
       </entry>
 
  <entry id="006">
-        <title>Vegan Majin?</title>
-        <content>Roman doesn't eat flesh or anything that comes from animals, such as honey or eggs. That's pretty weird for a Majin. </content>
+        <title>T: Vegan Majin?</title>
+        <content>Roman doesn't eat flesh or anything that comes from animals, such as honey or eggs. That's pretty weird for a Majin.</content>
       </entry>
 
  <entry id="007">
@@ -57,6 +57,16 @@
  <entry id="008">
         <title>Chef?</title>
         <content>Roman got his chef skills from his old position as a kitchen servant.</content>
+      </entry>
+
+      <entry id="067">
+        <title>T: Partners with Soume</title>
+        <content>He's Soume's partner and acts weird around Soume.</content>
+      </entry>
+
+      <entry id="068">
+        <title>Feelings for Soume</title>
+        <content>Roman be in lurve oooo</content>
       </entry>
 
     </entries>
@@ -70,21 +80,30 @@
         <content>Soume seems so strong during training, but he got ill in the hallway and had to sit down. His chest is full of bones...</content>
       </entry>
 
+      <entry id="065">
+        <title>Effeminate!</title>
+        <content>why soume so gurly.</content>
+      </entry>
+
+      <entry id="066">
+        <title>T: Age...?</title>
+        <content>why soume so old.</content>
+      </entry>
 
       <entry id="010">
-        <title>Plants!</title>
+        <title>T: Plants!</title>
         <content>Soume is a plant user. He talks to them and is able to grow them from seeds in his hands. He can even collect pollen. No one knows the full potential of his power.</content>
       </entry>
 
 
       <entry id="011">
-        <title>Lactose Intolerant!</title>
+        <title>T: Lactose Intolerant!</title>
         <content>Soume tried to eat some of Riku's strawberry shortcake and seemed to have some...stomach problems. He's probably allergic to dairy products.</content>
       </entry>
 
 
       <entry id="012">
-        <title>What does he eat?!</title>
+        <title>T: What does he eat?!</title>
         <content>Soume drinks a lot of water, but have you ever, ever seen him eat? Roman gets an answer from him, finally. He eats very sparingly, and rarely, because the only thing his stomach can tolerate is fresh, live meat. </content>
       </entry>
 
@@ -96,7 +115,7 @@
 
 
       <entry id="014">
-        <title>Are Plants Aware?</title>
+        <title>T: Are Plants Aware?</title>
         <content>Soume is always talking to his plants, and unlike other plants, they MOVE to look at him sometimes! Are plants smarter than we think they are, or is that just Soume's special ability? He does create monster plants that listen to his commands... </content>
       </entry>
 
@@ -114,12 +133,12 @@
 <journal id="Susa">
     <entries>
       <entry id="016">
-        <title>Temple Owner</title>
+        <title>T: Temple Owner</title>
         <content>Crotchety lady who runs the temple. She looks maybe 25, but supposedly is over 80 years old. Dunno how that works. </content>
       </entry>
 
       <entry id="017">
-        <title>Gamer?</title>
+        <title>T: Gamer?</title>
         <content>Miss Susa really loves video games. She has a million of them in her room, and all kinds of consoles and controllers. Her favorite is Hunt Duck. </content>
       </entry>
 
@@ -146,7 +165,7 @@
 <journal id="Mamoru">
     <entries>
       <entry id="021">
-        <title>Allergies?</title>
+        <title>T: Allergies?</title>
         <content>Mamoru's hand was really red when he touched Soume's plants, but Riku was completely fine. Does he have allergies? </content>
       </entry>
 
@@ -156,7 +175,7 @@
       </entry>
 
       <entry id="023">
-        <title>Weirdo</title>
+        <title>T: Weirdo</title>
         <content>Mamoru is always so casual when he attacks, always poking fun and he sometimes leaves without doing anything. What's his whole deal? </content>
       </entry>
 
@@ -164,6 +183,11 @@
       <entry id="024">
         <title>The Other Sister</title>
         <content>Mamoru says that Norah is his only sister, but he has another, an older sister...Miss Susa. He hates her because just before she left, she tried to kill him in his sleep. </content>
+      </entry>
+
+      <entry id="071">
+        <title>T: General of the Demon Hunters</title>
+        <content>he run them bitches</content>
       </entry>
 
 
@@ -175,7 +199,7 @@
 <journal id="Kazutaka">
     <entries>
       <entry id="025">
-        <title>Doctor</title>
+        <title>T: Doctor</title>
         <content>Kaz is a doctor </content>
       </entry>
 
@@ -185,25 +209,35 @@
       </entry>
 
       <entry id="027">
-        <title>Paranoid!</title>
+        <title>T: Paranoid!</title>
         <content>kaz be mad paranoid </content>
       </entry>
 
       <entry id="028">
-        <title>Love of Learning</title>
+        <title>T: Love of Learning</title>
         <content>kaz be lovin lernins </content>
       </entry>
 
 
       <entry id="029">
-        <title>Experiment!</title>
+        <title>T: Experiment!</title>
         <content>kaz be lovin experimenting on things </content>
       </entry>
 
 
       <entry id="030">
-        <title>Rumors...</title>
+        <title>T: Rumors...</title>
         <content>he's a blood sucking vampireeee </content>
+      </entry>
+
+      <entry id="072">
+        <title>T: Self-Hatred</title>
+        <content>kaz be hatin on the majins yo </content>
+      </entry>
+
+      <entry id="073">
+        <title>Problems with Soume</title>
+        <content>he cut off doze nuts!</content>
       </entry>
 
     </entries>
@@ -214,7 +248,7 @@
 <journal id="Liza">
     <entries>
       <entry id="031">
-        <title>Roman's Friend?</title>
+        <title>T: Roman's Friend?</title>
         <content>roman's old friend from russia </content>
       </entry>
 
@@ -261,27 +295,27 @@
       </entry>
 
       <entry id="038">
-        <title>Community Behavior</title>
+        <title>T: Community Behavior</title>
         <content>they have salvation armies and blackmail billionaires and lure charismatic poor people into stuff </content>
       </entry>
 
       <entry id="039">
-        <title>Religious Tenets</title>
+        <title>T: Religious Tenets</title>
         <content>three acts of war between humans and majin </content>
       </entry>
 
       <entry id="040">
-        <title>Cult?</title>
+        <title>T: Cult?</title>
         <content>they're totes an underground cult and will fuck you up if you try to leave </content>
       </entry>
 
       <entry id="041">
-        <title>Hunters</title>
+        <title>T: Hunters</title>
         <content>they operate like any other church </content>
       </entry>
 
       <entry id="042">
-        <title>Underground Dealings</title>
+        <title>T: Underground Dealings</title>
         <content>they be selling those majins yo </content>
       </entry>
 
@@ -293,17 +327,17 @@
 <journal id="Majin">
     <entries>
       <entry id="043">
-        <title>Basic Biology</title>
+        <title>T: Basic Biology</title>
         <content>majin do things </content>
       </entry>
 
       <entry id="044">
-        <title>Flame Users</title>
+        <title>T: Flame Users</title>
         <content>firesssss </content>
       </entry>
 
       <entry id="045">
-        <title>Eating Habits</title>
+        <title>T: Eating Habits</title>
         <content>they eats the meats </content>
       </entry>
 
@@ -313,12 +347,12 @@
       </entry>
 
       <entry id="047">
-        <title>Ice Users</title>
+        <title>T: Ice Users</title>
         <content>they be using ice </content>
       </entry>
 
       <entry id="048">
-        <title>Puberty</title>
+        <title>T: Puberty</title>
         <content>puberty at 100 </content>
       </entry>
 
@@ -328,7 +362,7 @@
       </entry>
 
       <entry id="050">
-        <title>History</title>
+        <title>T: History</title>
         <content>they come from some other world or smth </content>
       </entry>
 
@@ -343,13 +377,18 @@
       </entry>
 
       <entry id="053">
-        <title>Sensors</title>
+        <title>T: Sensors</title>
         <content>like kaz </content>
       </entry>
 	
 	<entry id="054">
-        <title>Low Intelligence...</title>
+        <title>T: Low Intelligence...</title>
         <content>Majin dumb</content>
+      </entry>
+
+      <entry id="069">
+        <title>Healers</title>
+        <content>some majin be healin yo.</content>
       </entry>
 
 
@@ -361,12 +400,12 @@
 <journal id="Humans">
     <entries>
       <entry id="055">
-        <title>Presence of Majin</title>
+        <title>T: Presence of Majin</title>
         <content>where they come from, idk, they appear outta nowhars </content>
       </entry>
 
       <entry id="056">
-        <title>Majin Rescue Facilies</title>
+        <title>T: Majin Rescue Facilies</title>
         <content>susa runs this in a temple </content>
       </entry>
 
@@ -376,7 +415,7 @@
       </entry>
 
       <entry id="058">
-        <title>Super Humans?</title>
+        <title>T: Super Humans?</title>
         <content>humans with powers like majinssssomg. susa, mamoru and norah are these </content>
       </entry>
 
@@ -391,7 +430,7 @@
       </entry>
 
       <entry id="061">
-        <title>Uses for Majin Flesh</title>
+        <title>T: Uses for Majin Flesh</title>
         <content>food, potions </content>
       </entry>
 
@@ -401,8 +440,13 @@
       </entry>
 
       <entry id="063">
-        <title>A Majin World?</title>
+        <title>T: A Majin World?</title>
         <content>omg where it be </content>
+      </entry>
+
+      <entry id="070">
+        <title>T: Majin Shop</title>
+        <content>buy majin things hurr</content>
       </entry>
 
     </entries>
