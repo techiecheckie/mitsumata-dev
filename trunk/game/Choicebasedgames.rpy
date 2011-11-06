@@ -472,7 +472,7 @@ label perfectparty:
     "Now I really don’t know what to say.  Susa has never given me anything before.  I look up at her, but no words are coming out."
     
     su  "Aw fuck, don’t go getting all emotional on me now.  Just take it and be glad I gave it to ya."
-    #$ unlock_item("boob")
+    #$inventory.unlock_item("boob")
     $ perparty = True
     return
 label decentparty:
@@ -491,4 +491,202 @@ label failparty:
 ######################
 # Kazu's Quiz Game
 ######################
-#label kazuquiz        
+label kazuquiz:
+    $show_message("Doctor Osamu wants to test your skill with a quiz!","medium")
+    $show_message("Select the best answer to each question","medium")
+    $show_message("Get as many correct as you can, and there may be a reward!","medium")
+    
+    $q1 = False
+    $q2 = False
+    $q3 = False
+    $q4 = False
+    $q5 = False
+    $q6 = False
+    $q7 = False
+    $q8 = False
+    $q9 = False
+    $q10 = False
+    $count2 = q1 + q2 + q3 + q4 + q5 + q6 + q7 + q8 + q9 + q10
+    
+    if hp > 200:
+        jump quiz1
+    elif hp < 200:
+        jump quiz2
+        
+label nextq:
+    k "Okay. Next question."
+    return
+    
+label quiz1:    
+    $show_message("Question 1")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q1 = True
+            call nextq
+    $show_message("Question 2")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q2 = True
+            call nextq
+    $show_message("Question 3")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q3 = True
+            call nextq
+    $show_message("Question 4")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q4 = True
+            call nextq
+    $show_message("Question 5")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q5 = True
+            call nextq
+    $show_message("Question 6")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q6 = True
+            call nextq
+    $show_message("Question 7")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q7 = True
+            call nextq
+    $show_message("Question 8")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q8 = True
+            call nextq
+    $show_message("Question 9")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q9 = True
+            call nextq
+    $show_message("Question 10")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q10 = True
+            call nextq    
+            
+label quiz1result:
+    if count2 = "10"
+        jump perquiz
+    else:
+        jump failquiz
+   
+label quiz2:    
+        $show_message("Question 1")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q1 = True
+            call nextq
+    $show_message("Question 2")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q2 = True
+            call nextq
+    $show_message("Question 3")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q3 = True
+            call nextq
+    $show_message("Question 4")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q4 = True
+            call nextq
+    $show_message("Question 5")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q5 = True
+            call nextq
+    $show_message("Question 6")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q6 = True
+            call nextq
+    $show_message("Question 7")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q7 = True
+            call nextq
+    $show_message("Question 8")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q8 = True
+            call nextq
+    $show_message("Question 9")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q9 = True
+            call nextq
+    $show_message("Question 10")
+    menu:
+        "Wrong Answer":
+            call nextq
+        "Right Answer":
+            $q10 = True
+            call nextq  
+            
+label quiz2results:
+    label quiz1result:
+    if count2 = "10"
+        jump perquiz
+    else:
+        jump failquiz
+    
+label perquiz:
+    k "............."
+    k "It seems you've gotten all of them correctly."
+    r "HAH! I WAS paying attention!"
+    k "Fine. I suppose your intelligence may be...within an acceptable range."
+    k "Take this."
+    #$inventory.unlock_item("ITEMMMMM")
+    return
+    
+label failquiz:
+     k ".........."
+     k "As I suspected, below average..."
+     r "Hey..."
+     k "That is all. You may go."
+     r "Awww..."
+     return
