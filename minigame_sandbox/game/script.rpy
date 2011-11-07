@@ -6,10 +6,12 @@ init python:
     game_height = 590
 
     games = [
-        ("minigame_mole",  "Whack-A-Mole"),
-        ("minigame_duck",  "Hunt Duck"),
-        ("minigame_cell",  "Cells"),
-        ("minigame_force", "Magic Force")
+        ("minigame_mole",   "Whack-A-Mole"),
+        ("minigame_duck",   "Hunt Duck"),
+        ("minigame_cell",   "Cells"),
+        ("minigame_force",  "Magic Force"),
+        ("minigame_power",  "Magic Power"),
+        ("minigame_squats", "Squats")
         ]
 
 screen games:
@@ -85,6 +87,24 @@ label minigame_force:
     window hide None
     python:
         run_minigame( MagicForce,
+                      0, 0,
+                      game_width, game_height )
+    window show None
+    return
+
+label minigame_power:
+    window hide None
+    python:
+        run_minigame( MagicPower,
+                      0, 0,
+                      game_width, game_height )
+    window show None
+    return
+
+label minigame_squats:
+    window hide None
+    python:
+        run_minigame( Squats,
                       0, 0,
                       game_width, game_height )
     window show None
