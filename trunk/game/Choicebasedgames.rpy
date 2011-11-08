@@ -690,3 +690,104 @@ label failquiz:
      k "That is all. You may go."
      r "Awww..."
      return
+
+#########################
+# SCAVENGER HUNT
+#########################
+label scav_hunt:
+    $decision = "50"
+    r "Alright, alright! I'll do it."
+    ro "I do appreciate it, Riku!  These scavenger hunts are always one of my favorite things to do at the rescue."
+    
+    r  "This kind of thing happen often?"
+    
+    ro  "Oh, yes.  Not just scavenger hunts, though.  Miss Susa is very good at organizing different things to make everyone feel more at home.  Last year she put together a carnival."
+    
+    r  "That sounds…terrifying."
+        
+    ro  "Terrifying?  A carnival?  I’m afraid I don’t understand how you could be afraid of a carnival."
+    
+    r  "Clowns. I hate clowns."
+    r "Freaky, makeup wearing creeps."
+    r "I accidentally broke a clown’s nose after he tried to pick me up at the circus. They’re just weird."
+       
+    ro  "What an odd thing to be afraid of..."
+    r "I'm not AFRAID of 'em, I just don't like them."
+    ro "Suuuure."
+    
+    su  "Oi!  OIIIIIIIIIIIIIIII!"
+    
+    "The crowd had been talking fairly loudly, but as soon as Susa begins to speak, everyone shuts up.  They must all be afraid of her, too."
+    
+    su  "Looks like everyone is here now, so we will begin.  It is time for our annual scavenger hunt.  There are four items that each team must find."
+   
+    #Riku whispers.
+    
+    r "How do we know what we’re looking for?"
+    
+    su  "OI!  Sprog in the back!  If you would shut your face for two fraking seconds I’d explain it to ya."
+    
+    r  "Gulp."
+    
+    su  "Now, if everyone is ready…"
+    
+    "Susa is glaring at me.  She pulls out a stack of papers from her pocket and starts flipping through them and then looking around at the crowd."
+    
+    su  "Alright, each team of two is going to get one of these pieces of paper.  They tell you want you’re looking for.  You only get one, so if you lose it tough shit."
+    
+    "She divides half the stack to Soume, and they both start handing out the list to people in the front."
+    
+    gir  "Miss Susa, what is the prize this year?"
+    
+    su  "Woops, thank you.  I almost forgot.  First prize this year is one thousand dollars to spend as you wish."
+    
+    r  "Whoa!  Good call on waking me up Roman."
+    
+    #Roman chuckles.
+    
+    ro  "I told you that it would be enjoyable."
+    
+    su  "Here ya go, brat.  Try not to lose it."
+    
+    "I look down the list really quick."
+    
+    r  "Huh?  All of this is here?  At the rescue?"
+    
+    ro  "Yes, these items are hidden around here somewhere."
+    
+    r  "Ugh.  I’ve never seen any of these."
+    
+    su  "Alright, first to find all of the items on the list wins.  Ready?  Annnnnd….go."
+    
+    "People take off running in every direction.  Soon, only Roman and I are left."
+    
+    r  "So…where should we start looking?"
+    
+    ro  "Hmm…why don’t we start around here?  This seems to be one of the few places we won’t be bumping into other Majin."
+    
+    r  "‘Kay.  Sounds good to me.  Lemme see here…hrm.  Might as well just start looking around then."
+    
+    #-Insert minigame here.  This is a hidden objects minigame.  Help Riku and Roman find the objects that Susa has indicated.  There are multiple screens to search, so be sure to check them all.-
+    # Use a combination of puzzle logic and the searchable screens for this minigame, no massive new programming.
+label succeed:    
+    r  "That should be the last of them, I think."
+    
+    ro  "Let me just double check…hmm…yep!  That’s it.  Lets go tell Miss Susa."
+    
+    r  "Hey, Susa!  SUUUUUSA!"
+    
+    su  "WHAT?  Damn, could you not fucking yell.  I’m not deaf."
+    
+    r  "Er…sorry.  Just wanted to tell you we’re done."
+    
+    su  "Hmph.  Already?  Lemme check what you have."
+    
+    su  "Hmm…yup."
+    
+    su  "Looks good.  Congrats, kids.  Dunno how you did it so quickly, but you won."
+    
+    ro  "Excellent job, Riku!  I’ve never managed to win one of these before."
+    
+    su  "Sure it had more to do with you than the brat here.  Here’s the prize.  Wait here for everyone else to finish.  I don’t want you ruining this for the others."
+    
+    r  "Fine by me.  I’ll just sit here and count my money."       
