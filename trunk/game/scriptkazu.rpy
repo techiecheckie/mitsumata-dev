@@ -1,9 +1,11 @@
 #*************************
 # Kazutaka's Branch
 #*************************
-#Currently at 1900 out of 3542
-# was editing at 3365 (11/3/11)
-#Add scene where Kaz is on the phone with Liza.
+#Currently at 2256 out of 3506
+# was editing at Kaz28.
+# Nearly done with this arc.
+
+#Scene w/Riku asking Kaz about his past.
 
 label kaz1:
     "I could go check on the doctor. He was the most shaken up."  
@@ -16,9 +18,7 @@ label kaz1:
     r  "Uh…it’s me.  Riku."
     
     k  "Riku?"
-    
-    "He pauses for a second.  I can’t tell if he doesn’t know if he should let me in or if he just doesn’t remember my name."
-    
+    ".........................."    
     k  "Ah, yes.  Hold on."
     
     #play sound  Unlocking noise.
@@ -1245,8 +1245,17 @@ label kaz8:
     k "But I cannot face any of them alone. Proof. I need proof."
     k  "And I need someone else to confide in…someone to help me."
     k "Hmmm."
-    
-#Night decision?    
+    $ decision = "7"
+menu:
+    "Search.":
+        call show_map
+    "Sleep.":
+        call sleep
+    "Store.":
+        call shop_loop
+    "Research.":
+        call research_loop
+        $journal.unlock_entry("something", "031")    
 label kaz9:
     r " Ehh…what did you say this, er, thing is?  Somethin’ about this don’t look right to me…"
     
@@ -1376,7 +1385,7 @@ label kaz10b:
     
     r  "Got it."
     
-    $ decision = "7"    
+    $ decision = "8"    
 menu:
     "Search.":
         call show_map
@@ -1727,7 +1736,7 @@ menu:
             jump ribirtalk
    
 label sobirtalk:
-    "Some sappy SoRo scene here."
+    "STICK THE SOUME/ROMAN YOUKO DISCUSSION HERE."
     jump kaz13e
     
 label ribirtalk:
@@ -1765,7 +1774,7 @@ label kaz13d:
     
 label kaz13e:
      "It's really late now. Time for bed."
-     $ decision = "8"
+     $ decision = "9"
 menu:
     "Search.":
         call show_map
@@ -1899,311 +1908,203 @@ label kaz15:
     l "Then, Doctor, I bid you good evening."
     
 label kaz16:
-    r  "Uh…hey, Doc?"
-    
     #play sound Knocking at door-
+
+    r  "Hey, Doc? You in?"
     
-    "I’m not even sure why I came here.  I can think of like fifty different things Kazu might try to surprise me with, and nearly all of them involves significant blood loss."  
+    
+    "I’m not even sure why I'm here. I know he asked to meet with me, but..."  
+    "I can think of like fifty different things Doctor Osamu might try to surprise me with, and nearly all of them involves significant blood loss."  
     "Still, he looked excited yesterday, and I’d feel like a bit of an ass if I didn’t even show up."
     
-    r  "Hey, Doc, you there?"
+    r  "Hey, Dooooc, you there?"
     
     #play sound Knocking-
-    
-    "I knock a little louder this time, but there still isn’t any sort of response.  Usually I can hear the guy talking to himself even before I knock on the door, but this time I don’t hear anything but silence."
-    
-    "I gotta admit, I actually prefer it to the alternative."
-    
-    "I head over to his office.  Never really see him in there, but I figure it’s worth a shot.  Once I get a bit closer, I can tell I’m right because Kazu’s loud voice is carrying throughout the hallway."
-    
-    "His door is ajar, and I can see him through the open bit.  He has a couple of books open, along with a computer that he types something into every once in a while."
+    #play sound door opening
     
     k  "Hrm…yes, that might be a possibility…no, no, what am I saying?  I would have had other symptoms.  But then what?"
     
-    r  "Uh…you said you wanted to see me?"
+    r  "Doctor Osamu? …you said you wanted to see me?"
     
-    k  "Hrm?  Who is it?  Oh…Riku.  Yes, please do come in.  Take a seat over there, and be careful not to soil anything by touching it."
+    k  "Hrm? Oh…Riku. Yes, please do come in. Take a seat over there, and be careful not to touch anything."
     
     "He clears off a spot for me on one of his chairs, which had previously been covered with a couple of old journals and loose papers, and returns to his chair."  
     "He goes to move his books to the side to clear off a little space on his desk, but before he finishes I manage to take a look at one of the titles."
     
-    r  "“Common Majin Ailments of the Late 15th Century:  A Historical Perspective.”  Just in for a bit of light reading there?"
+    r  "'Common Majin Ailments of the Late 15th Century:  A Historical Perspective.'”  Just in for a bit of light reading there?"
     
-    k  "Please.  I wish this was just light reading.  Unfortunately, while others in the shrine really aren’t in any hurry to find the traitor, I need to discover what has been dampening my powers as of late."
+    k  "Please. I wish this was just light reading. Unfortunately, while others in the shrine really aren’t in any hurry to find the traitor, I need to discover what has been dampening my powers as of late."
     
-    r  "You really gonna find it in there?"
+    r  "You think you'll find it in there?"
     
-    k  "Alas, it appears rather doubtful, at the moment.  The person who wrote this book was less of a true doctor, and more of a nurse."  
+    k  "It appears rather doubtful, at the moment. The person who wrote this book was less of a true doctor, and more of a nurse."  
     k "Symptoms are poorly described, and treatments are often glossed over entirely in favor of drawings."
     
-    k  "I’m sure this sort of thing has happened before.  It must have.  I just need to find out how this could have happened."  
-    k "Clearly it has to be affecting my brain chemistry.  That much is certain, because physically I feel fine."
+    k  "Most of the research available belongs to me."  
+    k "I believe whatever is blocking me is directly affecting my brain chemistry."  
+    k "No, that much is certain, my physical health hasn't changed."
     
-    r  "Huh.  I’m sure you’ll figure it out eventually."
-    
-    "If I had to guess, it is probably all in his head.  He’s paranoid as hell, and it wouldn’t surprise me if he had just convinced himself his powers were weakening."
-    
+    r  "Huh. I’m sure you’ll figure it out eventually."
+    "Might put him in a better mood."        
     k  "Well, of course I will.  I am not going to be outsmarted by some silly little man and whatever stupid tricks he is using."
     
     "He goes back to reading, mumbling something to himself and furiously flipping through the pages.  Looks like he already forgot I was here."
     
-    r  "Uh…Doc?  You wanted to talk to me ‘bout something.  ‘Member?"
+    r  "What did you want to talk to me about?"
     
-    k  "Hrm?  Oh yes.  I had almost forgotten.  Miss Susa has been on me for a while now to find an assistant to pass on my knowledge, and you have lucked out because I’ve chosen you."  
-    k "Congratulations.  You can start tomorrow."
+    k  "Ahh, yes."
+    k "Miss Susa has been asking me to pass on my medical knowledge to someone worthy and capable of learning it well."
+    k "Your memory for detail is quite amazing...and I'd like you to be my apprentice. In case anything should happen."
+    k "So, congratulations. You can start tomorrow."
+        
+    r  "M-me?"
+    k "...yes, you. Is that a problem?"
+    r "I'm just not good with any of this learning stuff! You'd be wasting your time on me."
+    k "I don't know. It seems your mock exam grades came up rather toward the high end..."
+    r "T-that---how did you even get that?"
     
-    "He smiles at me briefly while he motions to me with open hands, before immediately going back to his work."  
-    "I would have thought over his offer, but he didn’t really give me a choice.  He didn’t even really offer me the position; he just told me I’d be taking it."
+    k "I have my ways."
+    k "You won't stop training with Soume. You'll just also come here for lessons. You have a concentration problem, correct?"
     
-    r  "So…uh, what exactly am I going to be doing?"
+    r "........"
+    r "Sort of. I can't sit still for that long unless I'm in the mood."
+    k "Well, we can work on that too. This is supposed to be training to help you live in the human world, right?"
+    r ".......can you really help?"
+    k "I'll try."
+    
+    r "......."
+    "I guess he's not as horrible as I thought."
     
     k  "You will start off assisting in my research.  I need to teach you proper technique, along with the essentials of scientific inquiry."  
     k "We’ll start slow though, so I’ll show you some of the more common methods I utilize, I think."
     
-    r  "Oh.  Yeah, that sounds good.  You sure I’m the guy you want though.  Never really been that good at all that science stuff at school.  Spend most of my classes asleep, actually."
-    
-    k  "Well, you are not particularly well qualified.  You are rather lazy and careless, and I do worry that you are more interested in running around in circles than in actually ever accomplishing anything."
-    
-    r  "Yeaaaaaaaaah…that sounds like a ringing endorsement, right there."  
-    
-    k  "Yes, well…you do show promise.  You might be the most intelligent Majin at the entire rescue, excluding myself of course."    
-    k "Surprisingly smart, actually, considering the average IQ of most Majin.  You also handle directions fairly well, and your desire to prove yourself can prove useful if you actually try to apply yourself."
-    
-    "I almost went to try and clean out my ears with my knuckle, because I had to have misheard that.  It almost sounded like Kazu had actually complemented me."
-    
+    r "I don't know..."
+    k "Riku. You're very smart, considering the average IQ of most Majin."  
+    k "You also handle directions fairly well, and your desire to prove yourself can be useful if you actually try to apply yourself."
+    "........."
+    "Was that a compliment?"    
     k  "You also did a fairly decent job plating those colonies I asked you to last time.  I figure it couldn’t hurt to make you my assistant in an official capacity."
     
-    k  "Besides, Miss Susa has been so eager for me to find an assistant for so long, that I pretty much have to take you."  
-    k "Could do worse though; you’re certainly the least terrible candidate she’s tried to push on me."
+    k  "Besides, Miss Susa has been so eager for me to find an assistant for so long."  
+    k "What do you say?"
     
-    r  "‘Kay, I guess.  When you want me here by tomorrow?"
+#menu: 
+        #"Take the job."
+        #        jump kazwhatever
+        #"Refuse."
+        #        jump somemainscene
+
+label kaz16b:        
+    r  "Okay, I'll do it.  When do you want me to be here tomorrow?"
     
-    k  "Hrm, that is a good question.  Plan to come to my lab in the morning.  We can go over some of my research then."  
+    k  "Hrm, that is a good question."
+    k "Considering your training, plan to come to my lab after your lunch time.  We can go over some of my research then."  
     
-    r  "Sounds good.  One last question though; why is Susa so desperate to find you an assistant?"
+    r  "Sounds good.  One last question though; why is Miss Susa so desperate to find you an assistant?"
     
     k  "Ah.  Well, I would rather not go over that at the moment.  I’m quite busy, you see.  We can talk tomorrow."  
     k "Now, if you would please excuse me.  I’m having a hard time concentrating with you badgering me every couple of seconds."
+    #play sound shut
+    #play sound locked
     
-    "He shoos me out the door, and as he pushes me out he slams the door shut, and I can hear it locking."
+    r "......"
+    r "I do not get this guy..."
+    $ decision = "10"
+menu:
+    "Search.":
+        call show_map
+    "Sleep.":
+        call sleep
+    "Store.":
+        call shop_loop
+    "Research.":
+        call research_loop
+        $journal.unlock_entry("something", "031")
+        
+label nexttraining:
+    s "Good morning, Riku. Are you ready to move on to the next level of your training?"
+    r "The next level, huh? So I can gain better control of my powers?"
+    s "Precisely."
+    r "Alright. Lay it on me!"
+#stick the next level of some minigame here
     
-    r  "Jeez.  You invited me here, ya crazy bastard.  Hmph."
     
 label kaz17:
+
+    "I might be young, but I have no idea how I get dragged into these things..."
     ro  "Oh, please, come on?  I promise you that you will enjoy it!"
     
-    r  "Ugh.  I would rather been able to finish my nap."
+    r  "Ugh. Aren't you too old for this?"
     
-    "Roman is practically dragging me through the hallway.  Apparently he is all excited for some sort of scavenger hunt Susa set up, and has decided I’m gonna be doing it whether I want to or not."
-    
-    r  "Whooooa.  Hey, slow down for a sec.  My feet aren’t working right yet."
-    
-    ro  "Riku, the scavenger hunt will be starting shortly.  I still don’t understand why you weren’t ready."
+    ro  "Come on. It's a scavenger hunt. The bonus is supposed to be very good."
     
     r  "I told ya.  I wasn’t gonna do it.  I just wanted to catch a quick nap.  Why didn’t you just partner with Soume?"
     
     ro  "Ah.  Well, Soume helped Miss Susa set it up.  He very well can’t participate in the scavenger hunt if he knows where some of the items are at."
     
-    r  "Yeah, I ‘spose that’s a good point."
+    r  "Bah!"
     
-    ro  "So, I just thought that perhaps we could be partners.  I was going to ask you when you arrived, but you never showed up.  You don’t mind, do you?"
+    ro  "C'mon. Partner up with me!"
     
-    r  "Nah, it’s fine.  I didn’t want to nap anyway."
+    r  "..........."
+menu:
+        "Do the hunt. The surprise might be cool.":
+            call scav_hunt
+        "No way. This is kiddy stuff.":
+            jump sorryno
+            
+label sorryno:
+    r "No. I wanna watch TV instead."
+    ro "You're no fun..."
+    
+label kaz18:      
+    "The next morning, I'm in the lab, smelling like decaying...something."
         
-    ro "I do appreciate it, Riku!  These scavenger hunts are always one of my favorite things to do at the rescue."
-    
-    "We’re finally approaching what usually is the training area.  It looks like almost the entire shrine turned out for this, and the middle area is full of Majin."  
-    "Susa and Soume stand a couple of stairs up, chatting to each other about something."
-    
-    "I do a quick look around and don’t see Kazu.  Probably still in his office looking over old books that no one has read since I’ve been born.  He’s probably the only person here that didn’t show up."
-    
-    r  "These sort of things happen often?"
-    
-    ro  "Oh, yes.  Not just scavenger hunts, though.  Miss Susa is very good at organizing different things to make everyone feel more at home.  Last year she put together a carnival."
-    
-    r  "That sounds…terrifying."
-        
-    ro  "Terrifying?  A carnival?  I’m afraid I don’t understand how you could be afraid of a carnival."
-    
-    r  "Clowns.  I hate clowns.  One time, when I was a kid, I accidentally broke a clown’s nose after he tried to pick me up at the circus.  They’re just weird."
-       
-    ro  "What an odd thing to be afraid of!  There were no clowns, so you don’t need to worry about that."
-    
-    su  "Oi!  OIIIIIIIIIIIIIIII!"
-    
-    "The crowd had been talking fairly loudly, but as soon as Susa begins to speak, everyone shuts up.  They must all be afraid of her, too."
-    
-    su  "Looks like everyone is here now, so we will begin.  It is time for our annual scavenger hunt.  There are ten items that each team of two must find."
-   
-    #Riku whispers.
-    
-    r "How do we know what we’re looking for?"
-    
-    su  "OI!  Sprog in the back!  If you would shut your face for two fraking seconds I’d explain it to ya."
-    
-    r  "Gulp."
-    
-    su  "Now, if everyone is ready…"
-    
-    "Susa is glaring at me.  She pulls out a stack of papers from her pocket and starts flipping through them and then looking around at the crowd."
-    
-    su  "Alright, each team of two is going to get one of these pieces of paper.  They tell you want you’re looking for.  You only get one, so if you lose it tough shit."
-    
-    "She divides half the stack to Soume, and they both start handing out the list to people in the front."
-    
-    gir  "Miss Susa, what is the prize this year?"
-    
-    su  "Woops, thank you.  I almost forgot.  First prize this year is an extra thousand to spend as you wish."
-    
-    r  "Whoa!  Good call on waking me up Roman."
-    
-    #Roman chuckles.
-    
-    ro  "I told you that it would be enjoyable."
-    
-    su  "Here ya go, brat.  Try not to lose it."
-    
-    "I look down the list really quick."
-    
-    r  "Huh?  All of this is here?  At the rescue?"
-    
-    ro  "Yes, these items are hidden around here somewhere."
-    
-    r  "Ugh.  I’ve never seen any of these."
-    
-    su  "Alright, first to find all of the items on the list wins.  Ready?  Annnnnd….go."
-    
-    "People take off running in every direction.  Soon, only Roman and I are left."
-    
-    r  "So…where should we start looking?"
-    
-    ro  "Hmm…why don’t we start around here?  This seems to be one of the few places we won’t be bumping into other Majin."
-    
-    r  "‘Kay.  Sounds good to me.  Lemme see here…hrm.  Might as well just start looking around then."
-    
-    #-Insert minigame here.  This is a hidden objects minigame.  Help Riku and Roman find the objects that Susa has indicated.  There are multiple screens to search, so be sure to check them all.-
-    # Use a combination of puzzle logic and the searchable screens for this minigame, no massive new programming.
-    
-    r  "That should be the last of them, I think."
-    
-    ro  "Let me just double check…hmm…yep!  That’s it.  Lets go tell Miss Susa."
-    
-    r  "Hey, Susa!  SUUUUUSA!"
-    
-    su  "WHAT?  Damn, could you not fucking yell.  I’m not deaf."
-    
-    r  "Er…sorry.  Just wanted to tell you we’re done."
-    
-    su  "Hmph.  Already?  Lemme check what you have."
-    
-    su  "Hmm…yup."
-    
-    su  "Looks good.  Congrats, kids.  Dunno how you did it so quickly, but you won."
-    
-    ro  "Excellent job, Riku!  I’ve never managed to win one of these before."
-    
-    su  "Sure it had more to do with you than the brat here.  Here’s the prize.  Wait here for everyone else to finish.  I don’t want you ruining this for the others."
-    
-    r  "Fine by me.  I’ll just sit here and count my money."  
-    
-label kaz18:  
-    "Two days ago I was celebrating Roman’s birthday.  There was a feast and dancing.  Yesterday I did a scavenger hunt.  We won, and were given a lot of money for doing so."
-    
-    "Today I’m in Kazu’s lab and I smell something decaying."
-    
-    "This has to be the single greatest drop-off from happiness to shit in recorded history.  I’ll have to contact whoever is in charge of world records."
-    
     k  "Riku, please, focus.  I cannot trust you to handle my projects if you can’t even pay attention for a couple of minutes."
     
-    r  "I’m paying attention.  It’s just that…this lab coat is like three sizes to big on me.  Don’t you have any smaller?"
+    r  "I’m paying attention."
+    "I'm trying to, anyway."
+    r "Aaaaaaaaaaaaaachooo!"
+    k "What are you doing?! You're getting mucus into my bacteria!"
+    r "I am not!"
+    k "My precious bacteria..."
     
-    k  "What are you talking about?  It fits you perfectly!"
+    k "Just pay attention!"
     
-    r  "My hands don’t even reach the end of the sleeves.  This feels like I’m wearing a dress…"
-    
-    k  "Hmph.  Impudent child.  Fine, if you’re going to just complain, take it off.  I could not care less if you soil your clothes or not."
-    
-    r  "Ah.  Much better.  Thanks, Doc.  I can actually move now."
-    
-    k  "Well, here, take your spot on the lab bench.  I’ve moved everything you need in front of it."
-    
-    r  "Uh…am I supposed to know what these things are?"
-    
-    k  "What?  Surely you are at least familiar with all of this.  These are common tools, children stuff mostly."
-    
-    r  "Hrm.  I think I’ve seen this thing before.  It takes temperatures?"
-    
-    k  "Oh my, no.  Not even close.  You must be joking.  Surely you know the purpose of a Bunsen burner?"
-    
-    r  "To…uh…burn things?"
-    
-    k  "Sigh.  Well, that is technically true, I suppose.  Very oversimplified I’m afraid, but technically true."
-    
-    r  "Hrm.  And what are these things?"
-    
-    k  "Lets see here…we have various glassware, an assortment of flasks, a microcentrifuge, mortar and pestle, common organic compounds-"
-    
-    "He goes on to list like twenty other things.  I’m positive I’ve never heard of any of them."  
-    "I know I’ve seen things like flasks before from my science classes, but I never really paid enough attention to learn what they were called."
-    
-    k  "I believe that is about everything.  Are you prepared then?  I have already set up the glassware as needed, so all you will need to do is add the ingredients."
-    
-    r  "Er…so what exactly am I doing."
-    
-    k  "Using the organic compounds, I need you to try and impair my judgment and sensory abilities."
-    
-    r  "…wait, am I making you drugs?  Because I’m nearly positive Susa would be against me doing that."
-    
-    k  "What?  No, you fool, I want you to try and replicate the impairment I felt on the day of the raid.  I need to determine what it was that was interfering with my powers."
-    
-    r  "Huh?  You think I can do that with the stuff you’ve given me?"
-    
-    k  "Maybe.  Possibly, but I am not for certain.  It is certainly worth an attempt though, at the very least."  
-    k "I am afraid that the impairment is becoming more and more severe.  Even in my lab now, I have trouble sensing danger if it is not in the immediate vicinity."
-    
-    "Don’t know if he is just paranoid or what, but one thing is for sure:  he’s legit worried.  I don’t think he’s faking this."  
-    "Whenever he brings the subject up, he starts talking faster and he leans in towards me like he’s afraid someone else is listening."
-    
-    "Besides, this guy is too proud to pretend his powers were failing him if they actually weren’t."
-    
-    r  "‘Kay.  I should be able to handle this.  So I just add stuff into here and then what?"
-    
-    k  "When you’re ready, throw this ball at me.  I’ll face the wall, and if it hits me then we know we were successful.  The slower my reaction time, the closer we are, so watch my reaction for clues."
-    
+    #Level 2 of Kaz's cell game goes here.
     #Time passes
-    
+label cellgame2suc:    
     k  "Ngh.  Hmm…not exactly right but very close."
     
-    r  "Huh?  What do you mean not right?  I hit you right in the head."
+    r  "No way, I did pretty well on it!"
     
-    k  "Yes, well, like I said it was close.  My senses were impaired, but I could still tell it was coming."  
-    k "It just took me too long to identify.  During the ambush, I couldn’t sense danger even when someone was right next to me."
-    
-    r  "Oh…so should I keep going."
-    
-    k  "No, this shall be enough for one day.  Which compounds did you use for the last mixture."
+    k  "I said you were close, child, are you paying attention?"
+    r "..........."    
+    k  "Anyway, this shall be enough for one day.  Which compounds did you use for the last mixture?"
     
     r  "Uh…these three, I think."
     
-    k  "You think?  Riku, where are your notes on the experiment?  How can you expect to be a real scientist if you aren’t documenting each of your steps?  How can I possibly reproduce your results?"
+    k  "You think?!"  
+    k "Riku, where are your notes on the experiment?  How can you expect to be a real scientist if you aren’t documenting each of your steps?  How can I possibly reproduce your results?"
     
-    r  "Err…sorry.  I didn’t know I needed to do that.  Ya kind of omitted that part."
+    r  "Err…sorry.  I didn’t know I needed to do that."
     
     k  "I thought you would have had enough sense to deduce that on your own!  My, you certainly have a lot to learn."
+    r "I toldja, I'm not GOOD at this--"        
+    k  "Hmph.  Excuses.  Nevermind, you are dismissed. I have a lot of work to do."
     
-    r  "Uh…it was my first day.  You realize that, right?"
-    
-    k  "Hmph.  Excuses.  Nevermind, you are dismissed.  I need to try and duplicate your finding and then do some additional tests to determine the identity of the compound."
-    
-    r  "Sounds good to me.  Just let me know when you need me back here."
-    
+    r  "........."
+    "One day...he's gonna cross me wrong."
+    r "Fine. Same time tomorrow?"
     k  "Yes, certainly.  Oh, and Riku?"
     
     r  "Huh?"
     
     k  "You performed quite adequately today.  However, try to do better than adequate next time."
     
-    r  "Right.  Thanks, I guess."
+    r  "......."
+    r "Will do."
+    "I really, really don't get him."
     
 label kaz19:
     
@@ -2225,52 +2126,33 @@ label kaz19:
     
     l  "Doctor?"
     
-    k  "Who…Liza?  Liza is that you?"
+    k  "Ah, Liza, one moment..."
     
-    l  "Yes, it is.  I am a little surprised that you were the one answering the phone.  I was hoping to get a hold of Susa."
+    l "This will only take a moment, Doctor..."    
+    l  "I’m afraid I won't be able to help you for the forseeable future..."
     
-    k  "Miss Susa?  That is a completely different extension.  The secretary must have transferred you here on accident."  
-    k "He is a rather simple man, and gets confused rather easily.  I have already suggested Miss Susa fire him and replace him with an ape, because it would at the very least improve the smell."
+    k "W-what? But why?"
+    k  "I simply must impress upon you how urgent the matter is."
     
-    l  "Well, I am certain it is a rather simple mistake.  And one that is easily enough corrected.  Can you do me a favor and please transfer me to Susa?"
+    l  "I understand that, and I am treating this with the appropriate amount of urgency."
+    l "However, something more pressing has arriven that must be dealt."
     
-    k  "Yes, I can…but before I do, have you managed to collect any more information?  About what we talked about the other day?"
-    
-    l  "I’m sorry but I am not quite ready for you yet.  I have let a couple people know, but right now my priorities are elsewhere.  I promise that I will find out what I can as soon as I can."
-    
-    k  "I must impress upon you how urgent the matter is.  I do not know how much time we have left."
-    
-    l  "I understand that, and I am treating this with the appropriate amount of urgency.  However, I need to speak with Susa regarding something extremely important."
-    
-    k  "More important than the safety of the shrine?"
+    k  "More important than the safety of the shrine?!"
     
     l  "Doctor, like I made clear last time, there is only so much I can do until you provide me with more legitimate evidence."  
     l "Until then I will work to find out what I can.  I promise you that if I hear something, you will be the first to know."
     
-    k  "Hmph.  I…appreciate it, Liza.  Just please keep me updated."
+    k  "F---fine. Please hurry and finish with your business."
     
-    l  "I certainly will.  Now, can you transfer me over to Susa?   I need to talk to her immediately."
-    
-    k  "Of course.  I’ll do it right now.  Nice talking to you."
-    
-    l  "Nice ta-"
+    l  "I will do my best. I do apologize for the inconvenience."
+    k "Hmph. Good day."
     
     #play sound Dial-tone, slamming noise-
     
-    k  "Is there no one that I can talk to that is even remotely competent.  Whatever pathetic side project she working on with Susa is only wasting time that could be spent aiding me."
-    
-    k  "How can she not see that?  How does she miss the urgency of this situation?  Perhaps I will need to act on my own after all."
-    
-    k  "No, not yet.  If Liza finds out I am, then she will alert Susa and everything will be ruined."
-    
-    k  "I can, however, begin to lay the groundwork.  And once I finish my work here, then there will be no doubt as to what he is up to."
-    
-    #play sound Electronic noises-
-    
-    k  "Hmm…peculiar.  But very interesting."
+    k  "DAMNIT!"
     
 label kaz20:
-    su  "Yes.  No, I agree Liza.  I have a couple of things left I need to do, but I am almost ready.  I will contact you when I am leaving."
+    su  "Yes.  No, I agree, Liza.  I have a couple of things left I need to do, but I am almost ready.  I will contact you when I am leaving."
     
     su  "Sounds good.  Yes.  Bye."
     
@@ -2286,15 +2168,15 @@ label kaz20:
     
     k  "Ahem.  Miss Susa?  Perhaps you could stop rummaging around your file cabinet and listen to what I am about to say?"
     
-    su  "Just a sec.  I need to find something… I tell you, once of these days I’m actually going to fucking organize this thing.  Never can find what I am looking for when I need it."
+    su  "Just a sec. I need to find something… I tell you, once of these days I’m actually going to fucking organize this thing.  Never can find what I am looking for when I need it."
     
     k  "Well, perhaps you can look for whatever you need in a couple of moments?"  
     
-    su  "Nah.  This is pretty important.  Besides, I can guess what you’re going to say anyway."
+    su  "No need. I can guess what you’re going to say anyway."
     
     k  "Oh really?  And what would that be?"
     
-    su  "Soume blah blah blah ambush blah blah blah his fault blah blah your sensory abilities blah.  Something along those lines?"
+    su  "Soume blah blah blah ambush his fault blah blah your sensory abilities blah.  Something along those lines?"
     
     k  "Well…sort of, but I would prefer it if you took me a bit more seriously.  I am not some delirious child caught up in some outrageous fancy!"  
     
@@ -2322,53 +2204,58 @@ label kaz20:
     
     k  "This isn’t paranoia!  This-"
     
-    su  "Tell me Osamu, is Soume this first person you have accused of being a spy since you’ve joined us here?"
+    su  "Osamu, since Soume arrived, you have beelined to him as a spy."
     
-    k  "Er…well, yes."
-    
-    su  "Don’t you fucking lie to me.  It was just a year ago you were convinced Roman was a spy.  Remember?"
-    
-    k  "I just thought he might still be working for his old masters.  That…that was different."
+    k  "Er…well...yes, but I was su---"
     
     #Susa sighs.
     
-    su  "No, it wasn’t.  I really am worried about you.  This isn’t healthy.  You are by far the most brilliant mind here, but you convince yourself of these outlandish conspiracy theories."  
+    su  "Shut it! You are by far the most brilliant mind here, but you convince yourself of these outlandish conspiracy theories."  
     
     k  "Out-outlandish?"
     
-    su  "I don’t mean to offend you, but does this have anything to do with what you did to Soume under the orders of your old masters?"
+    su  "Outlandish."
+    su "I already know what you did to Soume under the human orders."
+    su "I understand you aren't comfortable with his presence here, but he deserves a chance just as well as you do."
     
-    k  "What?  No, that is completely out of the question!  I-I haven’t even thought about that in years."
+    k  "I-I haven’t even thought about that in years."
     
-    su  "It wasn’t your fucking fault, Osamu.  You worked for some truly evil people that just used you to-"
+    su "Sell that line to someone who'll buy it."
+    su  "You don't like him because you are afraid. But not once have you been able to prove a thing."
     
-    k  "ENOUGH!  I have moved on past that sordid chapter in my life, and I will not have it thrown in my face by someone who can’t possibly understand what I went through."  
+    k "Well maybe you protect him because you feel bad for what you and yours did to him!"
+    su "............."
+    k  "Don’t think I forgot what you used to be, before you opened up this rescue out of the goodness of your heart."
     
-    su  "That isn’t what-"
+    su  "…............."
     
-    k  "And don’t you dare bring this up again.  Don’t think I forgot what you used to be, before you opened up this rescue out of the goodness of your heart."
+    k  "Perhaps a case of overcompensation, yes?"
+    k "Indeed! Maybe it is your own bias!"
     
-    su  "…"
+    su "........."
+    su "This conversation is over."
+    su "Do not bring it to me again, short of concrete proof. I am too busy for your bullshit."
     
-    k  "Hah!  Overcompensating much?  This is pathetic, truly pathetic."
+    k "................."
+    $ decision = "11"
+menu:
+    "Search.":
+        call show_map
+    "Sleep.":
+        call sleep
+    "Store.":
+        call shop_loop
+    "Research.":
+        call research_loop
+        $journal.unlock_entry("something", "031")
+
+label nexttraining2:
+    s "Good morning, Riku. Are you ready to move on to the next level of your training?"
+    r "The next level, huh? So I can gain better control of my powers?"
+    s "Precisely."
+    r "Alright. Lay it on me!"
     
-    su  "Doctor, I know this isn’t you talking now, so I’ll forgive you.  But-oh, about fucking time.  Here it is.  Completely wrong section of the filing cabinet, nicely done Susa.  Got to be more careful in the future."
-    
-    k  "You seem busy.  I’ll be on my way."
-    
-    su  "No, we can talk, I’m just-"
-    
-    k  "No.  I’ll try again later.  Perhaps when you’re not so busy looking for whatever it is you’re looking for.  But I would suggest you get the filing cabinet in order, Miss Susa."
-    
-    su  "Eh?"
-    
-    k  "I am certain there are some things in there you wouldn’t want people finding.  Things you might have a hard time explaining.  Just need to be sure to keep it safe."
-    
-    su  "Now, I certainly hope, for your sake, that you aren’t threatening me."
-    
-    k  "Sigh.  Another warning that will certainly go ignored by you.  Have it your way.  I’ll see myself out."
-    
-label kaz21:
+label kaz22:
     k  "No!  Ngh…another dead end!"
     
     k  "Unless…perhaps I misread the results.  That has to be it."  
@@ -2459,7 +2346,7 @@ label kaz21:
     
     k "I…guess I am…just another…stupid animal."
     
-label kaz22:
+label kaz23:
     r  "Uh…you in there Doc?"  
     
     "I’m hoping it was him in there."  
@@ -2570,7 +2457,7 @@ label kaz22:
     
     r  "Uh…sure thing, Kazu."
     
-label kaz23:
+label kaz24:
     s  "Riku, please, focus.  I understand that channeling this much youki at once must be difficult, especially for one as young as you.  You can do it though~!  Just concentrate."
     
     r  "Ngh…ah!"
@@ -2685,50 +2572,6 @@ label kaz23:
     r "Why don’t you just tell me how I’m supposed to train all of these Majin, most of whom are already older than I am."
     
     s  "Hmph.  Fiiiiine~!"  
-    
-label kaz24:
-    k  "Hmm…shame I broke some of this.  I really must learn to control my temper.  It really is unbecoming for-"
-    
-    #play sound Footsteps
-    
-    k  "Hrm?  Who is-"
-    
-    k  "Liza?  What are you doing here?"
-    
-    l  "Ah.  Doctor Kazutaka.  I had assumed you would have been down in your lab."
-    
-    k  "I was just throwing some things out.  Old…ah…equipment that I no longer need."
-    
-    l  "Hm…yes, it does look like this equipment has seen better days.  Sorry, I am in a bit of a rush though, so if you can excuse me…"
-    
-    k  "Well, while you are here, perhaps we can discuss what we were talking about the other day?  I feel like I am close to a breakthrough, and-"
-    
-    l  "Sorry to interrupt you, but I need to meet with Susa immediately.  This project will have to wait until I return."
-    
-    k  "Until you return?  How long will that be?"
-    
-    l  "I cannot give you a firm estimate.  If I had to guess, a couple of days.  Perhaps a week, but regardless, I will not be able to assist you until we get back."
-    
-    k  "What about me?  What should I do?"
-    
-    l  "Whatever it is you are currently doing.  Keep on trying to identify the spy, try to link someone to your power loss and do it with some sort of tangible evidence."  
-    l "We can continue our correspondence upon my return."
-    
-    k  "Yes.  That sounds like an excellent idea.  I do think I am-"
-    
-    l  "I’m really sorry, but I need to be leaving.  Now.  Susa doesn’t like to be kept waiting."
-    
-    k  "…right."
-    
-    l  "I am sorry, but I simply cannot focus on this project until something else is completed first.  I promise you, once it is I will put forth full effort into finding the spy."
-    
-    k  "Certainly.  That sounds fine.  I just hope it is not too late by that time."
-    
-    l  "We will not be gone that long.  I can assure you that things shall be fine until our return.  Relax, Doctor Kazutaka.  I promise we will figure this out."
-    
-    k  "Understood.  Farwell, for now, Liza."
-    
-    l  "Farwell."
     
 label laz25:
     k  "I would like to thank the two of you for accompanying me to the store.  Don’t feel quite safe out here on my own."
@@ -3365,11 +3208,14 @@ label kaz28:
     
     r  "…............"
     
-    k  "There, now you know everything you could ever need to know about me.   You’re the first person I’ve ever told that story to willingly.  You should feel honored."
+    k ".........."
+    k  "Well, there, now you know everything you could ever need to know about me."
+    k "You’re the first person I’ve ever told that story to willingly. You should feel honored."
     
-    "Even when Kazu is revealing intimate details about his life, he still manages to do it in a way that makes him seem a little pompous.  That takes real talent."
+    "Even when the Doc is revealing intimate details about his life, he still manages to do it in a way that makes him seem a little pompous."  
+    "That takes real talent."
     
-    r  "Thanks…for telling me that.  Kazu.  Y’know, it wasn’t-"
+    r  ""
     
     k  "I assure you I don’t need to be coddled.  I do appreciate your show of friendship though.  I will think about it the next time I find myself saddened by something."
     
