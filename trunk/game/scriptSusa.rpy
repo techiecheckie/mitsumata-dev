@@ -2,18 +2,17 @@
 # I am at 882 out of 1807
 #---------------------------------
 
-# I need to add the scene where Susa's mother is married off to the Akemiya.
-# I need to add the scene where Susa meets Soume.
-# I need to add the scene where Susa describes Mamoru as a child.
-# I need to add the scene where Soume figures out what Mamoru can eat.
-# I need to add the scene where Mamoru starts getting out of hand.
-# I need to add the scene where Mamoru bites Liza.
-# I need to add the scene where Susa tries to get it on with Liza to find her bitten and decides to finally leave home.
-# I need to add the scene where Susa tries to kill Mamoru.
-# I need to add the scene where their son is killed.
-# I need to add the scene where Soume is saved.
-# I need to add the scene where they break-up.
-
+#Scene w/Susa's mother marrying Akemiya.
+#Scene w/Susa meets Soume.
+#Scene w/Susa describes Mamoru as a child.
+#Scene w/Soume figuring out Mamoru's diet.
+#Scene w/Mamoru starts getting out of hand.
+#Scene w/Mamoru bites Liza.
+#Scene w/Susa trying to get it with Liza, finds her bitten.
+#Scene w/Susa trying to kill Mamoru.
+#Scene w/their son being killed.
+#Scene w/Soume being saved.
+#Scene w/Susa-Liza break-up.
 
 label su1:
     #play sound phone ringing
@@ -1236,95 +1235,8 @@ label su16:
     
     "Put in something here, idek."
     
-label su17:
-    r "And from his car door was dangling an iron hook!"
-    s "Oh no!  Did it scratch the paint!"
-    r "...what?  What do you mean?  Why would that matter?"
-    s "Oh...I dunno.  Probably would hurt the resale value some."
-    r "That...that isn't the point of the story, Soume!  It is supposed to be scary.  It is about an escaped convict!"
-    s "Well, property damage can be scary, can't it~!  I would hate it if anything happened to any of my beautiful little plants~!"
-    "Soume has turned around and is trying to reach out to his nearest plant.  It is completely dark out now, so I can't tell if it responds, but Soume coos softly before turning around."
-    ro "...I'm sorry, I guess I don't understand how that is supposed to be scary.  It doesn't make any sense."
-    r "Oh for the love of....not you too, Roman!"
-    ro "How is it supposed to be scary?  He's already gotten away from the escaped convict without even knowing it."
-    r "Well...yeah, but-"
-    ro "And if he did escape from prison, why does he still have his hook hand?  That is something you would think the prison might have confiscated before his arrest."
-    r "Er..."
-    ro "Honestly!  What kind of prison guard just lets a prisoner walk around with a sharp metal object coming out of his arm?  No wonder he escaped.  Probably murdered all the prison guards."
-    r "Ugh...I don't know why I even tried."
-    
-    "I am terrible at telling stories.  I'll fucking admit it."  
-    "Still though, at least Roman or Soume could pretend to act scared.  Roman is too busy disecting the logic of it all and Soume wouldn't be frightened unless my story involved a weed whacker."
-    
-    su "What're you all doing out so late.  Should be getting to bed.  Especially you, sprog."
-    r "Right, I was just-"
-    ro "Riku was just telling us about the appauling state of our prison system."
-    r "No!  It was just supposed to be a scary story, is all!"
-    su "Aw, really?  I love a good scary story.  Which one was it?"
-    r "The one with the escaped convict with a hook for a hand."
-    su "That shitty old story? Fuck, no wonder they look bored, kid.  You gotta do a better job than that."
-    r "But that's the only one I know.  And I thought it was pretty good..."
-    su "Nah.  But, here, I'll tell you a good one.  A true one, actually.  One involving this very rescue."
-    r "Oh yeah?  Does it end with you jumping at me and yelling 'IT IS RIGHT BEHIND YOU!'"
-    su "What, no.  No one would be stupid enough to fall for-RIKU WATCH OUT!"
-    r "AH!"
-    "I turn around to where she is pointing, only to see Soume sitting there twirling his fingers around in the cool grass.  He looks up at me and waves enthusiastically."
-    s "Hi Riku!"
-    r "Uh...yeah.  Hi."
-    su "Ha ha ha!  I can't believe that actually worked.  Anyway, as I was saying, I don't think I ever told you this before sprog, but someone died here."
-    r "Here?  Like where I'm sitting?"
-    su "No, dunce.  I mean here, like here at the rescue."
-    r "Really?  Someone died?"
-    
-    "I'm not sure if I should take here seriously or not."  
-    "Roman and Soume are talking to each other about something, so apparently they've already heard this or know Susa is just messing with me.  I can't tell which yet."
-    
-    su "Yup.  Before I got here though.  Long time ago.  The last person that ran this place didn't really take a hands on approach.  Just sort of let you guys take care of yourselves."
-    r "Sounds better than-"
-    su "You sayin' something, kid?"
-    r "Ah...no.  Just commenting that, uh...nothing.  I'll ask later."
-    su "Hmph.  So, some of the Majin would end up training themselves.  Others just spend the entire day playing around and relaxing around the rescue."
-    r "Any chance we could start that up again?"
-    su "No.  And stop fuckin' interrupting.  Now one day a group of young Majin were playing upstairs."  
-    su "They were playing hide-and-seek.  One of the children decided to hide inside an old antique trunk, but when he climbed inside, the trunk closed on him."
-    s "Oh no!"
-    
-    "Soume is finally paying attention again.  Sort of.  Right after he yelled that, he starts looking around at his plants again."
-    
-    su "The other children searched for hours, but couldn't find him.  It wasn't until days later that they found him in the trunk, but by then it was too late.  There was nothing they could do."
-    su "Well, that was the end of things, at least for a while."  
-    su "But later, people started noticing some weird things.  Items went missing."  
-    su "People would feel chills when passing by the room he trapped himself in.  And then...people started seeing him again.  Glimpses, but people kept on seeing him."
-    
-    r "Sure.  And why don't people still see him then?  Hmph.  Nice try."
-    
-    su "Heh.  Who says they don't?  Come with me kiddo."
-    
-    "She stands up and walks towards a particularly dense portion of trees by Soume's garden."  
-    "I look over at Roman and Soume.  Roman is smiling at me and motions for me to follow her.  I get closer to the trees and look around."
-    
-    r "What am I supposed to be looking for?"
-    su "Just peak back through here, sprog."
-    
-    "I look around pass the trees she's pointing at.  Nothing.  Can't believe I almost believed her."
-    r "Hmph.  Nice try, but-OH WHAT THE HELL?"
-    
-    "I see it.  There is just a flicker, but a shadow of a girl flickers in front of my eyes.  She looks happy, but a little confused.  She reaches towards me, but fades out before she can finish the motion."
-    
-    r "Ghosts!  There are ghosts here?  THIS PLACE IS HAUNTED?"
-    
-    "I begin thinking of the quickest ways to pack up all my stuff, but Susa starts laughing."
-    
-    r "What?  What're you laughing at."
-    su "Sorry, sorry.  Didn't mean to frighten you.  That much at least.  Those weren't ghosts."
-    r "Huh?  Then what were they?  I...I definitely saw her.  She was just in front of me."
-    su "Yeah, those aren't ghosts though.  They pop up here every once in a while, but all of that is just brief glimpses of Majin on the other side of the barrier."
-    r "Oh...that...is strange.  How do they get here?"
-    su "Fuck, I dunno.  They seem to show up in places wherever there are a lot of Majin, but beyond that I don't know.  Glad they do show up though; makes it easier to scare all the new students."
-    r "I-I wasn't scared."
-    su "Mm hmm...why don't you head back with Roman and Soume.  I have some stuff I need to finish up anyway."
-    "She turns and heads back towards her office.  She is smiling a bit, which is a nice change of pace, but I think it might have something to do with how loud I yelled when she showed me the 'ghost'."
-    #put in Susa/Kazu scene here
+
+#put in Susa/Kazu chat scene here...?
     
 label su18:
     #play sound knocking"
