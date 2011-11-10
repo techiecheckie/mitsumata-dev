@@ -112,7 +112,7 @@ init -50 python:
         def set_frameset( self, frameset ):
             if frameset not in self.frames:
                 raise ValueError( "Invalid frameset %s.  Not a recognized "
-                                  "frameset name." )
+                                  "frameset name." % frameset )
             self.current_frameset = frameset
 
         def set_looping( self, loop_animation ):

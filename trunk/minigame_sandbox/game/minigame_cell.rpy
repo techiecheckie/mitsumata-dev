@@ -18,15 +18,18 @@ init python:
     INFECTED_FRAMESET = "infected"
 
     # animation names.
-    CELL_ANIMATION_PULSE = "pulse"
+    CELL_ANIMATION_PULSE  = "pulse"
+    CELL_ANIMATION_ATTACK = "attack"
 
     # animation durations.  these divided into the number of frames that are
     # in the corresponding animation are the frames per second value passed to
     # the GameAnimation constructor.
-    CELL_ANIMATION_PULSE_DURATION = 0.45
+    CELL_ANIMATION_PULSE_DURATION  = 0.45
+    CELL_ANIMATION_ATTACK_DURATION = 0.8
 
     # number of animation frames.
-    NUMBER_CELL_PULSE_FRAMES = 3
+    NUMBER_CELL_PULSE_FRAMES  = 3
+    NUMBER_CELL_ATTACK_FRAMES = 12
 
     # prefab names.
     CELL_TYPE = "cell"
@@ -37,9 +40,9 @@ init python:
 
     # how fast cells multiply.
     HEALTHY_GROWTH_RATE         = 2
-    INFECTED_STAGE1_GROWTH_RATE = 0.5
-    INFECTED_STAGE2_GROWTH_RATE = 0.3
-    INFECTED_STAGE3_GROWTH_RATE = 0.1
+    INFECTED_STAGE1_GROWTH_RATE = 9
+    INFECTED_STAGE2_GROWTH_RATE = 7
+    INFECTED_STAGE3_GROWTH_RATE = 5
 
     INFECTED_STAGE1_GROWTH_RATE_DURATION = 20
     INFECTED_STAGE2_GROWTH_RATE_DURATION = 40
@@ -171,9 +174,9 @@ init python:
             return neighbors
 
         # non-infected neighbors are either free slots or slots that have
-        # healthy cells in the idle state.  we make the rule that you can't
-        # infect something that's currently completing an action (growing or
-        # moving).
+        # healthy cells in the idle state that are either to the left or right
+        # of the given coordinate.  we make the rule that you can't infect
+        # something that's currently completing an action (growing or moving).
         def get_noninfected_neighbors( self, row, col ):
             neighbors = []
             slots     = self.slots
@@ -190,6 +193,8 @@ init python:
                             break
                     else:
                         neighbors.append( (up_row, up_col) )
+#                if slots[up_index].is_valid and not slots[up_index].cells:
+#                    neighbors.append( (up_row, up_col) )
 
             # right.
             if col < (NUMBER_GRID_COLS - 1):
@@ -216,6 +221,8 @@ init python:
                             break
                     else:
                         neighbors.append( (down_row, down_col) )
+#                if slots[down_index].is_valid and not slots[down_index].cells:
+#                    neighbors.append( (down_row, down_col) )
 
             # left.
             if col > 0:
@@ -295,6 +302,10 @@ init python:
                                                       CELL_COLLIDER_HEIGHT ),
                                                 Anchor.CENTER )
             cell["renderer"].add_animation( CELL_ANIMATION_PULSE, pulse_animation )
+            cell["renderer"].add_animation( CELL_ANIMATION_ATTACK,
+                                            GameAnimation( [ GameImage( "gfx/cells/ai/cell-ai-attack-%d.png" % frame_index, Anchor( 79, 77 ) )
+                                                             for frame_index in xrange( NUMBER_CELL_ATTACK_FRAMES ) ],
+                                                           NUMBER_CELL_ATTACK_FRAMES / CELL_ANIMATION_ATTACK_DURATION ) )
             cell["renderer"].set_collider_visible( False )
             PrefabFactory.add_prefab( CELL_TYPE, cell )
 
@@ -521,18 +532,9 @@ init python:
                     self.grid.remove_cell( self, row, col )
                     self.reset_move_timeout()
             elif self.state == CELL_STATE_INFECTING:
-                # move halfway towards the target
-                if self.move_towards_target( delta_sec ):
-                    # we reached as far as we need to go for infecting.  now
-                    # retract back to our original cell.
-                    self.target_slot = None
-                    self.state       = CELL_STATE_RETRACTING
+                pass
             elif self.state == CELL_STATE_RETRACTING:
-                # move back towards our original slot after infecting.
-                if self.move_towards_target( delta_sec ):
-                    # we reached our original slot.  go to the idle state.
-                    self.state = CELL_STATE_IDLE
-                    self.reset_move_timeout()
+                pass
             elif self.state == CELL_STATE_INFECTED:
                 self.infect_timeout -= delta_sec
 
@@ -619,8 +621,11 @@ init python:
                                 # the target we picked.
                                 cells[0].infect( self.idle_time, self.growth_rate )
                                 cells[0].set_parent( self )
-                                self.state       = CELL_STATE_INFECTING
-                                self.target_slot = (trow, tcol)
+                                self.state = CELL_STATE_INFECTING
+                                self.game_object["renderer"].play_animation( CELL_ANIMATION_ATTACK,
+                                                                             loop_animation=False,
+                                                                             on_animation_end=self.finish_infecting,
+                                                                             frameset=GameAnimation.DEFAULT_FRAMESET )
                             else:
                                 # we picked an empty slot.  just move to it
                                 # like we would if we were healthy.
@@ -631,3 +636,9 @@ init python:
                             # slots are occupied by our friends.  reset the
                             # move timeout and try to move again later.
                             self.reset_move_timeout()
+
+        def finish_infecting( self ):
+            self.state = CELL_STATE_IDLE
+            self.game_object["renderer"].play_animation( CELL_ANIMATION_PULSE,
+                                                         frameset=INFECTED_FRAMESET )
+            self.reset_move_timeout()
