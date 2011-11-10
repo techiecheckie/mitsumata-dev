@@ -1,5 +1,6 @@
 init python:
     import itertools
+    import math
 
     class CellLevel( object ):
         def __init__( self, infected_idle_time, healthy_idle_time ):
@@ -71,6 +72,7 @@ init python:
     CELL_STATE_INFECTED       = "infected"
     CELL_STATE_INFECTING      = "infecting"
     CELL_STATE_RETRACTING     = "retracting"
+    CELL_STATE_DYING          = "dying"
 
     # static locations and dimensions.
     PETRI_DISH_X = 17
@@ -286,7 +288,6 @@ init python:
             self.grid             = Grid()
             self.start_screen_hud = None
             self.stop_screen_hud  = None
-            self.score_hud        = None
             self.elapsed_time_hud = None
 
             self.create_dish()
@@ -334,6 +335,15 @@ init python:
             self.stop_screen_hud             = GameObject()
             self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/cells/stop_screen.png" ) )
             self.stop_screen_hud["transform"].set_position( 138, 50 )
+
+            self.elapsed_time_hud             = GameObject()
+            self.elapsed_time_hud["renderer"] = GameRenderer( GameText( self.get_elapsed_time ) )
+            self.elapsed_time_hud["transform"].set_position( 10, 10 )
+
+        def get_elapsed_time( self ):
+            minutes = math.floor( self.elapsed_time / 60 )
+            seconds = math.floor( self.elapsed_time - minutes * 60 )
+            return "Elapsed Time: %d:%02d" % (minutes, seconds)
 
         def spawn_cell( self, cell_type, slot=None, state=None ):
             # if a slot wasn't given, get a random available one.  return
@@ -409,6 +419,8 @@ init python:
             elif self.state == CELLS_GAME_STATE_END:
                 self.stop_screen_hud["renderer"].render( blitter, world_transform )
 
+            self.elapsed_time_hud["renderer"].render( blitter, world_transform )
+
         def update( self, delta_sec ):
             if self.state == CELLS_GAME_STATE_PLAY:
                 self.elapsed_time += delta_sec
@@ -419,6 +431,10 @@ init python:
                 # update all cells.
                 for cell in itertools.chain( self.infected_cells, self.healthy_cells ):
                     cell.update( delta_sec )
+
+                # remove dead cells.
+                self.healthy_cells[:]  = [ cell for cell in self.healthy_cells if cell.is_alive() ]
+                self.infected_cells[:] = [ cell for cell in self.infected_cells if cell.is_alive() ]
 
                 # healthy cells that have become infected need to be removed
                 # from the healthy list and moved to the infected list.
@@ -450,7 +466,18 @@ init python:
                     self.quit()
 
         def on_mouse_down( self, mx, my, button ):
-            renpy.log( "Mouse down" )
+            if button == Minigame.LEFT_MOUSE_BUTTON:
+                if self.state == CELLS_GAME_STATE_PLAY:
+                    # translate the mouse position to something that can be
+                    # used to determine if the mouse is over a grid cell.
+                    world_transform = self.get_world_transform()
+                    x = mx - world_transform.x - self.dish["transform"].x - GRID_OFFSET_X
+                    y = my - world_transform.y - self.dish["transform"].y - GRID_OFFSET_Y
+
+                    for cell in itertools.chain( self.healthy_cells, self.infected_cells ):
+                        if cell["collider"].is_point_inside( x, y ):
+                            cell["behavior"].hit()
+                            break
 
     class CellBehavior( GameComponent ):
         def __init__( self, cell_type, grid, idle_time, growth_rate,
@@ -570,7 +597,15 @@ init python:
             #   * infecting
             #   * growing
             #   * chilling
-            if self.state == CELL_STATE_MOVING:
+            if self.state == CELL_STATE_DYING:
+                if self.slot:
+                    row, col = self.slot
+                    self.grid.remove_cell( self, row, col )
+                if self.target_slot:
+                    row, col = self.target_slot
+                    self.grid.remove_cell( self, row, col )
+                self.game_object.kill()
+            elif self.state == CELL_STATE_MOVING:
                 # move towards the target.
                 if self.move_towards_target( delta_sec ):
                     # we reached the target.  tell the grid our previous slot
@@ -687,6 +722,9 @@ init python:
                             # slots are occupied by our friends.  reset the
                             # move timeout and try to move again later.
                             self.reset_move_timeout()
+
+        def hit( self ):
+            self.state = CELL_STATE_DYING
 
         def finish_infecting( self ):
             self.state = CELL_STATE_IDLE
