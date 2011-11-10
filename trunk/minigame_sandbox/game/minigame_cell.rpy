@@ -14,6 +14,11 @@ init python:
 
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####
 
+    # points.
+    CELLS_TIME_BLOCK_SIZE       = 5
+    CELLS_POINTS_PER_TIME_BLOCK = 500
+    CELLS_COMPLETION_BONUS      = 300
+
     # different states the Cells game can be in.
     CELLS_GAME_STATE_BEGIN = "cells_begin"
     CELLS_GAME_STATE_PLAY  = "cells_play"
@@ -291,9 +296,12 @@ init python:
             self.healthy_growth_rate  = StagedValue( [ (0, HEALTHY_GROWTH_RATE) ] )
 
             # setup game state.
-            self.state         = CELLS_GAME_STATE_BEGIN
-            self.elapsed_time  = 0
-            self.end_countdown = CELLS_END_GAME_COUNTDOWN
+            self.state            = CELLS_GAME_STATE_BEGIN
+            self.elapsed_time     = 0
+            self.base_score       = 0
+            self.completion_bonus = 0
+            self.total_score      = 0
+            self.end_countdown    = CELLS_END_GAME_COUNTDOWN
 
             # setup entities.
             self.dish             = None
@@ -350,9 +358,60 @@ init python:
             self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/cells/stop_screen.png" ) )
             self.stop_screen_hud["transform"].set_position( 138, 50 )
 
+            base_score             = GameObject()
+            base_score["renderer"] = GameRenderer( GameText( self.get_base_score ) )
+            base_score["transform"].set_position( 185, 159 )
+            self.stop_screen_hud.add_child( base_score )
+
+            completion_bonus             = GameObject()
+            completion_bonus["renderer"] = GameRenderer( GameText( self.get_completion_bonus ) )
+            completion_bonus["transform"].set_position( 185, 251 )
+            self.stop_screen_hud.add_child( completion_bonus )
+
+            total_score             = GameObject()
+            total_score["renderer"] = GameRenderer( GameText( self.get_total_score ) )
+            total_score["transform"].set_position( 185, 320 )
+            self.stop_screen_hud.add_child( total_score )
+
             self.elapsed_time_hud             = GameObject()
             self.elapsed_time_hud["renderer"] = GameRenderer( GameText( self.get_elapsed_time ) )
             self.elapsed_time_hud["transform"].set_position( 10, 10 )
+
+        def compute_scores( self ):
+            self.base_score = (math.floor( self.elapsed_time /
+                                           CELLS_TIME_BLOCK_SIZE ) *
+                               CELLS_POINTS_PER_TIME_BLOCK)
+
+            if len( self.healthy_cells ) == MAX_VALID_SLOTS:
+                self.completion_bonus = CELLS_COMPLETION_BONUS
+            else:
+                self.completion_bonus = 0
+
+            self.total_score = self.base_score + self.completion_bonus
+
+        def get_base_score( self ):
+            if self.base_score < 1000:
+                return "%20d" % self.base_score
+            elif self.base_score < 10000:
+                return "%18d" % self.base_score
+            else:
+                return "%16d" % self.base_score
+
+        def get_completion_bonus( self ):
+            if self.completion_bonus == 0:
+                return "%20d" % self.completion_bonus
+            elif self.completion_bonus < 1000:
+                return "%18d" % self.completion_bonus
+            else:
+                return "%16d" % self.completion_bonus
+
+        def get_total_score( self ):
+            if self.total_score < 1000:
+                return "%20d" % self.total_score
+            elif self.total_score < 10000:
+                return "%18d" % self.total_score
+            else:
+                return "%16d" % self.total_score
 
         def get_elapsed_time( self ):
             minutes = math.floor( self.elapsed_time / 60 )
@@ -470,6 +529,7 @@ init python:
                     len( self.healthy_cells ) == 0):
                     self.end_countdown -= delta_sec
                     if self.end_countdown <= 0:
+                        self.compute_scores()
                         self.state = CELLS_GAME_STATE_END
 
         def on_key_down( self, key ):
