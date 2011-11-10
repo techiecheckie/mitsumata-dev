@@ -10,7 +10,7 @@ init python:
     MAGIC_FORCE_LEVELS = [
         MagicForceLevel( number_digits     = (1,5),
                          correct_timeout   = 0.15,
-                         incorrect_timeout = 0.75,
+                         incorrect_timeout = 0.9,
                          time_limit        = 60 )
         ]
 
@@ -25,6 +25,39 @@ init python:
     NUMBER_FRAMESET_CORRECT   = "correct_number"
     NUMBER_FRAMESET_INCORRECT = "incorrect_number"
 
+    RIKU_FRAMESET_IDLE          = "riku_idle"
+    RIKU_FRAMESET_CHANNEL_START = "riku_start"
+    RIKU_FRAMESET_CHANNEL_SQUAT = "riku_squat"
+    RIKU_FRAMESET_CHANNEL_STAND = "riku_stand"
+    RIKU_FRAMESET_BACKFIRED     = "riku_backfired"
+
+    # animation names.
+    RIKU_ANIMATION_POWERED = "riku_powered"
+    RIKU_ANIMATION_TIRED   = "riku_tired"
+
+    # animation durations.
+    RIKU_ANIMATION_POWERED_DURATION = 0.2
+    RIKU_ANIMATION_TIRED_DURATION   = 0.35
+
+    # frameset durations.
+    RIKU_CHANNEL_START_DURATION = 0.6
+    RIKU_CHANNEL_SQUAT_DURATION = 1.2
+    RIKU_CHANNEL_STAND_DURATION = 0.9
+    RIKU_BACKFIRED_PERCENTAGE   = 0.25
+
+    # number of animation frames.
+    NUMBER_RIKU_POWERED_FRAMES = 2
+    NUMBER_RIKU_TIRED_FRAMES   = 3
+
+    # riku states.
+    RIKU_STATE_IDLE          = "riku_idle"
+    RIKU_STATE_CHANNEL_START = "riku_start"
+    RIKU_STATE_CHANNEL_SQUAT = "riku_squat"
+    RIKU_STATE_CHANNEL_STAND = "riku_stand"
+    RIKU_STATE_POWERED       = "riku_powered"
+    RIKU_STATE_BACKFIRED     = "rik_backfired"
+    RIKU_STATE_TIRED         = "riku_tired"
+
     # points.
     MAGIC_FORCE_CORRECT_SCORE          = 100
     MAGIC_FORCE_BASE_COMPLETION_BONUS  = 300
@@ -33,6 +66,9 @@ init python:
     # static locations and sizes.
     NUMBER_Y     = 200
     NUMBER_WIDTH = 96
+
+    RIKU_X = 277
+    RIKU_Y = 430
 
     class MagicForce( Minigame ):
         def __init__( self, level_number=1 ):
@@ -66,12 +102,14 @@ init python:
 
             # setup the entities.
             self.current_numbers    = []
+            self.riku               = None
             self.start_screen_hud   = None
             self.stop_screen_hud    = None
             self.score_hud          = None
             self.time_remaining_hud = None
 
             self.create_numbers()
+            self.create_riku()
             self.create_huds()
 
             # get the first number.
@@ -84,6 +122,26 @@ init python:
                 number["renderer"].set_frame( NUMBER_FRAMESET_CORRECT, GameImage( "gfx/magic_force/numbers/number%d-correct.png" % digit ) )
                 number["renderer"].set_frame( NUMBER_FRAMESET_INCORRECT, GameImage( "gfx/magic_force/numbers/number%d-incorrect.png" % digit ) )
                 PrefabFactory.add_prefab( "number%d" % digit, number )
+
+        def create_riku( self ):
+            self.riku             = GameObject()
+            self.riku["renderer"] = GameRenderer()
+            self.riku["behavior"] = RikuBehavior( self.incorrect_timeout )
+            self.riku["renderer"].set_frame( RIKU_FRAMESET_IDLE, GameImage( "gfx/magic_force/riku/riku-idle.png", Anchor.BOTTOM_LEFT ) )
+            self.riku["renderer"].set_frame( RIKU_FRAMESET_CHANNEL_START, GameImage( "gfx/magic_force/riku/riku-channel_start.png", Anchor.BOTTOM_LEFT ) )
+            self.riku["renderer"].set_frame( RIKU_FRAMESET_CHANNEL_SQUAT, GameImage( "gfx/magic_force/riku/riku-channel_squat.png", Anchor.BOTTOM_LEFT ) )
+            self.riku["renderer"].set_frame( RIKU_FRAMESET_CHANNEL_STAND, GameImage( "gfx/magic_force/riku/riku-channel_stand.png", Anchor.BOTTOM_LEFT ) )
+            self.riku["renderer"].set_frame( RIKU_FRAMESET_BACKFIRED, GameImage( "gfx/magic_force/riku/riku-backfired.png", Anchor.BOTTOM_LEFT ) )
+            self.riku["renderer"].add_animation( RIKU_ANIMATION_POWERED,
+                                                 GameAnimation( [ GameImage( "gfx/magic_force/riku/riku-powered%d.png" % frame_index, Anchor.BOTTOM_LEFT )
+                                                                  for frame_index in xrange( NUMBER_RIKU_POWERED_FRAMES ) ],
+                                                                NUMBER_RIKU_POWERED_FRAMES / RIKU_ANIMATION_POWERED_DURATION ) )
+            self.riku["renderer"].add_animation( RIKU_ANIMATION_TIRED,
+                                                 GameAnimation( [ GameImage( "gfx/magic_force/riku/riku-tired%d.png" % frame_index, Anchor.BOTTOM_LEFT )
+                                                                  for frame_index in xrange( NUMBER_RIKU_TIRED_FRAMES ) ],
+                                                                NUMBER_RIKU_TIRED_FRAMES / RIKU_ANIMATION_TIRED_DURATION ) )
+            self.riku["transform"].set_position( RIKU_X, RIKU_Y )
+            self.riku["behavior"].idle()
 
         def create_huds( self ):
             self.start_screen_hud             = GameObject()
@@ -188,11 +246,17 @@ init python:
 
         def get_displayables( self ):
             displayables = []
+            displayables.extend( self.riku["renderer"].get_displayables() )
+            for number in self.current_numbers:
+                displayables.extend( number["renderer"].get_displayables() )
+            displayables.extend( self.score_hud["renderer"].get_displayables() )
             displayables.extend( self.time_remaining_hud["renderer"].get_displayables() )
             return displayables
 
         def render( self, blitter ):
             world_transform = self.get_world_transform()
+
+            self.riku["renderer"].render( blitter, world_transform )
 
             if self.state == MAGIC_FORCE_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, world_transform )
@@ -210,6 +274,9 @@ init python:
                 # update automated parameters.
                 self.number_digits.update( delta_sec )
                 self.time_remaining.update( delta_sec )
+
+                # update riku.
+                self.riku.update( delta_sec )
 
                 if self.number_countdown >= 0:
                     self.number_countdown -= delta_sec
@@ -257,11 +324,13 @@ init python:
                         # will be displayed.
                         number["renderer"].set_frameset( NUMBER_FRAMESET_INCORRECT )
                         self.number_countdown = self.incorrect_timeout
+                        self.riku["behavior"].backfire()
 
         def on_mouse_up( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
                 if self.state == MAGIC_FORCE_GAME_STATE_BEGIN:
                     self.state = MAGIC_FORCE_GAME_STATE_PLAY
+                    self.riku["behavior"].channel_magic()
                 elif self.state == MAGIC_FORCE_GAME_STATE_END:
                     self.quit()
 
@@ -282,3 +351,55 @@ init python:
 
         def is_digit_pressed( self, key ):
             return key in self.valid_keys
+
+    class RikuBehavior( GameObject ):
+        def __init__( self, incorrect_timeout ):
+            self.state             = RIKU_STATE_IDLE
+            self.frame_countdown   = 0
+            self.incorrect_timeout = incorrect_timeout
+
+        def update( self, delta_sec ):
+            if self.state not in (RIKU_STATE_IDLE, RIKU_STATE_POWERED):
+                self.frame_countdown -= delta_sec
+
+            if self.state == RIKU_STATE_CHANNEL_START:
+                if self.frame_countdown <= 0:
+                    self.state           = RIKU_STATE_CHANNEL_SQUAT
+                    self.frame_countdown = RIKU_CHANNEL_SQUAT_DURATION
+                    self.game_object["renderer"].set_frameset( RIKU_FRAMESET_CHANNEL_SQUAT )
+            elif self.state == RIKU_STATE_CHANNEL_SQUAT:
+                if self.frame_countdown <= 0:
+                    self.state           = RIKU_STATE_CHANNEL_STAND
+                    self.frame_countdown = RIKU_CHANNEL_STAND_DURATION
+                    self.game_object["renderer"].set_frameset( RIKU_FRAMESET_CHANNEL_STAND )
+            elif self.state == RIKU_STATE_CHANNEL_STAND:
+                if self.frame_countdown <= 0:
+                    self.power_up()
+            elif self.state == RIKU_STATE_BACKFIRED:
+                if self.frame_countdown <= 0:
+                    self.state           = RIKU_STATE_TIRED
+                    self.frame_countdown = self.incorrect_timeout * (1.0 - RIKU_BACKFIRED_PERCENTAGE)
+                    self.game_object["renderer"].play_animation( RIKU_ANIMATION_TIRED )
+            elif self.state == RIKU_STATE_TIRED:
+                if self.frame_countdown <= 0:
+                    self.game_object["renderer"].stop_animation()
+                    self.channel_magic()
+
+        def idle( self ):
+            self.state = RIKU_STATE_IDLE
+            self.game_object["renderer"].set_frameset( RIKU_FRAMESET_IDLE )
+
+        def channel_magic( self ):
+            self.state           = RIKU_STATE_CHANNEL_START
+            self.frame_countdown = RIKU_CHANNEL_START_DURATION
+            self.game_object["renderer"].set_frameset( RIKU_FRAMESET_CHANNEL_START )
+
+        def power_up( self ):
+            self.state = RIKU_STATE_POWERED
+            self.game_object["renderer"].play_animation( RIKU_ANIMATION_POWERED )
+
+        def backfire( self ):
+            self.state           = RIKU_STATE_BACKFIRED
+            self.frame_countdown = self.incorrect_timeout * RIKU_BACKFIRED_PERCENTAGE
+            self.game_object["renderer"].stop_animation()
+            self.game_object["renderer"].set_frameset( RIKU_FRAMESET_BACKFIRED )
