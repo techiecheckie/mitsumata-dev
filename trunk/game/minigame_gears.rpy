@@ -2,17 +2,15 @@ init python:
     import math
     import pygame
 
-    # Replace with whatever the real gears are.
-    GEAR_L_SIZE = Size(133,131)
-    GEAR_M_SIZE = Size(106,105)
-    GEAR_S_SIZE = Size(85,84)
+    GEAR_L_SIZE = Size(106,106)
+    GEAR_M_SIZE = Size(85,86)
+    GEAR_S_SIZE = Size(70,70)
     
-    # From an image I quickly cropped from one of the complete images
-    AXLE_WIDTH  = 23
-    AXLE_HEIGHT = 24
+    AXLE_WIDTH  = 22
+    AXLE_HEIGHT = 22
     
     # The (starting point of) gear area on the right side of the screen.
-    GEAR_AREA = (400, 40)
+    GEAR_AREA = (450, 60)
     GEAR_AREA_SPACING = (65, 65)
     
     # How far a released (mouse up) gear can be for it to snap to an axle.
@@ -23,114 +21,118 @@ init python:
     # The order doesn't really matter here, but having them in a descending order
     # (top to bottom) makes it easier to find and adjust the correct coordinates
     LEVELS = [
-        [
-         (257, 202, GEAR_L_SIZE),         
-         (105, 345, GEAR_L_SIZE),
+        [ # level 1
+         (282, 245, GEAR_L_SIZE),         
+         (140, 392, GEAR_L_SIZE),
 
-         (312,  96, GEAR_M_SIZE, "locked"),
-         (131, 436, GEAR_M_SIZE, "locked"),
-         (170, 249, GEAR_M_SIZE),         
+         (334, 137, GEAR_M_SIZE, "locked"),
+         (162, 481, GEAR_M_SIZE, "locked"),
+         (200, 284, GEAR_M_SIZE),         
 
-         (237, 118, GEAR_S_SIZE),
-         (190, 328, GEAR_S_SIZE)
+         (262, 161, GEAR_S_SIZE),
+         (216, 356, GEAR_S_SIZE)
         ],
-        [
-         (295, 296, GEAR_L_SIZE),         
-         ( 80, 328, GEAR_L_SIZE),
+        [ # level 2
+         (322, 332, GEAR_L_SIZE),         
+         (119, 361, GEAR_L_SIZE),
 
-         (306,  95, GEAR_M_SIZE, "locked"),
-         (126, 453, GEAR_M_SIZE, "locked"),
-         (236, 154, GEAR_M_SIZE),
-         (317, 198, GEAR_M_SIZE),         
-         (169, 378, GEAR_M_SIZE),
+         (335, 140, GEAR_M_SIZE, "locked"),
+         (162, 482, GEAR_M_SIZE, "locked"),
+         (274, 198, GEAR_M_SIZE),
+         (346, 242, GEAR_M_SIZE),         
+         (200, 410, GEAR_M_SIZE),
 
-         (215, 249, GEAR_S_SIZE),
-         (157, 283, GEAR_S_SIZE),
+         (250, 288, GEAR_S_SIZE),
+         (192, 319, GEAR_S_SIZE),
          
-         ( 90,  99, None),    
-         (139, 175, None),     
-         ( 67, 231, None),         
-         (212, 316, None),  
-         (338, 408, None),
-         (248, 457, None)
+         (128, 144, None),    
+         (173, 215, None),     
+         (106, 269, None),         
+         (245, 351, None),  
+         (365, 439, None),
+         (277, 482, None)
         ],
-        [
-         (126, 236, GEAR_L_SIZE, "locked"),         
-         (323, 198, GEAR_L_SIZE),
-         (101, 346, GEAR_L_SIZE),
-         (222, 432, GEAR_L_SIZE),
+        [ # level 3
+         (164, 274, GEAR_L_SIZE, "locked"),         
+         (349, 231, GEAR_L_SIZE),
+         (145, 374, GEAR_L_SIZE),
+         (250, 460, GEAR_L_SIZE),
 
-         (305,  98, GEAR_M_SIZE, "locked"),
-         (123, 457, GEAR_M_SIZE, "locked"),         
-         (145, 100, GEAR_M_SIZE),
-         (202, 320, GEAR_M_SIZE),         
+         (335, 141, GEAR_M_SIZE, "locked"),
+         (161, 484, GEAR_M_SIZE, "locked"),         
+         (179, 151, GEAR_M_SIZE),
+         (235, 352, GEAR_M_SIZE),         
          
-         ( 82, 158, GEAR_S_SIZE),
-         (204, 165, GEAR_S_SIZE),         
-         (235, 224, GEAR_S_SIZE),
-         (276, 349, GEAR_S_SIZE),
-         (308, 407, GEAR_S_SIZE),
+         (122, 200, GEAR_S_SIZE),
+         (234, 205, GEAR_S_SIZE),         
+         (267, 263, GEAR_S_SIZE),
+         (305, 381, GEAR_S_SIZE),
+         (334, 440, GEAR_S_SIZE),
 
-         (213, 102, None),         
-         ( 60, 282, None),         
-         (278, 291, None),         
-         (168, 378, None),         
-         (317, 489, None)
+         (247, 146, None),         
+         (101, 316, None),         
+         (308, 326, None),         
+         (203, 408, None),         
+         (349, 514, None)
         ],
-        [
-         (215, 277, GEAR_L_SIZE, "locked"),
-         ( 91, 214, GEAR_L_SIZE),
-         (110, 323, GEAR_L_SIZE),
+        [ # level 4
+         (242, 309, GEAR_L_SIZE, "locked"),
+         (122, 241, GEAR_L_SIZE),
+         (142, 340, GEAR_L_SIZE),
 
-         (311, 101, GEAR_M_SIZE, "locked"),
-         (133, 449, GEAR_M_SIZE, "locked"),
-         (141, 129, GEAR_M_SIZE),
-         (338, 281, GEAR_M_SIZE),
-         (315, 366, GEAR_M_SIZE),
-         (211, 407, GEAR_M_SIZE),
+         (335, 138, GEAR_M_SIZE, "locked"),
+         (162, 485, GEAR_M_SIZE, "locked"),
+         (171, 165, GEAR_M_SIZE),
+         (357, 314, GEAR_M_SIZE),
+         (332, 395, GEAR_M_SIZE),
+         (233, 449, GEAR_M_SIZE),
          
-         (334, 439, GEAR_S_SIZE, "locked"),
-         (232,  94, GEAR_S_SIZE),
-         (215, 157, GEAR_S_SIZE),
-         (289, 219, GEAR_S_SIZE),
-         (269, 461, GEAR_S_SIZE),
+         (355, 468, GEAR_S_SIZE, "locked"),
+         (260, 131, GEAR_S_SIZE),
+         (239, 195, GEAR_S_SIZE),
+         (309, 255, GEAR_S_SIZE),
+         (295, 494, GEAR_S_SIZE),
 
-         ( 70, 105, None),
-         (278, 164, None),
-         (170, 187, None),
-         (347, 220, None),         
-         ( 51, 278, None),
-         (249, 349, None),
-         (147, 387, None)
+         (106, 142, None),
+         (302, 198, None),
+         (199, 221, None),
+         (367, 250, None),         
+         ( 85, 310, None),
+         (274, 379, None),
+         (179, 415, None)
         ],
-        [
-         (246, 236, GEAR_L_SIZE),
-         (148, 345, GEAR_L_SIZE),
+        [ # level 5
+         (280, 273, GEAR_L_SIZE),
+         (182, 378, GEAR_L_SIZE),
          
-         (306,  98, GEAR_M_SIZE, "locked"),
-         (302, 324, GEAR_M_SIZE, "locked"),
-         (126, 451, GEAR_M_SIZE, "locked"),
-         (337, 181, GEAR_M_SIZE),
-         (132, 239, GEAR_M_SIZE),
+         (335, 139, GEAR_M_SIZE, "locked"),
+         (325, 352, GEAR_M_SIZE, "locked"),
+         (163, 480, GEAR_M_SIZE, "locked"),
+         (368, 219, GEAR_M_SIZE),
+         (168, 277, GEAR_M_SIZE),
          
-         (111, 166, GEAR_S_SIZE, "locked"),
-         (153, 111, GEAR_S_SIZE),
-         (202, 160, GEAR_S_SIZE),
-         (350, 260, GEAR_S_SIZE),
-         ( 72, 293, GEAR_S_SIZE),
-         ( 72, 391, GEAR_S_SIZE),
+         (149, 206, GEAR_S_SIZE, "locked"),
+         (188, 152, GEAR_S_SIZE),
+         (236, 200, GEAR_S_SIZE),
+         (377, 295, GEAR_S_SIZE),
+         (111, 328, GEAR_S_SIZE),
+         (111, 424, GEAR_S_SIZE),
          
-         (201,  90, None),
-         ( 80, 114, None),
-         (268, 157, None),
-         ( 60, 217, None),
-         (186, 281, None),
-         (199, 400, None),
-         (300, 405, None),
-         (235, 447, None),
-         (327, 483, None)
+         (236, 133, None),
+         (118, 155, None),
+         (300, 198, None),
+         ( 99, 254, None),
+         (220, 315, None),
+         (233, 430, None),
+         (332, 435, None),
+         (268, 476, None),
+         (356, 510, None)
         ]
     ]
+    
+    GEARS_GAME_STATE_BEGIN = "begin"
+    GEARS_GAME_STATE_PLAY  = "play"
+    GEARS_GAME_STATE_END   = "end"
     
     class Axle(GameObject):
       def __init__(self, x, y, required_size):
@@ -209,8 +211,11 @@ init python:
             self.gears = []
             
             level = LEVELS[self.level_number-1]
+            
+            self.state = GEARS_GAME_STATE_BEGIN
 
-            self.create_background()            
+            self.create_background()
+            self.create_huds()            
             self.create_axles(level)
             self.create_gears(level)
 
@@ -218,6 +223,16 @@ init python:
         def create_background( self ):
             self.background = GameObject()
             self.background["renderer"] = GameRenderer(GameImage("gfx/gears/background.jpg"))
+            
+            
+        def create_huds( self ):
+            self.start_screen_hud             = GameObject()
+            self.start_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/gears/start_screen.png" ) )
+            self.start_screen_hud["transform"].set_position( 138, 50 )
+
+            self.stop_screen_hud             = GameObject()
+            self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/gears/stop_screen.png" ) )
+            self.stop_screen_hud["transform"].set_position( 138, 50 )
 
 
         def create_axles(self, level):
@@ -245,7 +260,7 @@ init python:
                     gear.set_locked(True)
                     gear.set_axle(axle)
                     gear["transform"].set_position(x - size.width/2, y - size.height/2)
-                    gear["renderer"] = GameRenderer(GameImage("gfx/gears/" + img + "_.png"))
+                    gear["renderer"] = GameRenderer(GameImage("gfx/gears/perma" + img + ".png"))
                     gear["collider"] = GameBoxCollider(size)
                     self.gears.append(gear)
                     
@@ -272,7 +287,7 @@ init python:
                     y = GEAR_AREA[1] + accum_y
                     
                     accum_y += data[2].height                    
-                    if y > 400:
+                    if y > 500:
                         accum_x += 100
                         accum_y = 0
                         
@@ -285,88 +300,110 @@ init python:
                     
         def render( self, blitter ):
             world_transform = self.get_world_transform()
+
             self.background["renderer"].render( blitter, world_transform )
-            
+
             for axle in self.axles:
-                axle["renderer"].render(blitter, world_transform)
+              axle["renderer"].render(blitter, world_transform)
             
             for gear in self.gears:
-                gear["renderer"].render(blitter, world_transform)
+              gear["renderer"].render(blitter, world_transform)
+            
+            if self.state == GEARS_GAME_STATE_BEGIN:
+              self.start_screen_hud["renderer"].render( blitter, world_transform )                
+            elif self.state == GEARS_GAME_STATE_END:
+              self.stop_screen_hud["renderer"].render( blitter, world_transform )
             
             
         def get_gear_at_position( self, x, y ):
             for gear in self.gears:
-                if gear["collider"].is_point_inside( x, y ):
-                    return gear
+              if gear["collider"].is_point_inside( x, y ):
+                return gear
             
             
         def on_key_down( self, key ):
             if key == pygame.K_ESCAPE:
-                self.quit()
+              self.state = GEARS_GAME_STATE_END
 
 
         def on_mouse_down( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
+              if self.state == GEARS_GAME_STATE_BEGIN:
+                self.state = GEARS_GAME_STATE_PLAY
+              elif self.state == GEARS_GAME_STATE_PLAY:
                 mx, my = self.transform_screen_to_world(mx,my)
                 gear = self.get_gear_at_position(mx,my)
                 if gear and not gear.get_locked():
-                    self.selected_gear = gear
-
+                  self.selected_gear = gear
+              elif self.state == GEARS_GAME_STATE_END:
+                #self.quit()
+                # temporary, or should it do something like this?
+                self.level_number += 1
+                self.create_game()
+                
 
         def on_mouse_up( self, mx, my, button ):
-            if self.selected_gear:
-                gear = self.selected_gear
+            if self.state == GEARS_GAME_STATE_PLAY:
+              if self.selected_gear != None:
                 mx, my = self.transform_screen_to_world(mx,my)
                 
+                potential_axle = None
+                
+                # see if any of the axles are close enough for snapping
                 for axle in self.axles:
                   ax, ay = axle.get_position()
                   dx, dy = mx-ax, my-ay
                   distance = math.sqrt(dx*dx + dy*dy)
-                  if distance < SNAP_DISTANCE and axle.get_gear() == None:
-                    enough_space = True
+                  
+                  if distance < SNAP_DISTANCE:
+                    potential_axle = axle
+                    break
+                 
+                # check for overlapping axles and gears, and if none found,
+                # insert the selected gear into the potential axle
+                if potential_axle != None and potential_axle.get_gear() == None:
+                  fits = True
+                  
+                  for axle in self.axles:
+                    if axle != potential_axle:
+                      bx, by = axle.get_position()
+                      dx, dy = bx-ax, by-ay
+                      
+                      # ignore the axles that are way too far
+                      if dx < 100 and dy < 100:
+                        gear = axle.get_gear()
+                        
+                        if gear != None:
+                          size = gear.get_size()
+                          distance = math.sqrt(dx*dx + dy*dy)
+                          distance -= size.width/2
+                          distance -= self.selected_gear.get_size().width/2
+                          
+                          # allow a small overlap, but if it's too big, break the
+                          # loop and don't even try placing the gear anywhere
+                          if distance < -5:
+                            fits = False
+                            break
+                  
+                  if fits:
+                    self.selected_gear.clear_axle()
+                    self.selected_gear.set_axle(potential_axle)
+                            
+                    x = potential_axle.get_position()[0] - self.selected_gear.get_size().width/2
+                    y = potential_axle.get_position()[1] - self.selected_gear.get_size().height/2
+                            
+                    self.selected_gear.set_position((x,y))
+                    self.selected_gear["transform"].set_position(x, y)
+                      
+                    self.selected_gear = None
+                    self.check_if_complete()
                     
-                    # Check if any of the nearby axles have gears that could overlap
-                    for another_axle in self.axles:
-                      if another_axle != axle:
-                        bx, by = another_axle.get_position()
-                        dx, dy = bx-ax, by-ay
-                        if dx < 100 and dy < 100:
-                          another_gear = another_axle.get_gear()
-                          if another_gear:
-                            size = another_gear.get_size()
-                            distance = math.sqrt(dx*dx + dy*dy)
-                            
-                            # Note: multiplying by 0.76 takes care of the invisible
-                            # areas around the test images I've used here. The 
-                            # final version shouldn't have to do this. 
-                            distance -= (0.76*size.width)/2
-                            distance -= (0.76*self.selected_gear.get_size().width)/2
-                            
-                            if distance < 0:
-                              enough_space = False
-                              break                   
-
-                    if not enough_space:
-                      break
-                    else:
-                      self.selected_gear.clear_axle()
-                      self.selected_gear.set_axle(axle)
-                      
-                      x = axle.get_position()[0] - self.selected_gear.get_size().width/2
-                      y = axle.get_position()[1] - self.selected_gear.get_size().height/2
-                      
-                      self.selected_gear.set_position((x,y))
-                      self.selected_gear["transform"].set_position(x, y)
-                      
-                      self.selected_gear = None
-                      self.check_if_complete()
-                      
-                      return
-                      
-                # Toss the gear back to the area on the right side
-
+                    return
+                    
+                # The gear didn't fit, so toss it back to the area on the right 
+                # side of the screen
                 if mx < GEAR_AREA[0] or mx > GEAR_AREA[0] + 200:
-                  x = GEAR_AREA[0]
+                  x = GEAR_AREA[0] + GEAR_L_SIZE.width/2
                 else:
                   x = mx
 
@@ -382,8 +419,6 @@ init python:
                 self.selected_gear["transform"].set_position(x, y)
                 self.selected_gear.clear_axle()                
                 self.selected_gear = None
-                
-                return
 
             
         def on_mouse_move( self, mx, my ):
@@ -399,8 +434,5 @@ init python:
               axle = gear.get_axle()
               if axle == None or axle.get_required_size() != gear.get_size():
                 return
-                    
-            # testing
-            self.level_number += 1
-            self.create_game()
-
+                
+            self.state = GEARS_GAME_STATE_END
