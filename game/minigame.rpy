@@ -17,8 +17,8 @@ init python:
       elif button == "molegame":
         score = run_minigame( game_type=WhackAMole,
                               x=370, y=115,
-                              game_width=635,
-                              game_height=590 )
+                              game_width=650,
+                              game_height=630 )
         # And do something with it...
 
     hide_minigame_ui(background, False)
