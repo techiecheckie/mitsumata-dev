@@ -13,6 +13,14 @@ init python:
 
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####
 
+    # different states the Cells game can be in.
+    CELLS_GAME_STATE_BEGIN = "cells_begin"
+    CELLS_GAME_STATE_PLAY  = "cells_play"
+    CELLS_GAME_STATE_END   = "cells_end"
+
+    # timing stuff.
+    CELLS_END_GAME_COUNTDOWN = 2.75
+
     # frameset names.
     HEALTHY_FRAMESET  = "healthy"
     INFECTED_FRAMESET = "infected"
@@ -39,10 +47,10 @@ init python:
     INFECTED_CELL_TYPE = "infected"
 
     # how fast cells multiply.
-    HEALTHY_GROWTH_RATE         = 2
-    INFECTED_STAGE1_GROWTH_RATE = 9
-    INFECTED_STAGE2_GROWTH_RATE = 7
-    INFECTED_STAGE3_GROWTH_RATE = 5
+    HEALTHY_GROWTH_RATE         = 0.7
+    INFECTED_STAGE1_GROWTH_RATE = 0.5
+    INFECTED_STAGE2_GROWTH_RATE = 0.3
+    INFECTED_STAGE3_GROWTH_RATE = 0.1
 
     INFECTED_STAGE1_GROWTH_RATE_DURATION = 20
     INFECTED_STAGE2_GROWTH_RATE_DURATION = 40
@@ -79,6 +87,8 @@ init python:
 
     NUMBER_GRID_ROWS = 9
     NUMBER_GRID_COLS = 10
+
+    MAX_VALID_SLOTS = 68
 
     def get_slot_position( row, col ):
         x = col * GRID_CELL_WIDTH + GRID_CELL_WIDTH / 2
@@ -265,16 +275,23 @@ init python:
             self.healthy_growth_rate  = StagedValue( [ (0, HEALTHY_GROWTH_RATE) ] )
 
             # setup game state.
-            self.elapsed_time = 0
+            self.state         = CELLS_GAME_STATE_BEGIN
+            self.elapsed_time  = 0
+            self.end_countdown = CELLS_END_GAME_COUNTDOWN
 
             # setup entities.
-            self.dish           = None
-            self.healthy_cells  = []
-            self.infected_cells = []
-            self.grid           = Grid()
+            self.dish             = None
+            self.healthy_cells    = []
+            self.infected_cells   = []
+            self.grid             = Grid()
+            self.start_screen_hud = None
+            self.stop_screen_hud  = None
+            self.score_hud        = None
+            self.elapsed_time_hud = None
 
             self.create_dish()
             self.create_cells()
+            self.create_huds()
 
             # XXX: remove me.
             self.spawn_cell( HEALTHY_CELL_TYPE )
@@ -308,6 +325,15 @@ init python:
                                                            NUMBER_CELL_ATTACK_FRAMES / CELL_ANIMATION_ATTACK_DURATION ) )
             cell["renderer"].set_collider_visible( False )
             PrefabFactory.add_prefab( CELL_TYPE, cell )
+
+        def create_huds( self ):
+            self.start_screen_hud             = GameObject()
+            self.start_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/cells/start_screen.png" ) )
+            self.start_screen_hud["transform"].set_position( 138, 50 )
+
+            self.stop_screen_hud             = GameObject()
+            self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/cells/stop_screen.png" ) )
+            self.stop_screen_hud["transform"].set_position( 138, 50 )
 
         def spawn_cell( self, cell_type, slot=None, state=None ):
             # if a slot wasn't given, get a random available one.  return
@@ -360,43 +386,68 @@ init python:
 
         def get_displayables( self ):
             displayables = []
-
             for cell in itertools.chain( self.healthy_cells, self.infected_cells ):
                 displayables.extend( cell["renderer"].get_displayables() )
-
             displayables.extend( self.dish["renderer"].get_displayables() )
-
             return displayables
 
         def render( self, blitter ):
             world_transform = self.get_world_transform()
             self.dish["renderer"].render( blitter, world_transform )
 
-            cell_transform = GameTransform( world_transform.x +
-                                            self.dish["transform"].x +
-                                            GRID_OFFSET_X,
-                                            world_transform.y +
-                                            self.dish["transform"].y +
-                                            GRID_OFFSET_Y )
-            for cell in itertools.chain( self.infected_cells, self.healthy_cells ):
-                cell["renderer"].render( blitter, cell_transform )
+            if self.state == CELLS_GAME_STATE_BEGIN:
+                self.start_screen_hud["renderer"].render( blitter, world_transform )
+            elif self.state == CELLS_GAME_STATE_PLAY:
+                cell_transform = GameTransform( world_transform.x +
+                                                self.dish["transform"].x +
+                                                GRID_OFFSET_X,
+                                                world_transform.y +
+                                                self.dish["transform"].y +
+                                                GRID_OFFSET_Y )
+                for cell in itertools.chain( self.infected_cells, self.healthy_cells ):
+                    cell["renderer"].render( blitter, cell_transform )
+            elif self.state == CELLS_GAME_STATE_END:
+                self.stop_screen_hud["renderer"].render( blitter, world_transform )
 
         def update( self, delta_sec ):
-            self.elapsed_time += delta_sec
-#            renpy.log( "Start update (%s)" % self.elapsed_time )
+            if self.state == CELLS_GAME_STATE_PLAY:
+                self.elapsed_time += delta_sec
 
-            # update the growth rate.
-            self.infected_growth_rate.update( delta_sec )
+                # update the growth rate.
+                self.infected_growth_rate.update( delta_sec )
 
-            # update all cells.
-            for cell in itertools.chain( self.infected_cells, self.healthy_cells ):
-                cell.update( delta_sec )
+                # update all cells.
+                for cell in itertools.chain( self.infected_cells, self.healthy_cells ):
+                    cell.update( delta_sec )
 
-#            renpy.log( "End update\n\n" )
+                # healthy cells that have become infected need to be removed
+                # from the healthy list and moved to the infected list.
+                for cell in self.healthy_cells:
+                    if cell["behavior"].type == INFECTED_CELL_TYPE:
+                        self.infected_cells.append( cell )
+
+                self.healthy_cells[:] = [ cell for cell in self.healthy_cells
+                                          if cell["behavior"].type == HEALTHY_CELL_TYPE ]
+
+                # see if it's game over.  add a little delay between detecting
+                # the end game condition and the actual display of the final
+                # score screen.
+                if (len( self.healthy_cells ) == MAX_VALID_SLOTS or
+                    len( self.healthy_cells ) == 0):
+                    self.end_countdown -= delta_sec
+                    if self.end_countdown <= 0:
+                        self.state = CELLS_GAME_STATE_END
 
         def on_key_down( self, key ):
             if key == pygame.K_ESCAPE:
                 self.quit()
+
+        def on_mouse_up( self, mx, my, button ):
+            if button == Minigame.LEFT_MOUSE_BUTTON:
+                if self.state == CELLS_GAME_STATE_BEGIN:
+                    self.state = CELLS_GAME_STATE_PLAY
+                elif self.state == CELLS_GAME_STATE_END:
+                    self.quit()
 
         def on_mouse_down( self, mx, my, button ):
             renpy.log( "Mouse down" )
