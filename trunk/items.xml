@@ -1,54 +1,33 @@
+# Static Items that you have to receive in game.
+
 <items>
   <item id="pda">
     <name>PDA</name>
     <description>A state of the art organizer that Riku received for a senior year gift. He can keep memos, write information, and also play a few simple games on it. A must-have for every tech-savvy teenager.</description>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-    </locations>
   </item>
 
 
   <item id="knife">
     <name>Antique Knife</name>
     <description>A knife dropped by the two assassins sent after Riku. The blade is an extremely hard steel, and the hilt is inlaid with silver, gold and bronze. It has a strange signet on it that Riku doesn't recognize.</description>   
-    <locations>
-      <map decision="any" room="any"  stash="any" />
-    </locations>
-  </item>
+      </item>
 
 
   <item id="wallet">
     <name>Empty Wallet</name>
     <description>A wallet given to Riku by his parents when he was 10 years old. It has a picture of PuniUni on it. Riku likes it so much he refuses to use any other wallet, but he doesn't let his friends see it.</description>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-    </locations>
-  </item>
+      </item>
 
 
   <item id="fullwallet">
     <name>Full Wallet</name>
     <description>A wallet given to Riku by his parents when he was 10 years old. It has a picture of PuniUni on it. Riku likes it so much he refuses to use any other wallet, but he doesn't let his friends see it. It contains a wad of cash.</description>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-    </locations>
-  </item>
-
-  <item id="signet">
-    <name>Church of the Acts Signet</name>
-    <description>A signet that represents the Church of the Acts, the major religion across the world, with headquarters stationed in rural Japan. Though it is most popular in America and Europe, it is rapidly picking up speed in Asia.</description>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-    </locations>
-  </item>
+      </item>
 
   <item id="redjewel">
     <name>Parent's Good Luck Charm</name>
     <description>This is a deep red jewel that Riku was found with as a baby. It seems to have a strange liquid inside, and has a faint glow. Riku's parents kept it hidden from him until now. It isn't made of any material known in science.</description>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-    </locations>
-  </item>
+      </item>
 
   <item id="map">
     <name>Map to Susa's Estate</name>
@@ -58,28 +37,19 @@
   <item id="salve">
     <name>Fire Salve</name>
     <description> A protective salve that helps heal burns and protect from fire abilities.</description>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-    </locations>
-  </item>
+      </item>
 
 
   <item id="ice">
     <name>First Ice Sculpture</name>
     <description>The first sculpture Roman ever managed to do with his ice abilities. It's a bit ugly and malformed, but Roman loves it and doesn't seem to want to fix it.</description>   
-    <locations>
-      <map decision="any" room="any"  stash="any" />
-    </locations>
   </item>
 
 
   <item id="rose">
     <name>Makai Rose</name>
     <description>A special breed of rose created by Soume. It mixes the DNA of several different roses from the human world, and roses from the demon world. It has no thorns and smells like heaven.</description>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-    </locations>
-  </item>
+      </item>
 
 
   <item id="cake">
@@ -91,10 +61,7 @@
   <item id="goodice">
     <name>Improved Ice Sculpture</name>
     <description>An ice sculpture Roman created well after he had decent control of his ice power. It is shaped like a Makai Rose, curiously enough...</description>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-    </locations>
-  </item>
+      </item>
 
 
   <item id="trackseed">
@@ -106,10 +73,7 @@
   <item id="memo">
     <name>Memo to Family</name>
     <description>A note Susa wrote to her little brother. She hasn't sent it, and it's yellowed and aged, as if it were very old.</description>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-    </locations>
-  </item>
+      </item>
 
 
   <item id="pic">
@@ -117,16 +81,150 @@
     <description>A picture of Susa, Liza, and their son twenty years ago. They look happy.</description>
   </item>
 
+<item id="sake">
+    <name>Onigoroshi</name>
+    <description>A powerful sake that is very easy to get drunk off of, hence its name, Demon Killer.</description>
+      </item>
 
 
+  <item id="spice">
+    <name>Cooking Spice</name>
+    <description>A medley of spices made by Roman, crafted from his years of experience as an assistant chef in a kitchen. It smells strong and spicy.</description>   
+  </item>
 
-#Search Items
+
+  <item id="meat">
+    <name>Fresh Meat</name>
+    <description>A variety of fresh, raw meat kept in Susa's kitchen. Roman checked, there isn't any Majin meat there, though a few things look questionable...</description>
+      </item>
+
+
+<items>
+  <item id="license">
+    <name>Marriage License</name>
+    <description>A marriage license for the Kamiya and Akemiya families. The Kamiya woman's brother is signed on as a witness...</description>
+     </item>
+
+
+<items>
+  <item id="schematics">
+    <name>Layout Schematics</name>
+    <description>The layout for the Akemiya and Kamiya households. Gotten by Liza's diligence.</description>
+      </item>
+
+
+<items>
+  <item id="keys">
+    <name>Temple Keys</name>
+    <description>Keys for every nook and cranny in the temple.</description>
+      </item>
+
+
+  <item id="pollen">
+    <name>Pungent Pollen</name>
+    <description>A crushed blend of plants, made specially by Soume. The smell is calming...it makes one want to forget all of his troubles. Soume seems to use this pollen a lot...but all of its effects are not known.</description>
+      </item>
+
+
+<items>
+  <item id="radio">
+    <name>Transreceiver</name>
+    <description>A plant that apparently can work like a little walkie talkie.</description>
+      </item>
+
+<items>
+  <item id="parts">
+    <name>Spare Parts</name>
+    <description>Spare parts for Doctor Osamu's machinery.</description>
+  </item>
+
+<items>
+  <item id="lab">
+    <name>Laboratory Equipment</name>
+    <description>Laboratory materials that Doctor Osamu is teaching Riku to use.</description>
+     </item>
+
+<items>
+  <item id="bcake">
+    <name>Birthday Cake</name>
+    <description>A wonderful vegan birthday cake Riku made for Roman's 100th birthday.</description>
+  </item>
+
+<items>
+  <item id="decor">
+    <name>Birthday Decorations</name>
+    <description>A wonderful floral arrangement Soume made for Roman's 100th birthday.</description>
+      </item>
+
+<items>
+  <item id="gift">
+    <name>Wrapped Gift</name>
+    <description>A pristinely wrapped present for Roman's 100th birthday.</description>
+  </item>
+
+  <item id="gun">
+    <name>Hunt Duck Gun</name>
+    <description>A gun used with a video game called Hunt Duck, which is Susa's favorite game. She broke her old one over Riku's head, and he must pay for it.</description>
+  </item>
+
+  <item id="ios">
+    <name>Io Seed</name>
+    <description>Planting Item.</description>   
+  </item>
+
+
+##############################################################
+
+#Items you can buy or find!
+
+##############################################################
+
+<item id="signet">
+    <name>Church of the Acts Signet</name>
+    <description>A signet that represents the Church of the Acts, the major religion across the world, with headquarters stationed in rural Japan. Though it is most popular in America and Europe, it is rapidly picking up speed in Asia.</description>
+    <locations>
+      <map decision="10" room="any" stash="any" />
+      <store decision="28" />
+	<map decision="21" room="any" stash="any" />
+	<store decision="31" />
+    </locations>
+  </item>
+
 
   <item id="coin">
     <name>Gold Coin</name>
     <description>A coin from the Makai. It's greened from its age, and it looks to have some sort of jewel in the center of the gold.</description>
     <locations>
-      <map decision="any" room="any" stash="any" />
+      <map decision="4" room="any" stash="any" />
+      <store decision="13" />
+	<map decision="20" room="any" stash="any" />
+	<store decision="5" />
+
+    </locations>
+  </item>
+
+
+  <item id="amethyst">
+    <name>Amethyst</name>
+    <description>A purple stone.</description>
+    <locations>
+      <map decision="3" room="any" stash="any"/>
+      <store decision="8" />
+      <map decision="31" room="any" stash="any"/>
+      <store decision="12" />
+    </locations>
+  </item>
+
+
+  <item id="candle">
+    <name>Makai Candles</name>
+    <description>Candles from Makai with special properties.</description>
+    <locations>
+      <map decision="11" room="any" stash="any" />
+      <store decision="26" />
+	<map decision="13" room="any" stash="any" />
+	<store decision="30" />
+
     </locations>
   </item>
 
@@ -134,32 +232,12 @@
   <item id="seal">
     <name>Anti-Majin Seals</name>
     <description>These seals were crafted 2000 years ago as a way to prevent Majin energy from penetrating an area. It severely weakens any Majin who manages to be surrounded by them, and it also prevents things like Tracking Seeds from working. The protective seals the Japanese use today are less effective versions of these ancient seals.</description>
-  </item>
+	<locations>
+       <map decision="7" room="any" stash="any" />
+      <store decision="27" />
+	<map decision="8" room="any" stash="any" />
+	<store decision="23" />
 
-
-  <item id="sake">
-    <name>Onigoroshi</name>
-    <description>A powerful sake that is very easy to get drunk off of, hence its name, Demon Killer.</description>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-    </locations>
-  </item>
-
-
-  <item id="spice">
-    <name>Cooking Spice</name>
-    <description>A medley of spices made by Roman, crafted from his years of experience as an assistant chef in a kitchen. It smells strong and spicy.</description>   
-    <locations>
-      <map decision="any" room="any"  stash="any" />
-    </locations>
-  </item>
-
-
-  <item id="meat">
-    <name>Fresh Meat</name>
-    <description>A variety of fresh, raw meat kept in Susa's kitchen. Roman checked, there isn't any Majin meat there, though a few things look questionable...</description>
-    <locations>
-      <map decision="any" room="any" stash="any" />
     </locations>
   </item>
 
@@ -168,7 +246,11 @@
     <name>Garden Vegetables</name>
     <description>Some vegetables collected from Soume's garden. They have a strong smell, which is odd for vegetables...it is possible that they will grow teeth. Better not eat these.</description>
     <locations>
-      <map decision="any" room="any" stash="any" />
+      <map decision="24" room="any" stash="any" />
+      <store decision="14" />
+	<map decision="22" room="any" stash="any" />
+	<store decision="10" />
+
     </locations>
   </item>
 
@@ -177,16 +259,11 @@
     <name>Herbs</name>
     <description>Herbs that Soume grows in his garden. Like everything Soume grows, it has a very strong, lovely scent. These herbs may be edible, but Soume usually crushes them into powders for pollens.</description>
     <locations>
-      <map decision="any" room="any" stash="any" />
-    </locations>
-  </item>
+      <map decision="27" room="any" stash="any" />
+      <store decision="15" />
+	<map decision="9" room="any" stash="any" />
+	<store decision="22" />
 
-
-  <item id="pollen">
-    <name>Pungent Pollen</name>
-    <description>A crushed blend of plants, made specially by Soume. The smell is calming...it makes one want to forget all of his troubles. Soume seems to use this pollen a lot...but all of its effects are not known.</description>
-    <locations>
-      <map decision="any" room="any" stash="any" />
     </locations>
   </item>
 
@@ -195,7 +272,11 @@
     <name>Aqua Clara</name>
     <description>A potion that replenishes the mind.</description>
     <locations>
-      <location decision="any" room="any" stash="any" />
+      <map decision="28" room="any" stash="any" />
+      <store decision="21" />
+	<map decision="15" room="any" stash="any" />
+	<store decision="16" />
+
     </locations>
   </item>
 
@@ -204,7 +285,11 @@
     <name>Aqua Terra</name>
     <description>A potion that replenishes the body.</description>    
     <locations>
-      <location decision="any" room="any" stash="any" />
+      <map decision="17" room="any" stash="any" />
+      <store decision="25" />
+	<map decision="26" room="any" stash="any" />
+	<store decision="9" />
+
     </locations>
   </item>
 
@@ -213,7 +298,11 @@
     <name>Aqua Vita</name>
     <description>A potion that replenishes the soul.</description>
     <locations>
-      <location decision="any" room="any" stash="any" />
+      <map decision="29" room="any" stash="any" />
+      <store decision="18" />
+	<map decision="5" room="any" stash="any" />
+	<store decision="11" />
+
     </locations>
   </item>
 
@@ -222,7 +311,11 @@
     <name>Mitsumata Flower</name>
     <description>A flower that grows in Japan. It means "unsuspecting love" and is used to make Japanese paper.</description>
     <locations>
-      <location decision="any" room="any" stash="any" />
+      <map decision="9" room="any" stash="any" />
+      <store decision="6" />
+	<map decision="20" room="any" stash="any" />
+	<store decision="24" />
+
     </locations>
 	</item>
 
@@ -230,19 +323,38 @@
     <name>PuniUni</name>
     <description>PuniUni is a favorite icon amongst young children and teenaged girls. He's an adorable sea urchin, and will soon have his own TV show. Riku has a picture of him on his wallet, but he doesn't show it to others in case they make fun of him.</description>
     <locations>
-      <location decision="any" room="any" stash="any" />
+      <map decision="7" room="any" stash="any" />
+      <store decision="19" />
+	<map decision=26" room="any" stash="any" />
+	<store decision="20" />
+
+    </locations>
+  </item>
+
+<items>
+  <item id="bone">
+    <name>Dried Majin Bone</name>
+    <description>Old dried majin bone.</description>
+    <locations>
+      <map decision="18" room="any" stash="any" />
+      <store decision="29" />
+	<map decision="22" room="any" stash="any" />
+	<store decision="7" />
+
     </locations>
   </item>
 
 
-
-#Store Items
-
-  <item id="gun">
-    <name>Hunt Duck Gun</name>
-    <description>A gun used with a video game called Hunt Duck, which is Susa's favorite game. She broke her old one over Riku's head, and he must pay for it.</description>
+<items>
+  <item id="kimono">
+    <name>Brand New Kimono</name>
+    <description>Bought for Soume at the store.</description>
     <locations>
-      <store decision="any" />
+      <map decision="29" room="any" stash="any" />
+      <store decision="7" />
+	<map decision="13" room="any" stash="any" />
+	<store decision="17" />
+
     </locations>
   </item>
 
@@ -251,7 +363,11 @@
     <name>Intro to Majin Biological Processes</name>
     <description>A medical book written by Doctor Osamu, to help others learn about Majin biology. This is the first book in the series.</description>
     <locations>
-      <store decision="any" />
+      <map decision="8" room="any" stash="any" />
+      <store decision="11" />
+	<map decision="31" room="any" stash="any" />
+	<store decision="9" />
+
     </locations>
   </item>
 
@@ -260,7 +376,11 @@
     <name>Adv. Majin Biological Processes</name>
     <description>A medical book written by Doctor Osamu to help others learn about Majin biology. This is the second book in the series.</description>
     <locations>
-      <store decision="any" />
+      <map decision="17" room="any" stash="any" />
+      <store decision="29" />
+	<map decision="4" room="any" stash="any" />
+	<store decision="17" />
+
     </locations>
   </item>
 
@@ -269,7 +389,11 @@
     <name>Majin Organ Systemic Function</name>
     <description>An advanced textbox written by Doctor Osamu to help new Majin doctors learn about Majin biology. It focuses on organs and systemic functions.</description>   
     <locations>
-      <store decision="any" />
+      <map decision="11" room="any" stash="any" />
+      <store decision="27" />
+	<map decision="21" room="any" stash="any" />
+	<store decision="10" />
+
     </locations>
   </item>
 
@@ -278,16 +402,74 @@
     <name>Prophesies and Falsehoods</name>
     <description>A historical textbook written by Doctor Osamu about prophesies amongst the underground Majin world.</description>
     <locations>
-      <store decision="any" />
+      <map decision="28" room="any" stash="any" />
+      <store decision="12" />
+	<map decision="24" room="any" stash="any" />
+	<store decision="8" />
+
     </locations>
   </item>
 
+  <item id="book5">
+    <name>Book5</name>
+    <description>Blah blah this is book 5's desc.</description>
+    <locations>
+      <map decision="11" room="any" stash="any" />
+      <store decision="31" />
+	<map decision="27" room="any" stash="any" />
+	<store decision="26" />
+
+    </locations>
+  </item>
+
+
+  <item id="book6">
+    <name>Book6</name>
+    <description>This is book 6's desc.</description>
+    <locations>
+      <map decision="3" room="any" stash="any" />
+      <store decision="22" />
+	<map decision="10" room="any" stash="any" />
+	<store decision="20" />
+
+    </locations>
+  </item>
+
+
+  <item id="book7">
+    <name>Book7</name>
+    <description>This is book 7's desc.</description>
+    <locations>
+      <map decision="23" room="any" stash="any" />
+      <store decision="5" />
+	<map decision="17" room="any" stash="any" />
+	<store decision=30" />
+
+    </locations>
+  </item>
+
+
+  <item id="book8">
+    <name>Book8</name>
+    <description>This is book 8's desc.</description>
+    <locations>
+      <map decision="4" room="any" stash="any" />
+      <store decision="21" />
+	<map decision="31" room="any" stash="any" />
+	<store decision="13" />
+
+    </locations>
+  </item>
 
   <item id="garden">
     <name>Gardening Set</name>
     <description>A set of gardening tools put together by Soume. There's some soil, a small shovel, a pot and some seeds.</description>
     <locations>
-      <store decision="any" />
+      <map decision="20" room="any" stash="any" />
+      <store decision="25" />
+	<map decision="15" room="any" stash="any" />
+	<store decision="14" />
+
     </locations>
   </item>
 
@@ -296,7 +478,11 @@
     <name>Cellular Phone</name>
     <description>A state of the art cellular phone with all the bells and whistles.</description>
     <locations>
-      <store decision="any" />
+      <map decision="5" room="any" stash="any" />
+      <store decision="18" />
+	<map decision="13" room="any" stash="any" />
+	<store decision="28" />
+
     </locations>
   </item>
 
@@ -305,7 +491,11 @@
     <name>State of the Art Video Game</name>
     <description>The new video game system that recently came out in Japan. Susa doesn't like it at all, and sticks with the old video game system.</description>
     <locations>
-      <store decision="any" />
+      <map decision="29" room="any" stash="any" />
+      <store decision="19" />
+	<map decision="26" room="any" stash="any" />
+	<store decision="7" />
+
     </locations>
   </item>
 
@@ -314,7 +504,11 @@
     <name>Hyper Strength Potion</name>
     <description>A potion drafted by the owner of the little Majin shop. No clue what's in it, but it seems to invigorate you when you hold it.</description>
     <locations>
-      <store decision="any" />
+      <map decision="7" room="any" stash="any" />
+      <store decision="24" />
+	<map decision="27" room="any" stash="any" />
+	<store decision="6" />
+
     </locations>
   </item>
 
@@ -323,20 +517,29 @@
     <name>Hyper Elemental Potion</name>
     <description>A potion drafted by the owner of the little Majin shop. No clue what's in it, but it seems to invigorate you when you hold it.</description>   
     <locations>
-      <store decision="any" />
+      <map decision="22" room="any" stash="any" />
+      <store decision="15" />
+	<map decision="4" room="any" stash="any" />
+	<store decision="23" />
+
     </locations>
   </item>
 
+################################################################
 
+#Planting Items You can Find or Buy
 
-#Planting Items
+################################################################
 
   <item id="aos">
     <name>Ao Seed</name>
     <description>Planting Item.</description>
     <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
+      <map decision="24" room="any" stash="any" />
+      <store decision="16" />
+	<map decision="3" room="any" stash="any" />
+	<store decision="28" />
+
     </locations>
   </item>
 
@@ -345,8 +548,11 @@
     <name>Bo Seed</name>
     <description>Planting Item.</description>
     <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
+      <map decision="10" room="any" stash="any" />
+      <store decision="31" />
+	<map decision="28" room="any" stash="any" />
+	<store decision="13" />
+
     </locations>
   </item>
 
@@ -355,8 +561,11 @@
     <name>Co Seed</name>
     <description>Planting Item.</description>   
     <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
+      <map decision="13" room="any" stash="any" />
+      <store decision="6" />
+	<map decision="18" room="any" stash="any" />
+	<store decision="21" />
+
     </locations>
   </item>
 
@@ -364,8 +573,11 @@
     <name>Do Seed</name>
     <description>Planting Item.</description>
     <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
+      <map decision="10" room="any" stash="any" />
+      <store decision="20" />
+	<map decision="15" room="any" stash="any" />
+	<store decision="25" />
+
     </locations>
   </item>
 
@@ -374,8 +586,11 @@
     <name>Eo Seed</name>
     <description>Planting Item.</description>
     <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
+      <map decision="17" room="any" stash="any" />
+      <store decision="27" />
+	<map decision="9" room="any" stash="any" />
+	<store decision="24" />
+
     </locations>
   </item>
 
@@ -384,8 +599,11 @@
     <name>Fo Seed</name>
     <description>Planting Item.</description>   
     <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
+      <map decision="5" room="any" stash="any" />
+      <store decision="10" />
+	<map decision="26" room="any" stash="any" />
+	<store decision="17" />
+
     </locations>
   </item>
 
@@ -393,8 +611,11 @@
     <name>Go Seed</name>
     <description>Planting Item.</description>
     <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
+      <map decision="20" room="any" stash="any" />
+      <store decision="5" />
+	<map decision="22" room="any" stash="any" />
+	<store decision="11" />
+
     </locations>
   </item>
 
@@ -403,35 +624,33 @@
     <name>Mo Seed</name>
     <description>Planting Item.</description>
     <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
+      <map decision="3" room="any" stash="any" />
+      <store decision="8" />
+	<map decision="29" room="any" stash="any" />
+	<store decision="14" />
+
     </locations>
   </item>
 
-
-  <item id="ios">
-    <name>Io Seed</name>
-    <description>Planting Item.</description>   
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
-  </item>
 
   <item id="jos">
     <name>Jo Seed</name>
     <description>Planting Item.</description>   
     <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
+      <map decision="24" room="any" stash="any" />
+      <store decision="11" />
+	<map decision="18" room="any" stash="any" />
+	<store decision="29" />
+
     </locations>
   </item>
 
 
+##############################################################
 
+#Full grown plants that must be HARVESTED
 
-#Full grown plants
-
+##############################################################
 
   <item id="aop">
     <name>Ao Plant</name>
@@ -530,9 +749,11 @@
   </item>
 
 
+################################################################
 
+#Monster plants that must be harvested
 
-#Monster plants
+################################################################
 
 
   <item id="aom">
