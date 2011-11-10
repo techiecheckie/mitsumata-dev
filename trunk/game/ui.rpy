@@ -117,8 +117,8 @@ init python:
     (ui_hp_x, ui_mp_x) = calculate_new_main_ui_positions(hp, mp)
     
     renpy.transition(MoveTransition(1.0))
-    renpy.show("ui_mp_bar", at_list = [Position(xpos=ui_mp_x, ypos=572), Transform(anchor=(1.0, 0.0))])
-    renpy.show("ui_hp_bar", at_list = [Position(xpos=ui_hp_x, ypos=571), Transform(anchor=(1.0, 0.0))])
+    renpy.show("ui_mp_bar", at_list = [Position(xpos=ui_mp_x, ypos=572), Transform(anchor=(1.0, 0.0))], zorder=8)
+    renpy.show("ui_hp_bar", at_list = [Position(xpos=ui_hp_x, ypos=571), Transform(anchor=(1.0, 0.0))], zorder=8)
     
     renpy.pause(1.0)
     
