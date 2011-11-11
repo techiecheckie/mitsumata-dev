@@ -4,10 +4,13 @@
 #Currently at 2256 out of 3506
 # was editing at Kaz28.
 # Nearly done with this arc.
+#At label Kaz20 and ND=16
 
 #Scene w/Riku asking Kaz about his past.
 
 label kaz1:
+    #Riku talks to Kazu about the mission, Cell Game II. Riku gives Kazu
+    # the Makai Rose. Kazu blames Soume.
     "I could go check on the doctor. He was the most shaken up."  
     "Seeing him freak out...well, it's good to know I wasn't the only one."
     
@@ -203,7 +206,7 @@ label minigame10:
     "I wanted to ask him about the drinking blood thing, but he’s alrady back to work. I’ll ask him later."
     
     r "See ya later, Doc."
-
+    $ decison ="9"
 menu:
     "Search.":
         call show_map
@@ -215,6 +218,7 @@ menu:
         call research_loop
         $journal.unlock_entry("something", "031")    
 label kaz2:
+    #Roman tries to convince Kazu to lighten up on Soume.
     ro "Doctor Osamu!"
         
     k "What?  Oh…you?"
@@ -309,8 +313,14 @@ label kaz2:
     k "Well, Roman, perhaps you should talk to your beloved...'friend' about it. And tell him to hurry and finish it as well, or I might sample his supply."
     
     "Kazutaka walks off laughing and talking to himself. I’m trying to think of a time I’ve seen him happier, but, unfortunately, nothing comes to mind."
-
+    ################
+    call su1 #Susa has a phone convo with Liza about their son.
+    #################
 label kaz3:
+    #Roman and Soume talk about the convo with Kazu and his not easing up on Soume.
+    #Roman explains his veganism, moralizes at Soume, and angers Soume.
+    $unlock_entry("Soume","082")
+    $unlock_entry("Majin","049")
     ro "It does smell wonderful here, you know."
     
     s "Why, certainly.  You can thank my precious children for that."
@@ -571,14 +581,22 @@ label kaz3:
     "He puts his hand on top of mine. I should run off screaming. Animal meat I can tolerate, but human? Other Majin?"
     "But he smells so powerful, and this is Soume we're talking about..."
     "What should I do?"
-    
-    #DECISION:
-    #Pull away: This will divert to the Soume/Roman scenes at the end of the game (instead of Kazutaka's ending, and go to a bad ending where Soume will kill Roman, as well.
-    ro "I'm sorry Soume...I can't...I can't---"
-    
+    $bc1 = False
+menu:
+    "Pull away.": 
+    #This will divert to the Soume/Roman scenes at the end of the game (instead of Kazutaka's ending, and go to a bad ending where Soume will kill Roman, as well.
+        jump pullaway
     "And with that, I leave the garden. Eating people, even if there is nothing else...I can't abide by it."
-    #Stay close: Continue to Scene 55b.
-    
+    "Stay close.":
+        jump kaz3b
+
+label pullaway:
+    ro "I'm sorry Soume...I can't...I can't---"
+    ro "I can't surround myself with that. I've suffered enough already."
+    s "............."
+    s "I see."
+    $ bc1 = True
+    jump kaz4
 label kaz3b:
     "I stay within his grasp, and allow him to hold me."
     "This is the right decision. There are times where one must throw away their ideas to accommodate the fact that others, different from us, must co-exist with us."
@@ -600,7 +618,7 @@ label kaz3b:
     "For the first time, I feel like I have a chance to touch this...otherwordly being that Soume is."
     
     ro "You're special to me too."
-
+    $ decision = "10"
 menu:
     "Search.":
         call show_map
@@ -620,8 +638,7 @@ label kaz4:
     
     su "This one should be just fine."
     
-#Mission:
-#Take Soume to the mall and buy him some new clothing.
+    $show_message("Mission: Take Soume to the mall and buy him some new clothing. He's been wearing his for twenty years already.","medium")
 
     ro "...b-but...this...is a mission?"
     
@@ -640,6 +657,7 @@ label kaz4:
     ro "Well, you need some new clothes! All of yours are so similar..."
     
     s "What’s wrong with them?"
+    $bc2 = False
     
 menu:
     "They're too girly...":
@@ -648,18 +666,21 @@ menu:
     "You need more color variety.": 
          jump colorvar
 label toogirly:
-    ro "They're too girly."
+    ro "They're too...you know...they make you look like a girl."
     
     #Soume sounds hurt.
-    s "They are...?"
+    s "T-they do...?"
     
     "Ouch. The look on his face is really sore."
     ro "We'll get you some pants, that's all, for variety!"
+    $ bc2 = True
     jump kaz4b
     
 label colorvar:    
     
-    ro "You just need more color. Pink and green is great, but blues and purples would really offset your hair and eyes."
+    ro "You just need more color." 
+    ro "Pink and green is great, but blues and purples would really offset your hair and eyes."
+    s "Blues and purples...?"
     jump kaz4b
 
 label kaz4b:       
@@ -799,7 +820,7 @@ label kaz4b:
     ro "Any luck?"
     
     Clerk "I'm afraid not. He's just a bit too tall for our tallest size...perhaps try the store a little farther down..."
-
+    $bc3 = False
 menu:
     "Try the kimono store, like Soume wanted.":
         jump kaz5
@@ -813,10 +834,11 @@ label kaz5a:
     s "I'd rather not. Can we just go home?"
     
     ro "...oh...of course..."
+    $bc3 = True
     jump kaz6
     
 label kaz5:
-    ro "I'm sorry, Soume. I didn't know that would happen. How about it we try the kimono store?"
+    ro "I'm sorry, Soume. I didn't know it would be so difficult. How about if we try the kimono store?"
     
     "Soume purses his lips and thinks very carefully."
     
@@ -966,6 +988,7 @@ label kaz5:
     "Soume winks at me and, with renewed energy, runs back up the stairs to explore the other side of the mall."
     "This might be the happiest I’ve ever been in my life."
 
+    $inventory.unlock_item("kimono")
 label kaz6:
     m  "Damn. Hmph."
     
@@ -1019,7 +1042,7 @@ label kaz6:
     na "With you."
     
     m "Very well then. Here is the new plan..."
-    
+    $ decision ="11"
 menu:
     "Search.":
         call show_map
@@ -1030,7 +1053,55 @@ menu:
     "Research.":
         call research_loop
         $journal.unlock_entry("something", "031")    
+
+label kaz7a:
+    s "Good morning, Riku. Are you ready to move on to the next level of your training?"
+    r "The next level, huh?"
+    r "Alright. Lay it on me!"
+    #Strength Training I
+label kaz7b:
+        r "Hey Soume, how come our training has changed all of a sudden?"
+        r "We didn't used to do this kind of stuff before."
+        s "Well, your powers still get out of hand here and there."
+        s "Training your body, your spirit and your mind will help you to put some of that wayward energy toward a very powerful focus."
+        r "I thought I was getting the hang of this stuff..."
+        s "You are, Riku, make no mistake."
+        s "There is just always room for improvement."
+        r "Alright. Let's go a little while longer..."
         
+label kaz7c:
+    "Sunday. My favorite day. I just get to lie around doing nothing."
+    r "Teeeeeeveeeeeeee, teeeeeeeveeeeeeee..."
+    "I head for the main room, the only room with a decent television in the whole joint."
+    r "....aw."
+    "Miss Susa's already on it."
+    "Doesn't she have a TV in her room? Why does she gotta get on THIS one out HERE?"
+    su "DIE! DIE DIE DIE!"
+    su "HA! EAT THAT! TAKE IT AND SHOVE IT RIGHT UP YOUR---"
+    "...interesting TV."
+    #play sound footsteps
+    r "Oh cool! You've got one of those game things!"
+    "It looks like some kind of shooting game...like the one I had to replace the gun for."
+    "She's pretty good at it."
+    su "BLAM BLAM BLAM BLAM BLAM! YEAH SUCK ON THAT!"
+    "It's kind of funny to watch her."
+    #play sound negative game over
+    su "AWWWWWWW FUCK! What the HELL! I HIT THAT!"
+    su "Did you SEE THAT? I FUCKING HIT IT! FFFF---"
+    #play sound cracking
+    ".............."
+    r "....guh...."
+    "I better run. She just stepped on the video game box and I know it's gonna be my faul---"
+    su "Kid, get over here."
+    "..........damnit."
+    r "...I-I-I---"
+    su "Cool your damn jets. I do this all the time."
+    su "C'mere. You got little tiny hands, it'll be easier for you to figure it out."
+    r "...oh--I see. The pieces just popped out."
+    su "You mind?"
+    r "....mmrph. My hands aren't that small."
+    su "Sure kid. Whatever makes you feel good."
+    #Gear Puzzle II
 label kaz7:
     k  "No.  No, that can’t be right…"
     k  "I’m sure I checked all the variables."
@@ -1119,7 +1190,23 @@ label kaz7:
     #play footsteps
     
     k  "Hmph. Keep that smile on your face while you still have the opportunity, Soume."
-
+    $ decision ="12"
+menu:
+    "Search.":
+        call show_map
+    "Sleep.":
+        call sleep
+    "Store.":
+        call shop_loop
+    "Research.":
+        call research_loop
+        $journal.unlock_entry("something", "031")
+        
+label kaz8a:
+    s "Good morning, Riku. Are you ready to move on to the next level of your training?"
+    r "The next level, huh?"
+    r "Alright. Lay it on me!"
+    #Agility Training I    
 label kaz8:
     #play sound  Knocking
     
@@ -1245,18 +1332,9 @@ label kaz8:
     k "But I cannot face any of them alone. Proof. I need proof."
     k  "And I need someone else to confide in…someone to help me."
     k "Hmmm."
-    $ decision = "7"
-menu:
-    "Search.":
-        call show_map
-    "Sleep.":
-        call sleep
-    "Store.":
-        call shop_loop
-    "Research.":
-        call research_loop
-        $journal.unlock_entry("something", "031")    
+   
 label kaz9:
+    #Roman vegetarian food scene!
     r " Ehh…what did you say this, er, thing is?  Somethin’ about this don’t look right to me…"
     
     #Roman chuckles.
@@ -1294,7 +1372,13 @@ label kaz9:
     "Roman is looking at me with a big grin on his face."
     "Why would anyone want to make fake meat? It's fake. Fake is like a secret code for 'shittier than the original'."
     "Plus, the color in this thing is all off.  Smell too."
-    
+menu:
+        "Riku, you can do this.":
+            jump eatthefood
+        "AGH just NO WAY!":
+            jump canteatit
+       
+label eatthefood:            
     r  "Alright.  Ah, well…here I go."
     
     "I close my eyes and prepare for what I can only assume will be the worst thing I’ve ever tasted."
@@ -1324,7 +1408,42 @@ label kaz9:
     r  "Relax, Roman! I’m just teasing ya."
     ro "Oh, yes. Of course. I knew that."
     "Poor naive bastard. I don't know how he lives with Soume's brand of teasing."
-
+    $inventory.unlock_item("book5")
+    jump kaz10a
+    
+label canteatit:
+    "I stare at the guck in front of me. It stares back."
+    "Mocking me."
+    "Haunting me with its puce green gloppy glare."
+    "I gag."
+    
+    r "Sorry, Roman, I can't. There are just some things I can't do and THIS IS IT."
+    ro "You haven't even tried it!"
+    r "It SMELLS. I can't, Roman. I promise I will make the cake thing up to you, but I CAN'T--"
+    
+    "I am really going to puuuuuuuuuuuuuke---"
+    jump kaz10a
+    
+label kaz10a:    
+    $ decision ="13"
+menu:
+    "Search.":
+        call show_map
+    "Sleep.":
+        call sleep
+    "Store.":
+        call shop_loop
+    "Research.":
+        call research_loop
+        $journal.unlock_entry("something", "031")
+        
+label kaz10b:
+    k "Oh Riku~ I need a little bit of your assistance, if you don't miiiiiind~"
+    "Uh oh."
+    k "Nothing you haven't done before, but I have this other little tiny mechanism that needs a little fixer-upper~"
+    r "Alright, lemme see it."
+    #GEAR PUZZLE III
+    
 label kaz10:    
     su  "Oi!  Hey brat, get over here."
     
@@ -1353,7 +1472,7 @@ label kaz10:
     
     #play sound  -smacking noises-
     
-    r  "OW OW OW.  Please stop that…"
+    r  "OW OW OW!"
     
     su  "It's supposed to be a surprise, so quit fucking screaming about it!"
     
@@ -1379,22 +1498,11 @@ label kaz10:
     call birthdaygame
 
     
-label kaz10b:
+label kaz10c:
     
     su  "Hurry up and get off to bed. Wake your ass up early tomorrow and make sure Roman stays in his room until at least nine."
     
     r  "Got it."
-    
-    $ decision = "8"    
-menu:
-    "Search.":
-        call show_map
-    "Sleep.":
-        call sleep
-    "Store.":
-        call shop_loop
-    "Research.":
-        $journal.unlock_entry("something", "031")
 
 label kaz11:
     "I set my alarm extra early today for Roman's party."
@@ -1693,7 +1801,7 @@ label kaz13:
 menu:
     "I...can't, Liza. There's...someone...":
         jump kaz13a
-    "I'm helping out here...it's best if I stayed.":
+    "Move?":
         jump kaz13b
     
 label kaz13a:
@@ -1707,21 +1815,12 @@ label kaz13a:
     ro "I will. I promise."
     jump kaz13c
 label kaz13b:    
-    ro  "Liza…I would love to.  But I can’t.  Not now, at least.  Miss Susa is starting to depend on me to assist in the training."  
-    l  "…and you’re happy here?"
-    ro  "Oh, I absolutely love it!  I can’t remember being happier."
-    
-    l  "And you are certain of this?  Your decision, that is?"
-    ro "Yes. I want to help others, like this place has helped me."
-    l "Well, I can't argue with that, can I?"
-    ro "I'd move in with you in a moment otherwise!"
-    l "It's not a problem."
-    jump kaz13c
+    jump neuend00
     
 label kaz13c:    
     l "I'll need to go have my conference with Susa, but I did want to give you this."
     
-    $inventory.unlock_item("something or other")
+    $inventory.unlock_item("gift")
     
     ro "Oh Liza, you didn't have to."
     l "But I wanted to, so take it and keep it."
@@ -1737,6 +1836,7 @@ menu:
    
 label sobirtalk:
     "STICK THE SOUME/ROMAN YOUKO DISCUSSION HERE."
+    $unlock_entry("Majin","046")
     jump kaz13e
     
 label ribirtalk:
@@ -1768,13 +1868,9 @@ label ribirtalk:
     ro "Night, Riku."
     jump kaz13e
     
-label kaz13d:
-    "I can't. I'm such an idiot."    
-    "Put some more stuff here."
-    
 label kaz13e:
      "It's really late now. Time for bed."
-     $ decision = "9"
+     $ decision = "14"
 menu:
     "Search.":
         call show_map
@@ -1907,6 +2003,26 @@ label kaz15:
     
     l "Then, Doctor, I bid you good evening."
     
+label scavenge:
+
+    "I might be young, but I have no idea how I get dragged into these things..."
+    ro  "Oh, please, come on?  I promise you that you will enjoy it!"
+    
+    r  "Ugh. Aren't you too old for this?"
+    
+    ro  "Come on. It's a scavenger hunt. The bonus is supposed to be very good."
+    
+    r  "I told ya.  I wasn’t gonna do it.  I just wanted to catch a quick nap.  Why didn’t you just partner with Soume?"
+    
+    ro  "Ah.  Well, Soume helped Miss Susa set it up.  He very well can’t participate in the scavenger hunt if he knows where some of the items are at."
+    
+    r  "Bah!"
+    
+    ro  "C'mon. Partner up with me!"
+    
+    r  "..........."
+    call scav_hunt    
+    
 label kaz16:
     #play sound Knocking at door-
 
@@ -1988,11 +2104,11 @@ label kaz16:
     k  "Besides, Miss Susa has been so eager for me to find an assistant for so long."  
     k "What do you say?"
     
-#menu: 
-        #"Take the job."
-        #        jump kazwhatever
-        #"Refuse."
-        #        jump somemainscene
+menu: 
+        "Take the job."
+                jump kaz16b
+        "Refuse."
+                jump somemainscene
 
 label kaz16b:        
     r  "Okay, I'll do it.  When do you want me to be here tomorrow?"
@@ -2009,7 +2125,23 @@ label kaz16b:
     
     r "......"
     r "I do not get this guy..."
-    $ decision = "10"
+    
+label kaz16c:
+        "Mamoru flirts with someone here."
+menu:
+    "Flirt with a chick."
+        jump chickflirt
+    "Flirt with a dude."
+        jump dudeflirt
+label chickflirt:
+    "Mamoru flirts with the girl then eats her yay!"
+    jump dec15
+label dudeflirt:
+      "Mamoru flirts with the dude and then eats him yay!"
+      jump dec15      
+    
+label dec15:      
+    $ decision = "15"
 menu:
     "Search.":
         call show_map
@@ -2020,44 +2152,8 @@ menu:
     "Research.":
         call research_loop
         $journal.unlock_entry("something", "031")
-        
-label nexttraining:
-    s "Good morning, Riku. Are you ready to move on to the next level of your training?"
-    r "The next level, huh? So I can gain better control of my powers?"
-    s "Precisely."
-    r "Alright. Lay it on me!"
-#stick the next level of some minigame here
     
-    
-label kaz17:
-
-    "I might be young, but I have no idea how I get dragged into these things..."
-    ro  "Oh, please, come on?  I promise you that you will enjoy it!"
-    
-    r  "Ugh. Aren't you too old for this?"
-    
-    ro  "Come on. It's a scavenger hunt. The bonus is supposed to be very good."
-    
-    r  "I told ya.  I wasn’t gonna do it.  I just wanted to catch a quick nap.  Why didn’t you just partner with Soume?"
-    
-    ro  "Ah.  Well, Soume helped Miss Susa set it up.  He very well can’t participate in the scavenger hunt if he knows where some of the items are at."
-    
-    r  "Bah!"
-    
-    ro  "C'mon. Partner up with me!"
-    
-    r  "..........."
-menu:
-        "Do the hunt. The surprise might be cool.":
-            call scav_hunt
-        "No way. This is kiddy stuff.":
-            jump sorryno
-            
-label sorryno:
-    r "No. I wanna watch TV instead."
-    ro "You're no fun..."
-    
-label kaz18:      
+label kaz17:      
     "The next morning, I'm in the lab, smelling like decaying...something."
         
     k  "Riku, please, focus.  I cannot trust you to handle my projects if you can’t even pay attention for a couple of minutes."
@@ -2106,7 +2202,7 @@ label cellgame2suc:
     r "Will do."
     "I really, really don't get him."
     
-label kaz19:
+label kaz18:
     
     k  "Hrm…bizarre."
     
@@ -2150,6 +2246,13 @@ label kaz19:
     #play sound Dial-tone, slamming noise-
     
     k  "DAMNIT!"
+    
+label kaz19:
+        "Kazu goes to the store and gets accosted oh noes very bad."
+        $inventory.unlock_item("book6")
+    
+label kaz19b:
+    "Kaz throws a tantrum and nearly destroys the Makai Rose Riku gave him."
     
 label kaz20:
     su  "Yes.  No, I agree, Liza.  I have a couple of things left I need to do, but I am almost ready.  I will contact you when I am leaving."
