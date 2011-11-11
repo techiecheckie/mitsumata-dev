@@ -466,15 +466,14 @@ define na = Character('Naomi', show_two_window=False )
 #*****************************************
 # DYNAMIC CHARACTER NAMING
 #*****************************************
-init:
-    $ m = DynamicCharacter ("Mamoru")
-    $ s = DynamicCharacter ("Soume")
-    $ su = DynamicCharacter ("Susa")
-    $ ro = DynamicCharacter ("Roman")
-    $ n = DynamicCharacter ("Norah")
-    $ k = DynamicCharacter ("Kazu")
-    $ a = DynamicCharacter ("Audra")
-    $ na = DynamicCharacter ("Naomi")
+#init:
+#    $ m = DynamicCharacter ("Mamoru")
+#    $ s = DynamicCharacter ("Soume")
+#    $ ro = DynamicCharacter ("Roman")
+#    $ n = DynamicCharacter ("Norah")
+#    $ k = DynamicCharacter ("Kazu")
+#    $ a = DynamicCharacter ("Audra")
+#    $ na = DynamicCharacter ("Naomi")
 
 
     # Set "maid_name" to mean something early on in the game.
@@ -638,11 +637,11 @@ $ magpot = inventory.item_unlocked("magpotion")
 #--------------------------------
 
 label start: 
-menu:
-        "Jump ahead for a test.":
-                jump Scene5
-        "Start from beginning.":
-                jump Scene1
+#menu:
+#        "Jump ahead for a test.":
+#                jump Scene20
+#        "Start from beginning.":
+#                jump Scene1
                 
 label otherstuff:    
     scene bg blackscr
@@ -1548,7 +1547,7 @@ label Scene8:
     m "Nngh." 
     #stop sound
     m "Oi. Chemical burns? How positively droll."
-    $journal.unlock_entry("Mamoru","021")
+    $unlock_entry("Mamoru","021")
     
     $ Roman = "Awkward Kid"
     #hide r scare
@@ -2085,8 +2084,8 @@ label Scene13:
     ro "Well, first—here."
     
     $inventory.unlock_item("map")
-    $inventory.unlock_entry("Humans", "055")
-    $journal.unlock_entry("Majin", "043")
+    $unlock_entry("Humans", "055")
+    $unlock_entry("Majin", "043")
     
     ro "It’s a map of the whole place, and some basic information on Majin. You can just put it in your palm pilot if you want to read it later."
         
@@ -2139,7 +2138,7 @@ label Scene13:
     ro "Yes, but...that’s because as a Majin, you’re still essentially a baby. Approximately 80 or so years from physical maturity."
     
     r "...80 years before I grow up?"
-    $journal.unlock_entry("Majin","048")
+    $unlock_entry("Majin","048")
     
     ro "Something like that, yes."
     
@@ -2170,8 +2169,8 @@ label Scene13:
     ro "Some of them do. I’m not sure what they’re called...there doesn't seem to be a word for them."
     ro "But a lot of them side with that Church of the Acts."
     
-    $journal.unlock_entry("Humans", "056")
-    $journal.unlock_entry("Church of the Acts", "041")
+    $unlock_entry("Humans", "056")
+    $unlock_entry("Church of the Acts", "041")
     
     r "That new popular religion that opened up in the country?"
     
@@ -2199,7 +2198,7 @@ label Scene13:
     ro "The people here train, learn about the human world and how to survive. So that we can find more of us, and protect them."
     
     r "From being food, right?"
-    $journal.unlock_entry("Humans","061")
+    $unlock_entry("Humans","061")
     
     ro "Or worse. They’ll keep you alive and use you as a science experiment, or a slave..."
     
@@ -2237,7 +2236,7 @@ label Scene13:
     
     ro "That much, there's no information at all on."
     r "Hmmm."
-    $journal.unlock_entry("Humans","063")
+    $unlock_entry("Humans","063")
     
     ro "But, funny enough, all those stories you hear about boogeymen and demons?"
     ro "They're based on us. Humans do a very decent job of demonizing us, but we certainly aren't perfect..."
@@ -2248,8 +2247,8 @@ label Scene13:
     ro "Right, right—your powers. Ours are self explanatory. We're elemental users."
     ro "You use fire, I use ice. Soume can control plants."
     
-    $journal.unlock_entry("Majin", "044")
-    $journal.unlock_entry("Majin", "047")
+    $unlock_entry("Majin", "044")
+    $unlock_entry("Majin", "047")
     r "Is it hard?"
     
     ro "Immensely. I’m still trying to get it right in the heat of battle, myself..."
@@ -2302,7 +2301,7 @@ label Scene14A:
         show r grin at left with dissolve
         r "And why is that? Afraid I'll singe the foliage?"
         
-        $journal.unlock_entry("Soume", "010")
+        $unlock_entry("Soume", "010")
         
         "There he goes again, dancing around and being all fucking whimsical."
         show s gigg at right with dissolve
@@ -2332,6 +2331,7 @@ label Scene14A:
         s "Get some rest. We start training tomorrow." 
         
         show bg blackscr with dissolve
+        hide s smile
         $hide_main_ui()
         with slow_fade
 
@@ -2383,7 +2383,7 @@ label Scene14B:
         show ro smile at right with dissolve
         ro "You can ask Soume about it later. But fire’s a strong element, even against other fire."
         
-        $journal.unlock_entry("Riku","004")
+        $unlock_entry("Riku","004")
         
         show r grin at left with dissolve
         r "So next time I run into that guy, he's toast!"  
@@ -2394,6 +2394,7 @@ label Scene14B:
         
         ro "Oh, Riku..."
         show bg blackscr with dissolve
+        hide ro sweat
         $hide_main_ui()
         with slow_fade
         
@@ -2579,13 +2580,13 @@ label Scene17:
     
     #show Green glow with fade
     
-    "As you get more used to the feeling of the channelling, you become better able to utilise it under duress; but to start, you should try to eat healthily, drink a lot of water and sleep 10 hours a night."
+    s "As you get more used to the feeling of the channelling, you become better able to utilise it under duress; but to start, you should try to eat healthily, drink a lot of water and sleep 10 hours a night."
     
-    "Connect your body to your mind, your mind to your spirit, and release it all at one single point."
+    s "Connect your body to your mind, your mind to your spirit, and release it all at one single point."
     
-    "That is the secret of ki."
+    s "That is the secret of ki."
     
-    "A small spindle of a green vine twines itself around Soume’s fingers and forms a bud."
+    s "A small spindle of a green vine twines itself around Soume’s fingers and forms a bud."
     
     $hide_main_ui()
     scene bg traingr 
@@ -2621,7 +2622,7 @@ label Scene17:
     r "How old are you, anyway?"
     
     s "Ohhh, a few thousand or so, give or take..."
-    $journal.unlock_entry("Soume","066")
+    $unlock_entry("Soume","066")
     
     show r confu at left with dissolve
     r "Whaaa--? No way!"
@@ -2741,14 +2742,16 @@ label Scene17:
     with slow_fade
 #* * * * * * * * *
 label Scene17b:
-    s "Well, Soume, what's your opinion of our new recruit?"
-    so "Mmm, well, he is premature, but...he's what we've been looking for."
-    s "Hm."
-    s "Which means that he's what they're looking for, too."
-    so "Yes."
-    s "Alright. Keep an eye on him."
+    $show_main_ui()
+    su "Well, Soume, what's your opinion of our new recruit?"
+    s "Mmm, well, he is premature, but...he's what we've been looking for."
+    su "Hm."
+    su "Which means that he's what they're looking for, too."
+    s "Yes."
+    su "Alright. Keep an eye on him."
 
 label Scene18:
+    $show_main_ui()
 
     "I can still smell Soume’s pollen all over me."
     "I guess I needed a shower anyway, but I’ve sort of gotten used to the scent. It really IS nice, and nothing weird happened, so that’s somethin’ at least." 
@@ -2772,7 +2775,7 @@ label Scene18:
     
     ro "All right. Soume’s supposed to be my partner, but he makes me awfully nervous."
     "I’ve known him a pretty long while, since the first day I came here, and I don’t feel as if I know any more about him now than I did then."
-    $journal.unlock_entry("Roman","067")
+    $unlock_entry("Roman","067")
     
     r "He's a little out there, but he seems like a nice enough guy. He might just be really private, you know?"
     
@@ -2840,6 +2843,7 @@ label Scene19:
 #* * * * *
 
 label Scene20:
+    $show_main_ui()
 
     r "...ow. He ran your hand through?"
     
@@ -2913,7 +2917,7 @@ label Scene22:
     
     r "AAAAAAAAAAAAAAAAAAAAAGHHHHHDLFS--"
 
-    $journal.unlock_entry("Susa","016")
+    $unlock_entry("Susa","016")
 label Scene23:
     r "Ow ow ow ow..."
     
@@ -3083,7 +3087,7 @@ label Scene26:
     
     k "I am \"Dr. Osamu Kazutaka.\" You must be Riku...I should’ve told by your stature, the way your jaw is so positively narrow. Barely above an infant, I’d wager."
     $ Kazutaka = "Doctor Osamu"
-    $journal.unlock_entry("Kazutaka","025")
+    $unlock_entry("Kazutaka","025")
     
     r "You always this great with patients?"
     
@@ -3107,9 +3111,9 @@ label Scene26:
     
     k "All right, you are hereby given a clean bill of health. But, to make sure it stays that way, take this literature on Majin, your species type, and our enemies."
     
-    $journal.unlock_entry("Majin", "050")
-    $journal.unlock_entry("Church of the Three Acts","039")
-    $journal.unlock_entry("Church of Three Acts", "040")
+    $unlock_entry("Majin", "050")
+    $unlock_entry("Church of the Three Acts","039")
+    $unlock_entry("Church of Three Acts", "040")
     
     r "My...species type?"
     
@@ -3133,7 +3137,7 @@ label Scene26:
     "I decide to hold off getting pissed for a minute."
     
     r "They seem pretty cool...always having some kind of fundraiser, or feeding the poor, housing the homeless...stuff like that."
-    $journal.unlock_entry("Church of the Acts","038")
+    $unlock_entry("Church of the Acts","038")
     
     k "Oh, well, it is very easy to gain the money to do great things when you are selling our kind into slavery and onto dinner plates, I suppose."
     
@@ -3148,7 +3152,7 @@ label Scene26:
     
     r "They...SLAVERY?"
     r "Wouldn't that be like, ALL OVER THE NEWS?"
-    $journal.unlock_entry("Church of the Acts", "042")
+    $unlock_entry("Church of the Acts", "042")
     
     k "Would you, prior to us finding you, have believed in the slavery of a mythical being unless you saw it with your own eyes?"
     k "Would your friends? Your family?"
@@ -3158,7 +3162,7 @@ label Scene26:
     k "Those people lure in humans, and not just any ones—humans with special abilities, like Miss Susa. The ability to hunt our kind down."
     
     r "Special humans?"
-    $journal.unlock_entry("Humans","058")
+    $unlock_entry("Humans","058")
     
     k "The Church of Three Acts is a front for a small society of humans far beyond the capabilities of the normal...their strength, speed, agility and physical prowess are much more similar to Majin."
     k "That is why they are able to capture us and hold us." 
@@ -3193,7 +3197,7 @@ menu:
         $show_message("From now on, you will be allowed to research with Kazutaka.", "medium")
         $show_message("You will be able to learn a lot about the world from the information you receive here.", "medium")
         call research_loop
-        $journal.unlock_entry("something", "031")    
+        $unlock_entry("something", "031")    
 
 label Scene27:
 
@@ -3212,7 +3216,7 @@ label Scene27:
     "Something really hard and painful breaks right over my head."
     
     su "--fuck! Now look what you did! That’s my fucking Hunt Duck gun and your fucking hard head broke it in two!"
-    $journal.unlock_entry("Susa","017")
+    $unlock_entry("Susa","017")
     
     r "Remind me again how -I- broke it?"
     
@@ -3321,12 +3325,12 @@ label Scene28:
     ro "What a wonderful idea. You must remember that I would need a vegan option at the restaurant, but beyond that-"
     
     l "Vegan? Roman, you can’t still mean that silly notion that you mustn’t eat meat--"
-    $journal.unlock_entry("Roman","006")
+    $unlock_entry("Roman","006")
     
     ro "I assure you that this isn’t some phase I’m going through. I decided to become a vegan long ago and I can’t imagine ever deviating from my diet."
     
     l "Roman, it’s unnatural for Majin, and likely to be very harmful. Please, I know a very good place; they will cook a lovely veal for you--"
-    $journal.unlock_entry("Majin","045")
+    $unlock_entry("Majin","045")
     ro "Veal? That’s baby deer, isn’t it? I couldn’t."
     
     l "If you insist..."
@@ -3343,7 +3347,7 @@ label Scene28:
     
     #Liza chuckles.
     l "I’m afraid not."
-    $ journal.unlock_entry("Liza", "031")
+    $ unlock_entry("Liza", "031")
 
 label Scene29:
     #play sound Forest medley
@@ -3439,7 +3443,7 @@ label Scene29:
     #play sound scary noise medley
     
     m "Special indeed."
-    $journal.unlock_entry("Mamoru","023")
+    $unlock_entry("Mamoru","023")
     
     #show screen flash 
     #play sound lightning
@@ -3451,7 +3455,7 @@ menu:
         call sleep
     "Research.":
         call research_loop
-        $journal.unlock_entry("something", "031")    
+        $unlock_entry("something", "031")    
 
 label Scene30a:
     su "Mail call, brat. That's yours."
@@ -3694,8 +3698,8 @@ label Scene31:
     ro "His stomach is quite sensitive. I was rather surprised he took your offer at all."
     
     r "Oh--hm, y’know, I don’t think I’ve ever seen him eat. Like, since I got here, actually."
-    $journal.unlock_entry("Soume","011")
-    $journal.unlock_entry("Soume","012")
+    $unlock_entry("Soume","011")
+    $unlock_entry("Soume","012")
     
     ro "I have, but it’s never much, and he rarely accepts food from others."
     
@@ -3772,7 +3776,7 @@ label Scene32:
             call sleep
         "Research.":
             call research_loop
-            $journal.unlock_entry("something", "031")   
+            $unlock_entry("something", "031")   
 label Scene32a:
 
     "Really, really hate wakin’ up early. If the sun doesn’t fucking have to be up at 4am, why do I?"
@@ -3807,7 +3811,7 @@ label Scene32a:
     "I really hate when I can’t tell if Soume’s joking or not."
     
     "Especially since Ku-chan has teeth. Sharp teeth. Even though it’s just a small plant, I don’t think I’d want to get my hands anywhere near it."
-    $journal.unlock_entry("Soume","014")
+    $unlock_entry("Soume","014")
     
     r "So, training today? What are we doing?"
     
@@ -4169,7 +4173,7 @@ label Scene34:
     
     r "My hobbies? Sports and cutting class. Oh, and drinking. Long-lost love? Yeah, right. I’m seventeen. That’s barely enough time for a first love. 
     There is this one girl I want to ask out, but I dunno. I’m not really all that interested yet."
-    $journal.unlock_entry("Riku","002")
+    $unlock_entry("Riku","002")
     ro "You are still you---"
     
     r "I mean, heck. I’m not fully mature yet, right? You said that. So like, when do our kind like...usually lose our virginities? When’d you lose yours?"
@@ -4367,7 +4371,7 @@ label Scene36:
     $show_message("'Shop' has now been added to your nightly options." "medium") 
     $show_message("You may shop by selecting that choice.", "medium") 
     $show_message ("Inventory changes frequently, so be sure to check back as often as you can!","medium")
-    $journal.unlock_entry("Humans","070")
+    $unlock_entry("Humans","070")
     r "Hmm…I do have some cash left..."
 
 label Scene37:
@@ -4439,9 +4443,9 @@ label Scene37:
     
     su "What? Oh--this."
     su "Mm." 
-    su "You’ve been working hard. Take some time off."
+    su "You’ve been working hard. I guess you can have another day off."
     
-    "Time off? Have I fallen into some alternate universe where everyone is the opposite?"
+    "ANOTHER day off? Have I fallen into some alternate universe where everyone is the opposite?"
     
     r "...are you okay?"
     
@@ -4466,7 +4470,7 @@ menu:
         call shop_loop
     "Research.":
         call research_loop
-        $journal.unlock_entry("something", "031")
+        $unlock_entry("something", "031")
 
 label Scene38:
     #This is Naomi
@@ -4518,7 +4522,7 @@ label Scene38:
     
     na "Understood."
 
-    $journal.unlock_entry("Mamoru","071")
+    $unlock_entry("Mamoru","071")
 label Scene39:
 
     n  "Where are you taking me? It’s cold down here!"
@@ -4624,7 +4628,7 @@ menu:
         call shop_loop
     "Research.":
         call research_loop
-        $journal.unlock_entry("something", "031")
+        $unlock_entry("something", "031")
         
 label Scene40:
 #Soume whispers. His voice sounds a bit harsh.
@@ -4981,7 +4985,7 @@ label Scene41:
     k  "The average IQ for Majin is 87 on the human scale. Eighty-seven, Riku. Did you know that?"
 
     r  "No. Issat bad?"
-    $journal.unlock_entry("Majin", "054")
+    $unlock_entry("Majin", "054")
 
     k "............"
     #Doctor Osamu sighs.
@@ -5043,7 +5047,7 @@ label majhumdiff:
     
     $renpy.pause(3.0)
     "...can't say I didn't try."
-    $journal.unlock_entry("Kazutaka","072")
+    $unlock_entry("Kazutaka","072")
     
 label urite:
     r  "Okay, you're right." 
@@ -5171,7 +5175,7 @@ label gearsuc:
     k "The thrill of the unknown, the tension one feels during the chase of the answer, the satisfying climax of discovering something new, I--"
 
     "...does he get off on science, or what?"
-    $journal.unlock_entry("Doctor Osamu", "028")
+    $unlock_entry("Doctor Osamu", "028")
     r  "Hey, Doc! Yo, I’m still here. You need to clear me."
     
     k "Hush child, I'm trying to help you learn a little about yourself!"
@@ -5287,7 +5291,7 @@ label Scene42:
 
     r "........."
     r  "So look...I got to get going. Thanks for the clearance."
-    $journal.unlock_entry("Kazutaka","027")
+    $unlock_entry("Kazutaka","027")
     "He pauses. I think he notices I’m uncomfortable, because his demeanor suddenly changes."
 
     k  "Ahem. You’re right...I’m overreacting. You’re free to go."
@@ -5413,7 +5417,7 @@ label Scene43:
 
     ro  "Well, I can’t say I’d blame him for that. The Doctor is a genius, but I myself worry about his...enthusiasm at times."
 
-    $journal.unlock_entry("Kazutaka","029")
+    $unlock_entry("Kazutaka","029")
     r "I know what you mean."
     
     "I sure as heck wasn’t in any hurry to get back to the lab anytime soon."
@@ -5443,7 +5447,7 @@ label Scene43:
     ro "He can tell you which way to go by instinct, and how to avoid danger." 
     ro "He IS very good at it; I don’t think we’ve ever been ambushed when he accompanies us."
 
-    $journal.unlock_entry("Majin","053")
+    $unlock_entry("Majin","053")
     r  "So?"
 
     ro  "Well, he really only gets flashes of what’s going on." 
@@ -5472,7 +5476,7 @@ label Scene43:
     r  "He drank my blood!?"
 
     ro  "SSSSHHHHHH!"
-    $journal.unlock_entry("Doctor Osamu", "030")
+    $unlock_entry("Doctor Osamu", "030")
 
     "Roman clasps his hand over my mouth while looking around again."
 
@@ -5540,7 +5544,7 @@ menu:
         call shop_loop
     "Research.":
         call research_loop
-        $journal.unlock_entry("something", "031")
+        $unlock_entry("something", "031")
         
 label Scene44:
     
@@ -5549,7 +5553,7 @@ label Scene44:
     "Susa keeps on interrupting herself to make sure I'm paying attention." 
     "I dunno why—I haven’t nodded off once during her whole lecture, which is kind of a miracle for me."
     "I'm not very good at paying attention."
-    $journal.unlock_entry("Riku","064")
+    $unlock_entry("Riku","064")
 
     r  "Yeah, yeah. I’m listening."
 

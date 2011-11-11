@@ -1,7 +1,7 @@
 ######################
 # Roman's Birthday Game
 ######################
-label birthdaygame: 
+label birthdaygamemenu: 
     $show_message("You are in charge of throwing Roman a great coming-of-age party.", "medium") 
     $show_message("To throw the best possible party, you will need to get the right gift, fitting decorations, pick the best place in the temple to have the party, a delicious cake, and a special surprise to top it all off.", "large")
     $show_message("Try to do a good job!", "medium")
@@ -9,7 +9,6 @@ label birthdaygame:
     scene bg riroom with fade
     $show_main_ui()
     r "Where do I start...?"
-    
     $ perparty = False
     $ gift = False
     $ decor = False
@@ -22,11 +21,13 @@ label birthdaygame:
     $ corrcake = False
     $ corrsur = False
     $ count = corrgift + corrdec + corrloc + corrcake + corrsur       
+    
+label birthdaygame:        
    
     if (gift and decor and loca and bircake and surp):
         jump birthdayresults
     else:
-        "I need to figure all this stuff out."
+        "I still need to figure stuff out."
 menu:
             "Figure out a gift.":
                  jump bgift
@@ -283,7 +284,7 @@ menu:
                 jump bloca      
     
 label bcake:
-    if cake:
+    if bircake:
         jump diditalready
         
     else:    
@@ -590,13 +591,13 @@ label quiz1:
             call nextq    
             
 label quiz1result:
-    if count2 = "10"
+    if count2 = "10":
         jump perquiz
     else:
         jump failquiz
    
 label quiz2:    
-        $show_message("Question 1")
+    $show_message("Question 1")
     menu:
         "Wrong Answer":
             call nextq
@@ -668,8 +669,7 @@ label quiz2:
             call nextq  
             
 label quiz2results:
-    label quiz1result:
-    if count2 = "10"
+    if count2 = "10":
         jump perquiz
     else:
         jump failquiz
