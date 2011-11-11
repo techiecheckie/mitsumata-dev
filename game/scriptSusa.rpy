@@ -10,7 +10,7 @@
 #Scene w/Mamoru bites Liza.
 #Scene w/Susa trying to get it with Liza, finds her bitten.
 #Scene w/Susa trying to kill Mamoru.
-#Scene w/their son being killed.
+#Scene w/their son being "killed".
 #Scene w/Soume being saved.
 #Scene w/Susa-Liza break-up.
 
@@ -164,7 +164,7 @@ label su1:
     su "...it's not that bad."
     l "Please don't worry about me. I won't get caught. Not when our son may still be alive."
     #Journal entry son go hurr
-
+    return
 label su2:
     "Of all the people I thought I'd ask for advice, she's last on the list."
     
@@ -328,6 +328,7 @@ label su2b:
     su "My pleasure."
     
     "She's not so bad."
+    $ decision = "15"
 #menu:
         #"sleep"
         #"search"
@@ -877,6 +878,7 @@ label su10a:
 label su10b:
 
     "We'll stay, I guess."
+    #--NEED TO ADD TO SCENE HERE--
     
 label su11:
     su "Aw c'mon...eat.  Just...eat kid.  Cram it down yer' little gullet.  No, no, no!  Fuck.  Don't spit it out."
@@ -962,7 +964,7 @@ label su12:
     su "(Not that she'd really help me with this.)"
     su "Uh...yeah, ma.  Just me.  Came in for some food, is all."
     db "Ah.  Is Liza not feeding you properly?  I can have a word with her, if you so desire.  Your brother left some of his leftovers in the fridge, if you are hungry."
-    su "She isn't just some servent, ma.  You know that."
+    su "She isn't just some servant, ma.  You know that."
     db "Ah.  Yes.  You two are...in a relationship.  Of course.  But she should still be taking care of you.  She is property of the master, after all."
     su "Ngh.  Could you please not talk about her that way.  It makes things sound all weird."
     db "If you desire, Susanoo.  But just be aware, when you finally grow out of this phase you are passing through-"
