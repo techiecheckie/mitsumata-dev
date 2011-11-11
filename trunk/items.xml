@@ -411,8 +411,8 @@
   </item>
 
   <item id="book5">
-    <name>Book5</name>
-    <description>Blah blah this is book 5's desc.</description>
+    <name>I Can't Believe It's Vegan!</name>
+    <description>One of Roman's many vegan cookbooks. The stuff in here actually tastes pretty darn good!</description>
     <locations>
       <map decision="11" room="any" stash="any" />
       <store decision="31" />
