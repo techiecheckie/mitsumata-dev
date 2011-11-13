@@ -8,8 +8,20 @@ init python:
     PLATFORMER_LEVELS = [
       # Level 1
       PlatformerLevel( time_limit       = 60,
-                       distance         = 50, 
-                       obstacle_density = 25 )
+                       distance         = 30, 
+                       obstacle_density = 20 ),
+      # Level 2
+      PlatformerLevel( time_limit       = 60,
+                       distance         = 100, 
+                       obstacle_density = 30 ),
+      # Level 3
+      PlatformerLevel( time_limit       = 60,
+                       distance         = 150, 
+                       obstacle_density = 40 ),
+      # Level 4
+      PlatformerLevel( time_limit       = 60,
+                       distance         = 200, 
+                       obstacle_density = 50 )
     ]
     
     MAP = [
@@ -104,7 +116,7 @@ init python:
     DESCEND_ANIMATION_DURATION = 0.5
     LAND_ANIMATION_DURATION    = 0.4
     DROWN_ANIMATION_DURATION   = 1.0
-    FALL_ANIMATION_DURATION    = 1.0
+    FALL_ANIMATION_DURATION    = 1.5
 
     # number of animation frames.
     NUMBER_RUN_FRAMES     = 6
@@ -114,7 +126,7 @@ init python:
     NUMBER_DESCEND_FRAMES = 2
     NUMBER_LAND_FRAMES    = 2
     NUMBER_DROWN_FRAMES   = 3
-    NUMBER_FALL_FRAMES    = 4
+    NUMBER_FALL_FRAMES    = 7
 
     VIEW_WIDTH = 10
     VIEW_HEIGHT = 10
@@ -124,7 +136,7 @@ init python:
     TILE_SIZE = Size( TILE_WIDTH, TILE_HEIGHT )
     
     # runner initial cell position
-    CELL_X = 1
+    CELL_X = 2
     CELL_Y = len(MAP)-2
     
     class Cell( GameObject ):
@@ -144,6 +156,8 @@ init python:
         def __init__( self, level_number=1 ):
             super( Platformer, self ).__init__()
             
+            self.level_number = level_number
+            
             # setup the entities.
             self.start_screen_hud   = None
             self.stop_screen_hud    = None
@@ -154,33 +168,28 @@ init python:
             self.tiles  = None
             self.runner = None
             
-            self.create_tiles()
-            self.create_obstacles()
-            self.create_runner()
-            self.create_huds()
-            
-            self.create_game(level_number)
-        
-        def create_game( self, level_number) :
-
-            if level_number > len( PLATFORMER_LEVELS ) or level_number <= 0:
+            if self.level_number > len( PLATFORMER_LEVELS ) or self.level_number <= 0:
                 raise ValueError( "Invalid Magic Power level number %d.  Level "
                                   "number must be between 1 and %d." %
-                                  (level_number, len( PLATFORMER_LEVELS )) )
-                                  
-            self.level = PLATFORMER_LEVELS[level_number - 1]
+                                  (self.level_number, len( PLATFORMER_LEVELS )) )
+
+            self.level = PLATFORMER_LEVELS[self.level_number - 1]
 
             self.time_remaining = AutomatedInterpolator( self.level.time_limit,
                                                          0,
                                                          self.level.time_limit )
-
-            # setup the game state.
-            self.state       = PLATFORMER_GAME_STATE_BEGIN
-            self.base_score  = 0
-            self.total_score = 0
-
-            self.map = None
+            
+            self.create_tiles()
+            self.create_obstacles()
+            self.create_runner()
+            self.create_huds()
             self.create_map()
+            
+            self.start_game()
+        
+        def start_game( self ):
+            self.state = PLATFORMER_GAME_STATE_BEGIN
+            self.runner["behavior"].run()
             
         def create_huds( self ):
             self.start_screen_hud             = GameObject()
@@ -200,7 +209,7 @@ init python:
             distance_left["renderer"] = GameRenderer( GameText( self.get_distance_left ) )
             distance_left["transform"].set_position( 185, 200 )
             self.stop_screen_hud.add_child( distance_left )         
-            self.start_screen_hud.add_child( distance_left )   
+            self.start_screen_hud.add_child( distance_left )
             
             self.distance_left_hud             = GameObject()
             self.distance_left_hud["renderer"] = GameRenderer( GameText( self.get_distance_left ) )
@@ -263,15 +272,9 @@ init python:
                                               GameAnimation( [ GameImage( "gfx/platformer/runner/riku_fall-%d.png" % frame_index, Anchor.BOTTOM )
                                                                for frame_index in xrange( NUMBER_FALL_FRAMES ) ],
                                                              NUMBER_FALL_FRAMES / FALL_ANIMATION_DURATION ) )
-            
-            # runner sprite positioning, one to the right and up from the bottom left corner
-            runner_x = CELL_X * TILE_WIDTH
-            runner_y = CELL_Y * TILE_HEIGHT
-            
-            runner["transform"].set_position( runner_x, runner_y )
             runner["transform"].set_scale( 1.0 )
-            runner["behavior"] = RunnerBehavior( self, runner_x, runner_y )
-            runner["behavior"].run()
+            runner["behavior"] = RunnerBehavior( self )
+
             self.runner = runner
             
         def create_map( self ):
@@ -304,17 +307,20 @@ init python:
                 cell.drownable = drownable
                 
                 self.map[y].append( cell )
-                
-            self.runner["behavior"].cell = self.map[CELL_Y][CELL_X]
 
         def get_time_remaining( self ):
             return "Time Remaining: %d" % self.time_remaining.get_ceil_value()
 
         def get_distance_left( self ):
-          return "%20d" % ( self.level.distance*TILE_WIDTH - self.runner["behavior"].distance )
+            return "%20d" % ( self.level.distance*TILE_WIDTH - self.runner["behavior"].distance )
                 
         def get_distance_run( self ):
-          return "%20d" % self.runner["behavior"].distance
+            return "%20d" % self.runner["behavior"].distance
+          
+        def get_result( self ):
+            if self.runner["behavior"].distance >= self.level.distance * TILE_WIDTH:
+              return 1
+            return 0
 
         def render( self, blitter ):
             world_transform = self.get_world_transform()
@@ -345,7 +351,9 @@ init python:
             elif self.state == PLATFORMER_GAME_STATE_END:
                 self.runner["renderer"].render( blitter, world_transform )
                 self.stop_screen_hud["renderer"].render( blitter, world_transform )
-            
+            elif self.state == PLATFORMER_GAME_STATE_PAUSE:
+                self.runner["renderer"].render( blitter, world_transform )
+                self.stop_screen_hud["renderer"].render( blitter, world_transform )
 
         def update( self, delta_sec ):
             if self.state == PLATFORMER_GAME_STATE_PLAY:
@@ -353,18 +361,18 @@ init python:
   
               self.runner.update( delta_sec )
               
-              if self.runner["behavior"].distance >= self.level.distance * TILE_WIDTH:
-                self.state = PLATFORMER_GAME_STATE_END
-                # go up one level and start again?
-              elif self.time_remaining.get_value() <= 0 or self.runner["behavior"].dead:
+              if self.time_remaining.get_value() <= 0 \
+                  or self.runner["behavior"].dead \
+                  or self.runner["behavior"].distance >= self.level.distance * TILE_WIDTH:
                 self.state = PLATFORMER_GAME_STATE_END
                 
 
         def on_key_down( self, key ):
-            if key == pygame.K_ESCAPE:
-              self.quit()
-            elif key == pygame.K_SPACE:
-              self.runner["behavior"].jump()
+            if self.state == PLATFORMER_GAME_STATE_PLAY:
+              if key == pygame.K_ESCAPE:
+                self.quit()
+              elif key == pygame.K_SPACE:
+                self.runner["behavior"].jump()
 
         def on_mouse_up( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
@@ -374,38 +382,34 @@ init python:
                 self.quit()
 
     class RunnerBehavior( GameComponent ):
-        def __init__( self, platformer, x, y ):
+        def __init__( self, platformer ):
             super( RunnerBehavior, self ).__init__()
-            self.state = RUNNER_STATE_RUNNING
-            
             self.platformer = platformer
             
-            self.y_velocity = 0
-            self.x_velocity = RUN_SPEED
-            
-            # total distance
-            self.distance = 0
-            # distance until cell update (TILE_WIDTH)
-            self.sub_distance = 0
-            
+        def run( self ):
+            self.game_object["transform"].set_position( CELL_X * TILE_WIDTH, CELL_Y * TILE_HEIGHT )
             self.cell_x = CELL_X
             self.cell_y = CELL_Y
-            self.cell   = None
+            self.cell = self.platformer.map[CELL_Y][CELL_X]
             
-            self.y_offset = 0
+            self.x_velocity = RUN_SPEED
+            self.y_velocity = 0
+            self.y_offset   = 0
+            
+            self.distance     = 0
+            self.sub_distance = 0
+            
+            self.delay_counter = 0
             
             self.jump_requested = False
             self.dead = False
-            
-            # animation/action delay counter
-            self.delay_counter = 0
-            
-        def run( self ):
+        
             self.state = RUNNER_STATE_RUNNING
             self.game_object["renderer"].play_animation( RUNNER_ANIMATION_RUN )
             
         def jump( self ):
-            self.jump_requested = True
+            if self.state == RUNNER_STATE_RUNNING or self.state == RUNNER_STATE_LANDING:
+              self.jump_requested = True
         
         def update( self, delta_sec ):
             distance = self.x_velocity * delta_sec
@@ -446,12 +450,12 @@ init python:
                   self.state = RUNNER_STATE_FALLING
                   self.game_object["renderer"].play_animation( RUNNER_ANIMATION_FALL )
                   self.cell.cleared = True
+                  self.x_velocity = 0
                 elif self.jump_requested:
                   self.delay_counter += delta_sec
                   if self.delay_counter >= JUMP_DELAY:
                     self.state = RUNNER_STATE_JUMPING
                     self.game_object["renderer"].play_animation( RUNNER_ANIMATION_JUMP )
-                  
                     self.x_velocity = 0
                     self.delay_counter = 0
                     self.jump_requested = False
@@ -461,7 +465,6 @@ init python:
               if self.delay_counter >= JUMP_ANIMATION_DURATION:
                 self.state = RUNNER_STATE_ASCENDING
                 self.game_object["renderer"].play_animation( RUNNER_ANIMATION_ASCEND )
-                
                 self.x_velocity = RUN_SPEED
                 self.y_velocity = -JUMP_SPEED
                 
@@ -489,6 +492,8 @@ init python:
                 if self.cell.drownable and self.y_offset >= TILE_HEIGHT/4:
                   self.state = RUNNER_STATE_DROWNING
                   self.game_object["renderer"].play_animation( RUNNER_ANIMATION_DROWN )
+                  self.x_velocity = 0
+                  self.y_velocity = 0
                 else:
                   if self.y_velocity < MAX_FALL_SPEED:
                     self.y_velocity += GRAVITY * delta_sec
@@ -496,39 +501,32 @@ init python:
                 if self.y_offset >= 0:
                   self.state = RUNNER_STATE_LANDING
                   self.game_object["renderer"].play_animation( RUNNER_ANIMATION_LAND )
-                
-                  # reset runner's y position
                   self.game_object["transform"].y = self.cell_y*TILE_HEIGHT
+                  self.x_velocity = 0
+                  self.y_velocity = 0
                   
               # the runner has fallen off the screen
               if self.cell_y > VIEW_HEIGHT:
                 self.dead = True
               
             elif self.state == RUNNER_STATE_LANDING:
-              self.y_velocity = 0
-              self.x_velocity = 0
               self.delay_counter += delta_sec
               if self.delay_counter >= LAND_ANIMATION_DURATION:
                 self.state = RUNNER_STATE_RUNNING
                 self.game_object["renderer"].play_animation( RUNNER_ANIMATION_RUN )
-                
                 self.x_velocity = RUN_SPEED
                 self.delay_counter = 0
                 
             elif self.state == RUNNER_STATE_DROWNING:
-              self.y_velocity = 0
-              self.x_velocity = 0
               self.delay_counter += delta_sec
               if self.delay_counter > 3:
                 self.dead = True
                 self.delay_counter = 0
                 
             elif self.state == RUNNER_STATE_FALLING:
-              self.x_velocity = 0
               self.delay_counter += delta_sec
               if self.delay_counter >= FALL_ANIMATION_DURATION:
                 self.state = RUNNER_STATE_RUNNING
                 self.game_object["renderer"].play_animation( RUNNER_ANIMATION_RUN )
-                
-                self.x_velocity = RUN_SPEED
+                self.x_velocity = RUN_SPEED                
                 self.delay_counter = 0

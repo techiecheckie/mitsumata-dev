@@ -176,7 +176,7 @@ init -50 python:
             game.set_game_width( game_width )
             game.set_game_height( game_height )
             ui.add( driver )
-            ui.interact( suppress_overlay=True, suppress_underlay=True )
+            ui.interact( suppress_overlay=False, suppress_underlay=True )
             return driver.get_game_result()
         except:
             # make sure no matter what happens we can always see our mouse.
