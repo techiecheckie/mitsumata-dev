@@ -71,10 +71,10 @@ init python:
                    clicked=renpy.curried_call_in_new_context("_game_menu_preferences"))
    
     # game menu (minigame menu?)
-    ui.frame(xpos=164,ypos=675, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/buttons/minigame_menu.png", 
-                   "gfx/buttons/minigame_menu_hover.png", 
-                   clicked=ui.returns(""))
+    #ui.frame(xpos=164,ypos=675, xpadding=0, ypadding=0, background=None)
+    #ui.imagebutton("gfx/buttons/minigame_menu.png", 
+    #               "gfx/buttons/minigame_menu_hover.png", 
+    #               clicked=ui.returns(""))
                   
     # exit
     ui.frame(xpos=41,ypos=704, xpadding=0, ypadding=0, background=None)
