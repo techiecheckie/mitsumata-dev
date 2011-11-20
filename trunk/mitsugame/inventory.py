@@ -3,8 +3,10 @@ import xml.etree.ElementTree as xml
 import renpy
 
 class Inventory():
-  def __init__(self):
+  def __init__(self, persistent):
+    self.persistent = persistent
     self.items = []
+    # PDA visibility
     self.enabled = False
     
     # Populates the items list, using the items defined in "items.xml"
@@ -60,22 +62,43 @@ class Inventory():
     return None
     
   def unlock_item(self, id):
-    item = self.get_item(id)
-    if item != None:
-      item.unlock()
-      return
-    print "[WARN] Could not unlock item, no such id found (id: %s)" % id
+    if id not in self.persistent.unlocked_items:
+      item = self.get_item(id)
+      if item != None:
+        #item.unlock()
+        self.persistent.unlocked_items.append(id)
+        return
+      print "[WARN] Could not unlock item, no such id found (id: %s)" % id
+    print "id already unlocked"
   
-  def item_unlocked(self, item_id):
-    item = self.get_item(item_id)
-    if item == None:
-      print "[WARN] No item found with id '%s'" % item_id
-      return False
-    else:
-      return not item.is_locked()
+  def item_unlocked(self, id):
+    #item = self.get_item(item_id)
+    #if item == None:
+    #  print "[WARN] No item found with id '%s'" % item_id
+    #  return False
+    #else:
+    #  return not item.is_locked()
+    return id in self.persistent.unlocked_items
   
   def get_inventory_items(self):
     return self.items
+    
+  def get_unlocked_items(self):
+    #items = []
+    #for item in self.items:
+    #  if not item.is_locked():
+    #    items.append(item)
+    #return items
+    #return self.unlocked_items
+
+    unlocked_ids = self.persistent.unlocked_items
+    unlocked_items = []
+    for id in unlocked_ids:
+      item = self.get_item(id)
+      if item != None:
+        unlocked_items.append(item)
+
+    return unlocked_items
     
   def get_items(self, decision, location):
     items = []

@@ -4,11 +4,13 @@ from journal import Journal
 from journal_entry import Journal_entry
 
 class Journal_manager():
-  def __init__(self):
-    self.journals = []
+  def __init__(self, persistent):
+    self.persistent = persistent
+    self.journals = []  
+    # PDA visibility
     self.enabled = False
     
-    # Journal creation, simple xml parsing
+    # Journal creation, simple xml parsing    
     journals_xml = xml.parse(renpy.loader.transfn("../journal.xml"))
     journal_elements = journals_xml.findall("journal")
     for journal_element in journal_elements:
@@ -51,11 +53,15 @@ class Journal_manager():
     return None
     
   def unlock_entry(self, journal_id, entry_id):
-    journal = self.get_journal(journal_id)
-    if journal != None:
-      for entry in journal.get_entries():
-        if entry.get_id() == entry_id:
-          entry.unlock()
-          journal.unlock()
-          return
-    print "[WARN] Could not unlock entry, no such id found (journal_id: %s, entry_id: %s)" % (journal_id, entry_id)
+    new_id = journal_id + ":" + entry_id
+    if new_id not in self.persistent.unlocked_journals:
+      journal = self.get_journal(journal_id)
+      if journal != None:
+        for entry in journal.get_entries():
+          if entry.get_id() == entry_id:
+            entry.unlock()
+            journal.unlock()
+            self.persistent.unlocked_journals.append(new_id)
+            return
+      print "[WARN] Could not unlock entry, no such id found: " + new_id
+    print "Entry " + new_id + " already unlocked"

@@ -28,23 +28,23 @@ init python:
 
   def main_ui_buttons():
     ui.frame(xpos=98,ypos=630, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/buttons/ui_generic_button_hitbox.png", 
+    ui.imagebutton(im.Scale("gfx/transparent.png", 83, 44),
                    "gfx/buttons/button_save_hover.png", 
                    clicked=renpy.curried_call_in_new_context("_game_menu_save"))
 
     ui.frame(xpos=35,ypos=672, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/buttons/ui_generic_button_hitbox.png", 
+    ui.imagebutton(im.Scale("gfx/transparent.png", 83, 44), 
                    "gfx/buttons/button_load_hover.png", 
                    clicked=renpy.curried_call_in_new_context("_game_menu_load"))
 
     ui.frame(xpos=98,ypos=717, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/buttons/ui_generic_button_hitbox.png", 
+    ui.imagebutton(im.Scale("gfx/transparent.png", 84, 45),
                    "gfx/buttons/button_options_hover.png", 
                    clicked=renpy.curried_call_in_new_context("_game_menu_preferences"))
 
     ui.frame(xpos=842,ypos=651, xpadding=0, ypadding=0, background=None)    
     if pda:
-      ui.imagebutton("gfx/buttons/button_palm_pilot.png", 
+      ui.imagebutton(im.Scale("gfx/transparent.png", 145, 111), 
                      "gfx/buttons/button_palm_pilot_hover.png",
                      clicked=renpy.curried_call_in_new_context("pda_loop"))
     else:
@@ -235,9 +235,11 @@ init python:
     
   def unlock_item(item_id):
     item = inventory.get_item(item_id)
-    if item.is_locked():
+    
+    if item_id not in persistent.unlocked_items:
       item.unlock()
-      update_stats(item.get_bonuses())
+      persistent.unlocked_items.append(item_id)
+      update_stats()
     
     # Box 1
     renpy.transition(dissolve)
@@ -259,7 +261,7 @@ init python:
     renpy.show("textbox_l", at_list=[Position(xpos=0.5, ypos=0.5), Transform(anchor=(0.5,0.5))], zorder=9)
     
     ui.frame(xpos=0.3, ypos=0.35, background=None)
-    ui.image("gfx/items/generic_item.png")
+    ui.image(im.Scale("gfx/items/" + item.get_id() + ".png", 75, 75))
     
     ui.frame(xpos=0.4, ypos=0.35, xmaximum=300, background=None)
     ui.text(item.get_description())
@@ -275,7 +277,14 @@ init python:
     return
     
   def unlock_entry(journal_id, entry_id):
-    journal_manager.unlock_entry(journal_id, entry_id)
+    journal = journal_manager.get_journal(journal_id)
+    entry   = journal.get_entry(entry_id)
+    
+    new_id = journal_id + ":" + entry_id
+    if new_id not in persistent.unlocked_journals:
+      journal.unlock()
+      entry.unlock()
+      persistent.unlocked_journals.append(new_id)
     
     renpy.transition(dissolve)
     renpy.show("textbox_m", at_list=[Position(xpos=0.5, ypos=0.5), Transform(anchor=(0.5,0.5))], zorder=9)
@@ -292,17 +301,32 @@ init python:
     renpy.hide("textbox_m")
     
     return
+    
+  def unlock_minigame(minigame):
+    if minigame not in persistent.unlocked_minigames:
+      persistent.unlocked_minigames.append(minigame)
+      
+    return
   
   # Not supposed to be in ui.rpy, but it'll do for now.
-  def update_stats(bonuses):
-    if bonuses == None:
-      return
+  def update_stats():
+    items = inventory.get_unlocked_items()
+    # Remove these if going back to item-specific updates
+    hp = 0
+    mp = 0
+    
+    for item in items:
+      bonuses = item.get_bonuses()
+      if bonuses == None:
+        return
       
-    if bonuses.has_key("hp"):
-      hp += bonuses["hp"]
-    if bonuses.has_key("mp"):
-      mp += bonuses["mp"]
-    # ... and any other stats to be updated
+      if bonuses.has_key("hp"):
+        hp += bonuses["hp"]
+      if bonuses.has_key("mp"):
+        mp += bonuses["mp"]
+      # ... and any other stats to be updated
+      
+    # Also remember to go through the minigame bonuses
       
     # call update_main_ui() afterwards or let the script take care of that?
     
