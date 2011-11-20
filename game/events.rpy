@@ -1,6 +1,8 @@
 #################################
 #Main arc decision numbers: 25, 30, 32.
 #################################
+init python:
+  event_triggered = False
 
 label run_event:
   $event_triggered = False

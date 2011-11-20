@@ -4,13 +4,15 @@ label show_map:
     "riroom" : { "equipment" : None, "clothes" : None, "trophies" : None, "posters" : None },
     "soroom" : { "plants" : None, "vines" : None, "hairclips" : None, "jewelry" : None, "nailpolish" : None, "clothes" : None }, 
     "suroom" : { "tv" : None, "games" : None, "burner" : None, "scrolls" : None }, 
-    "roroom" : { "sculpture" : None, "plant1" : None, "plant2" : None }
+    "roroom" : { "sculpture" : None, "plant1" : None, "plant2" : None },
     
     #"hall1" : { "stash1" : None, "stash2" : None }, 
     #"hall2" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
-    #"kitchen" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
     #"bathroom" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
-    #"lib" : { "stash1" : None, "stash2" : None, "stash3" : None } 
+    
+    # complete rooms
+    "kitchen" : { "hood" : None, "sink" : None, "pots1" : None, "pots2" : None, "pots3" : None, "pots4" : None },
+    "lib" : { "shelves1" : None, "shelves2" : None, "books1" : None, "books2" : None, "books3" : None, "books4" : None } 
   }
 
   # A list of items that match the decision value
@@ -78,16 +80,11 @@ label show_map:
     else:
      $current_tries = 0
     
-  # Display a message box before returning to the script
-  $show_tries(tries)
-  $renpy.pause(0.2)
-  
-  if event_triggered:
-    $message = "(Post-event message)"
-  else:
-    $message = "(\"0 tries left\" message)"
-    
-  $show_message(message, "large")
+  if not event_triggered:
+    # Display a message box before returning to the script
+    $show_tries(tries)
+    $renpy.pause(0.2)
+    $show_message("(\"0 tries left\" message)", "large")
     
   $renpy.transition(dissolve)
   $renpy.hide("map")
@@ -207,6 +204,79 @@ init python:
     elif room == "suroom":
       #"soroom" : { "plants" : None, "vines" : None, "hairclips" : None, "jewelry" : None, "nailpolish" : None, "clothes" : None } 
       pass
+    elif room == "kitchen":
+      # Cooker hood
+      ui.frame(xpos=273, ypos=0, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton(im.Scale("gfx/transparent.png", 431, 314),
+                     "gfx/map/kitchen/KitchenCabinets1.png",
+                     clicked=ui.returns(("stash", "hood")))
+      
+      # Sink
+      ui.frame(xpos=893, ypos=429, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton(im.Scale("gfx/transparent.png", 131, 339),
+                     "gfx/map/kitchen/KitchenCabinets2.png",
+                     clicked=ui.returns(("stash", "sink")))
+      
+      # Hanging pots (pots1)
+      ui.frame(xpos=842, ypos=0, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton(im.Scale("gfx/transparent.png", 182, 341),
+                     "gfx/map/kitchen/KitchenPots1.png",
+                     clicked=ui.returns(("stash", "pots1")))
+      
+      # Small pot (pots2)
+      ui.frame(xpos=326, ypos=408, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton(im.Scale("gfx/transparent.png", 77, 53),
+                     "gfx/map/kitchen/KitchenPots2.png",
+                     clicked=ui.returns(("stash", "pots2")))
+      
+      # Large pot (pots3)
+      ui.frame(xpos=424, ypos=391, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton(im.Scale("gfx/transparent.png", 98, 92),
+                     "gfx/map/kitchen/KitchenPots3.png",
+                     clicked=ui.returns(("stash", "pots3")))
+      
+      # Frying pan + pot (pots4)
+      ui.frame(xpos=544, ypos=406, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton(im.Scale("gfx/transparent.png", 131, 339),
+                     "gfx/map/kitchen/KitchenPots4.png",
+                     clicked=ui.returns(("stash", "pots4")))
+                     
+    elif room == "lib":
+      # Shelves 1
+      ui.frame(xpos=0, ypos=270, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton(im.Scale("gfx/transparent.png", 261, 491),
+                     "gfx/map/library/LibraryShelves1.png",
+                     clicked=ui.returns(("stash", "shelves1")))
+                     
+      # Shelves 2
+      ui.frame(xpos=802, ypos=279, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton(im.Scale("gfx/transparent.png", 222, 483),
+                     "gfx/map/library/LibraryShelves2.png",
+                     clicked=ui.returns(("stash", "shelves2")))
+    
+      # Books 1
+      ui.frame(xpos=448, ypos=446, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton(im.Scale("gfx/transparent.png", 255, 68),
+                     "gfx/map/library/LibraryBooks1.png",
+                     clicked=ui.returns(("stash", "books1")))
+
+      # Books 2
+      ui.frame(xpos=47, ypos=577, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton(im.Scale("gfx/transparent.png", 206, 187),
+                     "gfx/map/library/LibraryBooks2.png",
+                     clicked=ui.returns(("stash", "books2")))
+      
+      # Books 3
+      ui.frame(xpos=252, ypos=565, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton(im.Scale("gfx/transparent.png", 534, 203),
+                     "gfx/map/library/LibraryBooks3.png",
+                     clicked=ui.returns(("stash", "books3")))
+                     
+      # Books 4
+      ui.frame(xpos=790, ypos=614, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton(im.Scale("gfx/transparent.png", 211, 131),
+                     "gfx/map/library/LibraryBooks4.png",
+                     clicked=ui.returns(("stash", "books4")))
  
     # Return button
     ui.frame(xpos=0, ypos=0, background=None)
@@ -228,14 +298,8 @@ init python:
         update_stats(item.get_bonuses())
         
         items[selection[1]] = None
-        
-      
-      # Not every click is going to reduce this number, but this works just
-      # fine for now
-      current_tries -= 1
-  
-    # Show the info box
-    # show_message_window(message)
+
+      #current_tries -= 1
     
     show_message(message, "large")
     

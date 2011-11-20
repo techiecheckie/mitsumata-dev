@@ -25,25 +25,7 @@
 #***********************************
 
 init python:
-  print ""
-  
-  inventory = Inventory()
-  journal_manager = Journal_manager()
-  pm = Persistent_manager(inventory, journal_manager)
-  
-  # These are the values that will be used when a new game starts. Everything 
-  # defined inside this init block will have its state written somewhere when
-  # Renpy creates a new/rewrites an old save game, so it's not actually necessary 
-  # to store these in any external file because already Renpy remembers all the 
-  # variables' states automatically. Which is nice.
-  hp = 0
-  mp = 0
-  tries = 3
-  
-  decision = "5"
-  event_triggered = False
-  pda = False
-  minigames = False
+  init()
   
 #---------------------
 #KONAMI CODE
@@ -259,9 +241,8 @@ image bg riroom = "gfx/backgrounds/room1.png"
 image bg roroom = "gfx/backgrounds/room2.png"
 image bg soroom = "gfx/backgrounds/room3.png"
 image bg suroom = "gfx/backgrounds/room4.png"
-image bg lib = "gfx/backgrounds/library.png"
+image bg lib = "gfx/backgrounds/library.jpg"
 #image bg bathroom = 
-image bg kitchen = "gfx/backgrounds/kitchen.png"
 image bg dfor1 = "gfx/backgrounds/dforest1.png"
 image bg dfor2 = "gfx/backgrounds/dforest2.png"
 image bg dfor3 = "gfx/backgrounds/dforest3.png"
@@ -505,6 +486,11 @@ define na = Character('Naomi', show_two_window=False )
 #    return
 
 label splashscreen:
+     $print persistent.unlocked_items
+     $print persistent.unlocked_journals
+     $print persistent.unlocked_minigames
+
+     return
      $ renpy.pause(0)
      scene bg whitescr
      show text "rosegold games presents..." with dissolve
@@ -637,6 +623,38 @@ $ magpot = inventory.item_unlocked("magpotion")
 #--------------------------------
 
 label start: 
+
+    $pda = True
+    $renpy.show("bg riroom")
+    $show_main_ui()
+    #$unlock_item("jom")
+    $unlock_minigame("mole")
+    #$unlock_item("knife")
+    $inventory.unlock_item("knife")
+    $inventory.unlock_item("aom")
+    $inventory.unlock_item("bom")
+    $inventory.unlock_item("com")
+    $inventory.unlock_item("dom")
+    $inventory.unlock_item("eom")
+    $inventory.unlock_item("fom")
+    $inventory.unlock_item("gom")
+    $inventory.unlock_item("mom")
+    $inventory.unlock_item("iom")
+    $inventory.unlock_item("jom")
+    $inventory.unlock_item("wallet")
+    $inventory.unlock_item("fullwallet")
+    $inventory.unlock_item("signet")
+    $inventory.unlock_item("redjewel")
+    $inventory.unlock_item("map")
+    "asdf"
+    "asdfasdf"
+    "czvbc"
+    "wqerqwer"
+    #"asdfadsf"
+    #call shop_loop
+    #$decision = "16"
+    #call show_map
+    #"asdf"
 #menu:
 #        "Jump ahead for a test.":
 #                jump Scene20
@@ -5724,6 +5742,7 @@ label Scene45:
 
     r  "Uh, yeah. Me neither. I’ll just stick behind you, if that’s all right. I’m kinda fond of all my limbs."
 
+
     #Roman chuckles.
     ro "Riku, I doubt it’ll be that serious."
 
@@ -6939,6 +6958,7 @@ menu:
     "Continue.":
         if susa_arc:
             jump su1
+
         elif kazu_arc:
             jump kaz1
         elif main_arc:

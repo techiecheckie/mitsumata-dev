@@ -1,6 +1,6 @@
 init python:
   def show_minigame_screen():
-    button = ""
+    button       = ""
     button_value = ""
 
     background = "bg riroom"
@@ -9,28 +9,17 @@ init python:
     while True:
       ui.frame(xpos=0.4, ypos=0.2)
       ui.vbox()
-      if minigame_mole:
-        ui.textbutton("Whack-a-mole", ui.returns(WhackAMole))
-      else:
-        ui.text("Whack-a-mole")
-      if minigame_cell:
-        ui.textbutton("Cell", ui.returns(Cells))
-      else:
-        ui.text("Cell")
-      if minigame_platformer:
-        ui.textbutton("Platformer", ui.returns(Platformer))
-      else:
-        ui.text("Platformer")
+      for minigame in persistent.unlocked_minigames:
+        ui.imagebutton("gfx/buttons/minigame_" + minigame + ".png",
+                       "gfx/buttons/minigame_" + minigame + "_hover.png",
+                       clicked=ui.returns(minigame))
       ui.close()
     
       button = ui.interact()
       if button == "exit":
         break
       else:
-        score = run_minigame( game_type=button,
-                              x=357, y=64,
-                              game_width=650,
-                              game_height=650 )
+        score = run(button)
                             
         # if minigame_level == this and score > that
         #   unlock some bonus?
@@ -40,6 +29,21 @@ init python:
     hide_minigame_ui(background, False)
      
     return
+  
+  def run(button):
+    if button == "mole":
+      game = WhackAMole
+    elif button == "cell":
+      game = Cells
+    elif button == "platformer":
+      game = Platformer
+      
+    score = run_minigame( game_type=game,
+                          x=357, y=64,
+                          game_width=650,
+                          game_height=650 )
+    
+    return score    
   
   # running minigames without starting the pda first
   def minigame(game, level):
