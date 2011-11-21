@@ -2,8 +2,8 @@
 # Name Loops!
 #---------------------
 label sleep:
-    $ hp += 1000
-    $ mp += 1000
+    $ hp += 50
+    $ mp += 50
     $show_message("You have a long, peaceful night's sleep.", "medium")
     $update_main_ui()
     return 
