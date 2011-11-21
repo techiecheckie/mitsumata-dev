@@ -242,7 +242,6 @@ image bg roroom = "gfx/backgrounds/room2.png"
 image bg soroom = "gfx/backgrounds/room3.png"
 image bg suroom = "gfx/backgrounds/room4.png"
 image bg lib = "gfx/backgrounds/library.jpg"
-#image bg bathroom = 
 image bg dfor1 = "gfx/backgrounds/dforest1.png"
 image bg dfor2 = "gfx/backgrounds/dforest2.png"
 image bg dfor3 = "gfx/backgrounds/dforest3.png"
@@ -251,18 +250,16 @@ image bg nfor2 = "gfx/backgrounds/nforest2.png"
 image bg nfor3 = "gfx/backgrounds/nforest3.png"
 #image bg shrfr = "shrinefront.png"
 image bg kitchen = "gfx/backgrounds/kitchen.jpg"
-#image bg traingr = ""
+#image bg train1 = ""
+#image bg train2 = ""
 image bg gar1 = "gfx/backgrounds/garden1.png"
 image bg gar2 = "gfx/backgrounds/garden2.png"
 image bg street = "gfx/backgrounds/streetalley1.png"
 image bg store = "gfx/backgrounds/store.png"
 image bg backalley = "gfx/backgrounds/streetalley2.png"
-#image bg cheapbar = ""
-
 image bg blackscr = "gfx/backgrounds/blackscr.png"
 image bg redscr = "gfx/backgrounds/redscr.jpg"
 image bg whitescr = "gfx/backgrounds/whitescr.jpg"
-
 image map = "gfx/backgrounds/map.png"
 image textbox_l = "gfx/textbox.png"
 image textbox_m = "gfx/textbox_2.png"
@@ -437,6 +434,7 @@ define ob = Character('Older Boy 1', show_two_window=False )
 define ob1 = Character('Older Boy 2', show_two_window=False)
 define a = Character('Audra', show_two_window=False )
 define na = Character('Naomi', show_two_window=False )
+define ak = Character('Akiko', show_two_window=False)
    # elif lang == "japanese":
    #         style.default.font = "enksh.ttf"
    #         style.default.language = "eastasian"
@@ -624,37 +622,14 @@ $ magpot = inventory.item_unlocked("magpotion")
 
 label start: 
 
-    $pda = True
-    $renpy.show("bg riroom")
-    $show_main_ui()
-    #$unlock_item("jom")
-    $unlock_minigame("mole")
-    #$unlock_item("knife")
-    $inventory.unlock_item("knife")
-    $inventory.unlock_item("aom")
-    $inventory.unlock_item("bom")
-    $inventory.unlock_item("com")
-    $inventory.unlock_item("dom")
-    $inventory.unlock_item("eom")
-    $inventory.unlock_item("fom")
-    $inventory.unlock_item("gom")
-    $inventory.unlock_item("mom")
-    $inventory.unlock_item("iom")
-    $inventory.unlock_item("jom")
-    $inventory.unlock_item("wallet")
-    $inventory.unlock_item("fullwallet")
-    $inventory.unlock_item("signet")
-    $inventory.unlock_item("redjewel")
-    $inventory.unlock_item("map")
-    "asdf"
-    "asdfasdf"
-    "czvbc"
-    "wqerqwer"
-    #"asdfadsf"
+    #$pda = True
+    #$renpy.show("bg riroom")
+    #$show_main_ui()
+    #$unlock_minigame("mole")
     #call shop_loop
     #$decision = "16"
     #call show_map
-    #"asdf"
+
 #menu:
 #        "Jump ahead for a test.":
 #                jump Scene20
@@ -2760,7 +2735,10 @@ label Scene17:
     with slow_fade
 #* * * * * * * * *
 label Scene17b:
+    scene bg suroom
     $show_main_ui()
+    with slow_fade
+    $renpy.pause(1.0)
     su "Well, Soume, what's your opinion of our new recruit?"
     s "Mmm, well, he is premature, but...he's what we've been looking for."
     su "Hm."
@@ -2769,7 +2747,10 @@ label Scene17b:
     su "Alright. Keep an eye on him."
 
 label Scene18:
+    scene bg hall2
     $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)
 
     "I can still smell Soume’s pollen all over me."
     "I guess I needed a shower anyway, but I’ve sort of gotten used to the scent. It really IS nice, and nothing weird happened, so that’s somethin’ at least." 
@@ -5003,7 +4984,7 @@ label Scene41:
     k  "The average IQ for Majin is 87 on the human scale. Eighty-seven, Riku. Did you know that?"
 
     r  "No. Issat bad?"
-    $unlock_entry("Majin", "054")
+    $journal.unlock_entry("Majin", "054")
 
     k "............"
     #Doctor Osamu sighs.
@@ -5065,7 +5046,7 @@ label majhumdiff:
     
     $renpy.pause(3.0)
     "...can't say I didn't try."
-    $unlock_entry("Kazutaka","072")
+    $journal.unlock_entry("Kazutaka","072")
     
 label urite:
     r  "Okay, you're right." 
@@ -5193,7 +5174,7 @@ label gearsuc:
     k "The thrill of the unknown, the tension one feels during the chase of the answer, the satisfying climax of discovering something new, I--"
 
     "...does he get off on science, or what?"
-    $unlock_entry("Doctor Osamu", "028")
+    $journal.unlock_entry("Kazutaka", "028")
     r  "Hey, Doc! Yo, I’m still here. You need to clear me."
     
     k "Hush child, I'm trying to help you learn a little about yourself!"
@@ -5309,7 +5290,7 @@ label Scene42:
 
     r "........."
     r  "So look...I got to get going. Thanks for the clearance."
-    $unlock_entry("Kazutaka","027")
+    $journal.unlock_entry("Kazutaka","027")
     "He pauses. I think he notices I’m uncomfortable, because his demeanor suddenly changes."
 
     k  "Ahem. You’re right...I’m overreacting. You’re free to go."
@@ -5435,7 +5416,7 @@ label Scene43:
 
     ro  "Well, I can’t say I’d blame him for that. The Doctor is a genius, but I myself worry about his...enthusiasm at times."
 
-    $unlock_entry("Kazutaka","029")
+    $journal.unlock_entry("Kazutaka","029")
     r "I know what you mean."
     
     "I sure as heck wasn’t in any hurry to get back to the lab anytime soon."
@@ -5465,7 +5446,7 @@ label Scene43:
     ro "He can tell you which way to go by instinct, and how to avoid danger." 
     ro "He IS very good at it; I don’t think we’ve ever been ambushed when he accompanies us."
 
-    $unlock_entry("Majin","053")
+    $journal.unlock_entry("Majin","053")
     r  "So?"
 
     ro  "Well, he really only gets flashes of what’s going on." 
@@ -5494,7 +5475,7 @@ label Scene43:
     r  "He drank my blood!?"
 
     ro  "SSSSHHHHHH!"
-    $unlock_entry("Doctor Osamu", "030")
+    $journal.unlock_entry("Kazutaka", "030")
 
     "Roman clasps his hand over my mouth while looking around again."
 
@@ -5594,7 +5575,7 @@ label Scene44:
 
     su  "See, that’s just what I mean. I already told you this! Her name is Akiko! You can’t just show up and be like 'hey you, come with me.' She’ll run off, won’t she!"
 
-    r  "Right, sorry. Akiko. Akiko  Akiko."
+    r  "Right, sorry. Akiko. Akiko Akiko."
 
     "I keep on repeating the name to myself in my head. Can’t forget this again, or Susa isn’t going to let me go along."
 
@@ -5782,7 +5763,7 @@ label Scene45:
     
     "............."
     
-    Akiko "...who are the others with you?"
+    ak "...who are the others with you?"
     r "They're my friends. Roman and Soume." 
     r "They wanna help too."
     
@@ -5790,7 +5771,7 @@ label Scene45:
     
     "A young looking girl comes out into the clearing."
     
-    Akiko "...well. You don't smell bad, I guess."
+    ak "...well. You don't smell bad, I guess."
     
     "She gives a shy smile."
     
@@ -5804,7 +5785,7 @@ label Scene45:
     
     "I think I did pretty good, for my first try!"
     
-    Akiko "Are we...going to the safe place, now?"
+    ak "Are we...going to the safe place, now?"
     
     s "Yes. But first, in case there are any undesirables around, we will wander a little to throw them off of our trails."
     
@@ -5835,7 +5816,7 @@ label Scene45:
 
     s  "I can’t tell for sure, but Mamoru-kun is the highest level of demon hunter. I doubt he would have such...easy targets with him."
 
-    Akiko "...a-am I going to have to fight?"
+    ak "...a-am I going to have to fight?"
     s "Don't worry."
     "He smiles, but I'm not sure if I'm buying it."
     
@@ -5862,7 +5843,7 @@ label Scene45:
     
     ro  "He did look like he was ready to doze off."
 
-    s  "Hrm. Riku, I leave it up to your judgement. You may wait here with Akiko, or move ahead to the safe point. I leave the decision to you."
+    s  "Hrm. Riku, I leave it up to your judgement. You may wait here with ak, or move ahead to the safe point. I leave the decision to you."
 
 menu:
         "Stay with Soume and Roman.":
@@ -5874,7 +5855,7 @@ menu:
                 
 label Scene46a:    
     "I decide we should just settle down and wait for them to come back."
-    Akiko "...maybe we should have gone to the safe point..."
+    ak "...maybe we should have gone to the safe point..."
     r "Soume's a pretty good fighter...we're probably much better off with him."
     r "The Doc is more likely to shriek like he's losing his head."
     "Akiko giggles at my joke."
@@ -5889,7 +5870,7 @@ label Scene46a:
     u  "-gurugle-"
 
     r  "Uh oh..."
-    Akiko "...w-what should we do??"
+    ak "...w-what should we do??"
     
     "He doesn't look very tough. I bet I could take him."
     
@@ -5900,7 +5881,7 @@ label Scene46a:
     #-Battle here. Riku versus a couple of minor demons. Game over if lose-
 
     r  "Hmph. Didn’t even break a sweat."
-    Akiko "T-that was AMAZING, Riku! You have such a unique ability..."
+    ak "T-that was AMAZING, Riku! You have such a unique ability..."
 
     r "Heh...yeah. I'm pretty good at this stuff."
     "Even though I won, I'm still nervous. These things are trying to kill me."
@@ -5921,7 +5902,7 @@ label Scene46a:
     "Roman takes off running in the direction he came from. Well shit."
     "Maybe though, if I try, I could take em..."
     
-    Akiko "What are you going to do?"
+    ak "What are you going to do?"
     
     "................"
 menu:
@@ -5953,7 +5934,7 @@ label Scene46b:
     k "Everything is clear. There is no danger around for miles."  
     k "Now, scoot on back to the others and let me get back to my work, please."
 
-    r  "Well, your sensing pretty fucking screwed up, or you have a weird idea of what danger is.  We were just attacked by demons."
+    r  "Well, your sensing is pretty fucking screwed up!  We were just attacked by demons!"
 
     k "........."
     k "...what?"
@@ -5961,14 +5942,14 @@ label Scene46b:
     r  "You didn't know?"
     r "Roman and Soume are still out there fighting them!"
     
-    r "They even tried to attack me and Akiko!"
+    r "They even tried to attack me and ak!"
 
     "Now he looks like he's going to have a heart attack."
 
     k  "No, no. That is impossible. I’d be able to tell. You must be mistaken."
 
     r  "Look, I know what I saw."
-    Akiko "...I saw it too..."
+    ak "...I saw it too..."
     
     k "............."
     k  "No, no.  That can’t be!  It can’t!  I’d be able to tell. I’d-"
@@ -5994,7 +5975,7 @@ label Scene46b:
     k "Oh lords of science..."
     k "I'll be MURDERED without a fight."
     
-    Akiko "I---he did protect me."
+    ak "I---he did protect me."
     
     k "As if that matters!"
     
@@ -6015,7 +5996,7 @@ label Scene46b:
 
     "Doctor Osamu has taken up pacing back and forth again, mumbling something to himself."
 
-    "I offer Akiko the place on the stump he vacated, and sit on the floor next to her."  
+    "I offer ak the place on the stump he vacated, and sit on the floor next to her."  
     "If we have to listen to his crap, we might as well get comfortable."
 
 
@@ -6254,7 +6235,8 @@ label Scene47:
 
     #-SFX cracking noises-
 
-    na "Chief!  You alright there?  This guy is a quick little fucker, I'd JUST turned my---"
+    na "Chief! ---that injury..."  
+    na "This guy is a quick little fucker, I'd JUST turned my---"
 
     m  "Shut up. Before I kill you."
 
@@ -6287,7 +6269,7 @@ label Scene47:
 #[Scene 48]
 label Scene48:
     r  "Did you hear that?"
-    Akiko "I heard it..."
+    ak "I heard it..."
 
     "I sit up and peer off into the forest. I can’t see much beyond the trees right in front of us."
 
@@ -6310,9 +6292,9 @@ label Scene48:
 
     r  "Did you hear it that time!  It sounded like a voice."
 
-    "Kazutaka sits up and looks around.  It seems he heard it this time too.  Something faint a little ways away."
+    "Kazutaka sits up and looks around. He heard it this time too.  Something faint a little ways away."
 
-    Akiko  "Maybe it's just your friends..."
+    ak  "Maybe it's just your friends..."
     
     "............."
 
@@ -6330,7 +6312,7 @@ label Scene48:
     r  "What the hell HAPPENED out there?"
 
     s  "Mamoru."
-    Akiko "...that scary human..."
+    ak "...that scary human..."
 
     "Soume doesn’t look up from Roman.  He’s doing something to his arm, and Roman doesn’t particularly seem to be liking it.  His face is twisted in pain."
 
@@ -6366,8 +6348,8 @@ label Scene48:
     
     r "...A-Akiko...what are you...?"
     
-    Akiko "I--"
-    Akiko "I have orders!"
+    ak "I--"
+    ak "I have orders!"
     
     "She lifts a clawed hand, to take off the doctor's head."
     
@@ -6406,7 +6388,7 @@ label Scene49:
 
     r  "Ah--"
     
-    "Where Akiko was standing is now just a charred corpse."
+    "Where ak was standing is now just a charred corpse."
     
     r "No---no, I didn't mean to---"
 
@@ -6431,7 +6413,7 @@ label Scene49:
 
     s "Shhh..."
 
-    "Roman is staring at what used to be Akiko. He looks green."
+    "Roman is staring at what used to be ak. He looks green."
 
     "Soume crushes something in his hand and blows it in my face, in Roman's face and around the clearing."
 
@@ -6470,7 +6452,7 @@ label Scene49:
     s  "He’s fine."
 
     ro  "What's going on...?"
-    ro "Why would Akiko attack us...?"
+    ro "Why would ak attack us...?"
     
     s "I'm...not sure."
 
@@ -6934,6 +6916,45 @@ label Scene54:
     
     "Free time, that's good, at least."
     "I don't know what I should do."
+    
+label Scene55:
+    m "What is wrong--? I don't understand--"
+    na "My lord, your injury...we must check for poisons or tracking seeds..."
+    m "......"
+    m "--why is this happening?"
+    na "Please, my lord, if you leave your inju--"
+    m "My injury is fine. Norah will tend to it."
+    na "......."
+    m ".............."
+    na "And what of your other needs, my lord?"
+    m "...?"
+    na "You are sixty five years of age this year...fifty is usually the age of marriage for the family, is it not?"
+    m "...hn. I have better things to do with my time."
+    na "But my lord, you must soon take over the heirship...surely you understand the necessity of taking a wife..."
+    m "Not. Interested."
+    na "......"
+    na "Then, as I asked before...what of your other needs? Your...masculine needs."
+    m "......."
+    na "I...would do anything for you."
+    na "Let me...ease your tension."
+    na "......."
+    m ".............."
+    #play sound bitchsmack
+    na "---!!!"
+    m "...if you touch me there again...I'll kill you."
+    na "--m--ah!"
+    m "Don't..."
+    m "Don't EVER..." 
+    m "...put your hands on me there."
+    m "This is your only warning."
+    na "--ahhh..."
+    m "You're excused. Leave."
+    #play sound footsteps
+    #play sound door slam
+    m "...no one touches that. No one touches there. No one."
+    m "...no one..."
+    m "............"
+    m "...only you..."
     
     $ susa_arc = False
     $ kazu_arc = False
