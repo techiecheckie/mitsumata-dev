@@ -1,13 +1,17 @@
 label badend1:
-    "Ahahaha you die cause you suck."
+    $show_main_ui()
+    "Your instincts were just off this time around..."
+    "Sometimes you have to think ahead to get ahead."
     jump game_over
     
 label badend2:
+        $show_main_ui()
         "You pissed Susa off so bad with your idiot stunting that she kicks you out of the shrine!"
-        "What're you going to do for protection now...?"
+        "Try being more appreciative of others!"
         jump game_over
 
 label badend3:
+        $show_main_ui()
         "If I run away now, what was the point of my training?"
         "I'm gonna stay and help."
         "I rush out into the fray, my hand aflame, ready to rock!"
@@ -29,6 +33,7 @@ label badend3:
         jump game_over  
         
 label badend4:
+    $show_main_ui()
     "I've trained for this. I can do this."
     "I light the dark fire in my hand and lunge at her to get her away from Doctor Osamu."
     "She---"
@@ -48,6 +53,7 @@ label badend4:
     jump game_over
     
 label badend5:
+    $show_main_ui()
     "As quickly as I can, I manage to summon a fireball and send it in the hunter’s direction. She sees me and avoids it."
 
     "In one swift motion, she runs Doctor Osamu through with his sword."
@@ -76,7 +82,21 @@ label badend5:
     "Go back, and consider some of your actions more carefully."
     jump game_over
     
+label badend6:
+        $show_main_ui()
+        "Soume kills you because you're just not a very nice person." 
+        "Next time, try not to be so callous when you need protecting..."
+        jump game_over
+        
+label badend7:
+    $show_main_ui()
+    "Liza ends up, in her disgust of Susa, waiting until the next mission and ambushing her."
+    "You really should watch how you treat people..."
+    jump game_over
+    
 label game_over:
         "Here is some game over loop thing that will play."
-        "You lose."
+        $show_main_ui()
+        "Have you learned your lesson...?"
+        "Then try again."
         return
