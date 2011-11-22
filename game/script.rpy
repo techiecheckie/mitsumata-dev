@@ -24,8 +24,8 @@
 # PYTHON CODES GO HERE.
 #***********************************
 
-init python:
-  init()
+#init python:
+#  init()
   
 #---------------------
 #KONAMI CODE
