@@ -26,23 +26,23 @@ init -50 python:
         @staticmethod
         def create( anchor_type, size ):
             if anchor_type == Anchor.BOTTOM:
-                return Anchor( size.width / 2, size.height )
+                return Anchor( size.width / 2, size.height, Anchor.BOTTOM )
             elif anchor_type == Anchor.BOTTOM_LEFT:
-                return Anchor( 0, size.height )
+                return Anchor( 0, size.height, Anchor.BOTTOM_LEFT )
             elif anchor_type == Anchor.BOTTOM_RIGHT:
-                return Anchor( size.width, size.height )
+                return Anchor( size.width, size.height, Anchor.BOTTOM_RIGHT )
             elif anchor_type == Anchor.CENTER:
-                return Anchor( size.width / 2, size.height / 2 )
+                return Anchor( size.width / 2, size.height / 2, Anchor.CENTER )
             elif anchor_type == Anchor.LEFT:
-                return Anchor( 0, size.height / 2 )
+                return Anchor( 0, size.height / 2, Anchor.LEFT )
             elif anchor_type == Anchor.RIGHT:
-                return Anchor( size.width, size.height / 2 )
+                return Anchor( size.width, size.height / 2, Anchor.RIGHT )
             elif anchor_type == Anchor.TOP:
-                return Anchor( size.width / 2, 0 )
+                return Anchor( size.width / 2, 0, Anchor.TOP )
             elif anchor_type == Anchor.TOP_LEFT:
-                return Anchor( 0, 0 )
+                return Anchor( 0, 0, Anchor.TOP_LEFT )
             elif anchor_type == Anchor.TOP_RIGHT:
-                return Anchor( size.width, 0 )
+                return Anchor( size.width, 0, Anchor.TOP_RIGHT )
 
     class AutomatedInterpolator( object ):
         def __init__( self, min_value, max_value, duration ):
@@ -81,7 +81,7 @@ init -50 python:
     class GameAnimation( object ):
         DEFAULT_FRAMESET = "default"
 
-        def __init__( self, default_frames=None, frame_rate=0 ):
+        def __init__( self, default_frames=None, frame_rate=0, timing_info=None ):
             super( GameAnimation, self ).__init__()
             if default_frames:
                 if isinstance( default_frames, collections.Sequence ):
@@ -92,12 +92,18 @@ init -50 python:
                 default_frames = []
 
             self.frames           = { GameAnimation.DEFAULT_FRAMESET : default_frames }
-            self.frame_duration   = 1.0 / frame_rate if frame_rate > 0 else 0
             self.current_frameset = GameAnimation.DEFAULT_FRAMESET
             self.current_frame    = 0
             self.elapsed_time     = 0
             self.loop_animation   = True
             self.on_animation_end = None
+            self.frame_rate       = frame_rate
+
+            if not timing_info and frame_rate:
+                frame_duration = 1.0 / frame_rate
+                self.timing_info = [ frame_duration ] * len( default_frames )
+            else:
+                self.timing_info = timing_info
 
         def get_displayables( self ):
             displayables = []
@@ -108,6 +114,8 @@ init -50 python:
 
         def set_frames( self, frameset, frames ):
             self.frames[frameset] = frames
+            if not self.timing_info and self.frame_rate:
+                self.timing_info = [ 1.0 / self.frame_rate ] * len( frames )
 
         def set_frameset( self, frameset ):
             if frameset not in self.frames:
@@ -128,10 +136,10 @@ init -50 python:
         def update( self, delta_sec ):
             number_frames = len( self.frames[self.current_frameset] )
 
-            if self.frame_duration > 0:
+            if self.timing_info:
                 self.elapsed_time += delta_sec
-                while self.elapsed_time >= self.frame_duration:
-                    self.elapsed_time  -= self.frame_duration
+                while self.elapsed_time >= self.timing_info[self.current_frame]:
+                    self.elapsed_time  -= self.timing_info[self.current_frame]
                     self.current_frame  = self.current_frame + 1
                     if self.current_frame >= number_frames:
                         self.current_frame = (self.current_frame % number_frames
@@ -231,6 +239,43 @@ init -50 python:
                 y = transform.y - anchor.y
 
             blitter.blit( get_blitter( image ), (x, y) )
+
+    class GameRect( object ):
+        def __init__( self, size, color, anchor=None ):
+            super( GameRect, self ).__init__()
+            self.size  = size
+            self.color = color
+
+            if isinstance( anchor, Anchor ):
+                self.anchor = anchor
+            else:
+                self.anchor = Anchor.create( anchor or Anchor.TOP_LEFT, self.size )
+
+        def get_displayables( self ):
+            return []
+
+        def render( self, blitter, transform, is_flipped=False ):
+            bounds = self.get_bounds( transform )
+            blitter.canvas().rect( self.color,
+                                   (bounds.left,
+                                    bounds.top,
+                                    bounds.right - bounds.left + 1,
+                                    bounds.bottom - bounds.top + 1) )
+
+        def get_bounds( self, transform ):
+            width  = self.size.width
+            height = self.size.height
+            anchor = self.anchor
+
+            if anchor.type:
+                anchor = Anchor.create( anchor.type, Size( width, height ) )
+
+            left   = transform.x - anchor.x
+            top    = transform.y - anchor.y
+            right  = left + width - 1
+            bottom = top + height - 1
+
+            return Bounds( left, top, right, bottom )
 
     class GameText( object ):
         def __init__( self, text_callback, color=None ):
