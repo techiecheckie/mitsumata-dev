@@ -67,8 +67,8 @@ init python:
     NUMBER_Y     = 200
     NUMBER_WIDTH = 96
 
-    RIKU_X = 277
-    RIKU_Y = 430
+    RIKU_X = 237
+    RIKU_Y = 500
 
     class MagicForce( Minigame ):
         def __init__( self, level_number=1 ):
@@ -141,6 +141,7 @@ init python:
                                                                   for frame_index in xrange( NUMBER_RIKU_TIRED_FRAMES ) ],
                                                                 NUMBER_RIKU_TIRED_FRAMES / RIKU_ANIMATION_TIRED_DURATION ) )
             self.riku["transform"].set_position( RIKU_X, RIKU_Y )
+            self.riku["transform"].set_scale( 2.0 )
             self.riku["behavior"].idle()
 
         def create_huds( self ):

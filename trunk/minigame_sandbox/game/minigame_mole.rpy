@@ -85,10 +85,9 @@ init python:
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####
 
     # different states the whack a mole game can be in.
-    MOLE_GAME_STATE_BEGIN     = "mole_begin"
-    MOLE_GAME_STATE_COUNTDOWN = "mole_countdown"
-    MOLE_GAME_STATE_PLAY      = "mole_play"
-    MOLE_GAME_STATE_END       = "mole_end"
+    MOLE_GAME_STATE_BEGIN = "mole_begin"
+    MOLE_GAME_STATE_PLAY  = "mole_play"
+    MOLE_GAME_STATE_END   = "mole_end"
 
     # mole states.
     MOLE_STATE_DEAD       = "dead"
@@ -104,11 +103,7 @@ init python:
     MOLE_ANIMATION_SUBMERGE = "submerge"
 
     # frameset names.
-    COUNTDOWN_FRAMESET_GO    = "countdown-go"
-    COUNTDOWN_FRAMESET_ONE   = "countdown-1"
-    COUNTDOWN_FRAMESET_TWO   = "countdown-2"
-    COUNTDOWN_FRAMESET_THREE = "countdown-3"
-    MOLE_FRAMESET_DEAD       = "dead"
+    MOLE_FRAMESET_DEAD = "dead"
 
     # animation durations.  these divided into the number of frames that are
     # in the corresponding animation are the frames per second value passed to
@@ -218,7 +213,6 @@ init python:
             self.easy_moles         = []
             self.medium_moles       = []
             self.hard_moles         = []
-            self.countdown_hud      = None
             self.score_hud          = None
             self.start_screen_hud   = None
             self.stop_screen_hud    = None
@@ -305,15 +299,6 @@ init python:
                 self.dirt_piles.append( dirt_pile )
 
         def create_huds( self ):
-            self.countdown_hud = GameObject()
-            self.countdown_hud["renderer"] = GameRenderer()
-            self.countdown_hud["behavior"] = CountdownBehavior()
-            self.countdown_hud["renderer"].set_frame( COUNTDOWN_FRAMESET_GO, GameImage( "gfx/whack_a_mole/countdown/countdown-go.png" ) )
-            self.countdown_hud["renderer"].set_frame( COUNTDOWN_FRAMESET_ONE, GameImage( "gfx/whack_a_mole/countdown/countdown-1.png" ) )
-            self.countdown_hud["renderer"].set_frame( COUNTDOWN_FRAMESET_TWO, GameImage( "gfx/whack_a_mole/countdown/countdown-2.png" ) )
-            self.countdown_hud["renderer"].set_frame( COUNTDOWN_FRAMESET_THREE, GameImage( "gfx/whack_a_mole/countdown/countdown-3.png" ) )
-            self.countdown_hud["renderer"].set_frameset( COUNTDOWN_FRAMESET_THREE )
-
             self.score_hud             = GameObject()
             self.score_hud["renderer"] = GameRenderer( GameText( self.get_score ) )
             self.score_hud["transform"].set_position( 400, 10 )
@@ -473,7 +458,6 @@ init python:
             for mole in moles:
                 displayables.extend( mole["renderer"].get_displayables() )
 
-            displayables.extend( self.countdown_hud["renderer"].get_displayables() )
             displayables.extend( self.start_screen_hud["renderer"].get_displayables() )
             displayables.extend( self.stop_screen_hud["renderer"].get_displayables() )
             displayables.extend( self.time_remaining_hud["renderer"].get_displayables() )
@@ -484,11 +468,7 @@ init python:
             return self.total_score
 
         def update( self, delta_sec ):
-            if self.state == MOLE_GAME_STATE_COUNTDOWN:
-                self.countdown_hud.update( delta_sec )
-                if not self.countdown_hud.is_alive():
-                    self.state = MOLE_GAME_STATE_PLAY
-            elif self.state == MOLE_GAME_STATE_PLAY:
+            if self.state == MOLE_GAME_STATE_PLAY:
                 # update automated parameters.
                 self.time_remaining.update( delta_sec )
                 self.spawn_time.update( delta_sec )
@@ -556,8 +536,6 @@ init python:
 
             if self.state == MOLE_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, world_transform )
-            elif self.state == MOLE_GAME_STATE_COUNTDOWN:
-                self.countdown_hud["renderer"].render( blitter, world_transform )
             elif self.state == MOLE_GAME_STATE_PLAY:
                 moles = itertools.chain( self.easy_moles,
                                          self.medium_moles,
@@ -613,32 +591,9 @@ init python:
         def on_mouse_up( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
                 if self.state == MOLE_GAME_STATE_BEGIN:
-                    self.state = MOLE_GAME_STATE_COUNTDOWN
+                    self.state = MOLE_GAME_STATE_PLAY
                 elif self.state == MOLE_GAME_STATE_END:
                     self.quit()
-
-    class CountdownBehavior( GameComponent ):
-        def __init__( self ):
-            super( CountdownBehavior, self ).__init__()
-            self.elapsed_time = 0
-
-        def update( self, delta_sec ):
-            self.elapsed_time += delta_sec
-
-            if self.elapsed_time > 3.85:
-                self.game_object.kill()
-            elif self.elapsed_time > 3:
-                self.game_object["renderer"].set_frameset( COUNTDOWN_FRAMESET_GO )
-                self.game_object["transform"].set_position( 15, 150 )
-            else:
-                self.game_object["transform"].set_position( 95, 20 )
-
-                if self.elapsed_time > 2:
-                    self.game_object["renderer"].set_frameset( COUNTDOWN_FRAMESET_ONE )
-                elif self.elapsed_time > 1:
-                    self.game_object["renderer"].set_frameset( COUNTDOWN_FRAMESET_TWO )
-                else:
-                    self.game_object["renderer"].set_frameset( COUNTDOWN_FRAMESET_THREE )
 
     class MoleBehavior( GameComponent ):
         def __init__( self, number_hit_points, duration, score_value,
