@@ -2105,9 +2105,9 @@ label kaz16:
     k "What do you say?"
     
 menu: 
-        "Take the job."
+        "Take the job.":
                 jump kaz16b
-        "Refuse."
+        "Refuse.":
                 jump somemainscene
 
 label kaz16b:        
@@ -2129,9 +2129,9 @@ label kaz16b:
 label kaz16c:
         "Mamoru flirts with someone here."
 menu:
-    "Flirt with a chick."
+    "Flirt with a chick.":
         jump chickflirt
-    "Flirt with a dude."
+    "Flirt with a dude.":
         jump dudeflirt
 label chickflirt:
     "Mamoru flirts with the girl then eats her yay!"
