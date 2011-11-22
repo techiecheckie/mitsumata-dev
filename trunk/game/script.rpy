@@ -750,15 +750,12 @@ label otherstuff:
     "Good night, Riku."
 
     "Night, Mom."
-    $ renpy.pause(2.0)    
+    $ renpy.pause(2.0)
+    scene bg blackscr 
+    $hide_main_ui()
+    with slow_fade    
     
-label Scene1:
-        scene bg blackscr 
-        $hide_main_ui()
-        with fade
-        
-        $ renpy.pause(2.0)
-        
+label Scene1:  
         #scene bg mameat1
         scene bg nfor1 
         $show_main_ui()
@@ -2279,7 +2276,7 @@ label Scene14A:
         $show_main_ui()
         with slow_fade
         "I decide to hang with Soume, since I already spoke with Roman. I head to his room. Roman wasn't kidding...it's covered in greenery."
-        show bg room3 with slow_dissolve
+        show bg soroom with slow_dissolve
         show s smile at right with dissolve
         s "Ahh, Riku-kun. How are you getting along here?"
         show r upset at left with dissolve
@@ -2333,9 +2330,9 @@ label Scene14A:
 label Scene14B:
         scene bg blackscr
         $show_main_ui()
-        with slow_fade
+        with fade
         "Ten minutes. Ten minutes I've been trying to melt chocolate.  I can’t really remember how I called that fire the first time, but whatever I did, it’s not working."
-        show bg room2 with dissolve
+        show bg riroom with dissolve
         show r upset at left with dissolve
         $renpy.pause(1.0)
         show r mad at left with dissolve
@@ -2386,10 +2383,12 @@ label Scene14B:
         r "Yeah, I’m gonna kick him in the -----, right before I shove his ------ down into his ----"
         
         ro "Oh, Riku..."
-        show bg blackscr with dissolve
         hide ro sweat
+        hide r grin
+        with dissolve
+        show bg blackscr with dissolve
         $hide_main_ui()
-        with slow_fade
+        with fade
         
         jump dec1
   
@@ -2413,10 +2412,10 @@ menu:
 
 label Scene16:
     scene bg blackscr
-     
-    scene bg maminpain
+    $renpy.pause(1.0)
+    #scene bg maminpain
     $show_main_ui()
-    with slow_fade
+    with fade
     m "Nngh..."
     
     m "Damned youko."
@@ -2457,16 +2456,16 @@ label Scene16:
     m "Thank you..."
 
 #play sound knocking on door    
-    Maid "Mamoru-sama, I heard you called for me."
+    se "Mamoru-sama, I heard you called for me."
     
     n "Mhm! Right this way. Niichan needs your help with something. He’s very ill and we need some medicine."
     
-    Maid "I...understand. Shall I call upon the doctors?"
+    se "I...understand. Shall I call upon the doctors?"
     
     n "Oh no. No need."
     show bg blackscr with slow_dissolve
-    Maid "Wait--wait!!"
-    Maid "Please--please don’t---aaaah!"
+    se "Wait--wait!!"
+    se "Please--please don’t---aaaah!"
     show bg redscr with dissolve
     #play sound horrible ravenous eating sounds
     $renpy.pause(1.0)
@@ -2485,7 +2484,7 @@ label Scene16:
 label Scene17:
     scene bg blackscr
     $show_main_ui()
-    with slow_fade
+    with fade
 
     "My first morning in this weird place. I roll around and groan. Don’t really want to get up."
     
@@ -2505,7 +2504,7 @@ label Scene17:
     "Thinking about it all is giving me a headache. That was my old life. I can’t go back there anymore."
     
     "And this life has superpowers. How bad could it be?"
-    
+    show bg hall2 with dissolve
     #play sound knocking
     show ro neu at left with dissolve
     ro "Riku, you should head down to the training grounds. Soume would like to start with you today."
@@ -2521,17 +2520,13 @@ label Scene17:
     "I get up and put on my new slave wear."
     show bg hall1 with dissolve
     
-    show bg gar1 with dissolve
+    show bg train1 with dissolve
     "Following the map, I head out to the training grounds. Soume’s already there, talking to the flowers as if they could talk back."
     
-    show bg souwithplants with dissolve
+    #show bg souwithplants with dissolve
     "It’s only just then that I realize that the plants actually seem to like it. They’re all sort of shifting toward him."
     
     "Really weird, but...cool."
-    hide bg souwithplants
-    hide bg gar1
-    show bg traingr
-    with dissolve
     
     show r neu at left with dissolve
     r "Hey Soume! I’m ready for training!"
@@ -2561,14 +2556,12 @@ label Scene17:
     show s smile at right with dissolve
     s "No worries, I’ll show you."
    
-    #These begin instructions for the next minigame.
-    #show bg minigame with dissolve.
     #Soume takes a deep breath.
-    $hide_main_ui()
-    scene bg soupowers 
-    with slow_dissolve
+    #$hide_main_ui()
+    #scene bg soupowers 
+    #with slow_dissolve
     $renpy.pause(2.0)
-    $show_main_ui()
+    #$show_main_ui()
     s "Ki is channelled when you are balanced."
     
     #show Green glow with fade
@@ -2581,8 +2574,8 @@ label Scene17:
     
     s "A small spindle of a green vine twines itself around Soume’s fingers and forms a bud."
     
-    $hide_main_ui()
-    scene bg traingr 
+    #$hide_main_ui()
+    scene bg train1 
     $show_main_ui()
     with slow_dissolve
     
@@ -2646,12 +2639,20 @@ label Scene17:
     #Instructions: PUT INSTRUCTIONS HERE
     
 #label balance failure:
+    #scene bg train1
+    #$show_main_ui()
+    #with slow_fade
+    #$ renpy.pause(1.0)
     #r "Awww, this is really tough!"
     
     #s "It takes a bit of practice. Try again, and focus this time."
     #here, the game must replay until you beat at least 1 level.
     
 #label balance success:
+    scene bg train1
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)
     r "I did it--whoa."
     
     show r dizzy at left with dissolve
@@ -2732,12 +2733,12 @@ label Scene17:
 
     show bg blackscr with dissolve
     $hide_main_ui()
-    with slow_fade
+    with fade
 #* * * * * * * * *
 label Scene17b:
     scene bg suroom
     $show_main_ui()
-    with slow_fade
+    with fade
     $renpy.pause(1.0)
     su "Well, Soume, what's your opinion of our new recruit?"
     s "Mmm, well, he is premature, but...he's what we've been looking for."
@@ -2745,11 +2746,14 @@ label Scene17b:
     su "Which means that he's what they're looking for, too."
     s "Yes."
     su "Alright. Keep an eye on him."
+    show bg blackscr with dissolve
+    $hide_main_ui()
+    with slow_fade
 
 label Scene18:
     scene bg hall2
     $show_main_ui()
-    with slow_fade
+    with fade
     $ renpy.pause(1.0)
 
     "I can still smell Soume’s pollen all over me."
@@ -2771,6 +2775,7 @@ label Scene18:
     r "C’mon Roman, I’m not a snitch!"
     
     "Roman doesn’t look like he trusts me that much. Which I guess makes sense."
+    show bg roroom with dissolve
     
     ro "All right. Soume’s supposed to be my partner, but he makes me awfully nervous."
     "I’ve known him a pretty long while, since the first day I came here, and I don’t feel as if I know any more about him now than I did then."
@@ -2796,8 +2801,13 @@ label Scene18:
     r "Oh, the pollen thing in your face? Yeah."
     
     ro "That’s not quite how it went for me..."
+    show bg blackscr with slow_dissolve
 
 label Scene19:
+    scene bg train2
+    $show_main_ui()
+    with fade
+    $ renpy.pause(1.0)
     #play sound Sound of weapons clashing.
     #Roman makes martial arts cries.
     ro "HIIIIIIIIIIIYAH!"
@@ -2811,8 +2821,6 @@ label Scene19:
     ro "Right."
     
     s "Call your best weapon."
-    
-    #show cg Rikupower with fade
     
     "Soume stands still and watches, fiddling with some seeds in his palm."
     
@@ -2838,12 +2846,17 @@ label Scene19:
     #play sound Sound of more flesh getting punctured.
     
     ro "Aah--"
+    show bg blackscr with dissolve
+    $hide_main_ui()
+    with fade
 
 #* * * * *
 
 label Scene20:
+    scene bg roroom
     $show_main_ui()
-
+    with fade
+    $ renpy.pause(1.0)
     r "...ow. He ran your hand through?"
     
     ro "It’s completely healed, not even a scar, but...I didn’t see it coming." 
@@ -2867,7 +2880,9 @@ label Scene20:
     "Maybe Soume wouldn’t’ve picked on him if he didn’t show enemies his whole fuckin’ deck before a fight. Ain’t nobody pickin’ on ME here."
     
     ro "You’re right; I apologize. I’m just overthinking it. I’ll talk to him."
-    
+    show bg blackscr with dissolve
+    $hide_main_ui()
+    with fade
 $ decision = "2"
 menu:
     "Search.":
@@ -2876,15 +2891,20 @@ menu:
         call sleep
     
 label Scene22:
+    scene bg blackscr
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)    
 
     "If there’s one thing I’ve noticed, it’s that I get much better sleep here. I haven’t had that wacky dream in a while."
     
-    "I’ve also sort of been forced to quit my vices...there’s nowhere to buy smokes, and I haven’t yet been able to find any liquor, not even for shrine ceremonies!"
+    "I’ve also sort of been forced to quit my vices...there’s nowhere to buy smokes, and I haven’t yet been able to find any liquor, not even for ceremonies!"
     "What kind of old lady doesn’t have alcohol around?"
     
     "Bet she’s hiding it in some secret cupboard or something."
     
     #play sound Sound of birds chirping.
+    show bg riroom with slow_dissolve
     
     su "GET THE FUCK OUTTA BED YOU LITTLE SHIT!"
     
@@ -2897,6 +2917,7 @@ label Scene22:
     su "I SAID GET THE FUCK UP! YOU GOT CLEANING TO DO, YOU UNGRATEFUL FREELOADING LITTLE FUCKER!"
     
     r "I’m up, I’m up!"
+    show bg train2 with dissolve
     
     "I throw on some clothes and head out to the grounds. Everyone else is already there, scrubbing away. Susa shoves a broom into my hand."
     
@@ -2917,7 +2938,15 @@ label Scene22:
     r "AAAAAAAAAAAAAAAAAAAAAGHHHHHDLFS--"
 
     $unlock_entry("Susa","016")
+    show bg blackscr
+    $hide_main_ui()
+    with slow_fade
+    
 label Scene23:
+    scene bg train1
+    $show_main_ui()
+    with fade
+    $ renpy.pause(1.0)    
     r "Ow ow ow ow..."
     
     ro "Wasn’t this morning’s training exercise invigorating, Riku?"
@@ -2977,17 +3006,21 @@ label Scene23:
     "For all the sensitive whining Roman does, he’s grinning like a fool at Soume right now."
     
     "We work on it until bedtime."
+    show bg blackscr
+    $hide_main_ui()
+    with fade
     if Scene21:
         jump Scene25
     else:
         jump Scene26
-label Scene25:    
+label Scene25:
+    $show_main_ui()        
     s "Roman-kun, would you mind staying a bit late to chat with me?"
     
     ro "Ah...sure, Soume, whatever you’d like."
-    
+    $renpy.pause(1.0)
     "Hm. Didn’t invite me. Though that doesn’t necessarily mean anything..."
-
+    $hide_main_ui()
 menu:
         "Eavesdrop.":
                 jump eavesdrop
@@ -2995,6 +3028,10 @@ menu:
                 jump stayout
                 
 label eavesdrop:
+    scene bg gar2
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)    
     "I stick around to listen in for just a bit. No harm, no foul, right?"
     
     s "You did really wonderfully today, Roman."
@@ -3030,11 +3067,24 @@ label eavesdrop:
     
     "This is getting a little too weird for me..."
     "I'm outta here."
+    show bg blackscr
+    $hide_main_ui()
+    with slow_fade
+    jump Scene26
     
 label stayout:
+    scene bg blackscr
+    $show_main_ui()
+    with fade
     "If I eavesdrop, and that rabid bat catches me, I’m screwed. Better to just move along."
+    $hide_main_ui() 
+    with slow_fade
     
 label Scene26:
+    scene bg riroom
+    $show_main_ui()
+    with fade
+    $ renpy.pause(1.0)
 
     su "Oi. You. Doctor’s visit."
     
@@ -3061,6 +3111,9 @@ label Scene26:
     "Can’t she take a joke?"
     
     "I head down the stairs. The basement is pretty deep; there’s a locked door and a broad library and lab down here. It’s a giant dusty mess, books and papers and scribbles everywhere."
+    show bg hall2 with dissolve
+    $renpy.pause(1.0)
+    show bg lib with dissolve
     
     #play sound Books falling to the ground, dust making loud noises, papers crinkling all over.
     
@@ -3185,6 +3238,9 @@ label Scene26:
     k "You’ll learn eventually. Now please remove yourself from my library. Your ignorance is starting to leak everywhere."
     
     "Oh, screw that guy. What an as---a grump. Still, what he says sticks with me. Human laws only apply to humans?"
+    show bg blackscr
+    $hide_main_ui()
+    with fade
     $ decision = "3"
     
 menu:
@@ -3199,7 +3255,10 @@ menu:
         $unlock_entry("something", "031")    
 
 label Scene27:
-
+    scene bg hall1
+    $show_main_ui()
+    with fade
+    $ renpy.pause(1.0)
     "Mmm, no sign of the witch this morning. Place isn't too dirty, either. No one will miss me if I watch a little TV instead of cleaning up..."
     
     #play sound Sound of someone getting smacked
@@ -3228,9 +3287,15 @@ label Scene27:
     su "Good. I’ll be expecting you to buy me a new one. NOW CLEAN ALL THIS SHIT UP!"
     
     "I just wanted to watch some television..."
-
+    show bg blackscr
+    $hide_main_ui()
+    with slow_fade
+    
 label Scene28:
-
+    scene bg hall1
+    $show_main_ui()
+    with fade
+    $ renpy.pause(1.0)
     #play sound phone ringing
     
     #Roman sighs here.
@@ -3347,9 +3412,15 @@ label Scene28:
     #Liza chuckles.
     l "I’m afraid not."
     $ unlock_entry("Liza", "031")
+    show bg blackscr
+    $hide_main_ui()
+    with slow_fade
 
 label Scene29:
     #play sound Forest medley
+    scene bg dfor1
+    $show_main_ui()
+    with fade
     
     #Girl pants and breathes heavily in terror.
     gir "Run. Must run."
@@ -3446,6 +3517,9 @@ label Scene29:
     
     #show screen flash 
     #play sound lightning
+    show bg blackscr
+    $hide_main_ui
+    with fade
     $ decision = "4"
 menu:
     "Search.":
@@ -3457,6 +3531,10 @@ menu:
         $unlock_entry("something", "031")    
 
 label Scene30a:
+    scene bg riroom
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)    
     su "Mail call, brat. That's yours."
     
     r "Really? Cool."
@@ -3468,6 +3546,7 @@ label Scene30a:
     "I talk to my parents a lot." 
     "Not that I’m homesick or anything!" 
     "It…it’s more for their sake than mine."
+    show bg hall1 with dissolve
     
     r "Yeah, I just got the package. That’s why I was calling, thanks."
     
@@ -3599,10 +3678,16 @@ label Scene30c:
     r "What the heck was I thinking? This is the first treat I’ve had since I got here. Let THEIR parents send THEM cake."
     $hp+=20
     $mp+=20
+    show bg blackscr
+    $hide_main_ui()
+    with fade
     jump Scene32
     
 label Scene31:
-
+    scene bg kitchen
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)
     ro "Mm, is the cake vegan?"
     
     r "Duh, of course."
@@ -3765,6 +3850,9 @@ label Scene31:
     "Roman runs off in the same direction as Soume. I can hear him gagging as he practically gallops to the bathroom."
     
     r "…this is the last time I share my food with ANYONE."
+    show bg blackscr
+    $hide_main_ui()
+    with fade
     
 label Scene32:
     $ decision = "5"       
@@ -3777,13 +3865,16 @@ label Scene32:
             call research_loop
             $unlock_entry("something", "031")   
 label Scene32a:
-
+    scene bg riroom
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)
     "Really, really hate wakin’ up early. If the sun doesn’t fucking have to be up at 4am, why do I?"
     
     "Training is the only thing about it I can stand. Still, kind of hard to focus on Soume when my body is pissed at me for forcing it to clean for the past four hours."
     
     "I’m a little late today, but I’m sure Soume will forgive me. I’d rather cross him than Susa, anyway."
-    
+    show bg gar1 with dissolve
     s "Why helloooooooo! I almost didn’t see you there!"
     
     r "Hey Soume. Sorry I’m late, I---"
@@ -3902,9 +3993,15 @@ label Scene32a:
     s "That’s quite unrealistic and irresponsible of the television people..."
     
     ro "Sooooumeeeeee..."
-
+    show bg blackscr 
+    $hide_main_ui()
+    with slow_fade
 
 label Scene33:
+    scene bg train2
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)    
     "Time fliiiiiiiiiies when you're training."
     "I don't remember any class in school moving this fast."
     
@@ -4017,12 +4114,20 @@ label battle1vic:
     
     #Soume giggles.
     s "Your flattery embarrasses me."
-
+    show bg blackscr
+    $hide_main_ui()
+    with fade
+    jump Scene34
+    
 label Scene34:
+    scene bg roroom
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)    
     "Today is a day off, FINALLY. Actually, I was supposed to clean this morning,"
     
     "I think I’ve earned a little break. Doubt Susa sees it the same way, but so long as she don’t know, she has no reason to hit me. Not that she needs a reason."
-    
+    show bg hall1 with dissolve
     r "So, Roman, where you taking me?"
     
     ro "I’d rather it remain a surprise."
@@ -4031,6 +4136,7 @@ label Scene34:
     
     #Roman chuckles.
     ro "No. Much better than a bar."
+    show bg gar1 with dissolve
     
     r "Strip club!?"
     
@@ -4039,7 +4145,7 @@ label Scene34:
     r "Dammit, Roman. If this turns out to be a library or a soup kitchen or something, I’m gonna be pissed."
     
     "It’s my first time off the rescue in months, and Roman is making me hike through the woods. First time I’ve been able to fuckin’ swear out loud in months, too."
-    
+    show bg dfor2 with dissolve
     #Roman chuckles.
     ro "You’ll have to wait until we get there."
     
@@ -4212,6 +4318,7 @@ label Scene34:
     "Roman runs off ahead. He either sees where we’re going, or he’s just trying to get away from me.  Probably both."
 
 label Scene35:
+    show bg dfor1 with dissolve
     r "…this is where you wanted to take me?"
     
     ro "Yes!"
@@ -4305,8 +4412,13 @@ label Scene35:
     "Something clicks."
     
     r "I got it!"
-
+    show bg blackscr
+    $hide_main_ui()
+    with fade
 label Scene36:
+    scene bg store
+    $show_main_ui()
+    with fade
     "The store opens up, revealing a big mess of clothes and books and weird little bottles of  liquids."
     ro "About time, Riku! Come on in and take a look around."
     
@@ -4371,9 +4483,15 @@ label Scene36:
     $show_message("You may shop by selecting that choice.", "medium") 
     $show_message ("Inventory changes frequently, so be sure to check back as often as you can!","medium")
     $unlock_entry("Humans","070")
-    r "Hmm…I do have some cash left..."
+    show bg blackscr
+    $hide_main_ui()
+    with fade
 
 label Scene37:
+    scene bg dfor2
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)    
     "Roman and I run back to the rescue. I spent too much time at the shop. Susa won’t be happy."
     
     r "Hey, Roman, thanks for taking me out. That was actually pretty fun. I was starting to forget was going outside was like."
@@ -4400,7 +4518,7 @@ label Scene37:
     ro "Of course. It isn’t that I don’t have people to talk to…there are some things that I’d just rather not talk about."
     
     r "Fine, fine. Just know that--"
-    
+    show bg gar2 with dissolve
     "I stop. Sitting right in the middle of the main courtyard is Susa, smoking something."
     
     ro "Oh er, well, good luck Riku!"
@@ -4458,7 +4576,9 @@ label Scene37:
     r "Um. Later...then?"
     r "............................"
     ".........."
-    
+    show bg blackscr
+    $hide_main_ui()
+    with slow_fade
     $ decision = "6"
 menu:
     "Search.":
@@ -4472,6 +4592,10 @@ menu:
         $unlock_entry("something", "031")
 
 label Scene38:
+    scene bg blackscr
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)
     #This is Naomi
     #Naomi chuckles.
     $ Naomi = "Cruel-eyed Woman"        
@@ -4520,10 +4644,16 @@ label Scene38:
     m "It's been confirmed. Go. Alert the other hunters. Tell them the plan is on schedule."
     
     na "Understood."
+    $hide_main_ui()
+    with fade
+    $renpy.pause(1.0)
 
     $unlock_entry("Mamoru","071")
 label Scene39:
-
+    scene bg dungeon
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)
     n  "Where are you taking me? It’s cold down here!"
     
     m "I have a present for you, Norah. For being such a good sister."
@@ -4567,11 +4697,11 @@ label Scene39:
     n "What about---"
     
     #Boy groans in pain.
-    Boy "Help…please…girl…get help…"
+    boy "Help…please…girl…get help…"
     
     n "Mmmmmm, you went out of your way to please me, brother."
     
-    Boy "What do you want? Please, my parents are rich…"
+    boy "What do you want? Please, my parents are rich…"
     
     n "'What do I want?' How about your eyes, just to start?"
     
@@ -4583,12 +4713,12 @@ label Scene39:
     
     n "AH. He tried to take a swing at me just now, did you see?"
     
-    Boy "Ngh. Can’t…breathe…"
+    boy "Ngh. Can’t…breathe…"
     
     m "Do watch where you put your hands. That is my little sister, after all."
     
     #Boy sobs.
-    Boy "I don’t understand! WHY IS THIS HAPPENING? I WANT TO GO HOME!"
+    boy "I don’t understand! WHY IS THIS HAPPENING? I WANT TO GO HOME!"
     
     m "Why---"
     
@@ -4596,7 +4726,7 @@ label Scene39:
     
     m "You absolutely may."
     
-    Boy "Please…I DON’T WANT TO DIE!"
+    boy "Please…I DON’T WANT TO DIE!"
     
     #(CG: Norah gently touching the boy’s face.)
     
@@ -4604,7 +4734,7 @@ label Scene39:
     
     n "The cry hasn’t  been invented yet that can be heard by an empty stomach."
     
-    Boy "…grgh…"
+    boy "…grgh…"
     
     m "Swine. Worse, really. Swine die with dignity."
     
@@ -4617,6 +4747,9 @@ label Scene39:
     n "I’m sorry. I tried, I did!"
     
     m "You’re forgiven, but into the bath before it starts to smell!"
+    show bg blackscr
+    $hide_main_ui()
+    with fade
     $ decision = "7"
 menu:
     "Search.":
@@ -4630,6 +4763,9 @@ menu:
         $unlock_entry("something", "031")
         
 label Scene40:
+    show bg blackscr
+    $show_main_ui()
+    with fade
 #Soume whispers. His voice sounds a bit harsh.
 
     s "Tch. They're more intelligent than I thought."
@@ -4645,7 +4781,7 @@ label Scene40:
     
     #Soume sounds muffled.
     s "…unacceptable…won’t…"
-    
+    show bg soroom with dissolve
     ro "Hey…Soume?"
     
     s  "--hm?"
@@ -4752,9 +4888,14 @@ label Scene40:
     #play sound footsteps
     
     ro "B-boy plant? Hey Soume, come back! How could you tell it was a boy plant?"
-
+    show bg blackscr
+    $hide_main_ui()
+    with fade
 label Scene40a:
-
+    scene bg train2
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)
     boy  "OOF!"
 
     r  "AHA! And another one! Man, I haven’t lost a sparing match in weeks!"
@@ -4947,9 +5088,14 @@ label daychal2suc:
     s "Heehee."
     su "Anyway, Soume, see me later, please."
     s "I will."
-    
+    show bg blackscr
+    $hide_main_ui()
+    with fade
 label Scene41:
-
+    scene bg lib
+    $show_main_ui()
+    with fade
+    $ renpy.pause(1.0)
     k  "Honestly, I don’t know how I can make this any clearer."
     k "HOLD STILL, or I will not be able to collect the blood sample I need."
 
@@ -4984,7 +5130,7 @@ label Scene41:
     k  "The average IQ for Majin is 87 on the human scale. Eighty-seven, Riku. Did you know that?"
 
     r  "No. Issat bad?"
-    $journal.unlock_entry("Majin", "054")
+    $unlock_entry("Majin", "054")
 
     k "............"
     #Doctor Osamu sighs.
@@ -5046,7 +5192,7 @@ label majhumdiff:
     
     $renpy.pause(3.0)
     "...can't say I didn't try."
-    $journal.unlock_entry("Kazutaka","072")
+    $unlock_entry("Kazutaka","072")
     
 label urite:
     r  "Okay, you're right." 
@@ -5174,7 +5320,7 @@ label gearsuc:
     k "The thrill of the unknown, the tension one feels during the chase of the answer, the satisfying climax of discovering something new, I--"
 
     "...does he get off on science, or what?"
-    $journal.unlock_entry("Kazutaka", "028")
+    $unlock_entry("Kazutaka", "028")
     r  "Hey, Doc! Yo, I’m still here. You need to clear me."
     
     k "Hush child, I'm trying to help you learn a little about yourself!"
@@ -5290,7 +5436,7 @@ label Scene42:
 
     r "........."
     r  "So look...I got to get going. Thanks for the clearance."
-    $journal.unlock_entry("Kazutaka","027")
+    $unlock_entry("Kazutaka","027")
     "He pauses. I think he notices I’m uncomfortable, because his demeanor suddenly changes."
 
     k  "Ahem. You’re right...I’m overreacting. You’re free to go."
@@ -5298,8 +5444,15 @@ label Scene42:
     "There’s definitely something strange going on, but I’m not sure it’s Soume."
     
     r  "Thanks again, Doc."
+    show bg blackscr
+    $hide_main_ui()
+    with fade
     
 label Scene43:
+    scene bg kitchen
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)    
     ro  "So, Riku, what was Doctor Osamu’s verdict? Have you passed?"
 
     r  "With flying colors."
@@ -5416,7 +5569,7 @@ label Scene43:
 
     ro  "Well, I can’t say I’d blame him for that. The Doctor is a genius, but I myself worry about his...enthusiasm at times."
 
-    $journal.unlock_entry("Kazutaka","029")
+    $unlock_entry("Kazutaka","029")
     r "I know what you mean."
     
     "I sure as heck wasn’t in any hurry to get back to the lab anytime soon."
@@ -5446,7 +5599,7 @@ label Scene43:
     ro "He can tell you which way to go by instinct, and how to avoid danger." 
     ro "He IS very good at it; I don’t think we’ve ever been ambushed when he accompanies us."
 
-    $journal.unlock_entry("Majin","053")
+    $unlock_entry("Majin","053")
     r  "So?"
 
     ro  "Well, he really only gets flashes of what’s going on." 
@@ -5475,7 +5628,7 @@ label Scene43:
     r  "He drank my blood!?"
 
     ro  "SSSSHHHHHH!"
-    $journal.unlock_entry("Kazutaka", "030")
+    $unlock_entry("Kazutaka", "030")
 
     "Roman clasps his hand over my mouth while looking around again."
 
@@ -5513,8 +5666,15 @@ label Scene43:
     r  "Alright, alright. Thanks, Roman."
 
     "I gotta learn to stop asking questions I really don’t want the answer to."
-
+    show bg blackscr
+    $hide_main_ui()
+    with fade
+    
 label Scene43a:
+    scene bg suroom
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)    
     #play knock
     s "Miss Susa?"
     su "Oh, it's you. I just wanted a quick opinion..."
@@ -5530,7 +5690,9 @@ label Scene43a:
     su "I've told you this before. We will, once he proves capable of handling the responsibility. If we scare him off, we could be losing our best shot."
     s "I understand. Thank you for speaking with me."
     su "No problem. It's always a pleasure."
-    
+    show bg blackscr
+    $hide_main_ui()
+    with slow_fade
 label Scene43c:    
     $ decision = "8"
     
@@ -5546,7 +5708,10 @@ menu:
         $unlock_entry("something", "031")
         
 label Scene44:
-    
+    scene bg suroom
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)    
     su  "Now the recon point is...Oi! You listening, sprog?"
 
     "Susa keeps on interrupting herself to make sure I'm paying attention." 
@@ -5652,12 +5817,19 @@ label Scene44:
 
     ro  "...ahem. Well, put him somewhere safe and then come join us at the entrance."
 
-    #-play sound footsteps-
+    #play sound footsteps
 
     r  "Svetlana, huh?"
+    show bg blackscr
+    $hide_main_ui()
+    with fade
 
 #[Scene 45]
 label Scene45:
+    scene bg nfor2
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)    
     r  "We there yet?"
 
     k  "Patience, child."
@@ -5685,6 +5857,7 @@ label Scene45:
 
     r  "Right, sorry."
 
+    show bg nfor1 with dissolve
     "I turn back around, and I find us approaching the area Doctor Osamu was just describing. He walks over to the stump and sits on top of it." 
     "Soume walks into the clearing as well, in a slow circle, dropping seeds. They sprout up as full grown plants."
 
@@ -5734,9 +5907,10 @@ label Scene45:
     s "...."
 
     "We leave the safe zone and head deeper into the forest." 
+    show bg nfor2 with dissolve
     "According to Susa's instructions, there is a small shack thing where our rescue is living." 
     "We just need to find her and get back to the safe zone. Job done. Easy, I think, for my first mission."
-    
+    show bg nfor3 with dissolve
     "The shack is pretty easy to find, a little makeshift house built between two trees."
     s "Riku, would you like to?"
     r "M-me?"
@@ -5792,6 +5966,7 @@ label Scene45:
     "So far, so good."
     "And we have another person to fight with us, too!"
 
+    show bg nfor2 with dissolve
     "We follow Soume as he leads us past a river. I don't remember the river on the way in, but it's probably part of Soume's plan."
     
     s "..........."
@@ -5853,7 +6028,11 @@ menu:
             s "Fair enough. Move as quickly and silently as you can."
             jump Scene46b
                 
-label Scene46a:    
+label Scene46a:
+    scene bg nfor3
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)    
     "I decide we should just settle down and wait for them to come back."
     ak "...maybe we should have gone to the safe point..."
     r "Soume's a pretty good fighter...we're probably much better off with him."
@@ -5912,6 +6091,10 @@ menu:
                 jump Scene46b
 
 label Scene46b:
+    scene bg nfor2
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)    
     r "Let's go back. I don't want to risk your safety."
     "I sound pretty cool."
     
@@ -5998,9 +6181,15 @@ label Scene46b:
 
     "I offer ak the place on the stump he vacated, and sit on the floor next to her."  
     "If we have to listen to his crap, we might as well get comfortable."
-
+    show bg blackscr
+    $hide_main_ui()
+    with slow_fade
 
 label Scene47:
+    scene bg blackscr
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)    
     s  "Roman, are you alright?"
 
     ro  "Yes. Those hunters were rather weak, weren't they?"
@@ -6265,9 +6454,16 @@ label Scene47:
     s "Shhhhh. You should rest. Your arm is pretty badly broken."
     
     "....................."
+    show bg blackscr
+    $hide_main_ui()
+    with fade
     
 #[Scene 48]
 label Scene48:
+    scene bg nfor1
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)
     r  "Did you hear that?"
     ak "I heard it..."
 
@@ -6366,18 +6562,22 @@ menu:
                 jump Scene49
 
 label Scene49:
-
+    scene bg nfor1
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)
     "I run over in front of Doctor Osamu.  I have no idea what I’m doing.  It’s like my body is moving on its own."
 
     s  "Riku!"
 
-    gir "HAAAAAAAAAAA!"
+    ak "HAAAAAAAAAAA!"
 
     r  "Stop!"
 
     "I can feel my body glowing.  An intense power, one I’ve never felt before is pulsating inside of me."
     
     "My vision goes white."
+    show bg whitescr with dissolve
 
     "Somewhere, far away, I think hear someone scream."  
     "It’s hurting my ears. I just wish it would stop."
@@ -6489,8 +6689,14 @@ label Scene49:
     s  "You be careful. I'll come back to you soon."
 
     k  "Let’s go.  I’m in no mood to stick around."
-
+    show bg blackscr
+    $hide_main_ui()
+    with fade
 label Scene50:
+    scene bg blackscr
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)
     #The narrator here is Roman, now.
     "I’m having that dream again.  The one I always have when I’m nervous or exhausted.  I’m back in Russia.  Enslaved and scared."
 
@@ -6510,9 +6716,9 @@ label Scene50:
     "The boy calls for me, calls out to me for help."
     "I don't reply."
     "I can't risk them taking me, instead."
-
+    show roroom with dissolve     
     ro  "AHHHHHHHHHHHH!"
-
+    
     "I wake up with a start and look around my room.  To my surprise, Soume is in there with me."
 
     ro  "Soume?"
@@ -6583,8 +6789,15 @@ label Scene50:
     
     ro "Oh...yes. I will. Thank you."
     #play sound  Door closing
-
+    show bg blackscr
+    $hide_main_ui()
+    with fade
+    
 label Scene51:
+    scene bg hall1
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)    
     k  "Ah.  Soume.  So nice to run into you."
 
     s  "Doctor Osamu.  Did you just finish checking up on Riku?  I was just heading in myself."
@@ -6651,9 +6864,10 @@ label Scene51:
 
     s "............."
     s  "You may be right. Do have a lovely day, Doctor."
-
+    show bg blackscr with dissolve
+    $renpy.pause(2.0)
 label Scene52:
-
+    show bg riroom with dissolve
     "I finish taking whatever gross thing Doctor Osamu just gave me."
 
     #Riku is gargling something here.
@@ -6727,6 +6941,7 @@ label Scene52:
     "I guess I won't mind training more. I’d rather not explode and take out a city block."
 
     r "Well, thanks for the burger. I feel much better."
+    $inventory.unlock_item("meat")
     s "........."
     s "I'm glad."
     s  "Now that you're full, lie back down. I’m sure Doctor Osamu will be back to check in on you shortly."
@@ -6739,8 +6954,14 @@ label Scene52:
     s "Well...we'll see."
     
     "No less cryptic, that guy."
-
+    show bg blackscr
+    $hide_main_ui()
+    with fade
 label Scene53:
+    scene bg hall1
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)    
     ro  "Hey Riku!  Hold on!"
 
     "I am on my way over to the phone."
@@ -6835,9 +7056,16 @@ label Scene53:
     ma "............."
     ma  "I love you too, Riku. See you soon."
 
+    show bg blackscr with dissolve
     "I hang up the phone. I don't think it helped, much."
-
+    $hide_main_ui
+    with fade
+    
 label Scene54:
+    scene bg suroom
+    $show_main_ui()
+    with slow_fade
+    $ renpy.pause(1.0)    
     su  "So, how is the little sprog, Doctor?"
 
     r  "I keep telling you, I’m-AH-fine."
@@ -6916,8 +7144,13 @@ label Scene54:
     
     "Free time, that's good, at least."
     "I don't know what I should do."
+    show bg blackscr
+    $hide_main_ui()
+    with fade
     
 label Scene55:
+    $show_main_ui
+    with slow_fade
     m "What is wrong--? I don't understand--"
     na "My lord, your injury...we must check for poisons or tracking seeds..."
     m "......"
@@ -6955,7 +7188,8 @@ label Scene55:
     m "...no one..."
     m "............"
     m "...only you..."
-    
+    $hide_main_ui()
+    with fade
     $ susa_arc = False
     $ kazu_arc = False
     $ main_arc = False
