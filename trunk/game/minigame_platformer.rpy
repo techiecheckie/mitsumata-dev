@@ -201,22 +201,22 @@ init python:
             self.stop_screen_hud["transform"].set_position( 138, 50 )
 
             distance_run             = GameObject()
-            distance_run["renderer"] = GameRenderer( GameText( self.get_distance_run ) )
+            distance_run["renderer"] = GameRenderer( GameText( self.get_distance_run, Color( 255, 255, 255, 255 ) ) )
             distance_run["transform"].set_position( 185, 159 )
             self.stop_screen_hud.add_child( distance_run )
 
             distance_left             = GameObject()
-            distance_left["renderer"] = GameRenderer( GameText( self.get_distance_left ) )
+            distance_left["renderer"] = GameRenderer( GameText( self.get_distance_left, Color( 255, 255, 255, 255 ) ) )
             distance_left["transform"].set_position( 185, 200 )
             self.stop_screen_hud.add_child( distance_left )         
             self.start_screen_hud.add_child( distance_left )
             
             self.distance_left_hud             = GameObject()
-            self.distance_left_hud["renderer"] = GameRenderer( GameText( self.get_distance_left ) )
+            self.distance_left_hud["renderer"] = GameRenderer( GameText( self.get_distance_left, Color( 255, 255, 255, 255 ) ) )
             self.distance_left_hud["transform"].set_position( 400, 10 )
 
             self.time_remaining_hud             = GameObject()
-            self.time_remaining_hud["renderer"] = GameRenderer( GameText( self.get_time_remaining ) )
+            self.time_remaining_hud["renderer"] = GameRenderer( GameText( self.get_time_remaining, Color( 255, 255, 255, 255 ) ) )
             self.time_remaining_hud["transform"].set_position( 10, 10 )
 
         def create_tiles( self ):                
@@ -322,7 +322,7 @@ init python:
               return 1
             return 0
 
-        def render( self, blitter ):
+        def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
             
             cell_x = self.runner["behavior"].cell_x-1
@@ -334,26 +334,26 @@ init python:
                 if cell.tile != None:
                   cell.tile["transform"].x = cell.x - self.runner["behavior"].distance
                   cell.tile["transform"].y = cell.y - TILE_HEIGHT/2
-                  cell.tile["renderer"].render( blitter, world_transform )
+                  cell.tile["renderer"].render( blitter, clip_rect, world_transform )
                   
                 if cell.obstacle != None:
                   cell.obstacle["transform"].x = cell.x - self.runner["behavior"].distance
                   cell.obstacle["transform"].y = cell.y - TILE_HEIGHT
-                  cell.obstacle["renderer"].render( blitter, world_transform )
+                  cell.obstacle["renderer"].render( blitter, clip_rect, world_transform )
 
             if self.state == PLATFORMER_GAME_STATE_BEGIN:
-                self.runner["renderer"].render( blitter, world_transform )
-                self.start_screen_hud["renderer"].render( blitter, world_transform )
+                self.runner["renderer"].render( blitter, clip_rect, world_transform )
+                self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == PLATFORMER_GAME_STATE_PLAY:
-                self.time_remaining_hud["renderer"].render( blitter, world_transform )
-                self.distance_left_hud["renderer"].render( blitter, world_transform )
-                self.runner["renderer"].render( blitter, world_transform )
+                self.time_remaining_hud["renderer"].render( blitter, clip_rect, world_transform )
+                self.distance_left_hud["renderer"].render( blitter, clip_rect, world_transform )
+                self.runner["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == PLATFORMER_GAME_STATE_END:
-                self.runner["renderer"].render( blitter, world_transform )
-                self.stop_screen_hud["renderer"].render( blitter, world_transform )
+                self.runner["renderer"].render( blitter, clip_rect, world_transform )
+                self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == PLATFORMER_GAME_STATE_PAUSE:
-                self.runner["renderer"].render( blitter, world_transform )
-                self.stop_screen_hud["renderer"].render( blitter, world_transform )
+                self.runner["renderer"].render( blitter, clip_rect, world_transform )
+                self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
 
         def update( self, delta_sec ):
             if self.state == PLATFORMER_GAME_STATE_PLAY:

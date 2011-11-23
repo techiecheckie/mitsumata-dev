@@ -8,6 +8,7 @@ image minigame_hp_bar = "gfx/minigame_hp_bar.png"
 image minigame_hp_bg  = "gfx/minigame_hp_bg.png"
 image minigame_mp_bar = "gfx/minigame_mp_bar.png"
 image minigame_mp_bg  = "gfx/minigame_mp_bg.png"
+image minigame_bg     = Solid( "#000" )
 
 init python:
   ui_hp_area = 300
@@ -141,8 +142,9 @@ init python:
     (mini_hp_x, mini_mp_x) = calculate_new_minigame_ui_positions(hp, mp)
     
     renpy.transition(dissolve)
-    if background:
-      renpy.show(background)
+#    if background:
+#      renpy.show(background)
+    renpy.show( "minigame_bg" )
     renpy.show("minigame_mp_bg",  at_list = [Position(xpos=579,       ypos=16), Transform(anchor=(0.0, 0.0))])
     renpy.show("minigame_mp_bar", at_list = [Position(xpos=mini_mp_x, ypos=18), Transform(anchor=(1.0, 0.0))])
     renpy.show("minigame_hp_bg",  at_list = [Position(xpos=105,       ypos=16), Transform(anchor=(0.0, 0.0))])

@@ -196,31 +196,51 @@ init -50 python:
         def update( self, delta_sec ):
             self.animator.update( delta_sec )
 
-        def render( self, blitter, world_transform ):
+        def render( self, blitter, clip_rect, world_transform ):
             frame     = (self.animator.get_current_frame() or
                          self.frames[self.current_frameset])
             transform = self.game_object["transform"] + world_transform
 
             if frame:
-                frame.render( blitter, transform, self.is_flipped )
+                frame.render( blitter, clip_rect, transform, self.is_flipped )
 
             for child in self.game_object.children:
                 for renderer in child.get_components( GameRenderer ):
-                    renderer.render( blitter, transform )
+                    renderer.render( blitter, clip_rect, transform )
 
             if self.is_collider_visible:
-                self.render_collider( blitter, world_transform )
+                self.render_collider( blitter, clip_rect, world_transform )
 
-        def render_collider( self, blitter, world_transform ):
+        def render_collider( self, blitter, clip_rect, world_transform ):
             collider = self.game_object["collider"]
 
             if isinstance( collider, GameBoxCollider ):
                 bounds = collider.get_bounds()
+
+                left   = bounds.left + world_transform.x
+                right  = bounds.right + world_transform.x
+                top    = bounds.top + world_transform.y
+                bottom = bounds.bottom + world_transform.y
+
+                if left > (clip_rect[0] + clip_rect[2]):
+                    return
+                if right < clip_rect[0]:
+                    return
+                if top > (clip_rect[1] + clip_rect[3]):
+                    return
+                if bottom < clip_rect[1]:
+                    return
+
+                left   = max( left, clip_rect[0] )
+                right  = min( right, clip_rect[0] + clip_rect[2] )
+                top    = max( top, clip_rect[1] )
+                bottom = min( bottom, clip_rect[1] + clip_rect[3] )
+
                 blitter.canvas().rect( self.collider_color,
-                                       (bounds.left + world_transform.x,
-                                        bounds.top + world_transform.y,
-                                        bounds.right - bounds.left + 1,
-                                        bounds.bottom - bounds.top + 1) )
+                                       (left,
+                                        top,
+                                        right - left + 1,
+                                        bottom - top + 1) )
 
     class GameTransform( GameComponent ):
         def __init__( self, x=0, y=0, scale=1.0 ):

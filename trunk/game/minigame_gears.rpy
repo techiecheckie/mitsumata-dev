@@ -298,21 +298,21 @@ init python:
                     self.gears.append(gear)
                     
                     
-        def render( self, blitter ):
+        def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
 
-            self.background["renderer"].render( blitter, world_transform )
+            self.background["renderer"].render( blitter, clip_rect, world_transform )
 
             for axle in self.axles:
-              axle["renderer"].render(blitter, world_transform)
+              axle["renderer"].render(blitter, clip_rect, world_transform)
             
             for gear in self.gears:
-              gear["renderer"].render(blitter, world_transform)
+              gear["renderer"].render(blitter, clip_rect, world_transform)
             
             if self.state == GEARS_GAME_STATE_BEGIN:
-              self.start_screen_hud["renderer"].render( blitter, world_transform )                
+              self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )                
             elif self.state == GEARS_GAME_STATE_END:
-              self.stop_screen_hud["renderer"].render( blitter, world_transform )
+              self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
             
             
         def get_gear_at_position( self, x, y ):
