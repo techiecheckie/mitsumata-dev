@@ -4,17 +4,22 @@ init python:
 
     class CellLevel( object ):
         def __init__( self, initial_healthy, initial_easy_infected,
+                      initial_medium_infected, initial_hard_infected,
                       infected_idle_time, healthy_idle_time ):
-            self.initial_healthy       = initial_healthy
-            self.initial_easy_infected = initial_easy_infected
-            self.infected_idle_time    = infected_idle_time
-            self.healthy_idle_time     = healthy_idle_time
+            self.initial_healthy         = initial_healthy
+            self.initial_easy_infected   = initial_easy_infected
+            self.initial_medium_infected = initial_medium_infected
+            self.initial_hard_infected   = initial_hard_infected
+            self.infected_idle_time      = infected_idle_time
+            self.healthy_idle_time       = healthy_idle_time
 
     CELL_LEVELS = [
-        CellLevel( initial_healthy       = 2,
-                   initial_easy_infected = 3,
-                   infected_idle_time    = (0.6, 0.85),
-                   healthy_idle_time     = (0.7, 0.9) )
+        CellLevel( initial_healthy         = 2,
+                   initial_easy_infected   = 2,
+                   initial_medium_infected = 0,
+                   initial_hard_infected   = 0,
+                   infected_idle_time      = (0.6, 0.85),
+                   healthy_idle_time       = (0.7, 0.9) )
         ]
 
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####
@@ -36,9 +41,17 @@ init python:
     # timing stuff.
     CELLS_END_GAME_COUNTDOWN = 2.75
 
+    # hit points.
+    NUMBER_HEALTHY_HIT_POINTS         = 1
+    NUMBER_EASY_INFECTED_HIT_POINTS   = 1
+    NUMBER_MEDIUM_INFECTED_HIT_POINTS = 3
+    NUMBER_HARD_INFECTED_HIT_POINTS   = 5
+
     # frameset names.
-    HEALTHY_FRAMESET  = "healthy"
-    INFECTED_FRAMESET = "infected"
+    HEALTHY_FRAMESET         = "healthy"
+    EASY_INFECTED_FRAMESET   = "easy_infected"
+    MEDIUM_INFECTED_FRAMESET = "medium_infected"
+    HARD_INFECTED_FRAMESET   = "hard_infected"
 
     # animation names.
     CELL_ANIMATION_PULSE  = "pulse"
@@ -333,11 +346,18 @@ init python:
             self.create_cells()
             self.create_huds()
 
+            # spawn the initial cells.
             for i in xrange( level.initial_healthy ):
                 self.spawn_cell( HEALTHY_CELL_TYPE )
 
             for i in xrange( level.initial_easy_infected ):
                 self.spawn_cell( EASY_INFECTED_CELL_TYPE )
+
+            for i in xrange( level.initial_medium_infected ):
+                self.spawn_cell( MEDIUM_INFECTED_CELL_TYPE )
+
+            for i in xrange( level.initial_hard_infected ):
+                self.spawn_cell( HARD_INFECTED_CELL_TYPE )
 
         def create_dish( self ):
             self.dish             = GameObject()
@@ -351,9 +371,28 @@ init python:
             pulse_animation.set_frames( HEALTHY_FRAMESET,
                                         [ GameImage( "gfx/cells/human/cell-human-%d.png" % frame_index, Anchor.CENTER )
                                           for frame_index in xrange( NUMBER_CELL_PULSE_FRAMES ) ] )
-            pulse_animation.set_frames( INFECTED_FRAMESET,
-                                        [ GameImage( "gfx/cells/ai/cell-ai-%d.png" % frame_index, Anchor.CENTER )
+            pulse_animation.set_frames( EASY_INFECTED_FRAMESET,
+                                        [ GameImage( "gfx/cells/ai/cell-ai-%d-easy.png" % frame_index, Anchor.CENTER )
                                           for frame_index in xrange( NUMBER_CELL_PULSE_FRAMES ) ] )
+            pulse_animation.set_frames( MEDIUM_INFECTED_FRAMESET,
+                                        [ GameImage( "gfx/cells/ai/cell-ai-%d-medium.png" % frame_index, Anchor.CENTER )
+                                          for frame_index in xrange( NUMBER_CELL_PULSE_FRAMES ) ] )
+            pulse_animation.set_frames( HARD_INFECTED_FRAMESET,
+                                        [ GameImage( "gfx/cells/ai/cell-ai-%d-hard.png" % frame_index, Anchor.CENTER )
+                                          for frame_index in xrange( NUMBER_CELL_PULSE_FRAMES ) ] )
+
+            attack_animation = GameAnimation( frame_rate=(NUMBER_CELL_ATTACK_FRAMES /
+                                                          CELL_ANIMATION_ATTACK_DURATION) )
+
+            attack_animation.set_frames( EASY_INFECTED_FRAMESET,
+                                         [ GameImage( "gfx/cells/ai/cell-ai-attack-%d-easy.png" % frame_index, Anchor( 79, 77 ) )
+                                           for frame_index in xrange( NUMBER_CELL_ATTACK_FRAMES ) ] )
+            attack_animation.set_frames( MEDIUM_INFECTED_FRAMESET,
+                                         [ GameImage( "gfx/cells/ai/cell-ai-attack-%d-medium.png" % frame_index, Anchor( 79, 77 ) )
+                                           for frame_index in xrange( NUMBER_CELL_ATTACK_FRAMES ) ] )
+            attack_animation.set_frames( HARD_INFECTED_FRAMESET,
+                                         [ GameImage( "gfx/cells/ai/cell-ai-attack-%d-hard.png" % frame_index, Anchor( 79, 77 ) )
+                                           for frame_index in xrange( NUMBER_CELL_ATTACK_FRAMES ) ] )
 
             cell             = GameObject()
             cell["renderer"] = GameRenderer()
@@ -361,10 +400,7 @@ init python:
                                                       CELL_COLLIDER_HEIGHT ),
                                                 Anchor.CENTER )
             cell["renderer"].add_animation( CELL_ANIMATION_PULSE, pulse_animation )
-            cell["renderer"].add_animation( CELL_ANIMATION_ATTACK,
-                                            GameAnimation( [ GameImage( "gfx/cells/ai/cell-ai-attack-%d.png" % frame_index, Anchor( 79, 77 ) )
-                                                             for frame_index in xrange( NUMBER_CELL_ATTACK_FRAMES ) ],
-                                                           NUMBER_CELL_ATTACK_FRAMES / CELL_ANIMATION_ATTACK_DURATION ) )
+            cell["renderer"].add_animation( CELL_ANIMATION_ATTACK, attack_animation )
             cell["renderer"].set_collider_visible( False )
             PrefabFactory.add_prefab( CELL_TYPE, cell )
 
@@ -458,11 +494,22 @@ init python:
                                                  self.infected_idle_time,
                                                  self.infected_growth_rate,
                                                  self.spawn_cell,
+                                                 NUMBER_HEALTHY_HIT_POINTS,
                                                  state )
                 cell["renderer"].play_animation( CELL_ANIMATION_PULSE,
                                                  frameset=HEALTHY_FRAMESET )
                 self.healthy_cells.append( cell )
             else:
+                if cell_type == EASY_INFECTED_CELL_TYPE:
+                    frameset          = EASY_INFECTED_FRAMESET
+                    number_hit_points = NUMBER_EASY_INFECTED_HIT_POINTS
+                elif cell_type == MEDIUM_INFECTED_CELL_TYPE:
+                    frameset          = MEDIUM_INFECTED_FRAMESET
+                    number_hit_points = NUMBER_MEDIUM_INFECTED_HIT_POINTS
+                elif cell_type == HARD_INFECTED_CELL_TYPE:
+                    frameset          = HARD_INFECTED_FRAMESET
+                    number_hit_points = NUMBER_HARD_INFECTED_HIT_POINTS
+
                 cell["behavior"] = CellBehavior( cell_type,
                                                  self.grid,
                                                  self.healthy_idle_time,
@@ -470,9 +517,11 @@ init python:
                                                  self.infected_idle_time,
                                                  self.infected_growth_rate,
                                                  self.spawn_cell,
+                                                 number_hit_points,
                                                  state )
+
                 cell["renderer"].play_animation( CELL_ANIMATION_PULSE,
-                                                 frameset=INFECTED_FRAMESET )
+                                                 frameset=frameset )
                 self.infected_cells.append( cell )
 
             # if the state of the cell being created is the child growing
@@ -581,7 +630,8 @@ init python:
     class CellBehavior( GameComponent ):
         def __init__( self, cell_type, grid, healthy_idle_time,
                       healthy_growth_rate, infected_idle_time,
-                      infected_growth_rate, spawn_cell, state=None ):
+                      infected_growth_rate, spawn_cell, number_hit_points,
+                      state=None ):
             super( CellBehavior, self ).__init__()
             self.state                = state or CELL_STATE_IDLE
             self.type                 = cell_type
@@ -595,6 +645,7 @@ init python:
             self.infected_idle_time   = infected_idle_time
             self.infected_growth_rate = infected_growth_rate
             self.infect_timeout       = 0
+            self.number_hit_points    = number_hit_points
             self.reset_move_timeout()
             self.reset_grow_timeout()
 
@@ -681,10 +732,18 @@ init python:
             self.game_object["transform"].set_position( sx, sy )
             return at_target
 
-        def infect( self ):
-            self.state          = CELL_STATE_INFECTED
-            self.type           = EASY_INFECTED_CELL_TYPE
-            self.infect_timeout = INFECT_DURATION
+        def infect( self, cell_type ):
+            if cell_type == EASY_INFECTED_CELL_TYPE:
+                number_hit_points = NUMBER_EASY_INFECTED_HIT_POINTS
+            elif cell_type == MEDIUM_INFECTED_CELL_TYPE:
+                number_hit_points = NUMBER_MEDIUM_INFECTED_HIT_POINTS
+            elif cell_type == HARD_INFECTED_CELL_TYPE:
+                number_hit_points = NUMBER_HARD_INFECTED_HIT_POINTS
+
+            self.state             = CELL_STATE_INFECTED
+            self.type              = cell_type
+            self.number_hit_points = number_hit_points
+            self.infect_timeout    = INFECT_DURATION
 
         def on_grow_complete( self ):
             self.state = CELL_STATE_IDLE
@@ -733,13 +792,20 @@ init python:
                 # do a cheesy flash effect while we're being infected.
                 toggle_number = math.trunc( self.infect_timeout / INFECT_TOGGLE_DURATION )
 
+                if self.type == EASY_INFECTED_CELL_TYPE:
+                    frameset = EASY_INFECTED_FRAMESET
+                elif self.type == MEDIUM_INFECTED_CELL_TYPE:
+                    frameset = MEDIUM_INFECTED_FRAMESET
+                elif self.type == HARD_INFECTED_CELL_TYPE:
+                    frameset = HARD_INFECTED_FRAMESET
+
                 if toggle_number % 2 == 0:
-                    self.game_object["renderer"].set_animation_frameset( INFECTED_FRAMESET )
+                    self.game_object["renderer"].set_animation_frameset( frameset )
                 else:
                     self.game_object["renderer"].set_animation_frameset( HEALTHY_FRAMESET )
 
                 if self.infect_timeout <= 0:
-                    self.game_object["renderer"].set_animation_frameset( INFECTED_FRAMESET )
+                    self.game_object["renderer"].set_animation_frameset( frameset )
                     self.state = CELL_STATE_IDLE
                     self.reset_move_timeout()
                     self.reset_grow_timeout()
@@ -809,15 +875,22 @@ init python:
                             cells      = self.grid.get_cells( trow, tcol )
 
                             if cells:
+                                if self.type == EASY_INFECTED_CELL_TYPE:
+                                    frameset = EASY_INFECTED_FRAMESET
+                                elif self.type == MEDIUM_INFECTED_CELL_TYPE:
+                                    frameset = MEDIUM_INFECTED_FRAMESET
+                                elif self.type == HARD_INFECTED_CELL_TYPE:
+                                    frameset = HARD_INFECTED_FRAMESET
+
                                 # there should be EXACTLY one healthy cell in
                                 # the target we picked.
-                                cells[0].infect()
+                                cells[0].infect( self.type )
                                 cells[0].set_parent( self )
                                 self.state = CELL_STATE_INFECTING
                                 self.game_object["renderer"].play_animation( CELL_ANIMATION_ATTACK,
                                                                              loop_animation=False,
                                                                              on_animation_end=self.finish_infecting,
-                                                                             frameset=GameAnimation.DEFAULT_FRAMESET )
+                                                                             frameset=frameset )
                             else:
                                 # we picked an empty slot.  just move to it
                                 # like we would if we were healthy.
@@ -836,13 +909,22 @@ init python:
                     if (self.grid.get_infected_count() < RANDOM_INFECTION_THRESHOLD and
                         self.grid.get_free_count() > 0 and
                         renpy.random.uniform( 0, 1 ) <= RANDOM_INFECTION_RATE):
-                        self.infect()
+                        self.infect( EASY_INFECTED_CELL_TYPE )
 
         def hit( self ):
-            self.state = CELL_STATE_DYING
+            self.number_hit_points -= 1
+            if self.number_hit_points <= 0:
+                self.state = CELL_STATE_DYING
 
         def finish_infecting( self ):
+            if self.type == EASY_INFECTED_CELL_TYPE:
+                frameset = EASY_INFECTED_FRAMESET
+            elif self.type == MEDIUM_INFECTED_CELL_TYPE:
+                frameset = MEDIUM_INFECTED_FRAMESET
+            elif self.type == HARD_INFECTED_CELL_TYPE:
+                frameset = HARD_INFECTED_FRAMESET
+
             self.state = CELL_STATE_IDLE
             self.game_object["renderer"].play_animation( CELL_ANIMATION_PULSE,
-                                                         frameset=INFECTED_FRAMESET )
+                                                         frameset=frameset )
             self.reset_move_timeout()
