@@ -576,6 +576,7 @@ init python:
             # avoid sudden movements, simply ignore mouse move events if we get
             # this coordinate.
             if mx != -1 and my != -1:
+                mx, my = self.transform_screen_to_world( mx, my )
                 self.player["transform"].set_position( mx, my )
 
         def on_mouse_down( self, mx, my, button ):
