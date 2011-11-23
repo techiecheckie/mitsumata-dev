@@ -142,9 +142,8 @@ init python:
     (mini_hp_x, mini_mp_x) = calculate_new_minigame_ui_positions(hp, mp)
     
     renpy.transition(dissolve)
-#    if background:
-#      renpy.show(background)
-    renpy.show( "minigame_bg" )
+    if background:
+      renpy.show(background)
     renpy.show("minigame_mp_bg",  at_list = [Position(xpos=579,       ypos=16), Transform(anchor=(0.0, 0.0))])
     renpy.show("minigame_mp_bar", at_list = [Position(xpos=mini_mp_x, ypos=18), Transform(anchor=(1.0, 0.0))])
     renpy.show("minigame_hp_bg",  at_list = [Position(xpos=105,       ypos=16), Transform(anchor=(0.0, 0.0))])

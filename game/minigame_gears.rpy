@@ -336,10 +336,7 @@ init python:
                 if gear and not gear.get_locked():
                   self.selected_gear = gear
               elif self.state == GEARS_GAME_STATE_END:
-                #self.quit()
-                # temporary, or should it do something like this?
-                self.level_number += 1
-                self.create_game()
+                self.quit()
                 
 
         def on_mouse_up( self, mx, my, button ):
@@ -436,3 +433,6 @@ init python:
                 return
                 
             self.state = GEARS_GAME_STATE_END
+            
+        def get_result( self ):
+            return self.level_number * 1000
