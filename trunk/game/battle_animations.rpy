@@ -1,8 +1,18 @@
 label prepare_battle_animations:
   $animation_delays = {}
+  $hit_delays = {}
+  
+  # Default slide animation duration
+  $animation_delays["slide"] = 0.5
   
   transform slide(delay, x, y):
     linear delay xpos x ypos y
+    
+  #transform jump_slide(delay, x, y):
+  #  pause 0.20
+  #  linear delay xpos x ypos x
+  #  linear delay xpos x ypos y
+  #  pause 0.2
 
   ########
   # Riku #
@@ -35,7 +45,7 @@ label prepare_battle_animations:
     "gfx/animated/riku/riku_hitwussyl02.png"
     pause 0.4
     
-  #$animation_delays["Riku melee"] = 0.8
+  $animation_delays["Riku melee"] = 0.8
   image Riku melee:  
     "gfx/animated/riku/riku_attackl01.png"
     pause 0.2
@@ -46,7 +56,7 @@ label prepare_battle_animations:
     "gfx/animated/riku/riku_attackl04.png"
     pause 0.2
     
-  #$animation_delays["Riku magic"] = 0.8
+  $animation_delays["Riku magic"] = 0.8
   image Riku magic:
     "gfx/animated/missing.png"
     
@@ -80,7 +90,9 @@ label prepare_battle_animations:
     pause 0.4
     "gfx/animated/roman/roman_hitwussyl02.png"
     pause 0.4
-    
+  
+  $animation_delays["Roman melee"] = 1.6
+  $hit_delays["Roman melee"]       = 0.6
   image Roman melee:
     "gfx/animated/roman/roman_kickl01.png"
     pause 0.2
@@ -98,7 +110,9 @@ label prepare_battle_animations:
     pause 0.2
     "gfx/animated/roman/roman_kickl08.png"
     pause 0.2
-    
+  
+  $animation_delays["Roman magic"] = 2.2
+  $hit_delays["Roman magic"]       = 1.0
   image Roman magic:
     "gfx/animated/roman/roman_iceswordl01.png"
     pause 0.2
@@ -128,18 +142,18 @@ label prepare_battle_animations:
   ################
   
   image DemonHunter idle:
-    "gfx/animated/riku/riku_idler02.png"
+    "gfx/animated/demonic_thug/demonic_idler01.png"
     pause 0.2
-    "gfx/animated/riku/riku_idler03.png"
+    "gfx/animated/demonic_thug/demonic_idler02.png"
     pause 0.2
-    "gfx/animated/riku/riku_idler01.png"
+    "gfx/animated/demonic_thug/demonic_idler03.png"
     pause 0.2
     repeat
     
   image DemonHunter hit:
-    "gfx/animated/riku/riku_hitr01.png"
+    "gfx/animated/demonic_thug/demonic_hitr01.png"
     pause 0.4
-    "gfx/animated/riku/riku_hitr02.png"
+    "gfx/animated/demonic_thug/demonic_hitr02.png"
     pause 0.4
     
   image DemonHunter hit_crit:
@@ -154,29 +168,15 @@ label prepare_battle_animations:
     "gfx/animated/riku/riku_hitwussyr02.png"
     pause 0.4
   
-  #$animation_delays["Demon hunter melee"] = 0.8
+  $animation_delays["Demon hunter melee"] = 0.8
   image DemonHunter melee:
-    "gfx/animated/riku/riku_swiper01.png"
+    "gfx/animated/demonic_thug/demonic_swiper01.png"
     pause 0.2
-    "gfx/animated/riku/riku_swiper02.png"
+    "gfx/animated/demonic_thug/demonic_swiper02.png"
     pause 0.2
-    "gfx/animated/riku/riku_swiper03.png"
+    "gfx/animated/demonic_thug/demonic_swiper03.png"
     pause 0.2
-    "gfx/animated/riku/riku_swiper04.png"
-    pause 0.2
-    
-  ##############
-  # Unassigned #
-  ##############
-  
-  image Riku fireblack:
-    "gfx/animated/riku/riku_fireblackr01.png"
-    pause 0.2
-    "gfx/animated/riku/riku_fireblackr02.png"
-    pause 0.2
-    "gfx/animated/riku/riku_fireblackr03.png"
-    pause 0.2
-    "gfx/animated/riku/riku_fireblackr04.png"
+    "gfx/animated/demonic_thug/demonic_swiper04.png"
     pause 0.2
     
   ##########
@@ -184,69 +184,84 @@ label prepare_battle_animations:
   ##########
   
   image Mamoru idle:
-    "gfx/animated/mamoru/mamoru_idle2l01.png"
+    "gfx/animated/mamoru/mamoru_idle2r01.png"
     pause 0.2
-    "gfx/animated/mamoru/mamoru_idle2l02.png"
+    "gfx/animated/mamoru/mamoru_idle2r02.png"
     pause 0.2
-    "gfx/animated/mamoru/mamoru_idle2l03.png"
+    "gfx/animated/mamoru/mamoru_idle2r03.png"
     repeat
     
   image Mamoru hit:
-    "gfx/animated/mamoru/mamoru_hitl01.png"
-    pause 0.4
-    "gfx/animated/mamoru/mamoru_hitl02.png"
+    "gfx/animated/mamoru/mamoru_hitr01.png"
+    pause 0.2
+    "gfx/animated/mamoru/mamoru_hitr02.png"
     pause 0.4
     
   image Mamoru hit_crit:
     "gfx/animated/riku/riku_hitwussyr01.png"
-    pause 0.4
+    pause 0.2
     "gfx/animated/riku/riku_hitwussyr02.png"
     pause 0.4
     
   image Mamoru dead:
-    "gfx/animated/mamoru/mamoru_hitl01.png"
+    "gfx/animated/mamoru/mamoru_hitr01.png"
     pause 0.4
-    "gfx/animated/mamoru/mamoru_hitl02.png"
+    "gfx/animated/mamoru/mamoru_hitr02.png"
     pause 0.4
+    
+  #$animation_delays["Mamoru slide"] = 1.0
+  #image Mamoru slide:
+  #  "gfx/animated/mamoru/mamoru_attackr01.png"
+  #  pause 0.2
+  #  "gfx/animated/mamoru/mamoru_attackr02.png"
+  #  pause 0.2
+  #  "gfx/animated/mamoru/mamoru_attackr03.png"
+  #  pause 0.2
+  #  "gfx/animated/mamoru/mamoru_attackr04.png"
+  #  pause 0.2
+  #  "gfx/animated/mamoru/mamoru_attackr05.png"
+  #  pause 0.2
   
+  $animation_delays["Mamoru melee"] = 1.4
+  $hit_delays["Mamoru melee"]       = 0.4
   image Mamoru melee:
-    "gfx/animated/mamoru/mamoru_attackl01.png"
+    "gfx/animated/mamoru/mamoru_attackr06.png"
     pause 0.2
-    "gfx/animated/mamoru/mamoru_attackl02.png"
+    "gfx/animated/mamoru/mamoru_attackr07.png"
     pause 0.2
-    "gfx/animated/mamoru/mamoru_attackl03.png"
-    pause 0.2
-    "gfx/animated/mamoru/mamoru_attackl04.png"
-    pause 0.2
-    "gfx/animated/mamoru/mamoru_attackl05.png"
-    pause 0.2
-    "gfx/animated/mamoru/mamoru_attackl06.png"
-    pause 0.2
-    "gfx/animated/mamoru/mamoru_attackl07.png"
-    pause 0.2
-    "gfx/animated/mamoru/mamoru_attackl08.png"
-    pause 0.2
-    "gfx/animated/mamoru/mamoru_attackl09.png"
-    pause 0.
+    "gfx/animated/mamoru/mamoru_attackr08.png"
+    pause 0.4
+    "gfx/animated/mamoru/mamoru_attackr09.png"
+    pause 0.6
   
+  $animation_delays["Mamoru magic"] = 1.6
+  $hit_delays["Mamoru magic"]       = 0.2
   image Mamoru magic:
-    "gfx/animated/riku/riku_firewhiter01.png"
+    "gfx/animated/mamoru/mamoru_firewhitehaughtyr01.png"
     pause 0.2
-    "gfx/animated/riku/riku_firewhiter02.png"
+    "gfx/animated/mamoru/mamoru_firewhitehaughtyr02.png"
     pause 0.2
-    "gfx/animated/riku/riku_firewhiter03.png"
+    "gfx/animated/mamoru/mamoru_firewhitehaughtyr03.png"
     pause 0.2
-    "gfx/animated/riku/riku_firewhiter04.png"
+    "gfx/animated/mamoru/mamoru_firewhitehaughtyr04.png"
+    pause 0.2
+    "gfx/animated/mamoru/mamoru_firewhitehaughtyr03.png"
+    pause 0.2
+    "gfx/animated/mamoru/mamoru_firewhitehaughtyr04.png"
+    pause 0.2
+    "gfx/animated/mamoru/mamoru_firewhitehaughtyr03.png"
+    pause 0.2
+    "gfx/animated/mamoru/mamoru_firewhitehaughtyr04.png"
     pause 0.2
     
   image Mamoru post_attack:
-    "gfx/animated/riku/riku_hairflickr01.png"
+    "gfx/animated/mamoru/mamoru_hairflickr01.png"
     pause 0.2
-    "gfx/animated/riku/riku_hairflickr02.png"
+    "gfx/animated/mamoru/mamoru_hairflickr02.png"
     pause 0.2
-    "gfx/animated/riku/riku_hairflickr03.png"
+    "gfx/animated/mamoru/mamoru_hairflickr03.png"
     pause 0.2
-    "gfx/animated/riku/riku_hairflickr04.png"
+    "gfx/animated/mamoru/mamoru_hairflickr04.png"
     pause 0.2
     
   ########

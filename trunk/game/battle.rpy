@@ -3,7 +3,21 @@ label battle(player_name, mob_name, mob_count, background):
 
   python:
     # Sprite zoom value
-    zoom = 2.0
+    ZOOM = 2.0
+    ATTACK_DISTANCE = 80 # the distance between the attacker and the target (visual effect only)
+    
+    MOB_CRIT_CHANCE     = 20 # 5% chance, 1-20
+    MOB_CRIT_MULTIPLIER = 2
+    
+    MAMORU_HEALTH = 100
+    MAMORU_MANA   = 100
+    MAMORU_MELEE  = 20
+    MAMORU_MAGIC  = 25
+    
+    DEMON_HUNTER_HEALTH = 50
+    DEMON_HUNTER_MANA   = 0
+    DEMON_HUNTER_MELEE  = 10
+    DEMON_HUNTER_MAGIC  = 0
   
     messages = []
   
@@ -50,39 +64,42 @@ label battle(player_name, mob_name, mob_count, background):
         some_test_value = 20
         return self.mana >= some_test_value
         
-      def attack(self, target, action, damage, critical, attack_distance, messages):
-        if critical:
-          damage *= 2
-          
-        target.dec_health(damage)
-      
-        # The rest of this is drawing shite (slide into position, attack, slide back)
-        renpy.show(self.id + " idle", at_list = [slide(0.5, target.get_x()-attack_distance, target.get_y())], zorder=self.zorder)
-        renpy.pause(0.5)
-      
-        messages.append(target.get_name() + " is hit for " + str(damage) + " points.")
-        if critical:
-            messages.append("Critical hit!")
+      def show_attack(self, target, action, damage, critical, attack_distance):
+        # slide animation
+        renpy.show(self.id + " idle", at_list = [slide(animation_delays["slide"], 
+                                                 target.get_x()-attack_distance, 
+                                                 target.get_y())], 
+                                                 zorder=self.zorder)
+        renpy.pause(animation_delays["slide"])
         
+        # attack animation
         renpy.show(self.id + " " + action, zorder=target.get_zorder())
+
+        # target waits a bit for the blow to fall, then plays the animation
+        renpy.pause(hit_delays[self.id + " " + action])
         if target.get_health() > 0:
           if critical:
             renpy.show(target.get_id() + " hit_crit", zorder=target.get_zorder())
           else:
             renpy.show(target.get_id() + " hit", zorder=target.get_zorder())
-          renpy.pause(animation_delays[self.name + " " + action])
+          renpy.pause(animation_delays[self.name + " " + action] - hit_delays[self.name + " " + action])
           renpy.show(target.get_id() + " idle", zorder=target.get_zorder())
         else:
           messages.append(target.get_name() + " dies.")      
           renpy.show(target.get_id() + " dead", zorder=target.get_zorder())
-          renpy.pause(animation_delays[self.name + " " + action])
-       
-        renpy.show(self.id + " idle", at_list = [slide(0.5, self.x, self.y)], zorder=self.zorder)
-        renpy.pause(0.5)
+          renpy.pause(animation_delays[self.name + " " + action] - hit_delays[self.name + " " + action])
+      
+        # slide back
+        renpy.show(self.id + " idle", at_list = [slide(animation_delays["slide"], 
+                                                 self.x, 
+                                                 self.y)], 
+                                                 zorder=self.zorder)
+        renpy.pause(animation_delays["slide"])
        
        
     class Player(Fighter):
       def __init__(self, id, health, mana):
+        # TODO: set melee and magic
         super(Player, self).__init__(id, id, health, mana, 25, 50, 800, 480, 1)
         
       def attack(self, target, messages):
@@ -90,15 +107,20 @@ label battle(player_name, mob_name, mob_count, background):
           damage = self.damage_melee
         elif action == "magic":
           damage = self.damage_magic
-          self.mana -= 10 # add any bonuses that items give
+          # TODO: add any bonuses that items give
+          self.mana -= 10 
         
         # Player's crit chance may vary, using hard-coded values for now
         if random.randint(1,20) == 20:
           critical = True
+          messages.append("Critical hit!")
         else:
           critical = False
           
-        Fighter.attack(self, target, action, damage, critical, -60, messages)
+        target.dec_health(damage)
+        messages.append(target.get_name() + " is hit for " + str(damage) + " points.")
+          
+        Fighter.show_attack(self, target, action, damage, critical, -ATTACK_DISTANCE)
        
        
     class Mob(Fighter):
@@ -106,7 +128,6 @@ label battle(player_name, mob_name, mob_count, background):
         super(Mob, self).__init__(name, id, health, mana, damage_melee, damage_magic, x, y, zorder)
         
       def attack(self, target, messages):
-        # Refactor this shite
         if self.mana > 0:
           # See if the attack should be melee or a magical one
           # "randomize two numbers, then multiply them with each other. If  the 
@@ -126,12 +147,17 @@ label battle(player_name, mob_name, mob_count, background):
           damage = self.damage_melee
           
         # Mobs have a 5% critical hit chance 
-        if random.randint(1,20) == 20:
+        if random.randint(1,MOB_CRIT_CHANCE) == MOB_CRIT_CHANCE:
           critical = True
+          damage *= MOB_CRIT_MULTIPLIER
+          messages.append("Critical hit!")
         else:
           critical = False
           
-        Fighter.attack(self, target, action, damage, critical, 60, messages)
+        target.dec_health(damage)
+        messages.append(target.get_name() + " is hit for " + str(damage) + " points.")
+          
+        Fighter.show_attack(self, target, action, damage, critical, ATTACK_DISTANCE)
         
         
     def create_mobs(mob_name, mob_count, mob_positions):
@@ -140,10 +166,10 @@ label battle(player_name, mob_name, mob_count, background):
       if mob_name == "Demon hunter":
         for i in range(0, mob_count):
           id = "DemonHunter_" + str(i)
-          health = 50
-          mana = 0
-          damage_melee = 10
-          damage_magic = 0
+          health       = DEMON_HUNTER_HEALTH
+          mana         = DEMON_HUNTER_MANA
+          damage_melee = DEMON_HUNTER_MELEE
+          damage_magic = DEMON_HUNTER_MAGIC
           # Copy the default images mentioned in battle_animations.rpy to named ones
           renpy.copy_images("DemonHunter idle",   id + " idle")
           renpy.copy_images("DemonHunter hit",    id + " hit")
@@ -157,10 +183,10 @@ label battle(player_name, mob_name, mob_count, background):
           zorder += 1
         
       elif mob_name == "Mamoru":
-        health = 100
-        mana = 100
-        damage_melee = 20
-        damage_magic = 25
+        health       = MAMORU_HEALTH
+        mana         = MAMORU_MANA
+        damage_melee = MAMORU_MELEE
+        damage_magic = MAMORU_MAGIC
         x = mob_positions[1][0]
         y = mob_positions[1][1]
         mobs.append(Mob(mob_name, "Mamoru", health, mana, damage_melee, damage_magic, x, y, zorder))
@@ -182,21 +208,16 @@ label battle(player_name, mob_name, mob_count, background):
   
     def show_action_list(player, target):
       ui.frame(xpos=65, ypos=100, xmaximum=230, background=None)
-      #ui.vbox()
       ui.text(mob_name + ", " + str(target.get_health()) + " HP")
-      #ui.textbutton("Attack: melee", clicked=ui.returns("melee"), xfill=True)
       ui.frame(xpos=65, ypos=140, background=None)
       ui.imagebutton("gfx/buttons/battle_melee.png", "gfx/buttons/battle_melee_hover.png", clicked=ui.returns("melee"))
       ui.frame(xpos=195, ypos=136, background=None)
       if player.can_afford_magic():
-        #ui.textbutton("Attack: magic", clicked=ui.returns("magic"), xfill=True)
         ui.imagebutton("gfx/buttons/battle_magic.png", "gfx/buttons/battle_magic_hover.png", clicked=ui.returns("magic"))
       else:
-        #ui.text("Attack: magic (not enough mana)")
         ui.image("gfx/buttons/battle_magic_disabled.png")
       ui.frame(xpos=65, ypos=250, xmaximum=230)
       ui.textbutton("Cancel", clicked=ui.returns("cancel"), xfill=True) 
-      #ui.close()
       
       return
       
@@ -232,10 +253,10 @@ label battle(player_name, mob_name, mob_count, background):
     hide_main_ui()
     show_minigame_ui(background, True)
     
-    renpy.show(player.get_id() + " idle", at_list = [Position(xpos=player.get_x(), ypos=player.get_y()), Transform(zoom=zoom)], zorder=player.get_zorder())
+    renpy.show(player.get_id() + " idle", at_list = [Position(xpos=player.get_x(), ypos=player.get_y()), Transform(zoom=ZOOM)], zorder=player.get_zorder())
     
     for i in range(0,len(mobs)):
-      renpy.show(mobs[i].get_id() + " idle", at_list = [Position(xpos=mobs[i].get_x(), ypos=mobs[i].get_y()), Transform(zoom=zoom)], zorder=mobs[i].get_zorder())
+      renpy.show(mobs[i].get_id() + " idle", at_list = [Position(xpos=mobs[i].get_x(), ypos=mobs[i].get_y()), Transform(zoom=ZOOM)], zorder=mobs[i].get_zorder())
   
     # And start the actual battle loop
     while player.get_health() > 0 and mobs_alive > 0:
