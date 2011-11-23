@@ -43,8 +43,9 @@ init -50 python:
             return self.game.get_displayables()
 
         def render( self, width, height, shown_time, animation_time ):
-            blitter = renpy.Render( width, height )
-            self.game.render( blitter )
+            blitter   = renpy.Render( width, height )
+            clip_rect = self.game.get_clip_rect()
+            self.game.render( blitter, clip_rect )
             return blitter
 
         def event( self, e, mx, my, shown_time ):
@@ -103,6 +104,15 @@ init -50 python:
         def get_displayables( self ):
             return []
 
+        def get_clip_rect( self ):
+            return (self.origin[0], self.origin[1],
+                    self.width, self.height)
+
+        def is_in_clip_rect( self, x, y ):
+            clip_rect = self.get_clip_rect()
+            return (clip_rect[0] <= x <= (clip_rect[0] + clip_rect[2]) and
+                    clip_rect[1] <= y <= (clip_rect[1] + clip_rect[3]))
+
         def get_game_width( self ):
             return self.width
 
@@ -134,7 +144,13 @@ init -50 python:
             return (x - self.origin[0],
                     y - self.origin[1])
 
-        def render( self, blitter ):
+        def clear_screen( self, blitter, color=None ):
+            color = color or Color( 0, 0, 0, 255 )
+            blitter.canvas().rect( color,
+                                   (self.origin[0], self.origin[1],
+                                    self.width, self.height) )
+
+        def render( self, blitter, clip_rect ):
             pass
 
         def update( self, delta_sec ):
@@ -176,7 +192,7 @@ init -50 python:
             game.set_game_width( game_width )
             game.set_game_height( game_height )
             ui.add( driver )
-            ui.interact( suppress_overlay=False, suppress_underlay=True )
+            ui.interact( suppress_overlay=True, suppress_underlay=True )
             return driver.get_game_result()
         except:
             # make sure no matter what happens we can always see our mouse.

@@ -39,19 +39,19 @@ init python:
       game = DuckHunt
     elif name == "force":
       game = MagicForce
-    #elif name == "power":
-    #  game = MagicPower
-    #elif name == "squats":
-    #  game = Squats
+    elif name == "power":
+      game = MagicPower
+    elif name == "squats":
+      game = Squats
     
     return game
   
   
   def run(name):
     score = run_minigame( game_type = choose_game(name),
-                          x=357, y=64,
-                          game_width=650,
-                          game_height=650 )
+                          x=365, y=114,
+                          game_width=648,
+                          game_height=593 )
                           # level_number = persistent.minigame_level[name] )
   
   
@@ -71,9 +71,9 @@ init python:
     show_minigame_ui(None, False)
     
     score = run_minigame(game_type = choose_game(name), 
-                         x=357, y=64,
-                         game_width=650,
-                         game_height=650,
+                         x=365, y=114,
+                         game_width=648,
+                         game_height=593,
                          level_number = level)
     update_high_score(name, score)
     

@@ -29,6 +29,8 @@ init python:
   persistent.unlocked_minigames.append("platformer")
   persistent.unlocked_minigames.append("duck")
   persistent.unlocked_minigames.append("force")
+  persistent.unlocked_minigames.append("power")
+  persistent.unlocked_minigames.append("squats")
   
   # these aren't in yet
   #persistent.unlocked_minigames.append("power")

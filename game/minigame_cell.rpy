@@ -3,13 +3,18 @@ init python:
     import math
 
     class CellLevel( object ):
-        def __init__( self, infected_idle_time, healthy_idle_time ):
-            self.infected_idle_time = infected_idle_time
-            self.healthy_idle_time  = healthy_idle_time
+        def __init__( self, initial_healthy, initial_easy_infected,
+                      infected_idle_time, healthy_idle_time ):
+            self.initial_healthy       = initial_healthy
+            self.initial_easy_infected = initial_easy_infected
+            self.infected_idle_time    = infected_idle_time
+            self.healthy_idle_time     = healthy_idle_time
 
     CELL_LEVELS = [
-        CellLevel( infected_idle_time = (0.6, 0.85),
-                   healthy_idle_time  = (0.7, 0.9) )
+        CellLevel( initial_healthy       = 2,
+                   initial_easy_infected = 3,
+                   infected_idle_time    = (0.6, 0.85),
+                   healthy_idle_time     = (0.7, 0.9) )
         ]
 
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####
@@ -53,8 +58,10 @@ init python:
     CELL_TYPE = "cell"
 
     # cell types.
-    HEALTHY_CELL_TYPE  = "healthy"
-    INFECTED_CELL_TYPE = "infected"
+    HEALTHY_CELL_TYPE         = "healthy"
+    EASY_INFECTED_CELL_TYPE   = "easy_infected"
+    MEDIUM_INFECTED_CELL_TYPE = "medium_infected"
+    HARD_INFECTED_CELL_TYPE   = "hard_infected"
 
     # how fast cells multiply.
     HEALTHY_GROWTH_RATE         = 0.7
@@ -138,7 +145,9 @@ init python:
         def get_infected_count( self ):
             count = 0
             for slot in self.slots:
-                if slot.cells and slot.cells[0].type == INFECTED_CELL_TYPE:
+                if slot.cells and slot.cells[0].type in (EASY_INFECTED_CELL_TYPE,
+                                                         MEDIUM_INFECTED_CELL_TYPE,
+                                                         HARD_INFECTED_CELL_TYPE):
                     count += 1
             return count
 
@@ -219,7 +228,9 @@ init python:
                 up_index = up_col + up_row * NUMBER_GRID_COLS
                 if slots[up_index].is_valid:
                     for cell in slots[up_index].cells:
-                        if (cell.type == INFECTED_CELL_TYPE or
+                        if (cell.type in (EASY_INFECTED_CELL_TYPE,
+                                          MEDIUM_INFECTED_CELL_TYPE,
+                                          HARD_INFECTED_CELL_TYPE) or
                             cell.state != CELL_STATE_IDLE):
                             break
                     else:
@@ -234,7 +245,9 @@ init python:
                 right_index = right_col + right_row * NUMBER_GRID_COLS
                 if slots[right_index].is_valid:
                     for cell in slots[right_index].cells:
-                        if (cell.type == INFECTED_CELL_TYPE or
+                        if (cell.type in (EASY_INFECTED_CELL_TYPE,
+                                          MEDIUM_INFECTED_CELL_TYPE,
+                                          HARD_INFECTED_CELL_TYPE) or
                             cell.state != CELL_STATE_IDLE):
                             break
                     else:
@@ -247,7 +260,9 @@ init python:
                 down_index = down_col + down_row * NUMBER_GRID_COLS
                 if slots[down_index].is_valid:
                     for cell in slots[down_index].cells:
-                        if (cell.type == INFECTED_CELL_TYPE or
+                        if (cell.type in (EASY_INFECTED_CELL_TYPE,
+                                          MEDIUM_INFECTED_CELL_TYPE,
+                                          HARD_INFECTED_CELL_TYPE) or
                             cell.state != CELL_STATE_IDLE):
                             break
                     else:
@@ -262,7 +277,9 @@ init python:
                 left_index = left_col + left_row * NUMBER_GRID_COLS
                 if slots[left_index].is_valid:
                     for cell in slots[left_index].cells:
-                        if (cell.type == INFECTED_CELL_TYPE or
+                        if (cell.type in (EASY_INFECTED_CELL_TYPE,
+                                          MEDIUM_INFECTED_CELL_TYPE,
+                                          HARD_INFECTED_CELL_TYPE) or
                             cell.state != CELL_STATE_IDLE):
                             break
                     else:
@@ -316,9 +333,11 @@ init python:
             self.create_cells()
             self.create_huds()
 
-            # XXX: remove me.
-            self.spawn_cell( HEALTHY_CELL_TYPE )
-            self.spawn_cell( INFECTED_CELL_TYPE )
+            for i in xrange( level.initial_healthy ):
+                self.spawn_cell( HEALTHY_CELL_TYPE )
+
+            for i in xrange( level.initial_easy_infected ):
+                self.spawn_cell( EASY_INFECTED_CELL_TYPE )
 
         def create_dish( self ):
             self.dish             = GameObject()
@@ -359,22 +378,22 @@ init python:
             self.stop_screen_hud["transform"].set_position( 138, 50 )
 
             base_score             = GameObject()
-            base_score["renderer"] = GameRenderer( GameText( self.get_base_score ) )
+            base_score["renderer"] = GameRenderer( GameText( self.get_base_score, Color( 255, 255, 255, 255 ) ) )
             base_score["transform"].set_position( 185, 159 )
             self.stop_screen_hud.add_child( base_score )
 
             completion_bonus             = GameObject()
-            completion_bonus["renderer"] = GameRenderer( GameText( self.get_completion_bonus ) )
+            completion_bonus["renderer"] = GameRenderer( GameText( self.get_completion_bonus, Color( 255, 255, 255, 255 ) ) )
             completion_bonus["transform"].set_position( 185, 251 )
             self.stop_screen_hud.add_child( completion_bonus )
 
             total_score             = GameObject()
-            total_score["renderer"] = GameRenderer( GameText( self.get_total_score ) )
+            total_score["renderer"] = GameRenderer( GameText( self.get_total_score, Color( 255, 255, 255, 255 ) ) )
             total_score["transform"].set_position( 185, 320 )
             self.stop_screen_hud.add_child( total_score )
 
             self.elapsed_time_hud             = GameObject()
-            self.elapsed_time_hud["renderer"] = GameRenderer( GameText( self.get_elapsed_time ) )
+            self.elapsed_time_hud["renderer"] = GameRenderer( GameText( self.get_elapsed_time, Color( 255, 255, 255, 255 ) ) )
             self.elapsed_time_hud["transform"].set_position( 10, 10 )
 
         def compute_scores( self ):
@@ -478,12 +497,12 @@ init python:
             displayables.extend( self.dish["renderer"].get_displayables() )
             return displayables
 
-        def render( self, blitter ):
+        def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
-            self.dish["renderer"].render( blitter, world_transform )
+            self.dish["renderer"].render( blitter, clip_rect, world_transform )
 
             if self.state == CELLS_GAME_STATE_BEGIN:
-                self.start_screen_hud["renderer"].render( blitter, world_transform )
+                self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == CELLS_GAME_STATE_PLAY:
                 cell_transform = GameTransform( world_transform.x +
                                                 self.dish["transform"].x +
@@ -492,11 +511,11 @@ init python:
                                                 self.dish["transform"].y +
                                                 GRID_OFFSET_Y )
                 for cell in itertools.chain( self.infected_cells, self.healthy_cells ):
-                    cell["renderer"].render( blitter, cell_transform )
+                    cell["renderer"].render( blitter, clip_rect, cell_transform )
             elif self.state == CELLS_GAME_STATE_END:
-                self.stop_screen_hud["renderer"].render( blitter, world_transform )
+                self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
 
-            self.elapsed_time_hud["renderer"].render( blitter, world_transform )
+            self.elapsed_time_hud["renderer"].render( blitter, clip_rect, world_transform )
 
         def update( self, delta_sec ):
             if self.state == CELLS_GAME_STATE_PLAY:
@@ -516,7 +535,9 @@ init python:
                 # healthy cells that have become infected need to be removed
                 # from the healthy list and moved to the infected list.
                 for cell in self.healthy_cells:
-                    if cell["behavior"].type == INFECTED_CELL_TYPE:
+                    if cell["behavior"].type in (EASY_INFECTED_CELL_TYPE,
+                                                 MEDIUM_INFECTED_CELL_TYPE,
+                                                 HARD_INFECTED_CELL_TYPE):
                         self.infected_cells.append( cell )
 
                 self.healthy_cells[:] = [ cell for cell in self.healthy_cells
@@ -662,7 +683,7 @@ init python:
 
         def infect( self ):
             self.state          = CELL_STATE_INFECTED
-            self.type           = INFECTED_CELL_TYPE
+            self.type           = EASY_INFECTED_CELL_TYPE
             self.infect_timeout = INFECT_DURATION
 
         def on_grow_complete( self ):
