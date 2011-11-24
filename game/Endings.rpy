@@ -53,6 +53,20 @@ label neu_over:
 # BAD ENDINGS
 ####################
 
+label quitter:
+    scene bg blackscr
+    $show_main_ui()
+    with fade
+    $show_message("Quitting already...?","medium")
+    $show_message("You're completely missing the point...","medium")
+    $show_message("Last chance. Quit?","medium")
+    menu:
+        "Yes.":
+            jump game_over
+        "No.":
+            jump battle1    
+    
+
 label badend1:
     scene bg blackscr
     $show_main_ui()
