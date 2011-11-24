@@ -488,7 +488,6 @@ label splashscreen:
      $print persistent.unlocked_journals
      $print persistent.unlocked_minigames
 
-     return
      $ renpy.pause(0)
      scene bg whitescr
      show text "rosegold games presents..." with dissolve
@@ -559,10 +558,9 @@ init:
     $ sho_dis = Dissolve(0.2)
 
 #Teleport uses the with command    
-init:
-    $ teleport = MultipleTransition([False, sho_dis, "#fff", sho_dis, False, 
-                                     sho_dis, "#fff", sho_dis,
-                                     True, sho_dis, "#fff", sho_dis, True])
+#init:
+#$ teleport = MultipleTransition([False, sho_dis, "#fff", sho_dis, False, sho_dis, "#fff", sho_dis,
+#                                     True, sho_dis, "#fff", sho_dis, True])
    
 #***********************
 # ITEM LABELS
@@ -630,11 +628,11 @@ label start:
     #$decision = "16"
     #call show_map
 
-#menu:
-#        "Jump ahead for a test.":
-#                jump Scene20
-#        "Start from beginning.":
-#                jump Scene1
+menu:
+        "Jump ahead for a test.":
+                jump Scene20
+        "Start from beginning.":
+                jump Scene1
                 
 label otherstuff:    
     scene bg blackscr
@@ -2630,28 +2628,28 @@ label Scene17:
     r "...got it. But I warn ya, I’m a major athlete, so I’ll probably get this in minutes."
     
     s  "No need to rush; holding it for a few minutes untrained is a feat by itself."
-
-#call minigame magic control   
-    #Put a minigame here:
-    
-    #This is a balancing game. Channel Riku’s Youki so that it forms a ball at the tip of his finger, just like Soume showed you.
-    
-    #Instructions: PUT INSTRUCTIONS HERE
-    
-#label balance failure:
-    #scene bg train1
-    #$show_main_ui()
-    #with slow_fade
-    #$ renpy.pause(1.0)
-    #r "Awww, this is really tough!"
-    
-    #s "It takes a bit of practice. Try again, and focus this time."
-    #here, the game must replay until you beat at least 1 level.
-    
-#label balance success:
+    $unlock_minigame("force")
+label magcontrol1:    
+    $result = minigame("force", 1, 1000)
+    if result == True: 
+            jump controlsucceed1
+    else: 
+            jump controlfailure1
+label controlfailure1:
     scene bg train1
     $show_main_ui()
-    with slow_fade
+    with fade
+    $ renpy.pause(1.0)
+    r "Awww, this is really tough!"
+    
+    s "It takes a bit of practice. Try again, and focus this time."
+    #here, the game must replay until you beat at least 1 level.
+    jump magcontrol1
+    
+label controlsucceed1:
+    scene bg train1
+    $show_main_ui()
+    with fade
     $ renpy.pause(1.0)
     r "I did it--whoa."
     
@@ -2990,25 +2988,37 @@ label Scene23:
     
     ro "All right...I guess..."
 
-#label minigame Manifestation
-    #  "Lesson 2: manifestation. One must keep a steady stream of ki to manifest properly. The difficulty then comes in holding that 
-    # perfect balance and keeping it for an extended period of time at its full power to use as an effective weapon."
-    #  [Minigame here? Focus Riku’s ki into a steady manifestation of his fire power and hold it for as long as you can. Instructions------]
-
-#label manifestation fail:    
-    #This section if you fail one level in the minigame.
-    s "That's alright. Try again. This is very difficult."
-
-#label manifestation success:    
-    #This section if you succeed one level in the minigame.
+label magcontrol2:    
+    $result = minigame(force, 2, 2000)
+    if result == True: 
+            jump controlsucceed2
+    else: 
+            jump controlfailure2
+label controlfailure2:
+    scene bg train1
+    $show_main_ui()
+    with fade
+    $ renpy.pause(1.0)
+    r "This is even harder than the first one!"
+    
+    s "It's alright. Don't stress yourself..."
+    jump controldone
+    
+label controlsucceed2:
+    scene bg train1
+    $show_main_ui()
+    with fade
+    $ renpy.pause(1.0)
     s "Good, excellent work!"
     
     "For all the sensitive whining Roman does, he’s grinning like a fool at Soume right now."
     
+label controldone:    
     "We work on it until bedtime."
     show bg blackscr
     $hide_main_ui()
     with fade
+  
     if Scene21:
         jump Scene25
     else:
@@ -3944,25 +3954,32 @@ label Scene32a:
     #Soume giggles
     s "No, I think you can handle it. Come now!"
 
-#label minigame3:
-    #Lesson 3:  Projection. Now that you can channel your Youki and keep a steady stream of ki, it is time to start utilizing your powers in a tangible way. Focus on your target and project your energy onto it. 
-    #Make sure not to lose focus—if you deplete your Youki, you will not be able to do anything!
-    
-    #[Put in a minigame here?  Maybe some sort of target practice minigame, where you need to hit certain targets while avoiding others?  
-    #Some secondary mechanic can be used to replenish Youki levels, possibly something similar to the first minigame.]
+    $unlock_minigame("power")
+label power1:    
+    $result = minigame(power, 1, 1000)
+    if result == True: 
+            jump powerfail1
+    else: 
+            jump powersucceed1
 
-#label projectionfail:    
+label powerfail1:
+    scene bg train1
+    $show_main_ui()
+    with fade
+    $ renpy.pause(1.0)
     r "Eh. This is harder than I thought it’d be…"
     
-    s "Remember, r focus. In the heat of battle, you need to be able to distinguish between friend and foe."
+    s "In the heat of battle, you need to be able to distinguish between friend and foe."
     
-    r "Right, right."
+    r "Alright, alright..."
     
-    s "I’d rather not be cooked by your flames, if that’s possible...I’m just no good with that much heat..."
-    
-    r "Okay, okay! I’ll get it this time!"
-    
-#label projectionsucceed:
+    s "There is one more thing I should mention..."
+    jump power3
+label powersucceed1:
+    scene bg train1
+    $show_main_ui()
+    with fade
+    $ renpy.pause(1.0)
     r "YES! WOOOOOO!!!"
     
     #Soume giggles.
@@ -3975,8 +3992,9 @@ label Scene32a:
     r "FLAMES! FLAMES OUT OF MY HANDS!"
     
     #Soume giggles.
-    s "Indeed, it is rather impressive. You must remember, though, Riku..."
+    s "Indeed, it is rather impressive. But you must remember, Riku..."
     
+label power3:    
     "Uh-oh. There’s ALWAYS a catch to the good stuff."
     
     s "Your abilities, my abilities, the abilities of everyone in here—the ki—that’s what gives us away to our enemies. They will find you by the signature of your fire alone. You must be careful."
@@ -4077,17 +4095,21 @@ label Scene33:
     s "Let me go over the basics of a serious battle with you."
 
 label battle1:
-#Lesson 4-Battle Tutorial
-#Put some stuff about how the combat system works in here.
+  call battle("Riku", "Demon hunter", 1, "bg gar1")
+  if hp > 0:
+      jump battle1vic
+  else:
+      jump battle1fail
 
-    s  "Do you understand all of that? Please let me know if I was unclear."
-    
-    r  "I got it. I know my way around a fight."
-    
-    s "Then, whenever you’re ready."
-    
-    #-Battle and all that. If you lose, you play again?-
-
+label battle1fail:
+    r "...yeesh."
+    s "Er, well...you made a good effort..."
+    menu:
+        "Try again.":
+            jump battle1
+        "Quit.":
+            jump quitter
+            
 label battle1vic:    
     r "Victory!"
     
@@ -4096,7 +4118,7 @@ label battle1vic:
     
     s "Your progress is absolutely incredible. You’ve come so far in such a short time."
     
-    r "I always knew I was cool."
+    r "I always knew I was cool."    
     
     #Soume gives a sarcastic laugh
     s "Ah...yes. Still, you may soon surpass Roman."
@@ -4559,7 +4581,18 @@ label Scene37:
     "I hand over the Hunt Duck gun. It might look like my hands are trembling, but only because it’s surprisingly windy down here."
     
     su "What? Oh--this."
-    su "Mm." 
+    su "Mm."
+    su "Wanna try it?"
+label duckhunt1:    
+    $result = minigame("duck", 1, 1000)
+    if result == True:
+            jump Scene37b
+    else: 
+            jump Scene37b
+
+label Scene37b: 
+    r "It's a pretty cool game."
+    su "Yeah. My favorite."
     su "You’ve been working hard. I guess you can have another day off."
     
     "ANOTHER day off? Have I fallen into some alternate universe where everyone is the opposite?"
@@ -5020,8 +5053,8 @@ menu:
     "I need a bit more training.":
         call pda_loop
     "I'm ready right now!":
-        jump daychal2
-label daychal2:
+        jump daychal1
+label daychal1:
     r  "All right, I think I’m ready."
 
     su  "You sure there, twerp? You don’t get another shot at this."
@@ -5029,22 +5062,28 @@ label daychal2:
     r  "I won’t need it."
 
     su  "Cocky. As always. That’s fine with me; it’ll just be more enjoyable when you fail."
+   
+    $result = minigame(platformer, 1)
+    if result == True: 
+            jump daychal1fail
+    else: 
+            jump daychal1suc
 
-    #Put the Day challenge minigame here.
+label daychal1fail:
+    scene bg train1
+    $show_main_ui()
+    with fade
+    $ renpy.pause(1.0)
+    
+    su "Pathetic. Like I thought."
+    r "No way! I can do this!"
+    jump daychal1
 
-    #Fail
-    #su "Prepare to clean like you have never cleaned before...
-    
-    #OPTION:
-    #Wait, one more chance...
-    
-    #su "Fine, you're lucky I'm in a good mood. Ready...GO!"
-    
-    #Awwww man...
-    
-    #r "Just great..."
-
-label daychal2suc:
+label daychal1suc:
+    scene bg train1
+    $show_main_ui()
+    with fade
+    $ renpy.pause(1.0)
 
     r  "YES! Wooo! A bit trickier than I guessed, but at least I passed, right?"
 
@@ -5091,6 +5130,7 @@ label daychal2suc:
     show bg blackscr
     $hide_main_ui()
     with fade
+    
 label Scene41:
     scene bg lib
     $show_main_ui()
@@ -6057,8 +6097,14 @@ label Scene46a:
 
     u "-gurgle-"
 
-    #-Battle here. Riku versus a couple of minor demons. Game over if lose-
+label battle2:
+  call battle("Riku", "Demon hunter", 2, "bg nfor2")
+  if hp > 0:
+      jump battle2vic
+  else:
+      jump game_over            
 
+label battle2vic:
     r  "Hmph. Didn’t even break a sweat."
     ak "T-that was AMAZING, Riku! You have such a unique ability..."
 
@@ -6316,8 +6362,14 @@ label Scene47:
 
     #play sound Swords clashing
 
-#Battle goes here; Roman against demon hunters.
+label battle3:
+  call battle("Roman", "Demon hunter", 3, "bg nfor2")
+  if hp > 0:
+      jump battle3vic
+  else:
+      jump game_over            
 
+label battle3vic:
     db "Hurk!"
 
     m  "Ahhh, so easily dispatched. Perhaps I will make a more worthy opponent?"
