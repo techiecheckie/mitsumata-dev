@@ -14,6 +14,11 @@ label battle(player_name, mob_name, mob_count, background):
     MAMORU_MELEE  = 20
     MAMORU_MAGIC  = 25
     
+    DEMON_THUG_HEALTH = 25
+    DEMON_THUG_MANA   = 0
+    DEMON_THUG_MELEE  = 10
+    DEMON_THUG_MAGIC  = 0
+    
     DEMON_HUNTER_HEALTH = 50
     DEMON_HUNTER_MANA   = 0
     DEMON_HUNTER_MELEE  = 10
@@ -61,9 +66,10 @@ label battle(player_name, mob_name, mob_count, background):
         self.mana -= amount
         
       def can_afford_magic(self):
+        # TODO: use proper spell costs
         some_test_value = 20
         return self.mana >= some_test_value
-        
+
       def show_attack(self, target, action, damage, critical, attack_distance):
         # slide animation
         renpy.show(self.id + " idle", at_list = [slide(animation_delays["slide"], 
@@ -76,7 +82,7 @@ label battle(player_name, mob_name, mob_count, background):
         renpy.show(self.id + " " + action, zorder=target.get_zorder())
 
         # target waits a bit for the blow to fall, then plays the animation
-        renpy.pause(hit_delays[self.id + " " + action])
+        renpy.pause(hit_delays[self.name + " " + action])
         if target.get_health() > 0:
           if critical:
             renpy.show(target.get_id() + " hit_crit", zorder=target.get_zorder())
@@ -99,7 +105,7 @@ label battle(player_name, mob_name, mob_count, background):
        
     class Player(Fighter):
       def __init__(self, id, health, mana):
-        # TODO: set melee and magic
+        # TODO: set proper melee and magic damage values
         super(Player, self).__init__(id, id, health, mana, 25, 50, 800, 480, 1)
         
       def attack(self, target, messages):
@@ -110,7 +116,7 @@ label battle(player_name, mob_name, mob_count, background):
           # TODO: add any bonuses that items give
           self.mana -= 10 
         
-        # Player's crit chance may vary, using hard-coded values for now
+        # Player's crit chance may vary, using hard-coded values for now, TODO
         if random.randint(1,20) == 20:
           critical = True
           messages.append("Critical hit!")
@@ -164,24 +170,15 @@ label battle(player_name, mob_name, mob_count, background):
       mobs = []
       zorder = 4
       if mob_name == "Demon hunter":
-        for i in range(0, mob_count):
-          id = "DemonHunter_" + str(i)
-          health       = DEMON_HUNTER_HEALTH
-          mana         = DEMON_HUNTER_MANA
-          damage_melee = DEMON_HUNTER_MELEE
-          damage_magic = DEMON_HUNTER_MAGIC
-          # Copy the default images mentioned in battle_animations.rpy to named ones
-          renpy.copy_images("DemonHunter idle",   id + " idle")
-          renpy.copy_images("DemonHunter hit",    id + " hit")
-          renpy.copy_images("DemonHunter dead",   id + " dead")
-          renpy.copy_images("DemonHunter melee",  id + " melee")
-          
-          x = mob_positions[i][0]
-          y = mob_positions[i][1]
-          mobs.append(Mob(mob_name, id, health, mana, damage_melee, damage_magic, x, y, zorder))
-          
-          zorder += 1
-        
+        create_normal_mobs(mob_name, "DemonHunter",
+                           DEMON_HUNTER_HEALTH, DEMON_HUNTER_MANA,
+                           DEMON_HUNTER_MELEE, DEMON_HUNTER_MAGIC,
+                           mobs, mob_positions, zorder)
+      elif mob_name == "Demon thug":
+        create_normal_mobs(mob_name, "DemonThug", 
+                           DEMON_THUG_HEALTH, DEMON_THUG_MANA,
+                           DEMON_THUG_MELEE, DEMON_THUG_MAGIC,
+                           mobs, mob_positions, zorder)
       elif mob_name == "Mamoru":
         health       = MAMORU_HEALTH
         mana         = MAMORU_MANA
@@ -192,6 +189,22 @@ label battle(player_name, mob_name, mob_count, background):
         mobs.append(Mob(mob_name, "Mamoru", health, mana, damage_melee, damage_magic, x, y, zorder))
 
       return mobs
+      
+      
+    def create_normal_mobs(real_name, pic_name, health, mana, damage_melee, damage_magic, mobs, mob_positions, zorder):
+      for i in range(0, mob_count):
+        id = pic_name + "_" + str(i)
+         
+        renpy.copy_images(pic_name + " idle",  id + " idle")
+        renpy.copy_images(pic_name + " hit",   id + " hit")
+        renpy.copy_images(pic_name + " dead",  id + " dead")
+        renpy.copy_images(pic_name + " melee", id + " melee")
+          
+        x = mob_positions[i][0]
+        y = mob_positions[i][1]
+        mobs.append(Mob(real_name, id, health, mana, damage_melee, damage_magic, x, y, zorder))
+          
+        zorder += 1
   
   
     def show_target_list(mobs):
