@@ -22,6 +22,8 @@ init python:
   pda      = False
   
   # testing stuff begins
+  print ""
+  
   pda = True
   persistent.unlocked_minigames = []
   persistent.unlocked_minigames.append("mole")
@@ -32,7 +34,12 @@ init python:
   persistent.unlocked_minigames.append("power")
   persistent.unlocked_minigames.append("squats")
   
-  # these aren't in yet
-  #persistent.unlocked_minigames.append("power")
-  #persistent.unlocked_minigames.append("squats")
+  persistent.unlocked_items = []
+  persistent.unlocked_items.append("knife")
+  persistent.unlocked_items.append("pda")
+  persistent.unlocked_items.append("map")
+  persistent.unlocked_items.append("garden")
+  
+  persistent.unlocked_journals = []
+  persistent.unlocked_journals.append("Riku:002")
   

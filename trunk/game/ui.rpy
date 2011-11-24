@@ -181,18 +181,17 @@ init python:
     return
     
   def confirmation_window(action_taken):
-    ui.frame(xpos=0.4, ypos=0.4)
+    conf_window = ui.frame(xpos=0.4, ypos=0.4)
     
     ui.vbox()
-    
     ui.text("Are you sure you want to " + action_taken + "?")
     ui.textbutton("Yes", clicked=ui.returns("yes"))
     ui.textbutton("No", clicked=ui.returns("no"))
-    
     ui.close()
     
-    confirmation = ""
-    confirmation = ui.interact()
+    confirmation = ui.interact(clear=False)
+    
+    ui.remove(conf_window)
     
     if confirmation == "yes":
         return True
@@ -238,7 +237,6 @@ init python:
     item = inventory.get_item(item_id)
     
     if item_id not in persistent.unlocked_items:
-      item.unlock()
       persistent.unlocked_items.append(item_id)
       update_stats()
     
@@ -283,8 +281,6 @@ init python:
     
     new_id = journal_id + ":" + entry_id
     if new_id not in persistent.unlocked_journals:
-      journal.unlock()
-      entry.unlock()
       persistent.unlocked_journals.append(new_id)
     
     renpy.transition(dissolve)

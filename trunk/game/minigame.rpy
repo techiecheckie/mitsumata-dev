@@ -43,6 +43,8 @@ init python:
       game = MagicPower
     elif name == "squats":
       game = Squats
+    #elif name == "gears":
+    #  game = Gears
     
     return game
   

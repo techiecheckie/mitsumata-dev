@@ -4,21 +4,21 @@ init python:
   from mitsugame.journal_manager import Journal_manager
 
   # Item/journal icon/contents (grid) starting positions
-  icon_x = 270
-  icon_y = 100
-  content_x = 370
-  content_y = 100
+  PDA_ICON_X = 270
+  PDA_ICON_Y = 100
+  PDA_CONTENT_X = 430
+  PDA_CONTENT_Y = 100
   
   # icon size will be 150x150, so here's a slight padding
-  item_cell_width  = 180
-  item_cell_height = 200
+  PDA_ITEM_CELL_WIDTH  = 160
+  PDA_ITEM_CELL_HEIGHT = 160
   
-  journal_cell_width  = 150
-  journal_cell_height = 200
+  PDA_JOURNAL_CELL_WIDTH  = 150
+  PDA_JOURNAL_CELL_HEIGHT = 200
   
   # item/journal grid
-  cols = 4
-  rows = 3
+  PDA_COLS = 4
+  PDA_ROWS = 3
   
   def pda_buttons():
     renpy.transition(Dissolve(0.5))
@@ -81,16 +81,16 @@ init python:
   def show_inventory(items, button, button_value, page):
     if button == "inventory" or button == "scroll":
       
-      for y in range(0, rows):
-        for x in range(0, cols):
-          index = (page * cols * rows) +  y * cols + x
+      for y in range(0, PDA_ROWS):
+        for x in range(0, PDA_COLS):
+          index = (page * PDA_COLS * PDA_ROWS) +  y * PDA_COLS + x
           if index >= len(items):
             break
             
           item = items[index]
           
-          x_pos = icon_x + x * item_cell_width
-          y_pos = icon_y + y * item_cell_height
+          x_pos = PDA_ICON_X + x * PDA_ITEM_CELL_WIDTH
+          y_pos = PDA_ICON_Y + y * PDA_ITEM_CELL_HEIGHT
           
           ui.frame(xpos=x_pos, ypos=y_pos, xpadding=0, ypadding=0)
           ui.imagebutton("gfx/items/" + item.get_id() + ".png", 
@@ -99,12 +99,12 @@ init python:
       
     elif button == "item":
       item = button_value
-      ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
+      ui.frame(xpos=PDA_ICON_X, ypos=PDA_ICON_Y, xpadding=0, ypadding=0)
       ui.imagebutton("gfx/items/" + item.get_id() + ".png",
                      "gfx/items/" + item.get_id() + "_hover.png",
                      clicked=ui.returns(("inventory", "")))
       
-      ui.frame(xpos=content_x, ypos=content_y, xpadding=0, ypadding=0, xmaximum=550, xminimum=550)
+      ui.frame(xpos=PDA_CONTENT_X, ypos=PDA_CONTENT_Y, xpadding=0, ypadding=0, xmaximum=550, xminimum=550)
       ui.text(button_value.get_description()) # button_value == item
       
       
@@ -112,19 +112,27 @@ init python:
   # the button to decide what should be displayed.
   def show_journal_manager(journals, button, button_value, page):
     if button == "journal manager":
-      for y in range(0, rows):
-        for x in range(0, cols):
-          index = y * cols * page + x
+      for y in range(0, PDA_ROWS):
+        for x in range(0, PDA_COLS):
+          index = y * PDA_COLS + x
           if index >= len(journals):
             break
             
           journal = journals[index]
           
-          x_pos = icon_x + x * journal_cell_width
-          y_pos = icon_y + y * journal_cell_height
+          x_pos = PDA_ICON_X + x * PDA_JOURNAL_CELL_WIDTH
+          y_pos = PDA_ICON_Y + y * PDA_JOURNAL_CELL_HEIGHT
           
           ui.frame(xpos=x_pos, ypos=y_pos, xpadding=0, ypadding=0)
-          if journal.is_locked():
+          
+          # unnecessary complexity, but oh well..
+          journal_unlocked = False
+          for id in persistent.unlocked_journals:
+            if id.startswith(journal.get_id()):
+              journal_unlocked = True
+              break
+              
+          if not journal_unlocked:
             ui.image("gfx/journals/" + journal.get_id() + "_disabled.png")
           else:
             ui.imagebutton("gfx/journals/" + journal.get_id() + ".png", 
@@ -136,18 +144,20 @@ init python:
       journal = button_value
       
       if journal != None:
-        ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
+        ui.frame(xpos=PDA_ICON_X, ypos=PDA_ICON_Y, xpadding=0, ypadding=0)
         ui.imagebutton("gfx/journals/" + journal.get_id() + ".png",
                        "gfx/journals/" + journal.get_id() + "_hover.png",
                        clicked=ui.returns(("journal manager", "")))
       
         entries = button_value.get_entries()
         
-        ui.frame(xpos=content_x, ypos=content_y)(grid)
+        ui.frame(xpos=PDA_CONTENT_X, ypos=PDA_CONTENT_Y)
         ui.vbox()
         for entry in entries:
-          if not entry.is_locked():
-            ui.textbutton(entry.get_title(), clicked=ui.returns(("entry", (journal, entry))))
+          for id in persistent.unlocked_journals:
+            if id == journal.get_id() + ":" + entry.get_id():
+              ui.textbutton(entry.get_title(), clicked=ui.returns(("entry", (journal, entry))))
+              break
         ui.close()
         
     # Display the entry's contents
@@ -156,12 +166,12 @@ init python:
       journal = button_value[0]
       entry = button_value[1]
       
-      ui.frame(xpos=icon_x, ypos=icon_y, xpadding=0, ypadding=0)
+      ui.frame(xpos=PDA_ICON_X, ypos=PDA_ICON_Y, xpadding=0, ypadding=0)
       ui.imagebutton("gfx/journals/" + journal.get_id() + ".png",
                      "gfx/journals/" + journal.get_id() + ".png",
                      clicked=ui.returns(("journal", journal)))
       
-      ui.frame(xpos=content_x, ypos=content_y, xpadding=0, ypadding=0, xmaximum=520, xminimum=520)
+      ui.frame(xpos=PDA_CONTENT_X, ypos=PDA_CONTENT_Y, xpadding=0, ypadding=0, xmaximum=520, xminimum=520)
       ui.vbox()
       ui.text(entry.get_title())
       ui.text(entry.get_text())        
@@ -183,7 +193,7 @@ label pda_loop:
     left_arrow  = False
     right_arrow = False
     page        = 0
-    max_page    = len(items)/(cols*rows)
+    max_page    = len(items)/(PDA_COLS*PDA_ROWS)
     
     button       = ""
     button_value = ""
@@ -218,7 +228,7 @@ label pda_loop:
           inventory.disable()
         page       = 0
         left_arrow = False
-        if inventory.is_enabled() and len(items) > cols * rows:
+        if inventory.is_enabled() and len(items) > PDA_COLS * PDA_ROWS:
           right_arrow = True
         else:
           right_arrow = False
