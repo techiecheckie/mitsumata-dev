@@ -5,7 +5,6 @@ class Item():
     self.description = description
     self.locations = locations
     self.bonuses = bonuses
-    self.locked = True
        
   def get_id(self):
     return self.id
@@ -23,16 +22,9 @@ class Item():
          location["decision"] == decision:
         return location
     return None
-    
-  def unlock(self):
-    print "Unlocked item: " + self.id + ", \"" + self.name + "\""
-    self.locked = False
-    
-  def is_locked(self):
-    return self.locked
-    
+
   def is_available(self, decision, location):
-    if not self.locked or self.locations == None:
+    if self.locations == None:
       return False
       
     for loc in self.locations:

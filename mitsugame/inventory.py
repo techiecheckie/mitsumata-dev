@@ -36,7 +36,6 @@ class Inventory():
         
          item_locations.append(item_location)
         
-        # Shop; could do better as a separated chunk, but this'll do for now
         shop_locations = locations.findall("shop")
         for shop_location in shop_locations:
           item_location = {}
@@ -65,32 +64,18 @@ class Inventory():
     if id not in self.persistent.unlocked_items:
       item = self.get_item(id)
       if item != None:
-        #item.unlock()
         self.persistent.unlocked_items.append(id)
         return
       print "[WARN] Could not unlock item, no such id found (id: %s)" % id
     print "id already unlocked"
   
   def item_unlocked(self, id):
-    #item = self.get_item(item_id)
-    #if item == None:
-    #  print "[WARN] No item found with id '%s'" % item_id
-    #  return False
-    #else:
-    #  return not item.is_locked()
     return id in self.persistent.unlocked_items
   
   def get_inventory_items(self):
     return self.items
     
   def get_unlocked_items(self):
-    #items = []
-    #for item in self.items:
-    #  if not item.is_locked():
-    #    items.append(item)
-    #return items
-    #return self.unlocked_items
-
     unlocked_ids = self.persistent.unlocked_items
     unlocked_items = []
     for id in unlocked_ids:
@@ -103,7 +88,7 @@ class Inventory():
   def get_items(self, decision, location):
     items = []
     for item in self.items:
-      if item.is_available(decision, location):
+      if item.is_available(decision, location) and item.get_id() not in self.persistent.unlocked_items:
         items.append(item)
     return items  
   

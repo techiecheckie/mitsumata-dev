@@ -2,7 +2,6 @@ class Journal():
   def __init__(self, id): 
     self.id = id
     self.entries = []
-    self.locked = True
   
   def add_entry(self, entry):
     self.entries.append(entry)
@@ -18,9 +17,3 @@ class Journal():
     
   def get_id(self):
     return self.id
-    
-  def unlock(self):
-    self.locked = False
-    
-  def is_locked(self):
-    return self.locked

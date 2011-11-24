@@ -59,8 +59,6 @@ class Journal_manager():
       if journal != None:
         for entry in journal.get_entries():
           if entry.get_id() == entry_id:
-            entry.unlock()
-            journal.unlock()
             self.persistent.unlocked_journals.append(new_id)
             return
       print "[WARN] Could not unlock entry, no such id found: " + new_id
