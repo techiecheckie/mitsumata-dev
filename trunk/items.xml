@@ -1,4 +1,4 @@
-# Static Items that you have to receive in game.
+
 
 <items>
   <item id="pda">
@@ -81,10 +81,10 @@
     <description>A picture of Susa, Liza, and their son twenty years ago. They look happy.</description>
   </item>
 
-<item id="sake">
+  <item id="sake">
     <name>Onigoroshi</name>
     <description>A powerful sake that is very easy to get drunk off of, hence its name, Demon Killer.</description>
-      </item>
+  </item>
 
 
   <item id="spice">
@@ -96,67 +96,66 @@
   <item id="meat">
     <name>Fresh Meat</name>
     <description>A variety of fresh, raw meat kept in Susa's kitchen. Roman checked, there isn't any Majin meat there, though a few things look questionable...</description>
-      </item>
+  </item>
 
 
 <items>
   <item id="license">
     <name>Marriage License</name>
     <description>A marriage license for the Kamiya and Akemiya families. The Kamiya woman's brother is signed on as a witness...</description>
-     </item>
+  </item>
 
 
 <items>
-  <item id="schematics">
+  <item id="blue">
     <name>Layout Schematics</name>
-    <description>The layout for the Akemiya and Kamiya households. Gotten by Liza's diligence.</description>
-      </item>
+    <description>The blueprint for the Akemiya and Kamiya households. Gotten by Liza's diligence.</description>
+   </item>
 
 
 <items>
-  <item id="keys">
+  <item id="key">
     <name>Temple Keys</name>
     <description>Keys for every nook and cranny in the temple.</description>
-      </item>
+  </item>
 
 
   <item id="pollen">
     <name>Pungent Pollen</name>
     <description>A crushed blend of plants, made specially by Soume. The smell is calming...it makes one want to forget all of his troubles. Soume seems to use this pollen a lot...but all of its effects are not known.</description>
-      </item>
+  </item>
 
 
-<items>
   <item id="radio">
     <name>Transreceiver</name>
     <description>A plant that apparently can work like a little walkie talkie.</description>
       </item>
 
-<items>
+
   <item id="parts">
     <name>Spare Parts</name>
     <description>Spare parts for Doctor Osamu's machinery.</description>
   </item>
 
-<items>
+
   <item id="lab">
     <name>Laboratory Equipment</name>
     <description>Laboratory materials that Doctor Osamu is teaching Riku to use.</description>
      </item>
 
-<items>
+
   <item id="bircake">
     <name>Birthday Cake</name>
     <description>A wonderful vegan birthday cake Riku made for Roman's 100th birthday.</description>
   </item>
 
-<items>
+
   <item id="decor">
     <name>Birthday Decorations</name>
     <description>A wonderful floral arrangement Soume made for Roman's 100th birthday.</description>
       </item>
 
-<items>
+
   <item id="gift">
     <name>Wrapped Gift</name>
     <description>A pristinely wrapped present for Roman's 100th birthday.</description>
@@ -172,12 +171,6 @@
     <description>Planting Item.</description>   
   </item>
 
-
-##############################################################
-
-#Items you can buy or find!
-
-##############################################################
 
 <item id="signet">
     <name>Church of the Acts Signet</name>
@@ -331,7 +324,7 @@
     </locations>
   </item>
 
-<items>
+
   <item id="bone">
     <name>Dried Majin Bone</name>
     <description>Old dried majin bone.</description>
@@ -345,7 +338,7 @@
   </item>
 
 
-<items>
+
   <item id="kimono">
     <name>Brand New Kimono</name>
     <description>Bought for Soume at the store.</description>
@@ -525,11 +518,8 @@
     </locations>
   </item>
 
-################################################################
 
-#Planting Items You can Find or Buy
 
-################################################################
 
   <item id="aos">
     <name>Ao Seed</name>
@@ -646,11 +636,7 @@
   </item>
 
 
-##############################################################
 
-#Full grown plants that must be HARVESTED
-
-##############################################################
 
   <item id="aop">
     <name>Ao Plant</name>
@@ -749,11 +735,7 @@
   </item>
 
 
-################################################################
 
-#Monster plants that must be harvested
-
-################################################################
 
 
   <item id="aom">
