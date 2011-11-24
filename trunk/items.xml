@@ -1,33 +1,30 @@
-
-
+<?xml version="1.0" encoding="ISO-8859-1"?> 
 <items>
+
   <item id="pda">
     <name>PDA</name>
     <description>A state of the art organizer that Riku received for a senior year gift. He can keep memos, write information, and also play a few simple games on it. A must-have for every tech-savvy teenager.</description>
   </item>
 
-
   <item id="knife">
     <name>Antique Knife</name>
     <description>A knife dropped by the two assassins sent after Riku. The blade is an extremely hard steel, and the hilt is inlaid with silver, gold and bronze. It has a strange signet on it that Riku doesn't recognize.</description>   
-      </item>
-
+  </item>
 
   <item id="wallet">
     <name>Empty Wallet</name>
     <description>A wallet given to Riku by his parents when he was 10 years old. It has a picture of PuniUni on it. Riku likes it so much he refuses to use any other wallet, but he doesn't let his friends see it.</description>
-      </item>
-
+  </item>
 
   <item id="fullwallet">
     <name>Full Wallet</name>
     <description>A wallet given to Riku by his parents when he was 10 years old. It has a picture of PuniUni on it. Riku likes it so much he refuses to use any other wallet, but he doesn't let his friends see it. It contains a wad of cash.</description>
-      </item>
+  </item>
 
   <item id="redjewel">
     <name>Parent's Good Luck Charm</name>
     <description>This is a deep red jewel that Riku was found with as a baby. It seems to have a strange liquid inside, and has a faint glow. Riku's parents kept it hidden from him until now. It isn't made of any material known in science.</description>
-      </item>
+  </item>
 
   <item id="map">
     <name>Map to Susa's Estate</name>
@@ -37,44 +34,37 @@
   <item id="salve">
     <name>Fire Salve</name>
     <description> A protective salve that helps heal burns and protect from fire abilities.</description>
-      </item>
-
+  </item>
 
   <item id="ice">
     <name>First Ice Sculpture</name>
     <description>The first sculpture Roman ever managed to do with his ice abilities. It's a bit ugly and malformed, but Roman loves it and doesn't seem to want to fix it.</description>   
   </item>
 
-
   <item id="rose">
     <name>Makai Rose</name>
     <description>A special breed of rose created by Soume. It mixes the DNA of several different roses from the human world, and roses from the demon world. It has no thorns and smells like heaven.</description>
-      </item>
-
+  </item>
 
   <item id="cake">
     <name>Strawberry Shortcake</name>
     <description>A cake from Riku's favorite bakery. It has thick, luscious strawberries and perfectly crafted cream.</description>
   </item>
 
-
   <item id="goodice">
     <name>Improved Ice Sculpture</name>
     <description>An ice sculpture Roman created well after he had decent control of his ice power. It is shaped like a Makai Rose, curiously enough...</description>
-      </item>
-
+  </item>
 
   <item id="trackseed">
     <name>Tracking Seeds</name>
     <description>These seeds embed themselves under the skin and work like a homing beacon to allow Soume to track anyone for several thousand kilometers. </description>
   </item>
 
-
   <item id="memo">
     <name>Memo to Family</name>
     <description>A note Susa wrote to her little brother. She hasn't sent it, and it's yellowed and aged, as if it were very old.</description>
-      </item>
-
+  </item>
 
   <item id="pic">
     <name>Old Picture</name>
@@ -86,75 +76,60 @@
     <description>A powerful sake that is very easy to get drunk off of, hence its name, Demon Killer.</description>
   </item>
 
-
   <item id="spice">
     <name>Cooking Spice</name>
     <description>A medley of spices made by Roman, crafted from his years of experience as an assistant chef in a kitchen. It smells strong and spicy.</description>   
   </item>
-
 
   <item id="meat">
     <name>Fresh Meat</name>
     <description>A variety of fresh, raw meat kept in Susa's kitchen. Roman checked, there isn't any Majin meat there, though a few things look questionable...</description>
   </item>
 
-
-<items>
   <item id="license">
     <name>Marriage License</name>
     <description>A marriage license for the Kamiya and Akemiya families. The Kamiya woman's brother is signed on as a witness...</description>
   </item>
 
-
-<items>
   <item id="blue">
     <name>Layout Schematics</name>
     <description>The blueprint for the Akemiya and Kamiya households. Gotten by Liza's diligence.</description>
    </item>
 
-
-<items>
   <item id="key">
     <name>Temple Keys</name>
     <description>Keys for every nook and cranny in the temple.</description>
   </item>
-
 
   <item id="pollen">
     <name>Pungent Pollen</name>
     <description>A crushed blend of plants, made specially by Soume. The smell is calming...it makes one want to forget all of his troubles. Soume seems to use this pollen a lot...but all of its effects are not known.</description>
   </item>
 
-
   <item id="radio">
     <name>Transreceiver</name>
     <description>A plant that apparently can work like a little walkie talkie.</description>
-      </item>
-
+  </item>
 
   <item id="parts">
     <name>Spare Parts</name>
     <description>Spare parts for Doctor Osamu's machinery.</description>
   </item>
 
-
   <item id="lab">
     <name>Laboratory Equipment</name>
     <description>Laboratory materials that Doctor Osamu is teaching Riku to use.</description>
-     </item>
-
+  </item>
 
   <item id="bircake">
     <name>Birthday Cake</name>
     <description>A wonderful vegan birthday cake Riku made for Roman's 100th birthday.</description>
   </item>
 
-
   <item id="decor">
     <name>Birthday Decorations</name>
     <description>A wonderful floral arrangement Soume made for Roman's 100th birthday.</description>
-      </item>
-
+  </item>
 
   <item id="gift">
     <name>Wrapped Gift</name>
@@ -171,18 +146,16 @@
     <description>Planting Item.</description>   
   </item>
 
-
-<item id="signet">
+  <item id="signet">
     <name>Church of the Acts Signet</name>
     <description>A signet that represents the Church of the Acts, the major religion across the world, with headquarters stationed in rural Japan. Though it is most popular in America and Europe, it is rapidly picking up speed in Asia.</description>
     <locations>
       <map decision="10" room="any" stash="any" />
       <store decision="28" />
-	<map decision="21" room="any" stash="any" />
-	<store decision="31" />
+      <map decision="21" room="any" stash="any" />
+      <store decision="31" />
     </locations>
   </item>
-
 
   <item id="coin">
     <name>Gold Coin</name>
@@ -190,12 +163,10 @@
     <locations>
       <map decision="4" room="any" stash="any" />
       <store decision="13" />
-	<map decision="20" room="any" stash="any" />
-	<store decision="5" />
-
+      <map decision="20" room="any" stash="any" />
+      <store decision="5" />
     </locations>
   </item>
-
 
   <item id="amethyst">
     <name>Amethyst</name>
@@ -208,32 +179,27 @@
     </locations>
   </item>
 
-
   <item id="candle">
     <name>Makai Candles</name>
     <description>Candles from Makai with special properties.</description>
     <locations>
       <map decision="11" room="any" stash="any" />
       <store decision="26" />
-	<map decision="13" room="any" stash="any" />
-	<store decision="30" />
-
+      <map decision="13" room="any" stash="any" />
+      <store decision="30" />
     </locations>
   </item>
-
 
   <item id="seal">
     <name>Anti-Majin Seals</name>
     <description>These seals were crafted 2000 years ago as a way to prevent Majin energy from penetrating an area. It severely weakens any Majin who manages to be surrounded by them, and it also prevents things like Tracking Seeds from working. The protective seals the Japanese use today are less effective versions of these ancient seals.</description>
-	<locations>
-       <map decision="7" room="any" stash="any" />
+    <locations>
+      <map decision="7" room="any" stash="any" />
       <store decision="27" />
-	<map decision="8" room="any" stash="any" />
-	<store decision="23" />
-
+      <map decision="8" room="any" stash="any" />
+      <store decision="23" />
     </locations>
   </item>
-
 
   <item id="veg">
     <name>Garden Vegetables</name>
@@ -241,12 +207,10 @@
     <locations>
       <map decision="24" room="any" stash="any" />
       <store decision="14" />
-	<map decision="22" room="any" stash="any" />
-	<store decision="10" />
-
+      <map decision="22" room="any" stash="any" />
+      <store decision="10" />
     </locations>
   </item>
-
 
   <item id="herb">
     <name>Herbs</name>
@@ -254,12 +218,10 @@
     <locations>
       <map decision="27" room="any" stash="any" />
       <store decision="15" />
-	<map decision="9" room="any" stash="any" />
-	<store decision="22" />
-
+      <map decision="9" room="any" stash="any" />
+      <store decision="22" />
     </locations>
   </item>
-
 
   <item id="clara">
     <name>Aqua Clara</name>
@@ -267,12 +229,10 @@
     <locations>
       <map decision="28" room="any" stash="any" />
       <store decision="21" />
-	<map decision="15" room="any" stash="any" />
-	<store decision="16" />
-
+      <map decision="15" room="any" stash="any" />
+      <store decision="16" />
     </locations>
   </item>
-
 
   <item id="terra">
     <name>Aqua Terra</name>
@@ -280,12 +240,10 @@
     <locations>
       <map decision="17" room="any" stash="any" />
       <store decision="25" />
-	<map decision="26" room="any" stash="any" />
-	<store decision="9" />
-
+      <map decision="26" room="any" stash="any" />
+      <store decision="9" />
     </locations>
   </item>
-
 
   <item id="vita">
     <name>Aqua Vita</name>
@@ -293,12 +251,10 @@
     <locations>
       <map decision="29" room="any" stash="any" />
       <store decision="18" />
-	<map decision="5" room="any" stash="any" />
-	<store decision="11" />
-
+      <map decision="5" room="any" stash="any" />
+      <store decision="11" />
     </locations>
   </item>
-
 
   <item id="mitsumata">
     <name>Mitsumata Flower</name>
@@ -306,9 +262,8 @@
     <locations>
       <map decision="9" room="any" stash="any" />
       <store decision="6" />
-	<map decision="20" room="any" stash="any" />
-	<store decision="24" />
-
+      <map decision="20" room="any" stash="any" />
+      <store decision="24" />
     </locations>
 	</item>
 
@@ -318,12 +273,10 @@
     <locations>
       <map decision="7" room="any" stash="any" />
       <store decision="19" />
-	<map decision=26" room="any" stash="any" />
-	<store decision="20" />
-
+      <map decision="26" room="any" stash="any" />
+      <store decision="20" />
     </locations>
   </item>
-
 
   <item id="bone">
     <name>Dried Majin Bone</name>
@@ -331,13 +284,10 @@
     <locations>
       <map decision="18" room="any" stash="any" />
       <store decision="29" />
-	<map decision="22" room="any" stash="any" />
-	<store decision="7" />
-
+      <map decision="22" room="any" stash="any" />
+      <store decision="7" />
     </locations>
   </item>
-
-
 
   <item id="kimono">
     <name>Brand New Kimono</name>
@@ -345,12 +295,10 @@
     <locations>
       <map decision="29" room="any" stash="any" />
       <store decision="7" />
-	<map decision="13" room="any" stash="any" />
-	<store decision="17" />
-
+      <map decision="13" room="any" stash="any" />
+      <store decision="17" />
     </locations>
   </item>
-
 
   <item id="book1">
     <name>Intro to Majin Biological Processes</name>
@@ -358,12 +306,10 @@
     <locations>
       <map decision="8" room="any" stash="any" />
       <store decision="11" />
-	<map decision="31" room="any" stash="any" />
-	<store decision="9" />
-
+      <map decision="31" room="any" stash="any" />
+      <store decision="9" />
     </locations>
   </item>
-
 
   <item id="book2">
     <name>Adv. Majin Biological Processes</name>
@@ -371,12 +317,10 @@
     <locations>
       <map decision="17" room="any" stash="any" />
       <store decision="29" />
-	<map decision="4" room="any" stash="any" />
-	<store decision="17" />
-
+      <map decision="4" room="any" stash="any" />
+      <store decision="17" />
     </locations>
   </item>
-
 
   <item id="book3">
     <name>Majin Organ Systemic Function</name>
@@ -384,12 +328,10 @@
     <locations>
       <map decision="11" room="any" stash="any" />
       <store decision="27" />
-	<map decision="21" room="any" stash="any" />
-	<store decision="10" />
-
+      <map decision="21" room="any" stash="any" />
+      <store decision="10" />
     </locations>
   </item>
-
 
   <item id="book4">
     <name>Prophesies and Falsehoods</name>
@@ -397,9 +339,8 @@
     <locations>
       <map decision="28" room="any" stash="any" />
       <store decision="12" />
-	<map decision="24" room="any" stash="any" />
-	<store decision="8" />
-
+      <map decision="24" room="any" stash="any" />
+      <store decision="8" />
     </locations>
   </item>
 
@@ -409,12 +350,10 @@
     <locations>
       <map decision="11" room="any" stash="any" />
       <store decision="31" />
-	<map decision="27" room="any" stash="any" />
-	<store decision="26" />
-
+      <map decision="27" room="any" stash="any" />
+      <store decision="26" />
     </locations>
   </item>
-
 
   <item id="book6">
     <name>Book6</name>
@@ -422,12 +361,10 @@
     <locations>
       <map decision="3" room="any" stash="any" />
       <store decision="22" />
-	<map decision="10" room="any" stash="any" />
-	<store decision="20" />
-
+      <map decision="10" room="any" stash="any" />
+      <store decision="20" />
     </locations>
   </item>
-
 
   <item id="book7">
     <name>Book7</name>
@@ -435,12 +372,10 @@
     <locations>
       <map decision="23" room="any" stash="any" />
       <store decision="5" />
-	<map decision="17" room="any" stash="any" />
-	<store decision=30" />
-
+      <map decision="17" room="any" stash="any" />
+      <store decision="30" />
     </locations>
   </item>
-
 
   <item id="book8">
     <name>Book8</name>
@@ -448,9 +383,8 @@
     <locations>
       <map decision="4" room="any" stash="any" />
       <store decision="21" />
-	<map decision="31" room="any" stash="any" />
-	<store decision="13" />
-
+      <map decision="31" room="any" stash="any" />
+      <store decision="13" />
     </locations>
   </item>
 
@@ -460,12 +394,10 @@
     <locations>
       <map decision="20" room="any" stash="any" />
       <store decision="25" />
-	<map decision="15" room="any" stash="any" />
-	<store decision="14" />
-
+      <map decision="15" room="any" stash="any" />
+      <store decision="14" />
     </locations>
   </item>
-
 
   <item id="phone">
     <name>Cellular Phone</name>
@@ -473,12 +405,10 @@
     <locations>
       <map decision="5" room="any" stash="any" />
       <store decision="18" />
-	<map decision="13" room="any" stash="any" />
-	<store decision="28" />
-
+      <map decision="13" room="any" stash="any" />
+      <store decision="28" />
     </locations>
   </item>
-
 
   <item id="game">
     <name>State of the Art Video Game</name>
@@ -486,12 +416,10 @@
     <locations>
       <map decision="29" room="any" stash="any" />
       <store decision="19" />
-	<map decision="26" room="any" stash="any" />
-	<store decision="7" />
-
+      <map decision="26" room="any" stash="any" />
+      <store decision="7" />
     </locations>
   </item>
-
 
   <item id="strpotion">
     <name>Hyper Strength Potion</name>
@@ -499,12 +427,10 @@
     <locations>
       <map decision="7" room="any" stash="any" />
       <store decision="24" />
-	<map decision="27" room="any" stash="any" />
-	<store decision="6" />
-
+      <map decision="27" room="any" stash="any" />
+      <store decision="6" />
     </locations>
   </item>
-
 
   <item id="magpotion">
     <name>Hyper Elemental Potion</name>
@@ -512,14 +438,10 @@
     <locations>
       <map decision="22" room="any" stash="any" />
       <store decision="15" />
-	<map decision="4" room="any" stash="any" />
-	<store decision="23" />
-
+      <map decision="4" room="any" stash="any" />
+      <store decision="23" />
     </locations>
   </item>
-
-
-
 
   <item id="aos">
     <name>Ao Seed</name>
@@ -527,12 +449,10 @@
     <locations>
       <map decision="24" room="any" stash="any" />
       <store decision="16" />
-	<map decision="3" room="any" stash="any" />
-	<store decision="28" />
-
+      <map decision="3" room="any" stash="any" />
+      <store decision="28" />
     </locations>
   </item>
-
 
   <item id="bos">
     <name>Bo Seed</name>
@@ -540,12 +460,10 @@
     <locations>
       <map decision="10" room="any" stash="any" />
       <store decision="31" />
-	<map decision="28" room="any" stash="any" />
-	<store decision="13" />
-
+      <map decision="28" room="any" stash="any" />
+      <store decision="13" />
     </locations>
   </item>
-
 
   <item id="cos">
     <name>Co Seed</name>
@@ -553,9 +471,8 @@
     <locations>
       <map decision="13" room="any" stash="any" />
       <store decision="6" />
-	<map decision="18" room="any" stash="any" />
-	<store decision="21" />
-
+      <map decision="18" room="any" stash="any" />
+      <store decision="21" />
     </locations>
   </item>
 
@@ -565,12 +482,10 @@
     <locations>
       <map decision="10" room="any" stash="any" />
       <store decision="20" />
-	<map decision="15" room="any" stash="any" />
-	<store decision="25" />
-
+      <map decision="15" room="any" stash="any" />
+      <store decision="25" />
     </locations>
   </item>
-
 
   <item id="eos">
     <name>Eo Seed</name>
@@ -578,12 +493,10 @@
     <locations>
       <map decision="17" room="any" stash="any" />
       <store decision="27" />
-	<map decision="9" room="any" stash="any" />
-	<store decision="24" />
-
+      <map decision="9" room="any" stash="any" />
+      <store decision="24" />
     </locations>
   </item>
-
 
   <item id="fos">
     <name>Fo Seed</name>
@@ -591,9 +504,8 @@
     <locations>
       <map decision="5" room="any" stash="any" />
       <store decision="10" />
-	<map decision="26" room="any" stash="any" />
-	<store decision="17" />
-
+      <map decision="26" room="any" stash="any" />
+      <store decision="17" />
     </locations>
   </item>
 
@@ -603,12 +515,10 @@
     <locations>
       <map decision="20" room="any" stash="any" />
       <store decision="5" />
-	<map decision="22" room="any" stash="any" />
-	<store decision="11" />
-
+      <map decision="22" room="any" stash="any" />
+      <store decision="11" />
     </locations>
   </item>
-
 
   <item id="mos">
     <name>Mo Seed</name>
@@ -616,12 +526,10 @@
     <locations>
       <map decision="3" room="any" stash="any" />
       <store decision="8" />
-	<map decision="29" room="any" stash="any" />
-	<store decision="14" />
-
+      <map decision="29" room="any" stash="any" />
+      <store decision="14" />
     </locations>
   </item>
-
 
   <item id="jos">
     <name>Jo Seed</name>
@@ -629,14 +537,10 @@
     <locations>
       <map decision="24" room="any" stash="any" />
       <store decision="11" />
-	<map decision="18" room="any" stash="any" />
-	<store decision="29" />
-
+      <map decision="18" room="any" stash="any" />
+      <store decision="29" />
     </locations>
   </item>
-
-
-
 
   <item id="aop">
     <name>Ao Plant</name>
@@ -647,7 +551,6 @@
     </locations>
   </item>
 
-
   <item id="bop">
     <name>Bo Plant</name>
     <description>A plant grown from the Bo seed. It adds __HP and __MP.</description>
@@ -656,7 +559,6 @@
       <store decision="any" />
     </locations>
   </item>
-
 
   <item id="cop">
     <name>Co Plant</name>
@@ -676,7 +578,6 @@
     </locations>
   </item>
 
-
   <item id="eop">
     <name>Eo Plant</name>
     <description>A plant grown from the Eo seed. It adds __HP and __MP.</description>
@@ -685,7 +586,6 @@
       <store decision="any" />
     </locations>
   </item>
-
 
   <item id="fop">
     <name>Fo Plant</name>
@@ -705,7 +605,6 @@
     </locations>
   </item>
 
-
   <item id="mop">
     <name>Mo Plant</name>
     <description>A plant grown from the Mo seed. It adds __HP and __MP.</description>
@@ -714,7 +613,6 @@
       <store decision="any" />
     </locations>
   </item>
-
 
   <item id="iop">
     <name>Io Plant</name>
@@ -734,10 +632,6 @@
     </locations>
   </item>
 
-
-
-
-
   <item id="aom">
     <name>Monster Ao Plant</name>
     <description>A plant grown from the Ao seed. Mutations caused it to look like this. It adds __HP and __MP.</description>
@@ -747,7 +641,6 @@
     </locations>
   </item>
 
-
   <item id="bom">
     <name>Monster Bo Plant</name>
     <description>A plant grown from the Bo seed. Mutations caused it to look like this. It adds __HP and __MP.</description>
@@ -756,7 +649,6 @@
       <store decision="any" />
     </locations>
   </item>
-
 
   <item id="com">
     <name>Monster Co Plant</name>
@@ -803,7 +695,6 @@
     </locations>
   </item>
 
-
   <item id="mom">
     <name>Monster Mo Plant</name>
     <description>A plant grown from the Mo seed. Mutations caused it to look like this. It adds __HP and __MP.</description>
@@ -812,7 +703,6 @@
       <store decision="any" />
     </locations>
   </item>
-
 
   <item id="iom">
     <name>Monster Io Plant</name>

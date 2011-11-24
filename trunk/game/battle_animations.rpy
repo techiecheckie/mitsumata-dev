@@ -1,5 +1,7 @@
 label prepare_battle_animations:
+  # how long the animation lasts (how long the target waits)
   $animation_delays = {}
+  # how long until the target should display hit animation
   $hit_delays = {}
   
   # Default slide animation duration
@@ -7,12 +9,6 @@ label prepare_battle_animations:
   
   transform slide(delay, x, y):
     linear delay xpos x ypos y
-    
-  #transform jump_slide(delay, x, y):
-  #  pause 0.20
-  #  linear delay xpos x ypos x
-  #  linear delay xpos x ypos y
-  #  pause 0.2
 
   ########
   # Riku #
@@ -46,6 +42,7 @@ label prepare_battle_animations:
     pause 0.4
     
   $animation_delays["Riku melee"] = 0.8
+  $hit_delays["Riku melee"]       = 0.4
   image Riku melee:  
     "gfx/animated/riku/riku_attackl01.png"
     pause 0.2
@@ -56,10 +53,21 @@ label prepare_battle_animations:
     "gfx/animated/riku/riku_attackl04.png"
     pause 0.2
     
-  $animation_delays["Riku magic"] = 0.8
+  $animation_delays["Riku magic"] = 1.2
+  $hit_delays["Riku magic"]       = 0.4
   image Riku magic:
-    "gfx/animated/missing.png"
-    
+    "gfx/animated/riku/riku_firewhitel01.png"
+    pause 0.2
+    "gfx/animated/riku/riku_firewhitel02.png"
+    pause 0.2
+    "gfx/animated/riku/riku_firewhitel03.png"
+    pause 0.2
+    "gfx/animated/riku/riku_firewhitel04.png"
+    pause 0.2
+    "gfx/animated/riku/riku_firewhitel03.png"
+    pause 0.2
+    "gfx/animated/riku/riku_firewhitel04.png"
+    pause 0.2
   #########
   # Roman #
   #########
@@ -142,18 +150,18 @@ label prepare_battle_animations:
   ################
   
   image DemonHunter idle:
-    "gfx/animated/demonic_thug/demonic_idler01.png"
+    "gfx/animated/demonic_hunter/demoniccape_idler01.png"
     pause 0.2
-    "gfx/animated/demonic_thug/demonic_idler02.png"
+    "gfx/animated/demonic_hunter/demoniccape_idler02.png"
     pause 0.2
-    "gfx/animated/demonic_thug/demonic_idler03.png"
+    "gfx/animated/demonic_hunter/demoniccape_idler03.png"
     pause 0.2
     repeat
     
   image DemonHunter hit:
-    "gfx/animated/demonic_thug/demonic_hitr01.png"
+    "gfx/animated/demonic_hunter/demoniccape_hitr01.png"
     pause 0.4
-    "gfx/animated/demonic_thug/demonic_hitr02.png"
+    "gfx/animated/demonic_hunter/demoniccape_hitr02.png"
     pause 0.4
     
   image DemonHunter hit_crit:
@@ -169,7 +177,52 @@ label prepare_battle_animations:
     pause 0.4
   
   $animation_delays["Demon hunter melee"] = 0.8
+  $hit_delays["Demon hunter melee"]       = 0.2
   image DemonHunter melee:
+    "gfx/animated/demonic_hunter/demoniccape_swiper01.png"
+    pause 0.2
+    "gfx/animated/demonic_hunter/demoniccape_swiper02.png"
+    pause 0.2
+    "gfx/animated/demonic_hunter/demoniccape_swiper03.png"
+    pause 0.2
+    "gfx/animated/demonic_hunter/demoniccape_swiper04.png"
+    pause 0.2
+    
+  ################
+  # Demon thug #
+  ################
+  
+  image DemonThug idle:
+    "gfx/animated/demonic_thug/demonic_idler01.png"
+    pause 0.2
+    "gfx/animated/demonic_thug/demonic_idler02.png"
+    pause 0.2
+    "gfx/animated/demonic_thug/demonic_idler03.png"
+    pause 0.2
+    repeat
+    
+  image DemonThug hit:
+    "gfx/animated/demonic_thug/demonic_hitr01.png"
+    pause 0.4
+    "gfx/animated/demonic_thug/demonic_hitr02.png"
+    pause 0.4
+    
+  image DemonThug hit_crit:
+    "gfx/animated/riku/riku_hitwussyr01.png"
+    pause 0.4
+    "gfx/animated/riku/riku_hitwussyr02.png"
+    pause 0.4
+
+    
+  image DemonThug dead:
+    "gfx/animated/riku/riku_hitwussyr01.png"
+    pause 0.4
+    "gfx/animated/riku/riku_hitwussyr02.png"
+    pause 0.4
+  
+  $animation_delays["Demon thug melee"] = 0.8
+  $hit_delays["Demon thug melee"]       = 0.2
+  image DemonThug melee:
     "gfx/animated/demonic_thug/demonic_swiper01.png"
     pause 0.2
     "gfx/animated/demonic_thug/demonic_swiper02.png"
@@ -178,6 +231,7 @@ label prepare_battle_animations:
     pause 0.2
     "gfx/animated/demonic_thug/demonic_swiper04.png"
     pause 0.2
+    
     
   ##########
   # Mamoru #
