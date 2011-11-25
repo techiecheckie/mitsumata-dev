@@ -1,18 +1,17 @@
 label show_map:
-  # A dict containing the rooms and their items (as mentioned in the GDD)
+  # A dict containing the rooms and their items
   $rooms = { 
-    "riroom" : { "equipment" : None, "clothes" : None, "trophies" : None, "posters" : None },
-    "soroom" : { "plants" : None, "vines" : None, "hairclips" : None, "jewelry" : None, "nailpolish" : None, "clothes" : None }, 
-    "suroom" : { "tv" : None, "games" : None, "burner" : None, "scrolls" : None }, 
-    "roroom" : { "sculpture" : None, "plant1" : None, "plant2" : None },
-    
-    #"hall1" : { "stash1" : None, "stash2" : None }, 
-    #"hall2" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
-    #"bathroom" : { "stash1" : None, "stash2" : None, "stash3" : None }, 
-    
-    # complete rooms
+    "riroom" : { "backpack":None, "ball1":None, "ball2":None, "blanket":None, "books":None, "clothes":None, "trophy_big":None, "trophy_medium":None, "trophy_small":None},
+    "soroom" : { "blanket":None, "brush":None, "bucket":None, "clothes":None, "flower_blue":None, "flower_cactus":None, "flower_red":None, "flower_white":None, "hairclips":None, "jewelry":None, "mirror":None, "paperbag":None, "vines":None }, 
+    "suroom" : { "blanket":None, "console":None, "drawer":None, "lamp":None, "mirror":None, "poster1":None, "poster2":None, "tv":None }, 
+    "roroom" : { "blanket":None, "cupboard":None, "doll":None, "hat":None, "jacket":None, "lamp":None, "magazines":None, "plant1":None, "plant2":None, "poster1":None, "poster2":None, "rack":None, "statue1":None, "statue2":None, "statue3":None },       
     "kitchen" : { "hood" : None, "sink" : None, "pots1" : None, "pots2" : None, "pots3" : None, "pots4" : None },
-    "lib" : { "shelves1" : None, "shelves2" : None, "books1" : None, "books2" : None, "books3" : None, "books4" : None } 
+    "lib" : { "shelves1" : None, "shelves2" : None, "books1" : None, "books2" : None, "books3" : None, "books4" : None },
+    
+    # TODO
+    "hall1" : { "stash1" : None, "stash2" : None },
+    "hall2" : { "stash1" : None, "stash2" : None, "stash3" : None },
+    "bathroom" : { "stash1" : None, "stash2" : None, "stash3" : None }
   }
 
   # A list of items that match the decision value
@@ -79,12 +78,14 @@ label show_map:
        $current_tries = show_room(room, decision, tries, rooms[room])
     else:
      $current_tries = 0
-    
+     
   if not event_triggered:
     # Display a message box before returning to the script
     $show_tries(tries)
     $renpy.pause(0.2)
     $show_message("(\"0 tries left\" message)", "large")
+
+  $update_stats()
     
   $renpy.transition(dissolve)
   $renpy.hide("map")
@@ -170,40 +171,280 @@ init python:
     
   def show_room_clickables(room):
     if room == "riroom":
-      # Riku room item containers
-      #"riroom" : { "equipment" : None, "clothes" : None, "trophies" : None, "posters" : None },
-
-      # Cupboard
-      ui.frame(xpos=100, ypos=100, background=None)
-      ui.textbutton("item", clicked=ui.returns(("stash", "equipment")))
-      
-      # Closet
-      ui.frame(xpos=200, ypos=100, background=None)
-      ui.textbutton("item", clicked=ui.returns(("stash", "clothes")))
-      
-      # Bed
-      ui.frame(xpos=300, ypos=100, background=None)
-      ui.textbutton("item", clicked=ui.returns(("stash", "trophies")))
-      
-      # Bed
-      ui.frame(xpos=400, ypos=100, background=None)
-      ui.textbutton("item", clicked=ui.returns(("stash", "posters")))
-      
-      # ...
-      
-      # Riku room tidbit containers
-      ui.frame(xpos=100, ypos=200, background=None)
-      ui.textbutton("tidbit", clicked=ui.returns(("tidbit", "1")))
- 
-      ui.frame(xpos=200, ypos=200, background=None)
-      ui.textbutton("tidbit", clicked=ui.returns(("tidbit", "2")))
+      # backpack
+      ui.frame(xpos=638, ypos=454, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/riroom/backpack.png",
+                     "gfx/map/riroom/backpack_hover.png",
+                     clicked=ui.returns(("stash", "backpack")))
+                     
+      # ball1
+      ui.frame(xpos=876, ypos=401, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/riroom/ball1.png",
+                     "gfx/map/riroom/ball1_hover.png",
+                     clicked=ui.returns(("stash", "ball1")))
+                     
+      # ball2
+      ui.frame(xpos=78, ypos=556, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/riroom/ball2.png",
+                     "gfx/map/riroom/ball2_hover.png",
+                     clicked=ui.returns(("stash", "ball2")))
+                     
+      # blanket
+      ui.frame(xpos=234, ypos=573, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/riroom/blanket.png",
+                     "gfx/map/riroom/blanket_hover.png",
+                     clicked=ui.returns(("stash", "blanket")))
+                     
+      # books
+      ui.frame(xpos=852, ypos=583, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/riroom/books.png",
+                     "gfx/map/riroom/books_hover.png",
+                     clicked=ui.returns(("stash", "books")))
+                     
+      # clothes
+      ui.frame(xpos=208, ypos=519, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/riroom/clothes.png",
+                     "gfx/map/riroom/clothes_hover.png",
+                     clicked=ui.returns(("stash", "clothes")))
+     
+      # trophy_big
+      ui.frame(xpos=748, ypos=335, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/riroom/trophy_big.png",
+                     "gfx/map/riroom/trophy_big_hover.png",
+                     clicked=ui.returns(("stash", "trophy_big")))
+                     
+      # trophy_medium
+      ui.frame(xpos=799, ypos=344, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/riroom/trophy_medium.png",
+                     "gfx/map/riroom/trophy_medium_hover.png",
+                     clicked=ui.returns(("stash", "trophy_medium")))
+                     
+      # trophy_small
+      ui.frame(xpos=728, ypos=348, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/riroom/trophy_small.png",
+                     "gfx/map/riroom/trophy_small_hover.png",
+                     clicked=ui.returns(("stash", "trophy_small")))
+                     
       
     elif room == "roroom":    
-      #"roroom" : { "stash1" : None, "stash2" : None }, 
-      pass
+      # blanket
+      ui.frame(xpos=234, ypos=573, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/roroom/blanket.png",
+                     "gfx/map/roroom/blanket_hover.png",
+                     clicked=ui.returns(("stash", "blanket")))
+      
+      # cupboard
+      ui.frame(xpos=561, ypos=403, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/roroom/cupboard.png",
+                     "gfx/map/roroom/cupboard_hover.png",
+                     clicked=ui.returns(("stash", "cupboard")))
+      
+      # doll               
+      ui.frame(xpos=883, ypos=501, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/roroom/doll.png",
+                     "gfx/map/roroom/doll_hover.png",
+                     clicked=ui.returns(("stash", "doll")))
+      
+      # jacket
+      ui.frame(xpos=104, ypos=248, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/roroom/jacket.png",
+                     "gfx/map/roroom/jacket_hover.png",
+                     clicked=ui.returns(("stash", "jacket")))
+      
+      # rack               
+      ui.frame(xpos=54, ypos=262, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/roroom/rack.png",
+                     "gfx/map/roroom/rack_hover.png",
+                     clicked=ui.returns(("stash", "rack")))
+
+      # hat
+      ui.frame(xpos=30, ypos=268, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/roroom/hat.png",
+                     "gfx/map/roroom/hat_hover.png",
+                     clicked=ui.returns(("stash", "hat")))
+                     
+      # magazines
+      ui.frame(xpos=597, ypos=628, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/roroom/magazines.png",
+                     "gfx/map/roroom/magazines_hover.png",
+                     clicked=ui.returns(("stash", "magazines")))
+                     
+      # plant1
+      ui.frame(xpos=640, ypos=296, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/roroom/plant1.png",
+                     "gfx/map/roroom/plant1_hover.png",
+                     clicked=ui.returns(("stash", "plant1")))
+                     
+      # plant2
+      ui.frame(xpos=443, ypos=367, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/roroom/plant2.png",
+                     "gfx/map/roroom/plant2_hover.png",
+                     clicked=ui.returns(("stash", "plant2")))
+      
+      # poster1               
+      ui.frame(xpos=571, ypos=253, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/roroom/poster1.png",
+                     "gfx/map/roroom/poster1_hover.png",
+                     clicked=ui.returns(("stash", "poster1")))
+                     
+      # poster2
+      ui.frame(xpos=762, ypos=210, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/roroom/poster2.png",
+                     "gfx/map/roroom/poster2_hover.png",
+                     clicked=ui.returns(("stash", "poster2")))
+                     
+      # lamp
+      ui.frame(xpos=721, ypos=331, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/roroom/lamp.png",
+                     "gfx/map/roroom/lamp_hover.png",
+                     clicked=ui.returns(("stash", "lamp")))                     
+                           
+      # statue1
+      ui.frame(xpos=830, ypos=325, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/roroom/statue1.png",
+                     "gfx/map/roroom/statue1_hover.png",
+                     clicked=ui.returns(("stash", "statue1")))
+                     
+      # statue2
+      ui.frame(xpos=796, ypos=354, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/roroom/statue2.png",
+                     "gfx/map/roroom/statue2_hover.png",
+                     clicked=ui.returns(("stash", "statue2")))
+                     
+      # statue3
+      ui.frame(xpos=876, ypos=331, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/roroom/statue3.png",
+                     "gfx/map/roroom/statue3_hover.png",
+                     clicked=ui.returns(("stash", "statue3")))
+      
+    elif room == "soroom":
+      # blanket
+      ui.frame(xpos=234, ypos=573, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/soroom/blanket.png",
+                     "gfx/map/soroom/blanket_hover.png",
+                     clicked=ui.returns(("stash", "blanket")))
+                     
+      # vines
+      ui.frame(xpos=544, ypos=3, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/soroom/vines.png",
+                     "gfx/map/soroom/vines_hover.png",
+                     clicked=ui.returns(("stash", "vines")))
+      
+      # brush
+      ui.frame(xpos=637, ypos=651, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/soroom/brush.png",
+                     "gfx/map/soroom/brush_hover.png",
+                     clicked=ui.returns(("stash", "brush")))
+                     
+      # bucket
+      ui.frame(xpos=37, ypos=449, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/soroom/bucket.png",
+                     "gfx/map/soroom/bucket_hover.png",
+                     clicked=ui.returns(("stash", "bucket")))
+                     
+      # clothes
+      ui.frame(xpos=286, ypos=629, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/soroom/clothes.png",
+                     "gfx/map/soroom/clothes_hover.png",
+                     clicked=ui.returns(("stash", "clothes")))
+                     
+      # mirror
+      ui.frame(xpos=810, ypos=215, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/soroom/mirror.png",
+                     "gfx/map/soroom/mirror_hover.png",
+                     clicked=ui.returns(("stash", "mirror")))
+                                          
+      # flower_blue
+      ui.frame(xpos=752, ypos=310, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/soroom/flower_blue.png",
+                     "gfx/map/soroom/flower_blue_hover.png",
+                     clicked=ui.returns(("stash", "flower_blue")))
+                     
+      # flower_cactus
+      ui.frame(xpos=787, ypos=334, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/soroom/flower_cactus.png",
+                     "gfx/map/soroom/flower_cactus_hover.png",
+                     clicked=ui.returns(("stash", "flower_cactus")))
+                     
+      # flower_red
+      ui.frame(xpos=446, ypos=351, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/soroom/flower_red.png",
+                     "gfx/map/soroom/flower_red_hover.png",
+                     clicked=ui.returns(("stash", "flower_red")))
+                     
+      # flower_white
+      ui.frame(xpos=499, ypos=391, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/soroom/flower_white.png",
+                     "gfx/map/soroom/flower_white_hover.png",
+                     clicked=ui.returns(("stash", "flower_white")))
+                     
+      # hairclips
+      ui.frame(xpos=597, ypos=674, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/soroom/hairclips.png",
+                     "gfx/map/soroom/hairclips_hover.png",
+                     clicked=ui.returns(("stash", "hairclips")))
+      
+      # jewelry
+      ui.frame(xpos=878, ypos=356, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/soroom/jewelry.png",
+                     "gfx/map/soroom/jewelry_hover.png",
+                     clicked=ui.returns(("stash", "jewelry")))
+                     
+      # paperbag
+      ui.frame(xpos=911, ypos=495, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/soroom/paperbag.png",
+                     "gfx/map/soroom/paperbag_hover.png",
+                     clicked=ui.returns(("stash", "paperbag")))
+      
     elif room == "suroom":
-      #"soroom" : { "plants" : None, "vines" : None, "hairclips" : None, "jewelry" : None, "nailpolish" : None, "clothes" : None } 
-      pass
+      # Blanket
+      ui.frame(xpos=234, ypos=573, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/suroom/blanket.png",
+                     "gfx/map/suroom/blanket_hover.png",
+                     clicked=ui.returns(("stash", "blanket")))
+
+      # Console
+      ui.frame(xpos=713, ypos=493, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/suroom/console.png",
+                     "gfx/map/suroom/console_hover.png",
+                     clicked=ui.returns(("stash", "console")))
+
+      # Drawer
+      ui.frame(xpos=597, ypos=416, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/suroom/drawer.png",
+                     "gfx/map/suroom/drawer_hover.png",
+                     clicked=ui.returns(("stash", "drawer")))
+
+      # Lamp
+      ui.frame(xpos=482, ypos=465, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/suroom/lamp.png",
+                     "gfx/map/suroom/lamp_hover.png",
+                     clicked=ui.returns(("stash", "lamp")))
+
+      # Mirror
+      ui.frame(xpos=871, ypos=203, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/suroom/mirror.png",
+                     "gfx/map/suroom/mirror_hover.png",
+                     clicked=ui.returns(("stash", "mirror")))
+
+      # Poster 1
+      ui.frame(xpos=586, ypos=246, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/suroom/poster1.png",
+                     "gfx/map/suroom/poster1_hover.png",
+                     clicked=ui.returns(("stash", "poster1")))
+
+      # Poster 2
+      ui.frame(xpos=7, ypos=224, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/suroom/poster2.png",
+                     "gfx/map/suroom/poster2_hover.png",
+                     clicked=ui.returns(("stash", "poster2")))
+
+      # TV
+      ui.frame(xpos=729, ypos=293, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/suroom/tv.png",
+                     "gfx/map/suroom/tv_hover.png",
+                     clicked=ui.returns(("stash", "tv")))
+
     elif room == "kitchen":
       # Cooker hood
       ui.frame(xpos=273, ypos=0, background=None, xpadding=0, ypadding=0)
@@ -292,15 +533,18 @@ init python:
       item = items[selection[1]]
       if item == None:
         message = "You found nothing of interest."
+        show_message(message, "medium")
       else:
         message = "You found an item." + "\n\n" + item.get_name()
-        item.unlock()
-        update_stats(item.get_bonuses())
+        show_message(message, "medium")
+        unlock_item(item.get_id())
         
         items[selection[1]] = None
 
       #current_tries -= 1
     
-    show_message(message, "large")
+    #show_message(message, "large")
+    #if item != None:
+      
     
     return current_tries

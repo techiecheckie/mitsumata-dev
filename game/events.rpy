@@ -10,7 +10,8 @@ label run_event:
   if room == "riroom":
     call riroom_events
   elif room == "soroom":
-    call soroom_events
+    #call soroom_events
+    pass
   elif room == "suroom":
     call suroom_events
   elif room == "roroom":

@@ -11,21 +11,28 @@ image minigame_mp_bg  = "gfx/minigame_mp_bg.png"
 image minigame_bg     = Solid( "#000" )
 
 init python:
-  ui_hp_area = 300
-  ui_hp_initial_x = 176
-  ui_hp_x = 0
-      
-  ui_mp_area = 283
-  ui_mp_initial_x = 603
-  ui_mp_x = 0
+  # the distance the health bar can move
+  UI_HP_AREA = 300
+  # where it starts from
+  UI_HP_INITIAL_X = 176
+  # and how far it should be from the initial position (100% health = 300 px)
+  UI_HP_X = 0
+
+  # the above applies to all three below
+  UI_MP_AREA = 283
+  UI_MP_INITIAL_X = 603
+  UI_MP_X = 0
   
-  mini_hp_area = 395
-  mini_hp_initial_x = 113
-  mini_hp_x = 0
+  MINI_HP_AREA = 395
+  MINI_HP_INITIAL_X = 113
+  MINI_HP_X = 0
   
-  mini_mp_area = 388
-  mini_mp_initial_x = 585
-  mini_mp_x = 0
+  MINI_MP_AREA = 388
+  MINI_MP_INITIAL_X = 585
+  MINI_MP_X = 0
+  
+  MESSAGE_BOX_PADDING_X = 40
+  MESSAGE_BOX_PADDING_Y = 40
 
   def main_ui_buttons():
     ui.frame(xpos=98,ypos=630, xpadding=0, ypadding=0, background=None)
@@ -88,25 +95,25 @@ init python:
   def calculate_new_main_ui_positions(hp, mp):
     # How big a part should the bar cover: (0.01 * hp) * area
     # so with 100 hp coverage is 100% (assuming that the value is between 0-100).
-    ui_hp_x = int(ui_hp_initial_x + (0.001 * hp) * ui_hp_area)
-    ui_mp_x = int(ui_mp_initial_x + (0.001 * mp) * ui_mp_area)
+    UI_HP_X = int(UI_HP_INITIAL_X + (0.001 * hp) * UI_HP_AREA)
+    UI_MP_X = int(UI_MP_INITIAL_X + (0.001 * mp) * UI_MP_AREA)
     
-    return (ui_hp_x, ui_mp_x)
+    return (UI_HP_X, UI_MP_X)
     
   def calculate_new_minigame_ui_positions(hp, mp):
-    mini_hp_x = int(mini_hp_initial_x + (0.001 * hp) * mini_hp_area)
-    mini_mp_x = int(mini_mp_initial_x + (0.001 * mp) * mini_mp_area)
+    MINI_HP_X = int(MINI_HP_INITIAL_X + (0.001 * hp) * MINI_HP_AREA)
+    MINI_MP_X = int(MINI_MP_INITIAL_X + (0.001 * mp) * MINI_MP_AREA)
     
-    return (mini_hp_x, mini_mp_x)
+    return (MINI_HP_X, MINI_MP_X)
   
   def show_main_ui():
-    (ui_hp_x, ui_mp_x) = calculate_new_main_ui_positions(hp, mp)
+    (UI_HP_X, UI_MP_X) = calculate_new_main_ui_positions(hp, mp)
   
     renpy.transition(dissolve)   
     renpy.show("ui_mp_bg",  at_list = [Position(xpos=596,     ypos=573), Transform(anchor=(0.0, 0.0))], zorder=8)
-    renpy.show("ui_mp_bar", at_list = [Position(xpos=ui_mp_x, ypos=572), Transform(anchor=(1.0, 0.0))], zorder=8)
+    renpy.show("ui_mp_bar", at_list = [Position(xpos=UI_MP_X, ypos=572), Transform(anchor=(1.0, 0.0))], zorder=8)
     renpy.show("ui_hp_bg",  at_list = [Position(xpos=171,     ypos=572), Transform(anchor=(0.0, 0.0))], zorder=8)
-    renpy.show("ui_hp_bar", at_list = [Position(xpos=ui_hp_x, ypos=571), Transform(anchor=(1.0, 0.0))], zorder=8)
+    renpy.show("ui_hp_bar", at_list = [Position(xpos=UI_HP_X, ypos=571), Transform(anchor=(1.0, 0.0))], zorder=8)
     renpy.show("ui", zorder=8)
     
     if main_ui_buttons not in config.overlay_functions:
@@ -115,11 +122,11 @@ init python:
     return
     
   def update_main_ui():
-    (ui_hp_x, ui_mp_x) = calculate_new_main_ui_positions(hp, mp)
+    (UI_HP_X, UI_MP_X) = calculate_new_main_ui_positions(hp, mp)
     
     renpy.transition(MoveTransition(1.0))
-    renpy.show("ui_mp_bar", at_list = [Position(xpos=ui_mp_x, ypos=572), Transform(anchor=(1.0, 0.0))], zorder=8)
-    renpy.show("ui_hp_bar", at_list = [Position(xpos=ui_hp_x, ypos=571), Transform(anchor=(1.0, 0.0))], zorder=8)
+    renpy.show("ui_mp_bar", at_list = [Position(xpos=UI_MP_X, ypos=572), Transform(anchor=(1.0, 0.0))], zorder=8)
+    renpy.show("ui_hp_bar", at_list = [Position(xpos=UI_HP_X, ypos=571), Transform(anchor=(1.0, 0.0))], zorder=8)
     
     renpy.pause(1.0)
     
@@ -139,15 +146,15 @@ init python:
     return
   
   def show_minigame_ui(background, battle):
-    (mini_hp_x, mini_mp_x) = calculate_new_minigame_ui_positions(hp, mp)
+    (MINI_HP_X, MINI_MP_X) = calculate_new_minigame_ui_positions(hp, mp)
     
     renpy.transition(dissolve)
     if background:
       renpy.show(background)
     renpy.show("minigame_mp_bg",  at_list = [Position(xpos=579,       ypos=16), Transform(anchor=(0.0, 0.0))])
-    renpy.show("minigame_mp_bar", at_list = [Position(xpos=mini_mp_x, ypos=18), Transform(anchor=(1.0, 0.0))])
+    renpy.show("minigame_mp_bar", at_list = [Position(xpos=MINI_MP_X, ypos=18), Transform(anchor=(1.0, 0.0))])
     renpy.show("minigame_hp_bg",  at_list = [Position(xpos=105,       ypos=16), Transform(anchor=(0.0, 0.0))])
-    renpy.show("minigame_hp_bar", at_list = [Position(xpos=mini_hp_x, ypos=16), Transform(anchor=(1.0, 0.0))])
+    renpy.show("minigame_hp_bar", at_list = [Position(xpos=MINI_HP_X, ypos=16), Transform(anchor=(1.0, 0.0))])
     renpy.show("minigame_ui")
     
     # temp
@@ -157,11 +164,11 @@ init python:
     return
     
   def update_minigame_ui(hp, mp):
-    (mini_hp_x, mini_mp_x) = calculate_new_minigame_ui_positions(hp, mp)
+    (MINI_HP_X, MINI_MP_X) = calculate_new_minigame_ui_positions(hp, mp)
     
     renpy.transition(MoveTransition(1.0))
-    renpy.show("minigame_hp_bar", at_list = [Position(xpos=mini_hp_x, ypos=16)])
-    renpy.show("minigame_mp_bar", at_list = [Position(xpos=mini_mp_x, ypos=18)])
+    renpy.show("minigame_hp_bar", at_list = [Position(xpos=MINI_HP_X, ypos=16)])
+    renpy.show("minigame_mp_bar", at_list = [Position(xpos=MINI_MP_X, ypos=18)])
     
     return
     
@@ -200,38 +207,36 @@ init python:
         
   def show_message(message, size):
     if size == "large":
-      box = "textbox_l"
-      x_pos = 0.3 # or use a pixel value, x_pos = 500
-      y_pos = 0.35
-      x_max = 500
+      # these should be about half of the image's size
+      x_anchor = 265
+      y_anchor = 175
+      bg = "gfx/textbox.png"
+      # how much space the content has (image width - padding (40px atm))
+      x_max = 490
     elif size == "medium":
-      box = "textbox_m"
-      x_pos = 0.25
-      y_pos = 0.45
-      x_max = 580
+      x_anchor = 304
+      y_anchor = 95
+      bg = "gfx/textbox_2.png"
+      x_max = 560
     elif size == "small":
-      box = "textbox_s"
-      x_pos = 0.45
-      y_pos = 0.47
-      x_max = 130
+      x_anchor = 70
+      y_anchor = 40
+      bg = "gfx/textbox_mini.png"
+      x_max = 100
   
     renpy.transition(dissolve)
-    renpy.show(box, at_list=[Position(xpos=0.5, ypos=0.5), Transform(anchor=(0.5,0.5))], zorder=9)
-    
-    ui.frame(xpos=x_pos, ypos=y_pos, xmaximum=x_max, background=None)
+    frame = ui.frame(xmaximum=x_max, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=x_anchor, yanchor=y_anchor, background=bg)
     ui.text(message)
     
     # Full screen hidden button, "click anywhere to continue" kind
     ui.frame(xpos=0, ypos=0, background=None)
     ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
     
-    ui.interact(suppress_overlay=True)
-    
+    ui.interact(clear=False)
+    ui.remove(frame)
     renpy.transition(dissolve)
-    renpy.hide(box)
     
     return
-
     
   def unlock_item(item_id):
     item = inventory.get_item(item_id)
@@ -242,36 +247,31 @@ init python:
     
     # Box 1
     renpy.transition(dissolve)
-    renpy.show("textbox_m", at_list=[Position(xpos=0.5, ypos=0.5), Transform(anchor=(0.5,0.5))], zorder=9)
-        
-    ui.frame(xpos=0.25, ypos=0.45, background=None)
+    frame = ui.frame(xmaximum=560, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=304, yanchor=95, background="gfx/textbox_2.png")
     ui.text(item.get_name() + " recorded")
-    
+
+    # full screen hidden button    
     ui.frame(xpos=0, ypos=0, background=None)
     ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
     
-    ui.interact(suppress_overlay=True)
-    
+    ui.interact(clear=False)
+    ui.remove(frame)
     renpy.transition(dissolve)
-    renpy.hide("textbox_m")
     
     # Box 2
     renpy.transition(dissolve)
-    renpy.show("textbox_l", at_list=[Position(xpos=0.5, ypos=0.5), Transform(anchor=(0.5,0.5))], zorder=9)
-    
-    ui.frame(xpos=0.3, ypos=0.35, background=None)
+    ui.frame(xmaximum=490, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=265, yanchor=175, background="gfx/textbox.png")    
+    ui.hbox(spacing=40)    
     ui.image(im.Scale("gfx/items/" + item.get_id() + ".png", 75, 75))
-    
-    ui.frame(xpos=0.4, ypos=0.35, xmaximum=300, background=None)
     ui.text(item.get_description())
+    ui.close()
     
+    # full screen hidden button
     ui.frame(xpos=0, ypos=0, background=None)
     ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
     
-    ui.interact(suppress_overlay=True)
-    
+    ui.interact()
     renpy.transition(dissolve)
-    renpy.hide("textbox_l")
     
     return
     
@@ -283,19 +283,35 @@ init python:
     if new_id not in persistent.unlocked_journals:
       persistent.unlocked_journals.append(new_id)
     
+    # Box 1
     renpy.transition(dissolve)
-    renpy.show("textbox_m", at_list=[Position(xpos=0.5, ypos=0.5), Transform(anchor=(0.5,0.5))], zorder=9)
-        
-    ui.frame(xpos=0.25, ypos=0.45, xmaximum=550, background=None)
+    frame = ui.frame(xmaximum=560, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=304, yanchor=95, background="gfx/textbox_2.png")
     ui.text("Entry " + entry_id + " recorded")
-    
+
+    # full screen hidden button    
     ui.frame(xpos=0, ypos=0, background=None)
     ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
     
-    ui.interact(suppress_overlay=True)
+    ui.interact(clear=False)
+    ui.remove(frame)
     
     renpy.transition(dissolve)
-    renpy.hide("textbox_m")
+    
+    # Box 2
+    renpy.transition(dissolve)
+    ui.frame(xmaximum=560, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=304, yanchor=95, background="gfx/textbox_2.png")    
+    ui.hbox(spacing=40)    
+    ui.image(im.Scale("gfx/journals/" + journal_id + ".png", 75, 75))
+    ui.text(entry.get_title())
+    ui.close()
+    
+    # full screen hidden button
+    ui.frame(xpos=0, ypos=0, background=None)
+    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
+    
+    ui.interact()
+    
+    renpy.transition(dissolve)
     
     return
     
