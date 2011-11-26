@@ -30,7 +30,7 @@ init python:
     button_value = ""
 
     background = "bg riroom"
-    show_minigame_ui(background, False)
+    show_minigame_ui(background)
   
     while True:      
       for y in range(0, MINIGAME_GRID_ROWS):
@@ -55,7 +55,7 @@ init python:
         score = run(button)
         update_high_score(button, score)
         
-    hide_minigame_ui(background, False)
+    hide_minigame_ui(background)
      
     return
 
