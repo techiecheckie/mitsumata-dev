@@ -89,7 +89,8 @@ init python:
                           game_width=MINIGAME_WIDTH,
                           game_height=MINIGAME_HEIGHT )
                           # level_number = persistent.minigame_level[name] )
-  
+    
+    return score
   
   def update_high_score(game, score):
     print "Got", score, "points."
