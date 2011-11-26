@@ -33,6 +33,16 @@ init python:
   persistent.unlocked_minigames.append("force")
   persistent.unlocked_minigames.append("power")
   persistent.unlocked_minigames.append("squats")
+  persistent.unlocked_minigames.append("gears")
+  
+  persistent.minigame_scores["mole"]       = 0
+  persistent.minigame_scores["cell"]       = 0
+  persistent.minigame_scores["platformer"] = 0
+  persistent.minigame_scores["duck"]       = 0
+  persistent.minigame_scores["force"]      = 0
+  persistent.minigame_scores["power"]      = 0
+  persistent.minigame_scores["squats"]     = 0
+  persistent.minigame_scores["gears"]      = 0
   
   persistent.unlocked_items = []
   persistent.unlocked_items.append("knife")
