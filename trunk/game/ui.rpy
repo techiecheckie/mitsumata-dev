@@ -33,6 +33,9 @@ init python:
   
   MESSAGE_BOX_PADDING_X = 40
   MESSAGE_BOX_PADDING_Y = 40
+  
+  MAIN_UI     = True
+  MINIGAME_UI = False
 
   def main_ui_buttons():
     ui.frame(xpos=98,ypos=630, xpadding=0, ypadding=0, background=None)
@@ -92,22 +95,22 @@ init python:
                    
     return
     
-  def calculate_new_main_ui_positions(hp, mp):
+  def calculate_new_main_ui_positions():
     # How big a part should the bar cover: (0.01 * hp) * area
     # so with 100 hp coverage is 100% (assuming that the value is between 0-100).
-    UI_HP_X = int(UI_HP_INITIAL_X + (0.001 * hp) * UI_HP_AREA)
-    UI_MP_X = int(UI_MP_INITIAL_X + (0.001 * mp) * UI_MP_AREA)
+    UI_HP_X = int(UI_HP_INITIAL_X + (0.001 * HP) * UI_HP_AREA)
+    UI_MP_X = int(UI_MP_INITIAL_X + (0.001 * MP) * UI_MP_AREA)
     
     return (UI_HP_X, UI_MP_X)
     
-  def calculate_new_minigame_ui_positions(hp, mp):
-    MINI_HP_X = int(MINI_HP_INITIAL_X + (0.001 * hp) * MINI_HP_AREA)
-    MINI_MP_X = int(MINI_MP_INITIAL_X + (0.001 * mp) * MINI_MP_AREA)
+  def calculate_new_minigame_ui_positions():
+    MINI_HP_X = int(MINI_HP_INITIAL_X + (0.001 * HP) * MINI_HP_AREA)
+    MINI_MP_X = int(MINI_MP_INITIAL_X + (0.001 * MP) * MINI_MP_AREA)
     
     return (MINI_HP_X, MINI_MP_X)
   
   def show_main_ui():
-    (UI_HP_X, UI_MP_X) = calculate_new_main_ui_positions(hp, mp)
+    (UI_HP_X, UI_MP_X) = calculate_new_main_ui_positions()
   
     renpy.transition(dissolve)   
     renpy.show("ui_mp_bg",  at_list = [Position(xpos=596,     ypos=573), Transform(anchor=(0.0, 0.0))], zorder=8)
@@ -122,7 +125,9 @@ init python:
     return
     
   def update_main_ui():
-    (UI_HP_X, UI_MP_X) = calculate_new_main_ui_positions(hp, mp)
+    (UI_HP_X, UI_MP_X) = calculate_new_main_ui_positions()
+    
+    print HP,MP
     
     renpy.transition(MoveTransition(1.0))
     renpy.show("ui_mp_bar", at_list = [Position(xpos=UI_MP_X, ypos=572), Transform(anchor=(1.0, 0.0))], zorder=8)
@@ -145,8 +150,8 @@ init python:
     
     return
   
-  def show_minigame_ui(background, battle):
-    (MINI_HP_X, MINI_MP_X) = calculate_new_minigame_ui_positions(hp, mp)
+  def show_minigame_ui(background):
+    (MINI_HP_X, MINI_MP_X) = calculate_new_minigame_ui_positions()
     
     renpy.transition(dissolve)
     if background:
@@ -157,14 +162,12 @@ init python:
     renpy.show("minigame_hp_bar", at_list = [Position(xpos=MINI_HP_X, ypos=16), Transform(anchor=(1.0, 0.0))])
     renpy.show("minigame_ui")
     
-    # temp
-    if not battle:
-      config.overlay_functions.append(minigame_ui_buttons)
+    config.overlay_functions.append(minigame_ui_buttons)
 
     return
     
   def update_minigame_ui(hp, mp):
-    (MINI_HP_X, MINI_MP_X) = calculate_new_minigame_ui_positions(hp, mp)
+    (MINI_HP_X, MINI_MP_X) = calculate_new_minigame_ui_positions()
     
     renpy.transition(MoveTransition(1.0))
     renpy.show("minigame_hp_bar", at_list = [Position(xpos=MINI_HP_X, ypos=16)])
@@ -172,7 +175,7 @@ init python:
     
     return
     
-  def hide_minigame_ui(background, battle):
+  def hide_minigame_ui(background):
     renpy.transition(dissolve)
     if background:
       renpy.hide(background)
@@ -182,8 +185,7 @@ init python:
     renpy.hide("minigame_hp_bg")
     renpy.hide("minigame_ui")
     
-    if not battle:
-      config.overlay_functions.remove(minigame_ui_buttons)
+    config.overlay_functions.remove(minigame_ui_buttons)
     
     return
     
@@ -243,7 +245,6 @@ init python:
     
     if item_id not in persistent.unlocked_items:
       persistent.unlocked_items.append(item_id)
-      update_stats()
     
     # Box 1
     renpy.transition(dissolve)
@@ -272,6 +273,8 @@ init python:
     
     ui.interact()
     renpy.transition(dissolve)
+    
+    update_stats(MAIN_UI)
     
     return
     
@@ -322,25 +325,35 @@ init python:
     return
   
   # Not supposed to be in ui.rpy, but it'll do for now.
-  def update_stats():
+  def update_stats(ui):
     items = inventory.get_unlocked_items()
-    # Remove these if going back to item-specific updates
     hp = 0
     mp = 0
     
     for item in items:
       bonuses = item.get_bonuses()
-      if bonuses == None:
-        return
+      if bonuses != None:
+        print "Going through item", item.get_name()
+        if bonuses.has_key("hp"):
+          hp += int(bonuses["hp"])
+          print "  Added hp", bonuses["hp"]
+        if bonuses.has_key("mp"):
+          mp += int(bonuses["mp"])
+          print "  Added mp", bonuses["mp"]
+        # ... and any other stats to be updated
       
-      if bonuses.has_key("hp"):
-        hp += bonuses["hp"]
-      if bonuses.has_key("mp"):
-        mp += bonuses["mp"]
-      # ... and any other stats to be updated
-      
-    # Also remember to go through the minigame bonuses
-      
-    # call update_main_ui() afterwards or let the script take care of that?
+    # TODO: Remember to go through the minigame bonuses
+    
+    global HP
+    global MP
+    
+    print "Setting HP and MP to", hp, mp
+    HP = hp
+    MP = mp
+    
+    if ui == MINIGAME_UI:
+      update_minigame_ui(HP, MP)
+    else:
+      update_main_ui()
     
     return

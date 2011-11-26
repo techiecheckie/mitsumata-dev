@@ -15,8 +15,8 @@ init python:
   journal_manager = Journal_manager(persistent)
   
   # New game default values
-  hp    = 0
-  mp    = 0
+  HP   = 1000
+  MP   = 0
   tries = 3
   decision = "0"
   pda      = False
@@ -46,10 +46,9 @@ init python:
   
   persistent.unlocked_items = []
   persistent.unlocked_items.append("knife")
-  persistent.unlocked_items.append("pda")
+  #persistent.unlocked_items.append("pda")
   persistent.unlocked_items.append("map")
   persistent.unlocked_items.append("garden")
   
   persistent.unlocked_journals = []
   persistent.unlocked_journals.append("Riku:002")
-  

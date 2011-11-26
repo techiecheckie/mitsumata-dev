@@ -1,4 +1,4 @@
-label asdf:
+label effects:
   transform fadein(delay):
     alpha 0.0
     linear delay alpha 1.0
@@ -6,6 +6,9 @@ label asdf:
   transform fadeout(delay):
     alpha 1.0
     linear delay alpha 0.0
+    
+  transform slide(delay, x, y):
+    linear delay xpos x ypos y
     
 #-----------------------
 # GLOW EFFECT
