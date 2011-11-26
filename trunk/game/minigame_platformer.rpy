@@ -371,12 +371,9 @@ init python:
                 
         def get_distance_run( self ):
             return "%20d" % self.runner["behavior"].distance
-          
-        def get_score( self ):
-            return self.runner["behavior"].distance
             
         def get_result( self ):
-            return self.runner["behavior"].distance
+            return int(self.runner["behavior"].distance)
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
