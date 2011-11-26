@@ -8,33 +8,71 @@ init python:
     PLATFORMER_LEVELS = [
       # Level 1
       PlatformerLevel( time_limit       = 60,
-                       distance         = 30, 
-                       obstacle_density = 20 ),
+                       distance         = 3000, 
+                       obstacle_density = 20),
       # Level 2
       PlatformerLevel( time_limit       = 60,
-                       distance         = 100, 
-                       obstacle_density = 30 ),
+                       distance         = 4000, 
+                       obstacle_density = 30),
       # Level 3
       PlatformerLevel( time_limit       = 60,
-                       distance         = 150, 
-                       obstacle_density = 40 ),
+                       distance         = 4500, 
+                       obstacle_density = 40),
       # Level 4
       PlatformerLevel( time_limit       = 60,
-                       distance         = 200, 
-                       obstacle_density = 50 )
+                       distance         = 5000, 
+                       obstacle_density = 50)
     ]
     
-    MAP = [
-      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 6, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [ 0, 1, 2, 6, 7, 0, 0, 0, 0, 1, 2, 3,10,21, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 6, 7, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 6, 7, 0, 0, 0, 0, 0, 0, 0],
-      [ 3, 4, 3, 6, 8, 9, 2, 3, 6, 7,17,18,21, 0, 1, 2, 4, 3, 4, 3, 4, 3, 4, 3, 6, 8, 9, 2, 3, 4, 3, 4, 3, 3, 4, 3, 6, 8, 9, 2, 3, 4, 3, 4, 3],
-      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    MAP_SEGMENTS = [
+      [
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 6, 7, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 1, 2, 6, 7, 0, 0, 0, 0, 1, 2, 3,10,21, 0, 0, 0, 0, 0, 3, 4, 3, 0],
+        [ 3, 4, 3, 6, 8, 9, 2, 3, 6, 7,17,18,21, 0, 1, 2, 4, 3, 0, 0, 0, 0, 4],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      ],
+      [
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 4],
+        [ 0, 0, 0, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 0, 0, 0],
+        [ 3, 4, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 4],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      ],
+      [
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 4],
+        [ 0, 0, 0, 0, 0, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 0, 3, 4, 0, 0],
+        [ 0, 0, 0, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 3, 4, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      ],
+      [
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 4, 0, 3, 4, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 4, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 3, 4, 3, 4, 0, 0, 0, 0, 0, 0, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4],
+        [ 0, 0, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      ]
     ]
     
     TILE_TYPES = [
@@ -137,7 +175,7 @@ init python:
     
     # runner initial cell position
     CELL_X = 2
-    CELL_Y = len(MAP)-2
+    CELL_Y = len(MAP_SEGMENTS[0])-2
     
     class Cell( GameObject ):
       def __init__( self, x, y ):
@@ -278,45 +316,65 @@ init python:
             self.runner = runner
             
         def create_map( self ):
-            self.map = []
-        
-            for y in range(0, len(MAP)):
-              self.map.append( [] )
-              for x in range(0, len(MAP[y])):
-                tile_type = MAP[y][x]
-                
-                tile      = None
-                obstacle  = None
-                walkable  = False
-                drownable = False
-                if tile_type > 0:
-                  tile     = self.tiles[ tile_type - 1 ]
-                  if tile_type in WALKABLE_TILES:
-                    walkable = True
-                  if tile_type in DROWNABLE_TILES:
-                    drownable = True
+            self.map = []            
+            segments = []
+            
+            map_length = 0
+            while map_length < self.level.distance:
+              index = random.randint(0,len(MAP_SEGMENTS)-1)
+              segments.append(MAP_SEGMENTS[index])
+              map_length += len(MAP_SEGMENTS[index][0]) * TILE_WIDTH
+            
+            print self.level.distance, map_length
 
-                if tile_type in OBSTACLE_TILES and x > 2:
-                  if random.randint( 0, 100 ) < self.level.obstacle_density:
-                    obstacle = self.obstacles[ random.randint( 0, len(OBSTACLE_TYPES)-1 ) ]
+            for k in range(0, len(segments)):
+              segment = segments[k]
+              for y in range(0, len(segment)):
+                if y >= len(self.map):
+                  self.map.append([])
+                for x in range(0, len(segment[y])):
+                  tile_type = segment[y][x]
                 
-                cell = Cell( x*TILE_WIDTH, y*TILE_HEIGHT )
-                cell.tile      = tile
-                cell.obstacle  = obstacle
-                cell.walkable  = walkable
-                cell.drownable = drownable
+                  tile      = None
+                  obstacle  = None
+                  walkable  = False
+                  drownable = False
+                  if tile_type > 0:
+                    tile = self.tiles[ tile_type - 1 ]
+                    if tile_type in WALKABLE_TILES:
+                      walkable = True
+                    if tile_type in DROWNABLE_TILES:
+                      drownable = True
+
+                  if tile_type in OBSTACLE_TILES and x > 2:
+                    if random.randint( 0, 100 ) < self.level.obstacle_density:
+                      obstacle = self.obstacles[ random.randint( 0, len(OBSTACLE_TYPES)-1 ) ]
                 
-                self.map[y].append( cell )
+                  cell = Cell( x*TILE_WIDTH + k*len(segment[0])*TILE_WIDTH, y*TILE_HEIGHT )
+                  cell.tile      = tile
+                  cell.obstacle  = obstacle
+                  cell.walkable  = walkable
+                  cell.drownable = drownable
+                
+                  self.map[y].append( cell )
+                  
+            row = self.map[0]
+            #for cell in row:
+            #  print cell.x/TILE_WIDTH
+            print len(self.map), len(self.map[0]), len(self.map[0])*TILE_WIDTH
 
         def get_time_remaining( self ):
             return "Time Remaining: %d" % self.time_remaining.get_ceil_value()
 
         def get_distance_left( self ):
-            return "%20d" % ( self.level.distance*TILE_WIDTH - self.runner["behavior"].distance )
+            return "%20d" % ( self.level.distance - self.runner["behavior"].distance )
                 
         def get_distance_run( self ):
             return "%20d" % self.runner["behavior"].distance
           
+        def get_score( self ):
+            return self.runner["behavior"].distance
+            
         def get_result( self ):
             return self.runner["behavior"].distance
 
@@ -361,7 +419,7 @@ init python:
               
               if self.time_remaining.get_value() <= 0 \
                   or self.runner["behavior"].dead \
-                  or self.runner["behavior"].distance >= self.level.distance * TILE_WIDTH:
+                  or self.runner["behavior"].distance >= self.level.distance:
                 self.state = PLATFORMER_GAME_STATE_END
                 
 
