@@ -33,7 +33,7 @@ label shop_loop:
     
     hide_main_ui()
     renpy.transition(dissolve)
-    show_minigame_ui("background_shop", False)
+    show_minigame_ui("background_shop")
     
     while (True):
       add_items(items)
@@ -51,7 +51,7 @@ label shop_loop:
     
     ui.clear()
     renpy.transition(dissolve)
-    hide_minigame_ui("background_shop", False)
+    hide_minigame_ui("background_shop")
     show_main_ui()
   
   return
