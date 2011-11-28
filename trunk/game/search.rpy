@@ -57,12 +57,12 @@ label show_map:
     renpy.transition(dissolve)
     renpy.show("map")
     hide_main_ui()
-       
-    current_tries = tries
+    
+    clicks_left = CLICKS
        
   # Start the map screen loop. 
-  while (current_tries > 0):
-    $show_tries(current_tries)  
+  while (clicks_left > 0):
+    $show_clicks(clicks_left)  
     $show_room_icons(decision)
       
     $room = ui.interact(suppress_overlay=True)
@@ -73,23 +73,22 @@ label show_map:
       # Break the loop if an event happened. (... set tries to 0 because Renpy
       # doesn't understand words like "break" and such)
       if event_triggered:
-        $current_tries = 0
+        $clicks_left = 0
       else:
-       $current_tries = show_room(room, decision, tries, rooms[room])
+       $clicks_left = show_room(room, decision, clicks_left, rooms[room])
     else:
-     $current_tries = 0
+     $clicks_left = 0
      
   if not event_triggered:
     # Display a message box before returning to the script
-    $show_tries(tries)
+    $show_clicks(clicks_left)
     $renpy.pause(0.2)
-    $show_message("(\"0 tries left\" message)", "large")
-
-  $update_stats()
+    $show_message("(\"0 clicks left\" message)", "large")
     
   $renpy.transition(dissolve)
   $renpy.hide("map")
   $show_main_ui()  
+  $update_stats(MAIN_UI)
   
   return
   
@@ -98,9 +97,9 @@ init python:
   from mitsugame.item import Item
   
   # Displays the amount of tries/clicks the player has.
-  def show_tries(current_tries):
+  def show_clicks(clicks_left):
     ui.frame(xpos=25, ypos=723, xmaximum=50, ymaximum=50, background=None)
-    ui.text('%d' % current_tries, xfill=True, yfill=True)
+    ui.text('%d' % clicks_left, xfill=True, yfill=True)
       
     return
     
@@ -148,26 +147,26 @@ init python:
     
     return
     
-  def show_room(room, decision, current_tries, items):   
+  def show_room(room, decision, clicks_left, items):   
     renpy.transition(dissolve)
     renpy.show("bg " + room, zorder=1)
     # room background names defined in script.rpy
     
-    while (current_tries > 0):
+    while (clicks_left > 0):
       show_room_clickables(room)
-      show_tries(tries)
+      show_clicks(clicks_left)
       
       selection = ui.interact(suppress_overlay=True, clear=False)
       if selection == "return":
         break
       else:
-        current_tries = show_info(selection, items, current_tries)
+        clicks_left = show_info(selection, items, clicks_left)
       
     renpy.transition(dissolve)
     renpy.hide("bg " + room)
     ui.clear()
     
-    return current_tries
+    return clicks_left
     
   def show_room_clickables(room):
     if room == "riroom":
@@ -525,7 +524,12 @@ init python:
     
     return
     
-  def show_info(selection, items, current_tries):
+  def show_info(selection, items, clicks_left):
+    # FIXME: something returns 0 as selection when clicking at nothing, so find
+    # out what that is and fix that.
+    if selection == 0:
+      return clicks_left
+    
     # First, check what info should be displayed
     if selection[0] == "tidbit":
       message = "You found a tidbit."
@@ -537,14 +541,13 @@ init python:
       else:
         message = "You found an item." + "\n\n" + item.get_name()
         show_message(message, "medium")
-        unlock_item(item.get_id())
+
+        if item.get_id() not in persistent.unlocked_items:
+          persistent.unlocked_items.append(item.get_id())
+        print "Unlocked item", item.get_id()
         
         items[selection[1]] = None
-
-      #current_tries -= 1
+        
+        clicks_left -= 1      
     
-    #show_message(message, "large")
-    #if item != None:
-      
-    
-    return current_tries
+    return clicks_left
