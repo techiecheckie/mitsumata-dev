@@ -15,25 +15,25 @@ init python:
   journal_manager = Journal_manager(persistent)
   
   # New game default values
-  HP   = 1000
-  MP   = 0
-  tries = 3
+  HP     = 0
+  MP     = 0
+  CLICKS = 0
   decision = "0"
   pda      = False
   
   # testing stuff begins
   print ""
   
-  pda = True
+  #pda = True
   persistent.unlocked_minigames = []
-  persistent.unlocked_minigames.append("mole")
-  persistent.unlocked_minigames.append("cell")
-  persistent.unlocked_minigames.append("platformer")
-  persistent.unlocked_minigames.append("duck")
-  persistent.unlocked_minigames.append("force")
-  persistent.unlocked_minigames.append("power")
-  persistent.unlocked_minigames.append("squats")
-  persistent.unlocked_minigames.append("gears")
+  #persistent.unlocked_minigames.append("mole")
+  #persistent.unlocked_minigames.append("cell")
+  #persistent.unlocked_minigames.append("platformer")
+  #persistent.unlocked_minigames.append("duck")
+  #persistent.unlocked_minigames.append("force")
+  #persistent.unlocked_minigames.append("power")
+  #persistent.unlocked_minigames.append("squats")
+  #persistent.unlocked_minigames.append("gears")
   
   persistent.minigame_scores["mole"]       = 0
   persistent.minigame_scores["cell"]       = 0
@@ -45,10 +45,10 @@ init python:
   persistent.minigame_scores["gears"]      = 0
   
   persistent.unlocked_items = []
-  persistent.unlocked_items.append("knife")
+  #persistent.unlocked_items.append("knife")
   #persistent.unlocked_items.append("pda")
-  persistent.unlocked_items.append("map")
-  persistent.unlocked_items.append("garden")
+  #persistent.unlocked_items.append("map")
+  #persistent.unlocked_items.append("garden")
   
   persistent.unlocked_journals = []
-  persistent.unlocked_journals.append("Riku:002")
+  #persistent.unlocked_journals.append("Riku:002")

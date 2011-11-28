@@ -329,6 +329,7 @@ init python:
     items = inventory.get_unlocked_items()
     hp = 0
     mp = 0
+    clicks = 0
     
     for item in items:
       bonuses = item.get_bonuses()
@@ -340,20 +341,24 @@ init python:
         if bonuses.has_key("mp"):
           mp += int(bonuses["mp"])
           print "  Added mp", bonuses["mp"]
-        # ... and any other stats to be updated
-      
-    # TODO: Remember to go through the minigame bonuses
+        if bonuses.has_key("clicks"):
+          clicks += int(bonuses["clicks"])
+          print "  Added clicks", bonuses["clicks"]
+
+    # TODO: Go through the minigame bonuses
     
     global HP
     global MP
+    global CLICKS
     
-    print "Setting HP and MP to", hp, mp
+    print "Setting HP/MP/CLICKS to", hp, mp, clicks
     HP = hp
     MP = mp
+    CLICKS = clicks
     
     if ui == MINIGAME_UI:
       update_minigame_ui(HP, MP)
-    else:
+    elif ui == MAIN_UI:
       update_main_ui()
     
     return
