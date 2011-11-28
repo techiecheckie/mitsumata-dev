@@ -104,7 +104,7 @@ init python:
       
   # running minigames without starting the pda first
   def minigame(name, level, score_to_pass):
-    show_minigame_ui(None, False)
+    show_minigame_ui(None)
     
     show_description(GAME_DESCRIPTIONS[name])
     
@@ -121,7 +121,7 @@ init python:
     # if score >= score_to_pass and current_level < level:
     #   persistent.minigame_level[name] = level
     
-    hide_minigame_ui(None, False)
+    hide_minigame_ui(None)
     
     return score >= score_to_pass
 
