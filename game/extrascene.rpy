@@ -4,7 +4,7 @@
 
 #Scene w/Mamoru offering Soume food
 
-label extrascene:
+label XS:
     ".........."
     "....................."
     u "It seems as if the receiver is no longer working."
@@ -25,8 +25,9 @@ label extrascene:
     u "Why that pureblood denies his instincts so readily."
     u "Yes. That is odd, isn't it? So error-filled, the poor creatures."
     u "Indeed. Nigh pathetic."
+    return
     
-label extrascene2:
+label XS2:
     db "We've confirmed it, sir, she's a lightning user. One of the many elemental types."
     m "You haven't hurt her too badly, I hope?"
     db "Of course not, sir. She's as you've ordered."
@@ -71,8 +72,16 @@ label extrascene2:
     m "Remember your promise? Into the bath, and then bed."
     na "Ooookayyy. I'm going. Good night, Brother."
     m "Good night, Naomi."
-
+    return
+    
+label XS3:
+        "blah blah blah." 
+        return
    
+label XS4:
+    "blah blah blah."
+    return
+    
 label extsc2:    
     su "...fuck.  This isn't your fault you know.  You didn't do anything wrong."
     
