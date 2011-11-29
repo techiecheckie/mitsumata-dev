@@ -64,9 +64,22 @@ label quitter:
         "Yes.":
             jump game_over
         "No.":
-            jump battle1    
+            jump battle1
+            
+label badliar:    
     
-
+    "My knees are shakin so bad I could piss myself, but it's better to be encouraging."
+    r "I'm going to protect you, for sure! I've done this lots of times."
+    "................."
+    ro "...I think you went too far with that one, Riku..."
+    s "He didn't sound at all confident, did he...?"
+    scene bg blackscr
+    $hide_main_ui()
+    with slow_fade
+    $show_message("Majin can smell your fear.","medium")
+    $show_message("Try to be more truthful to her, and yourself, next time.","medium")
+    jump game_over    
+    
 label badend1:
     scene bg blackscr
     $show_main_ui()

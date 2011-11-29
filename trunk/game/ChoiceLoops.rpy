@@ -15,7 +15,7 @@ label research_loop:
     
     "I head for the library to study with Doctor Osamu."
     $renpy.pause(1.0)
-    scene bg lib
+    show bg lib
     $show_main_ui
     with slow_fade
     show k neu with dissolve
