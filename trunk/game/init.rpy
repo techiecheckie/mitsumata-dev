@@ -19,8 +19,8 @@ init python:
   journal_manager = Journal_manager(persistent)
   
   # New game default values
-  HP     = 100
-  MP     = 100
+  HP     = 0
+  MP     = 0
   CLICKS = 0
   decision = "0"
   pda      = False
@@ -37,8 +37,8 @@ init python:
   persistent.unlocked_minigames.append("force")
   persistent.unlocked_minigames.append("power")
   persistent.unlocked_minigames.append("squats")
-  #persistent.unlocked_minigames.append("gears")
-  #persistent.unlocked_minigames.append("garden")
+  persistent.unlocked_minigames.append("gears")
+  persistent.unlocked_minigames.append("garden")
   
   persistent.minigame_scores["mole"]       = 0
   persistent.minigame_scores["cell"]       = 0
@@ -58,7 +58,7 @@ init python:
   persistent.minigame_levels["squats"]     = 1
   persistent.minigame_levels["gears"]      = 1
   
-  #persistent.unlocked_items = []
+  persistent.unlocked_items = []
   #persistent.unlocked_items.append("knife")
   #persistent.unlocked_items.append("pda")
   #persistent.unlocked_items.append("map")
@@ -66,6 +66,7 @@ init python:
   #persistent.unlocked_items.append("aos")
   #persistent.unlocked_items.append("bos")
   
-  
   persistent.unlocked_journals = []
   #persistent.unlocked_journals.append("Riku:002")
+
+  persistent.garden = [None]*9

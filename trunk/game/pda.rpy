@@ -92,19 +92,26 @@ init python:
           x_pos = PDA_ICON_X + x * PDA_ITEM_CELL_WIDTH
           y_pos = PDA_ICON_Y + y * PDA_ITEM_CELL_HEIGHT
           
-          ui.frame(xpos=x_pos, ypos=y_pos, xpadding=0, ypadding=0)
+          ui.frame(xpos=x_pos, ypos=y_pos, 
+                   xpadding=0, ypadding=0, 
+                   background=None)
           ui.imagebutton("gfx/items/" + item.get_id() + ".png", 
                          "gfx/items/" + item.get_id() + "_hover.png", 
                          clicked=ui.returns(("item", item)))
       
     elif button == "item":
       item = button_value
-      ui.frame(xpos=PDA_ICON_X, ypos=PDA_ICON_Y, xpadding=0, ypadding=0)
+      ui.frame(xpos=PDA_ICON_X, ypos=PDA_ICON_Y, 
+               xpadding=0, ypadding=0, 
+               background=None)
       ui.imagebutton("gfx/items/" + item.get_id() + ".png",
                      "gfx/items/" + item.get_id() + "_hover.png",
                      clicked=ui.returns(("inventory", "")))
       
-      ui.frame(xpos=PDA_CONTENT_X, ypos=PDA_CONTENT_Y, xpadding=0, ypadding=0, xmaximum=550, xminimum=550)
+      ui.frame(xpos=PDA_CONTENT_X, ypos=PDA_CONTENT_Y, 
+               xpadding=0, ypadding=0, 
+               xmaximum=550, xminimum=550,
+               background=None)
       ui.text(button_value.get_description()) # button_value == item
       
       
@@ -171,7 +178,10 @@ init python:
                      "gfx/journals/" + journal.get_id() + ".png",
                      clicked=ui.returns(("journal", journal)))
       
-      ui.frame(xpos=PDA_CONTENT_X, ypos=PDA_CONTENT_Y, xpadding=0, ypadding=0, xmaximum=520, xminimum=520)
+      ui.frame(xpos=PDA_CONTENT_X, ypos=PDA_CONTENT_Y, 
+               xpadding=0, ypadding=0, 
+               xmaximum=520, xminimum=520,
+               background=None)
       ui.vbox()
       ui.text(entry.get_title())
       ui.text(entry.get_text())        
