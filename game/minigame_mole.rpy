@@ -73,7 +73,7 @@ init python:
     # filling in the values for each of its settings.
     MOLE_LEVELS = [
         # Level 1
-        MoleLevel( time_limit       = 60,
+        MoleLevel( time_limit       = 10,
                    max_moles        = (2, 8),
                    max_easy_moles   = (3, 5),
                    max_medium_moles = (0, 4),
@@ -225,7 +225,7 @@ init python:
 
         def create_background( self ):
             self.background = GameObject()
-            self.background["renderer"] = GameRenderer( GameImage( "gfx/whack_a_mole/background.png" ) )
+            self.background["renderer"] = GameRenderer( GameImage( "gfx/whack_a_mole/background.jpg" ) )
 
         def create_moles( self ):
             # easy moles.

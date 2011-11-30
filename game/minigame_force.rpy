@@ -11,7 +11,12 @@ init python:
         MagicForceLevel( number_digits     = (1,5),
                          correct_timeout   = 0.15,
                          incorrect_timeout = 0.9,
-                         time_limit        = 60 )
+                         time_limit        = 10 ),
+
+        MagicForceLevel( number_digits     = (1,5),
+                         correct_timeout   = 0.12,
+                         incorrect_timeout = 0.7,
+                         time_limit        = 10)
         ]
 
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####
@@ -101,6 +106,7 @@ init python:
             self.number_correct       = 0
 
             # setup the entities.
+            self.background         = None
             self.current_numbers    = []
             self.riku               = None
             self.start_screen_hud   = None
@@ -108,6 +114,7 @@ init python:
             self.score_hud          = None
             self.time_remaining_hud = None
 
+            self.create_background()
             self.create_numbers()
             self.create_riku()
             self.create_huds()
@@ -115,6 +122,10 @@ init python:
             # get the first number.
             self.pick_numbers()
 
+        def create_background( self ):
+            self.background             = GameObject()
+            self.background["renderer"] = GameRenderer( GameImage( "gfx/magic_force/background.jpg" ) )
+        
         def create_numbers( self ):
             for digit in xrange( 10 ):
                 number = GameObject()
@@ -244,6 +255,9 @@ init python:
                 return "%18d" % self.total_score
             else:
                 return "%16d" % self.total_score
+                
+        def get_result( self ):
+            return self.total_score
 
         def get_displayables( self ):
             displayables = []
@@ -256,6 +270,7 @@ init python:
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
+            self.background["renderer"].render( blitter, clip_rect, world_transform )
 
             self.riku["renderer"].render( blitter, clip_rect, world_transform )
 
