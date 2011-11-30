@@ -279,8 +279,6 @@ init python:
     return
       
   def battle(player_name, mob_name, mob_count, background):
-  
-    # The battle stuff begins
     messages = []
       
     # Create the combatants

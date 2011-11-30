@@ -17,11 +17,9 @@ init python:
     (MINIGAME_POS_X + 400, MINIGAME_POS_Y + 350)
   ]
   
-  # temporary phase variables, will change once all the plant phases are clear
-  PHASE_1 = 0
-  PHASE_2 = 1
-  PHASE_3 = 2
-  PHASE_4 = 3
+  GARDEN_CELL_SIZE = 80
+  
+  GARDEN_PHASE_DURATION = 15*60
 
   
   # Garden's main method. Displays a field of grass and a few pieces of ground 
@@ -74,47 +72,64 @@ init python:
   # match the current state (currently only the last phase, the full grown
   # flower phase, is recognized).
   def update_garden(current_time):
-    for i in range(0, len(persistent.garden)-1):
+    for i in range(0, len(persistent.garden)):
       plant = persistent.garden[i]
       if plant != None:
         plant_id    = plant[0]
-        plant_phase = plant[1]
-        plant_time  = plant[2]
+        plant_time  = plant[1]
         time_diff   = current_time - plant_time
+        phase = int(time_diff/GARDEN_PHASE_DURATION)
         
-        if time_diff >= 15*60:
-          plant_phase += 1
-          plant_time   = current_time
-          
-          # change the seed into a plant by replacing the last letter in its id
-          # (aos --> aop)
-          if plant[1] == PHASE_4:
-            plant_id = plant_id[:2] + "p"
-            # TODO: turning into a monster plant? (10% chance)
+        print " ", plant_id, "in phase", phase
+        
+        # phase 0 (seed)      (aos)
+        # phase 1             (aos1) tms.
+        # phase 2             (aos2) tms.
+        # phase 3 (plant)     (aop)
+        # phase 4 (withered?) (aow) tms.
+        
+        if phase == 1:
+          # mid phase 1
+          pass
+        elif phase == 2:
+          # mid phase 2
+          pass
+        elif phase >= 3 and phase < 5:
+          # full grown plant
+          plant_id = plant_id[:2] + "p"
+        else:
+          #withered?
+          pass
+        
+        # There should be a 10% chance of the plant turning into a monster plant.
+        # Change the graphics (plant_id etc.) or just inform the user when
+        # harvesting?
             
-        persistent.garden[i] = (plant_id, plant_phase, plant_time)
-        print plant[0], plant[1], plant[2], "time diff:", time_diff
+        persistent.garden[i] = (plant_id, plant_time)
               
     return 
   
   # Displays a grid of patches of earth and the seeds/plants that are growing in
   # them. 
   def show_plant_spots():
-    print persistent.garden
-
     for i in range(0, len(GARDEN_GRID)):
       cell = GARDEN_GRID[i]
       
       # TODO: rather do image scaling before going through the array
       if persistent.garden[i] != None:
-        normal_image = im.Scale("gfx/items/" + persistent.garden[i][0] + ".png", 80, 80)
-        hover_image  = im.Scale("gfx/items/" + persistent.garden[i][0] + "_hover.png", 80, 80)
+        normal_image = im.Scale("gfx/items/" + persistent.garden[i][0] + ".png", 
+                                GARDEN_CELL_SIZE, GARDEN_CELL_SIZE)
+        hover_image  = im.Scale("gfx/items/" + persistent.garden[i][0] + "_hover.png", 
+                                GARDEN_CELL_SIZE, GARDEN_CELL_SIZE)
         
         ui.frame(xpos=cell[0], ypos=cell[1], background=None)
-        ui.image(im.Scale("gfx/whack_a_mole/dirt.png", 80, 80))
+        ui.image(im.Scale("gfx/whack_a_mole/dirt.png", 
+                          GARDEN_CELL_SIZE, GARDEN_CELL_SIZE))
       else:
-        normal_image = im.Scale("gfx/whack_a_mole/dirt.png", 80, 80)
-        hover_image  = im.Scale("gfx/whack_a_mole/dirt_hover.png", 80, 80)
+        normal_image = im.Scale("gfx/whack_a_mole/dirt.png", 
+                                GARDEN_CELL_SIZE, GARDEN_CELL_SIZE)
+        hover_image  = im.Scale("gfx/whack_a_mole/dirt_hover.png", 
+                                GARDEN_CELL_SIZE, GARDEN_CELL_SIZE)
         
       ui.frame(xpos=cell[0], ypos=cell[1], background=None)
       ui.imagebutton(normal_image,
@@ -123,23 +138,62 @@ init python:
     
     return
   
-  # Harverts the plant that was clicked, adding it into the user's inventory. 
+  # Harvests the plant that was clicked, adding it into the user's inventory. 
   # Once a plant is harvested, the cell containing the item is cleared for new
-  # seeds to be planted. 
-  #
-  # Not fully implemented yet. 
+  # seeds to be planted.
   def harvest(cell):
     plant = persistent.garden[cell]
     
-    # temp
+    renpy.transition(dissolve)
+    ui.frame(xpos=MINIGAME_POS_X+50, 
+             ypos=MINIGAME_POS_Y+150, 
+             background="gfx/textbox.png",
+             xpadding=40,
+             ypadding=40,
+             xmaximum=490)
+    ui.vbox()
+    ui.text("Harvest plant?")
+    ui.textbutton("Ok", clicked=ui.returns("ok"), xfill=True)
+    ui.textbutton("Cancel", clicked=ui.returns("cancel"), xfill=True)
+    ui.close()
+    
+    button = ui.interact(clear=False)
+    renpy.transition(dissolve)
+    
+    if button == "cancel": return
+    
     # Check if the clicked item was a full grown plant, and if so, then add it
-    # to the inventory (unlock)
-    if plant[1] == PHASE_4:
+    # to the inventory (and display the item info)
+    if plant[0].endswith("p"):
       if plant[0] not in persistent.unlocked_items:
         persistent.unlocked_items.append(plant[0])
-        print "Unlocked item", plant[0]
-    else:
-      print "Removed seed", plant[0]
+        
+        item = inventory.get_item(plant[0])
+        
+        # Item info box
+        ui.frame(xpos=MINIGAME_POS_X+50, 
+                 ypos=MINIGAME_POS_Y+150, 
+                 background="gfx/textbox.png",
+                 xpadding=40,
+                 ypadding=40,
+                 xmaximum=490)
+        ui.hbox(spacing=40)    
+        ui.image(im.Scale("gfx/items/" + item.get_id() + ".png", 75, 75))
+        ui.text(item.get_description())
+        ui.text("\n\nClick to continue")
+        ui.close()
+        
+        # Minigame area sized invisible button
+        ui.frame(xpos=MINIGAME_POS_X,
+                 ypos=MINIGAME_POS_Y,
+                 background=None,
+                 xmaximum=MINIGAME_WIDTH,
+                 ymaximum=MINIGAME_HEIGHT)
+        ui.textbutton("", clicked=ui.returns(""), 
+                      xfill=True, yfill=True,
+                      background=None)
+        ui.interact()
+        renpy.transition(dissolve)
     
     persistent.garden[cell] = None
     
@@ -165,8 +219,7 @@ init python:
     renpy.transition(dissolve)
     
     if seed_id != "cancel":
-      persistent.garden[button] = (seed_id, PHASE_1, current_time)
+      persistent.garden[button] = (seed_id, current_time)
       print "Planted seed", seed_id, "to spot", button
     
     return
-    
