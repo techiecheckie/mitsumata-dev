@@ -15,7 +15,14 @@ init python:
                          misfire_timeout     = 1.0,
                          near_shot_timeout   = 0.25,
                          middle_shot_timeout = 0.5,
-                         far_shot_timeout    = 0.75 )
+                         far_shot_timeout    = 0.75 ),
+
+        MagicPowerLevel( time_limit          = 60,
+                         marker_speed        = 325,
+                         misfire_timeout     = 0.8,
+                         near_shot_timeout   = 0.23,
+                         middle_shot_timeout = 0.4,
+                         far_shot_timeout    = 0.7 )
         ]
 
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####
@@ -143,6 +150,7 @@ init python:
             self.action_countdown    = 0
 
             # setup the entities.
+            self.background         = None
             self.start_screen_hud   = None
             self.stop_screen_hud    = None
             self.score_hud          = None
@@ -155,11 +163,16 @@ init python:
             self.target             = None
             self.shot_type          = None
 
+            self.create_background()
             self.create_huds()
             self.create_bars( level )
             self.create_target()
 
             self.spawn_target()
+
+        def create_background( self ):
+            self.background             = GameObject()
+            self.background["renderer"] = GameRenderer( GameImage( "gfx/magic_power/background.jpg" ) )
 
         def create_huds( self ):
             self.start_screen_hud             = GameObject()
@@ -271,6 +284,9 @@ init python:
                 return "%18d" % self.total_score
             else:
                 return "%16d" % self.total_score
+                
+        def get_result( self ):
+            return self.total_score
 
         def get_displayables( self ):
             displayables = []
@@ -286,6 +302,7 @@ init python:
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
+            self.background["renderer"].render( blitter, clip_rect, world_transform )
 
             if self.state == MAGIC_POWER_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )

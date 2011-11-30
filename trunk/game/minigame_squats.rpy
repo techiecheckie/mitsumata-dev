@@ -111,6 +111,7 @@ init python:
             self.number_bonus3_reps = level.number_bonus3_reps
 
             # setup the entities.
+            self.background           = None
             self.start_screen_hud     = None
             self.stop_screen_hud      = None
             self.score_hud            = None
@@ -120,9 +121,14 @@ init python:
             self.active_segment_index = None
             self.riku                 = None
 
+            self.create_background()
             self.create_huds()
             self.create_bar( level )
             self.create_riku( level )
+
+        def create_background( self ):
+            self.background             = GameObject()
+            self.background["renderer"] = GameRenderer( GameImage( "gfx/squats/background.jpg" ) )
 
         def create_huds( self ):
             self.start_screen_hud             = GameObject()
@@ -253,6 +259,9 @@ init python:
                 return "%18d" % self.total_score
             else:
                 return "%16d" % self.total_score
+                
+        def get_result( self ):
+            return self.total_score
 
         def get_displayables( self ):
             displayables = []
@@ -265,6 +274,7 @@ init python:
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
+            self.background["renderer"].render( blitter, clip_rect, world_transform )
 
             if self.state == SQUATS_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )

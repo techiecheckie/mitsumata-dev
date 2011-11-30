@@ -373,6 +373,9 @@ init python:
                 return "%18d" % self.total_score
             else:
                 return "%16d" % self.total_score
+                
+        def get_result( self ):
+            return self.total_score
 
         def is_out_of_bounds( self, bird ):
             bird_bounds    = bird["collider"].get_bounds()

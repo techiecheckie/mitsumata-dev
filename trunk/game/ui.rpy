@@ -103,9 +103,9 @@ init python:
     
     return (UI_HP_X, UI_MP_X)
     
-  def calculate_new_minigame_ui_positions():
-    MINI_HP_X = int(MINI_HP_INITIAL_X + (0.001 * HP) * MINI_HP_AREA)
-    MINI_MP_X = int(MINI_MP_INITIAL_X + (0.001 * MP) * MINI_MP_AREA)
+  def calculate_new_minigame_ui_positions(hp, mp):
+    MINI_HP_X = int(MINI_HP_INITIAL_X + (0.001 * hp) * MINI_HP_AREA)
+    MINI_MP_X = int(MINI_MP_INITIAL_X + (0.001 * mp) * MINI_MP_AREA)
     
     return (MINI_HP_X, MINI_MP_X)
   
@@ -151,11 +151,11 @@ init python:
     return
   
   def show_minigame_ui(background):
-    (MINI_HP_X, MINI_MP_X) = calculate_new_minigame_ui_positions()
+    (MINI_HP_X, MINI_MP_X) = calculate_new_minigame_ui_positions(HP, MP)
     
     renpy.transition(dissolve)
     if background:
-      renpy.show(background)
+      renpy.show(background, zorder=-2)
     renpy.show("minigame_mp_bg",  at_list = [Position(xpos=579,       ypos=16), Transform(anchor=(0.0, 0.0))])
     renpy.show("minigame_mp_bar", at_list = [Position(xpos=MINI_MP_X, ypos=18), Transform(anchor=(1.0, 0.0))])
     renpy.show("minigame_hp_bg",  at_list = [Position(xpos=105,       ypos=16), Transform(anchor=(0.0, 0.0))])
@@ -167,7 +167,7 @@ init python:
     return
     
   def update_minigame_ui(hp, mp):
-    (MINI_HP_X, MINI_MP_X) = calculate_new_minigame_ui_positions()
+    (MINI_HP_X, MINI_MP_X) = calculate_new_minigame_ui_positions(hp, mp)
     
     renpy.transition(MoveTransition(1.0))
     renpy.show("minigame_hp_bar", at_list = [Position(xpos=MINI_HP_X, ypos=16)])

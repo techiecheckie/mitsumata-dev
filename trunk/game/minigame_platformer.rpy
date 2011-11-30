@@ -9,7 +9,7 @@ init python:
       # Level 1
       PlatformerLevel( time_limit       = 60,
                        distance         = 3000, 
-                       obstacle_density = 20),
+                       obstacle_density = 40),
       # Level 2
       PlatformerLevel( time_limit       = 60,
                        distance         = 4000, 
@@ -33,9 +33,9 @@ init python:
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 6, 7, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 1, 2, 6, 7, 0, 0, 0, 0, 1, 2, 3,10,21, 0, 0, 0, 0, 0, 3, 4, 3, 0],
-        [ 3, 4, 3, 6, 8, 9, 2, 3, 6, 7,17,18,21, 0, 1, 2, 4, 3, 0, 0, 0, 0, 4],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3,10,21, 0, 0, 0, 0, 1, 2, 4, 6, 7],
+        [ 1, 2, 3, 6, 8, 9, 2, 3, 6, 7,17,18,21, 0, 1, 2, 4, 6, 7,17,10,15, 0],
+        [ 0,13,12,11,10,11,10,12,15, 0, 0, 0, 0, 0, 0,13,10,16, 0, 0,13,16, 0]
       ],
       [
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -44,10 +44,10 @@ init python:
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 4],
-        [ 0, 0, 0, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 0, 0, 0],
-        [ 3, 4, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 4],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 6, 7],
+        [ 0, 0, 0, 1, 2, 6, 8, 9, 2, 6, 8, 9, 2, 3, 4, 3, 4, 3, 6, 7,17,21, 0],
+        [ 1, 2, 3, 4,11,10,11,10,11,10,12,10,11,10,11,11,12,11,15, 0, 0, 0, 0],
+        [ 0,13,12,10,12,10,11,10,12,10,11,10,11,12,11,10,11,12,16, 0, 0, 0, 0]
       ],
       [
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -55,23 +55,23 @@ init python:
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 4],
-        [ 0, 0, 0, 0, 0, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 0, 3, 4, 0, 0],
-        [ 0, 0, 0, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 3, 4, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 6, 7],
+        [ 0, 0, 0, 0, 0, 0, 1, 2, 4, 6, 8, 9, 2, 6, 8, 9, 2, 3, 4, 3,11,16, 0],
+        [ 0, 0, 0, 1, 2, 3, 4,12,11,10,11,12,11,10,11,12,11,10,11,12,11,15, 0],
+        [ 1, 2, 3, 4,11,12,18,19,20,19,18,19,20,19,18,19,20,19,12,11,10,21, 0],
+        [ 0,13,10,18,19,21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,17,10,21, 0, 0]
       ],
       [
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 4, 0, 3, 4, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 4, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 3, 4, 3, 4, 0, 0, 0, 0, 0, 0, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4],
-        [ 0, 0, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 6, 8, 9, 2, 6, 7, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 3, 5,10,11,12,19,18,21, 0, 0, 0, 0],
+        [ 0, 0, 0, 1, 2, 6, 7, 0,17,19,18,19,20,19,18,21, 0, 0, 0, 0, 0, 0, 0],
+        [ 1, 2, 6, 7,17,21, 0, 1, 2, 3, 6, 8, 9, 2, 6, 8, 9, 2, 4, 3, 4, 6, 7],
+        [ 0,17,21, 1, 2, 3, 6, 7,13,10,11,10,12,11,10,12,11,10,11,10,11,14, 0],
+        [ 1, 2, 3, 4,11,12,21, 0,17,19,18,10,11,12,11,12,10,11,18,19,18,21, 0],
+        [ 0,13,10,12,10,16, 0, 0, 0, 0, 0,17,18,19,20,19,18,21, 0, 0, 0, 0, 0]
       ]
     ]
     
@@ -100,7 +100,13 @@ init python:
     ]
     
     OBSTACLE_TYPES = [
-      "bush.png"
+      "plant1.png",
+      "plant2.png",
+      "plant3.png",
+      "plant4.png",
+      "plant5.png",
+      "plant6.png",
+      "plant7.png",
     ]
     
     # those that can be walked on
@@ -217,6 +223,7 @@ init python:
                                                          0,
                                                          self.level.time_limit )
             
+            self.create_background()
             self.create_tiles()
             self.create_obstacles()
             self.create_runner()
@@ -244,18 +251,22 @@ init python:
             self.stop_screen_hud.add_child( distance_run )
 
             distance_left             = GameObject()
-            distance_left["renderer"] = GameRenderer( GameText( self.get_distance_left, Color( 255, 255, 255, 255 ) ) )
-            distance_left["transform"].set_position( 185, 200 )
+            distance_left["renderer"] = GameRenderer( GameText( self.get_distance, Color( 255, 255, 255, 255 ) ) )
+            distance_left["transform"].set_position( 185, 193 )
             self.stop_screen_hud.add_child( distance_left )         
             self.start_screen_hud.add_child( distance_left )
             
             self.distance_left_hud             = GameObject()
             self.distance_left_hud["renderer"] = GameRenderer( GameText( self.get_distance_left, Color( 255, 255, 255, 255 ) ) )
-            self.distance_left_hud["transform"].set_position( 400, 10 )
+            self.distance_left_hud["transform"].set_position( 340, 10 )
 
             self.time_remaining_hud             = GameObject()
             self.time_remaining_hud["renderer"] = GameRenderer( GameText( self.get_time_remaining, Color( 255, 255, 255, 255 ) ) )
             self.time_remaining_hud["transform"].set_position( 10, 10 )
+            
+        def create_background( self ):
+            self.background = GameObject()
+            self.background["renderer"] = GameRenderer( GameImage( "gfx/platformer/background.jpg" ) )
 
         def create_tiles( self ):                
             self.tiles = []
@@ -325,7 +336,7 @@ init python:
               segments.append(MAP_SEGMENTS[index])
               map_length += len(MAP_SEGMENTS[index][0]) * TILE_WIDTH
             
-            print self.level.distance, map_length
+            #print self.level.distance, map_length
 
             for k in range(0, len(segments)):
               segment = segments[k]
@@ -359,15 +370,16 @@ init python:
                   self.map[y].append( cell )
                   
             row = self.map[0]
-            #for cell in row:
-            #  print cell.x/TILE_WIDTH
-            print len(self.map), len(self.map[0]), len(self.map[0])*TILE_WIDTH
+            #print len(self.map), len(self.map[0]), len(self.map[0])*TILE_WIDTH
 
         def get_time_remaining( self ):
-            return "Time Remaining: %d" % self.time_remaining.get_ceil_value()
+            return "Time remaining: %d" % self.time_remaining.get_ceil_value()
 
         def get_distance_left( self ):
-            return "%20d" % ( self.level.distance - self.runner["behavior"].distance )
+            return "Distance left: %d" % ( self.level.distance - self.runner["behavior"].distance )
+                
+        def get_distance( self ):
+            return "%20d" % self.level.distance
                 
         def get_distance_run( self ):
             return "%20d" % self.runner["behavior"].distance
@@ -377,6 +389,7 @@ init python:
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
+            self.background["renderer"].render( blitter, clip_rect, world_transform )
             
             cell_x = self.runner["behavior"].cell_x-1
             
@@ -421,10 +434,11 @@ init python:
                 
 
         def on_key_down( self, key ):
-            if self.state == PLATFORMER_GAME_STATE_PLAY:
-              if key == pygame.K_ESCAPE:
+            if key == pygame.K_ESCAPE:
                 self.quit()
-              elif key == pygame.K_SPACE:
+        
+            if self.state == PLATFORMER_GAME_STATE_PLAY:
+              if key == pygame.K_SPACE:
                 self.runner["behavior"].jump()
 
         def on_mouse_up( self, mx, my, button ):

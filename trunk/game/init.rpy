@@ -10,13 +10,17 @@ init python:
     persistent.unlocked_minigames = []
   if persistent.minigame_scores == None:
     persistent.minigame_scores = {}
+  if persistent.minigame_levels == None:
+    persistent.minigame_levels = {}
+  if persistent.garden == None:
+    persistent.garden = [None]*9 #[None]*len(GARDEN_GRID)
   
   inventory = Inventory(persistent)
   journal_manager = Journal_manager(persistent)
   
   # New game default values
-  HP     = 0
-  MP     = 0
+  HP     = 100
+  MP     = 100
   CLICKS = 0
   decision = "0"
   pda      = False
@@ -24,16 +28,17 @@ init python:
   # testing stuff begins
   print ""
   
-  #pda = True
+  pda = True
   persistent.unlocked_minigames = []
-  #persistent.unlocked_minigames.append("mole")
-  #persistent.unlocked_minigames.append("cell")
-  #persistent.unlocked_minigames.append("platformer")
-  #persistent.unlocked_minigames.append("duck")
-  #persistent.unlocked_minigames.append("force")
-  #persistent.unlocked_minigames.append("power")
-  #persistent.unlocked_minigames.append("squats")
+  persistent.unlocked_minigames.append("mole")
+  persistent.unlocked_minigames.append("cell")
+  persistent.unlocked_minigames.append("platformer")
+  persistent.unlocked_minigames.append("duck")
+  persistent.unlocked_minigames.append("force")
+  persistent.unlocked_minigames.append("power")
+  persistent.unlocked_minigames.append("squats")
   #persistent.unlocked_minigames.append("gears")
+  #persistent.unlocked_minigames.append("garden")
   
   persistent.minigame_scores["mole"]       = 0
   persistent.minigame_scores["cell"]       = 0
@@ -44,11 +49,23 @@ init python:
   persistent.minigame_scores["squats"]     = 0
   persistent.minigame_scores["gears"]      = 0
   
-  persistent.unlocked_items = []
+  persistent.minigame_levels["mole"]       = 1
+  persistent.minigame_levels["cell"]       = 1
+  persistent.minigame_levels["platformer"] = 1
+  persistent.minigame_levels["duck"]       = 1
+  persistent.minigame_levels["force"]      = 1
+  persistent.minigame_levels["power"]      = 1
+  persistent.minigame_levels["squats"]     = 1
+  persistent.minigame_levels["gears"]      = 1
+  
+  #persistent.unlocked_items = []
   #persistent.unlocked_items.append("knife")
   #persistent.unlocked_items.append("pda")
   #persistent.unlocked_items.append("map")
   #persistent.unlocked_items.append("garden")
+  #persistent.unlocked_items.append("aos")
+  #persistent.unlocked_items.append("bos")
+  
   
   persistent.unlocked_journals = []
   #persistent.unlocked_journals.append("Riku:002")
