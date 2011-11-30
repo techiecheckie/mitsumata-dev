@@ -1,6 +1,7 @@
 init python:
   from mitsugame.inventory import Inventory
   from mitsugame.journal_manager import Journal_manager
+  import time
 
   if persistent.unlocked_items == None:
     persistent.unlocked_items = []
@@ -24,6 +25,9 @@ init python:
   CLICKS = 0
   decision = "0"
   pda      = False
+  
+  # Used in counting the phases of the plants/seeds growing in the garden
+  START_TIME = time.time()
   
   # testing stuff begins
   print ""
@@ -69,4 +73,4 @@ init python:
   persistent.unlocked_journals = []
   #persistent.unlocked_journals.append("Riku:002")
 
-  persistent.garden = [None]*9
+  #persistent.garden = [None]*9

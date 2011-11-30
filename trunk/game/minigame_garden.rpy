@@ -19,7 +19,7 @@ init python:
   
   GARDEN_CELL_SIZE = 80
   
-  GARDEN_PHASE_DURATION = 15*60
+  GARDEN_PHASE_DURATION = 60
 
   
   # Garden's main method. Displays a field of grass and a few pieces of ground 
@@ -77,10 +77,14 @@ init python:
       if plant != None:
         plant_id    = plant[0]
         plant_time  = plant[1]
-        time_diff   = current_time - plant_time
-        phase = int(time_diff/GARDEN_PHASE_DURATION)
+        time_diff   = int(current_time - START_TIME)
+        plant_time += time_diff
+        phase       = int(plant_time/GARDEN_PHASE_DURATION)
         
-        print " ", plant_id, "in phase", phase
+        #time_diff   = current_time - plant_time
+        #phase = int(time_diff/GARDEN_PHASE_DURATION)
+        
+        print " ", plant_id, "in phase", phase, time_diff, plant_time
         
         # phase 0 (seed)      (aos)
         # phase 1             (aos1) tms.
@@ -179,8 +183,7 @@ init python:
                  xmaximum=490)
         ui.hbox(spacing=40)    
         ui.image(im.Scale("gfx/items/" + item.get_id() + ".png", 75, 75))
-        ui.text(item.get_description())
-        ui.text("\n\nClick to continue")
+        ui.text(item.get_description() + "\n\n(Click to continue)")
         ui.close()
         
         # Minigame area sized invisible button
@@ -219,7 +222,7 @@ init python:
     renpy.transition(dissolve)
     
     if seed_id != "cancel":
-      persistent.garden[button] = (seed_id, current_time)
+      persistent.garden[button] = (seed_id, 0)
       print "Planted seed", seed_id, "to spot", button
     
     return

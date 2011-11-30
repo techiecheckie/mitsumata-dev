@@ -17,8 +17,7 @@ init python:
     "garden" : "Insert description here. \n\nLorem ipsum dolor sit amet."
   }
   
-  # config.overlay_functions.append(show_description) "fix"
-  CURRENT_DESCRIPTION = "asdasdf"
+  CURRENT_DESCRIPTION = ""
   
   MINIGAME_POS_X  = 365
   MINIGAME_POS_Y  = 114
@@ -29,7 +28,7 @@ init python:
   MINIGAME_GRID_Y    = 200
   MINIGAME_CELL_SIZE = 150
   MINIGAME_GRID_COLS = 4
-  MINIGAME_GRID_ROWS = 2 
+  MINIGAME_GRID_ROWS = 3 
 
   def show_minigame_screen():
     button       = ""
@@ -147,7 +146,6 @@ init python:
       #   persistent.minigame_level[name] = level
     
     hide_minigame_ui(None)
-    #config.overlay_functions.remove(show_description)
     
     return score >= score_to_pass
 
