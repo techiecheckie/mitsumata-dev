@@ -11,7 +11,7 @@ init python:
     "platformer" : "Use spacebar to jump over obstacles and pits.\n\nPress esc to quit the game.",
     "duck" : "Use the mouse to shoot the birds.\n\nPress esc to quit the game.",
     "force" : "Use the keypad or keys 0-9 to type the numbers as they appear.\n\nPress esc to quit the game.",
-    "power" : "Click the mouse to select the correct target and the amount of power while the arrows are moving.\n\nPress esc to quit the game.",
+    "power" : "Click the mouse to aim and set the amount of power while the arrows are moving.\n\nPress esc to quit the game.",
     "squats" : "As the marker passes over each lit section, hit the correct arrow key (down, left, or up).\n\nPress esc to quit the game.",
     "gears" : "Use the mouse to drag cogs and lock them on axles.\n\nPress esc to quit the game.",
     "garden" : "Insert description here. \n\nLorem ipsum dolor sit amet."
