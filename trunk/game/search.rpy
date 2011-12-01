@@ -539,9 +539,27 @@ init python:
         message = "You found nothing of interest."
         show_message(message, "medium")
       else:
-        message = "You found an item." + "\n\n" + item.get_name()
-        show_message(message, "medium")
-
+        message = "You found an item: " + item.get_name() + "\n"
+        
+        renpy.transition(dissolve)
+        ui.frame(xmaximum=480, 
+                 xpadding=40, ypadding=40, 
+                 xpos=0.5, ypos=0.5, 
+                 xanchor=304, yanchor=95, 
+                 background="gfx/textbox_2.png")
+        
+        ui.hbox(spacing=40)
+        ui.text("You found an item: " + item.get_name() + "\n\n" + item.get_description())
+        ui.image(im.Scale("gfx/items/" + item.get_id() + ".png", 100, 100))
+        ui.close()
+    
+        # Full screen hidden button, "click anywhere to continue" kind
+        ui.frame(xpos=0, ypos=0, background=None)
+        ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
+    
+        ui.interact()
+        renpy.transition(dissolve)
+        
         if item.get_id() not in persistent.unlocked_items:
           persistent.unlocked_items.append(item.get_id())
         print "Unlocked item", item.get_id()

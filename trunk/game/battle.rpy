@@ -14,8 +14,8 @@ init python:
   
   NAOMI_HEALTH  = 100
   NAOMI_MANA    = 100
-  NAOMI_MELEE   = 20
-  NAOMI_MAGIC   = 20
+  NAOMI_MELEE   = 50
+  NAOMI_MAGIC   = 75
   NAOMI_MAGIC_OFFSET = 100
     
   DEMON_THUG_HEALTH = 25
@@ -288,8 +288,10 @@ init python:
     mobs_alive = len(mobs)
     
     # Update the screen elements
+    renpy.transition(dissolve)
     hide_main_ui()
-    show_minigame_ui(background)
+    renpy.show(background, at_list = [Position(xpos=MINIGAME_POS_X, ypos=MINIGAME_POS_Y-20), Transform(anchor=(0.0, 0.0))]) 
+    show_minigame_ui(None)
     
     renpy.show(player.get_id() + " idle", at_list = [Position(xpos=player.get_x(), ypos=player.get_y()), Transform(zoom=ZOOM)], zorder=player.get_zorder())
     
@@ -300,8 +302,19 @@ init python:
     while player.get_health() > 0 and mobs_alive > 0:
       show_target_list(mobs)
       target = ui.interact()
+      
+      # temp checks?
+      if target == "exit":
+        player.dec_health(1000)
+        break
+        
       show_action_list(player, target)
       action = ui.interact()
+      
+      # temp checks?
+      if target == "exit":
+        player.dec_health(1000)
+        break
       
       if action != "cancel":
         player.attack(target, action, messages)

@@ -73,7 +73,7 @@ init python:
     # filling in the values for each of its settings.
     MOLE_LEVELS = [
         # Level 1
-        MoleLevel( time_limit       = 10,
+        MoleLevel( time_limit       = 60,
                    max_moles        = (2, 8),
                    max_easy_moles   = (3, 5),
                    max_medium_moles = (0, 4),

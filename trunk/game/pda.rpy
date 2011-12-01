@@ -110,9 +110,9 @@ init python:
       
       ui.frame(xpos=PDA_CONTENT_X, ypos=PDA_CONTENT_Y, 
                xpadding=0, ypadding=0, 
-               xmaximum=550, xminimum=550,
+               xmaximum=520, xminimum=550,
                background=None)
-      ui.text(button_value.get_description()) # button_value == item
+      ui.text(button_value.get_name() + "\n\n" + button_value.get_description())
       
       
   # Displays the journal manager. Just like the inventory part, this one uses 
@@ -130,7 +130,7 @@ init python:
           x_pos = PDA_ICON_X + x * PDA_JOURNAL_CELL_WIDTH
           y_pos = PDA_ICON_Y + y * PDA_JOURNAL_CELL_HEIGHT
           
-          ui.frame(xpos=x_pos, ypos=y_pos, xpadding=0, ypadding=0)
+          ui.frame(xpos=x_pos, ypos=y_pos, xpadding=0, ypadding=0, background=None)
           
           # unnecessary complexity, but oh well..
           journal_unlocked = False
@@ -151,14 +151,14 @@ init python:
       journal = button_value
       
       if journal != None:
-        ui.frame(xpos=PDA_ICON_X, ypos=PDA_ICON_Y, xpadding=0, ypadding=0)
+        ui.frame(xpos=PDA_ICON_X, ypos=PDA_ICON_Y, xpadding=0, ypadding=0, background=None)
         ui.imagebutton("gfx/journals/" + journal.get_id() + ".png",
                        "gfx/journals/" + journal.get_id() + "_hover.png",
                        clicked=ui.returns(("journal manager", "")))
       
         entries = button_value.get_entries()
         
-        ui.frame(xpos=PDA_CONTENT_X, ypos=PDA_CONTENT_Y)
+        ui.frame(xpos=PDA_CONTENT_X, ypos=PDA_CONTENT_Y, background=None)
         ui.vbox()
         for entry in entries:
           for id in persistent.unlocked_journals:
@@ -173,7 +173,7 @@ init python:
       journal = button_value[0]
       entry = button_value[1]
       
-      ui.frame(xpos=PDA_ICON_X, ypos=PDA_ICON_Y, xpadding=0, ypadding=0)
+      ui.frame(xpos=PDA_ICON_X, ypos=PDA_ICON_Y, xpadding=0, ypadding=0, background=None)
       ui.imagebutton("gfx/journals/" + journal.get_id() + ".png",
                      "gfx/journals/" + journal.get_id() + ".png",
                      clicked=ui.returns(("journal", journal)))
@@ -183,7 +183,7 @@ init python:
                xmaximum=520, xminimum=520,
                background=None)
       ui.vbox()
-      ui.text(entry.get_title())
+      ui.text(entry.get_title() + "\n")
       ui.text(entry.get_text())        
       ui.close()
      
