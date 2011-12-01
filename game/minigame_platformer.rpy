@@ -9,22 +9,37 @@ init python:
       # Level 1
       PlatformerLevel( time_limit       = 60,
                        distance         = 3000, 
-                       obstacle_density = 40),
+                       obstacle_density = 50), # density: 0-100
       # Level 2
       PlatformerLevel( time_limit       = 60,
                        distance         = 4000, 
-                       obstacle_density = 30),
+                       obstacle_density = 60),
       # Level 3
       PlatformerLevel( time_limit       = 60,
                        distance         = 4500, 
-                       obstacle_density = 40),
+                       obstacle_density = 70),
       # Level 4
       PlatformerLevel( time_limit       = 60,
                        distance         = 5000, 
-                       obstacle_density = 50)
+                       obstacle_density = 90)
     ]
     
     MAP_SEGMENTS = [
+      [
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [ 3, 4, 3, 6, 8, 9, 2, 4, 3, 4, 3, 6, 8, 9, 2, 6, 8, 9, 2, 4, 3, 4, 3],
+        [10,18,20,19,18,20,10,11,12,11,12,10,18,20,10,11,12,11,10,19,18,10,11],
+        [21, 0, 0, 0, 0, 0,17,20,19,18,20,21, 0, 0,17,20,19,20,21, 0, 0,17,20]
+      ]
+    ]
+    
+    '''
       [
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -73,7 +88,7 @@ init python:
         [ 1, 2, 3, 4,11,12,21, 0,17,19,18,10,11,12,11,12,10,11,18,19,18,21, 0],
         [ 0,13,10,12,10,16, 0, 0, 0, 0, 0,17,18,19,20,19,18,21, 0, 0, 0, 0, 0]
       ]
-    ]
+      '''
     
     TILE_TYPES = [
       "grass-edge-1.png",  # 1
@@ -117,9 +132,9 @@ init python:
     DROWNABLE_TILES = [8,9]
     
     RUN_SPEED      = 110
-    JUMP_SPEED     = 170
-    JUMP_DELAY     = 0.3
-    MAX_FALL_SPEED = 300
+    JUMP_SPEED     = 150
+    JUMP_DELAY     = 0.2
+    MAX_FALL_SPEED = 200
     GRAVITY        = 200
     
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####
@@ -172,7 +187,7 @@ init python:
     NUMBER_DROWN_FRAMES   = 3
     NUMBER_FALL_FRAMES    = 7
 
-    VIEW_WIDTH = 10
+    VIEW_WIDTH = 12
     VIEW_HEIGHT = 10
    
     TILE_WIDTH  = 64
@@ -181,7 +196,7 @@ init python:
     
     # runner initial cell position
     CELL_X = 2
-    CELL_Y = len(MAP_SEGMENTS[0])-2
+    CELL_Y = len(MAP_SEGMENTS[0])-3
     
     class Cell( GameObject ):
       def __init__( self, x, y ):
@@ -335,8 +350,6 @@ init python:
               index = random.randint(0,len(MAP_SEGMENTS)-1)
               segments.append(MAP_SEGMENTS[index])
               map_length += len(MAP_SEGMENTS[index][0]) * TILE_WIDTH
-            
-            #print self.level.distance, map_length
 
             for k in range(0, len(segments)):
               segment = segments[k]
@@ -358,8 +371,10 @@ init python:
                       drownable = True
 
                   if tile_type in OBSTACLE_TILES and x > 2:
-                    if random.randint( 0, 100 ) < self.level.obstacle_density:
-                      obstacle = self.obstacles[ random.randint( 0, len(OBSTACLE_TYPES)-1 ) ]
+                    if random.randint( 0, 100 ) <= self.level.obstacle_density:
+                      # make sure there are no three obstacles in a row
+                      if self.map[y][len(self.map[y])-1].obstacle == None or self.map[y][len(self.map[y])-2].obstacle == None:
+                        obstacle = self.obstacles[ random.randint( 0, len(OBSTACLE_TYPES)-1 ) ]
                 
                   cell = Cell( x*TILE_WIDTH + k*len(segment[0])*TILE_WIDTH, y*TILE_HEIGHT )
                   cell.tile      = tile
@@ -391,7 +406,7 @@ init python:
             world_transform = self.get_world_transform()
             self.background["renderer"].render( blitter, clip_rect, world_transform )
             
-            cell_x = self.runner["behavior"].cell_x-1
+            cell_x = self.runner["behavior"].cell_x-2
             
             for y in range(0, VIEW_HEIGHT):
               for x in range(cell_x, cell_x + VIEW_WIDTH):
@@ -552,19 +567,25 @@ init python:
             elif self.state == RUNNER_STATE_DESCENDING:
               # TODO: clean this mess
               
-              if self.cell.tile == None:
-                if self.y_velocity < MAX_FALL_SPEED:
-                  self.y_velocity += GRAVITY * delta_sec
-              elif not self.cell.walkable:
+              # free fall
+              #if self.cell.tile == None:
+              if self.y_velocity < MAX_FALL_SPEED:
+                self.y_velocity += GRAVITY * delta_sec
+              
+              # more free fall
+              if not self.cell.walkable:
+                # drown if the tile is water and the player has fallen down enough
                 if self.cell.drownable and self.y_offset >= TILE_HEIGHT/4:
                   self.state = RUNNER_STATE_DROWNING
                   self.game_object["renderer"].play_animation( RUNNER_ANIMATION_DROWN )
                   self.x_velocity = 0
                   self.y_velocity = 0
+                
                 else:
                   if self.y_velocity < MAX_FALL_SPEED:
                     self.y_velocity += GRAVITY * delta_sec
               else:
+                # 
                 if self.y_offset >= 0:
                   self.state = RUNNER_STATE_LANDING
                   self.game_object["renderer"].play_animation( RUNNER_ANIMATION_LAND )
