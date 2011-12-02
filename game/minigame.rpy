@@ -1,3 +1,6 @@
+image bg gears = "gfx/gears/background.jpg"
+image bg cells = "gfx/cells/petri_dish.jpg"
+
 init python:
   DESCRIPTION_POS_X = 60
   DESCRIPTION_POS_Y = 110
@@ -84,26 +87,39 @@ init python:
   def choose_game(name):
     if name == "mole":
       game = WhackAMole
+      bg   = "bg dgro"
     elif name == "cell":
       game = Cells
+      bg   = "bg cells"
     elif name == "platformer":
       game = Platformer
+      bg   = "bg dgro"
     elif name == "duck":
       game = DuckHunt
+      bg   = "bg dsky"
     elif name == "force":
       game = MagicForce
+      bg   = "bg dgro"
     elif name == "power":
       game = MagicPower
+      bg   = "bg dgro"
     elif name == "squats":
       game = Squats
+      bg   = "bg dgro"
     elif name == "gears":
       game = Gears
+      bg   = "bg gears"
     
-    return game
+    return game, bg
   
   
   def run(name):
-    score = run_minigame( game_type = choose_game(name),
+    (game, bg) = choose_game(name)
+    renpy.show(bg, at_list=[Position(xpos=MINIGAME_POS_X, 
+                                     ypos=MINIGAME_POS_Y-40), 
+                            Transform(anchor=(0.0,0.0))], 
+                            zorder=-1)
+    score = run_minigame( game_type = game,
                           x=MINIGAME_POS_X, 
                           y=MINIGAME_POS_Y,
                           game_width=MINIGAME_WIDTH,
@@ -132,7 +148,12 @@ init python:
       show_garden()
       score = 0
     else:   
-      score = run_minigame(game_type = choose_game(name), 
+      (game, bg) = choose_game(name)
+      renpy.show(bg, at_list=[Position(xpos=MINIGAME_POS_X-20, 
+                                       ypos=MINIGAME_POS_Y-40), 
+                              Transform(anchor=(0.0,0.0))], 
+                              zorder=-1)
+      score = run_minigame(game_type = game, 
                            x=MINIGAME_POS_X, 
                            y=MINIGAME_POS_Y,
                            game_width=MINIGAME_WIDTH,

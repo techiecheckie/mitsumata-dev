@@ -107,8 +107,8 @@ init python:
     PETRI_DISH_X = 17
     PETRI_DISH_Y = 0
 
-    GRID_OFFSET_X = 52
-    GRID_OFFSET_Y = 74
+    GRID_OFFSET_X = 82
+    GRID_OFFSET_Y = 64
 
     GRID_CELL_WIDTH  = 48
     GRID_CELL_HEIGHT = 48
@@ -334,7 +334,7 @@ init python:
             self.end_countdown    = CELLS_END_GAME_COUNTDOWN
 
             # setup entities.
-            self.dish             = None
+            #self.dish             = None
             self.healthy_cells    = []
             self.infected_cells   = []
             self.grid             = Grid()
@@ -342,7 +342,7 @@ init python:
             self.stop_screen_hud  = None
             self.elapsed_time_hud = None
 
-            self.create_dish()
+            #self.create_dish()
             self.create_cells()
             self.create_huds()
 
@@ -546,21 +546,21 @@ init python:
             displayables = []
             for cell in itertools.chain( self.healthy_cells, self.infected_cells ):
                 displayables.extend( cell["renderer"].get_displayables() )
-            displayables.extend( self.dish["renderer"].get_displayables() )
+            #displayables.extend( self.dish["renderer"].get_displayables() )
             return displayables
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
-            self.dish["renderer"].render( blitter, clip_rect, world_transform )
+            #self.dish["renderer"].render( blitter, clip_rect, world_transform )
 
             if self.state == CELLS_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == CELLS_GAME_STATE_PLAY:
                 cell_transform = GameTransform( world_transform.x +
-                                                self.dish["transform"].x +
+                                                #self.dish["transform"].x +
                                                 GRID_OFFSET_X,
                                                 world_transform.y +
-                                                self.dish["transform"].y +
+                                                #self.dish["transform"].y +
                                                 GRID_OFFSET_Y )
                 for cell in itertools.chain( self.infected_cells, self.healthy_cells ):
                     cell["renderer"].render( blitter, clip_rect, cell_transform )
@@ -622,8 +622,8 @@ init python:
                     # translate the mouse position to something that can be
                     # used to determine if the mouse is over a grid cell.
                     world_transform = self.get_world_transform()
-                    x = mx - world_transform.x - self.dish["transform"].x - GRID_OFFSET_X
-                    y = my - world_transform.y - self.dish["transform"].y - GRID_OFFSET_Y
+                    x = mx - world_transform.x - GRID_OFFSET_X
+                    y = my - world_transform.y - GRID_OFFSET_Y
 
                     for cell in itertools.chain( self.healthy_cells, self.infected_cells ):
                         if cell["collider"].is_point_inside( x, y ):

@@ -214,7 +214,7 @@ init python:
             
             self.state = GEARS_GAME_STATE_BEGIN
 
-            self.create_background()
+            #self.create_background()
             self.create_huds()            
             self.create_axles(level)
             self.create_gears(level)
@@ -301,7 +301,7 @@ init python:
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
 
-            self.background["renderer"].render( blitter, clip_rect, world_transform )
+            #self.background["renderer"].render( blitter, clip_rect, world_transform )
 
             for axle in self.axles:
               axle["renderer"].render(blitter, clip_rect, world_transform)

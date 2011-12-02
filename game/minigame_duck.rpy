@@ -154,7 +154,7 @@ init python:
 
 
             # set up entities.
-            self.background         = None
+            #self.background         = None
             self.player             = None
             self.booms              = []
             self.easy_birds         = []
@@ -165,7 +165,7 @@ init python:
             self.stop_screen_hud    = None
             self.time_remaining_hud = None
 
-            self.create_background()
+            #self.create_background()
             self.create_player()
             self.create_birds()
             self.create_boom()
@@ -441,7 +441,7 @@ init python:
 
         def get_displayables( self ):
             displayables = []
-            displayables.extend( self.background["renderer"].get_displayables() )
+            #displayables.extend( self.background["renderer"].get_displayables() )
             displayables.extend( self.player["renderer"].get_displayables() )
 
             for bird in itertools.chain( self.easy_birds,
@@ -460,7 +460,7 @@ init python:
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
-            self.background["renderer"].render( blitter, clip_rect, world_transform )
+            #self.background["renderer"].render( blitter, clip_rect, world_transform )
 
             if self.state == HUNT_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
