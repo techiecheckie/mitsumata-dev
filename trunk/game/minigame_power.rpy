@@ -191,7 +191,7 @@ init python:
             self.total_score         = 0
 
             # setup the entities.
-            self.background         = None
+            #self.background         = None
             self.start_screen_hud   = None
             self.stop_screen_hud    = None
             self.score_hud          = None
@@ -204,7 +204,7 @@ init python:
             self.target             = None
             self.fireball           = None
 
-            self.create_background()
+            #self.create_background()
             self.create_huds()
             self.create_bars( level )
             self.create_target()
@@ -384,7 +384,7 @@ init python:
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
-            self.background["renderer"].render( blitter, clip_rect, world_transform )
+            #self.background["renderer"].render( blitter, clip_rect, world_transform )
 
             if self.state == MAGIC_POWER_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )

@@ -238,7 +238,7 @@ init python:
                                                          0,
                                                          self.level.time_limit )
             
-            self.create_background()
+            #self.create_background()
             self.create_tiles()
             self.create_obstacles()
             self.create_runner()
@@ -404,7 +404,7 @@ init python:
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
-            self.background["renderer"].render( blitter, clip_rect, world_transform )
+            #self.background["renderer"].render( blitter, clip_rect, world_transform )
             
             cell_x = self.runner["behavior"].cell_x-2
             

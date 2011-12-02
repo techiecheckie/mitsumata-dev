@@ -106,7 +106,7 @@ init python:
             self.number_correct       = 0
 
             # setup the entities.
-            self.background         = None
+            #self.background         = None
             self.current_numbers    = []
             self.riku               = None
             self.start_screen_hud   = None
@@ -114,7 +114,7 @@ init python:
             self.score_hud          = None
             self.time_remaining_hud = None
 
-            self.create_background()
+            #self.create_background()
             self.create_numbers()
             self.create_riku()
             self.create_huds()
@@ -270,7 +270,7 @@ init python:
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
-            self.background["renderer"].render( blitter, clip_rect, world_transform )
+            #self.background["renderer"].render( blitter, clip_rect, world_transform )
 
             self.riku["renderer"].render( blitter, clip_rect, world_transform )
 

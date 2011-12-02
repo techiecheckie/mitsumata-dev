@@ -208,7 +208,7 @@ init python:
             self.occupied_cells = []
 
             # set up entities.
-            self.background         = None
+            #self.background         = None
             self.dirt_piles         = []
             self.easy_moles         = []
             self.medium_moles       = []
@@ -218,7 +218,7 @@ init python:
             self.stop_screen_hud    = None
             self.time_remaining_hud = None
 
-            self.create_background()
+            #self.create_background()
             self.create_moles()
             self.create_dirt()
             self.create_huds()
@@ -446,7 +446,7 @@ init python:
 
         def get_displayables( self ):
             displayables = []
-            displayables.extend( self.background["renderer"].get_displayables() )
+            #displayables.extend( self.background["renderer"].get_displayables() )
 
             for dirt in self.dirt_piles:
                 displayables.extend( dirt["renderer"].get_displayables() )
@@ -526,7 +526,7 @@ init python:
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
-            self.background["renderer"].render( blitter, clip_rect, world_transform )
+            #self.background["renderer"].render( blitter, clip_rect, world_transform )
 
             self.time_remaining_hud["renderer"].render( blitter, clip_rect, world_transform )
             self.score_hud["renderer"].render( blitter, clip_rect, world_transform )

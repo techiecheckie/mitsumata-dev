@@ -111,7 +111,7 @@ init python:
             self.number_bonus3_reps = level.number_bonus3_reps
 
             # setup the entities.
-            self.background           = None
+            #self.background           = None
             self.start_screen_hud     = None
             self.stop_screen_hud      = None
             self.score_hud            = None
@@ -121,7 +121,7 @@ init python:
             self.active_segment_index = None
             self.riku                 = None
 
-            self.create_background()
+            #self.create_background()
             self.create_huds()
             self.create_bar( level )
             self.create_riku( level )
@@ -274,7 +274,7 @@ init python:
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
-            self.background["renderer"].render( blitter, clip_rect, world_transform )
+            #self.background["renderer"].render( blitter, clip_rect, world_transform )
 
             if self.state == SQUATS_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
