@@ -20,13 +20,13 @@ init python:
   HIT_DELAYS["Roman magic"]       = 1.0
   
   ANIMATION_DELAYS["Demon hunter melee"] = 0.8
-  HIT_DELAYS["Demon hunter melee"]       = 0.2  
+  HIT_DELAYS["Demon hunter melee"]       = 0.4  
   
   ANIMATION_DELAYS["Demon thug melee"] = 0.8
   HIT_DELAYS["Demon thug melee"]       = 0.2
   
   ANIMATION_DELAYS["Mamoru melee"] = 1.4
-  HIT_DELAYS["Mamoru melee"]       = 0.4
+  HIT_DELAYS["Mamoru melee"]       = 0.8
   
   ANIMATION_DELAYS["Mamoru magic"] = 1.6
   HIT_DELAYS["Mamoru magic"]       = 0.2
@@ -106,9 +106,9 @@ image Roman idle:
   repeat
   
 image Roman hit:
-  "gfx/animated/riku/riku_hitl01.png"
+  "gfx/animated/roman/roman_hitwussyl01.png"
   pause 0.2
-  "gfx/animated/riku/riku_hitl02.png"
+  "gfx/animated/roman/roman_hitwussyl02.png"
   pause 0.4
     
 image Roman hit_crit:
@@ -185,15 +185,15 @@ image DemonHunter hit:
   pause 0.4
 
 image DemonHunter hit_crit:
-  "gfx/animated/riku/riku_hitwussyr01.png"
+  "gfx/animated/demonic_hunter/demoniccape_hitr01.png"
   pause 0.2
-  "gfx/animated/riku/riku_hitwussyr02.png"
+  "gfx/animated/demonic_hunter/demoniccape_hitr02.png"
   pause 0.4
 
 image DemonHunter dead:
-  "gfx/animated/riku/riku_hitwussyr01.png"
+  "gfx/animated/demonic_hunter/demoniccape_hitr01.png"
   pause 0.2
-  "gfx/animated/riku/riku_hitwussyr02.png"
+  "gfx/animated/demonic_hunter/demoniccape_hitr02.png"
   pause 0.4
 
 image DemonHunter melee:
@@ -226,15 +226,15 @@ image DemonThug hit:
   pause 0.4
  
 image DemonThug hit_crit:
-  "gfx/animated/riku/riku_hitwussyr01.png"
+  "gfx/animated/demonic_thug/demonic_hitr01.png"
   pause 0.2
-  "gfx/animated/riku/riku_hitwussyr02.png"
+  "gfx/animated/demonic_thug/demonic_hitr02.png"
   pause 0.4
   
 image DemonThug dead:
-  "gfx/animated/riku/riku_hitwussyr01.png"
+  "gfx/animated/demonic_thug/demonic_hitr01.png"
   pause 0.2
-  "gfx/animated/riku/riku_hitwussyr02.png"
+  "gfx/animated/demonic_thug/demonic_hitr02.png"
   pause 0.4
   
 image DemonThug melee:

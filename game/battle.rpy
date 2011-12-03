@@ -6,7 +6,7 @@ init python:
   MOB_CRIT_CHANCE     = 20 # 5% chance, 1-20
   MOB_CRIT_MULTIPLIER = 2
     
-  MAMORU_HEALTH = 100
+  MAMORU_HEALTH = 300
   MAMORU_MANA   = 100
   MAMORU_MELEE  = 20
   MAMORU_MAGIC  = 25
@@ -16,21 +16,22 @@ init python:
   NAOMI_MANA    = 100
   NAOMI_MELEE   = 50
   NAOMI_MAGIC   = 75
-  NAOMI_MAGIC_OFFSET = 100
+  NAOMI_MAGIC_OFFSET = 50
     
   DEMON_THUG_HEALTH = 25
   DEMON_THUG_MANA   = 0
-  DEMON_THUG_MELEE  = 10
+  DEMON_THUG_MELEE  = 20
   DEMON_THUG_MAGIC  = 0
     
   DEMON_HUNTER_HEALTH = 50
   DEMON_HUNTER_MANA   = 0
-  DEMON_HUNTER_MELEE  = 10
+  DEMON_HUNTER_MELEE  = 30
   DEMON_HUNTER_MAGIC  = 0
   
-  ROMAN_MAGIC_OFFSET = 50
+  ROMAN_MAGIC_OFFSET_X = 10
+  ROMAN_MAGIC_OFFSET_Y = 0
   
-  MOB_POSITIONS = [(420,420), (400,450), (450,480)]
+  MOB_POSITIONS = [(420,520), (400,550), (450,580)]
   
   class Fighter(object):
     def __init__(self, name, id, health, mana, damage_melee, damage_magic, x, y, zorder):
@@ -73,10 +74,14 @@ init python:
         
     def can_afford_magic(self):
       # TODO: use proper spell costs
-      some_test_value = 20
+      some_test_value = 50
       return self.mana >= some_test_value
 
     def show_attack(self, target, action, damage, critical, attack_distance):
+      target.dec_health(damage)
+    
+      BATTLE_MESSAGES.append(self.get_name() + " attacks " + target.get_name() + "\n")
+      
       # slide animation
       renpy.show(self.id + " idle", at_list = [slide(ANIMATION_DELAYS["slide"], 
                                               target.get_x()-attack_distance, 
@@ -89,14 +94,20 @@ init python:
 
       # target waits a bit for the blow to fall, then plays the animation
       renpy.pause(HIT_DELAYS[self.name + " " + action])
+      
+      BATTLE_MESSAGES.append(target.get_name() + " is hit for " + str(damage) + " points\n")
+            
       if target.get_health() > 0:
+        
         if critical:
+          BATTLE_MESSAGES.append("Critical hit!\n")
           renpy.show(target.get_id() + " hit_crit", zorder=target.get_zorder())
         else:
           renpy.show(target.get_id() + " hit", zorder=target.get_zorder())
         renpy.pause(ANIMATION_DELAYS[self.name + " " + action] - HIT_DELAYS[self.name + " " + action])
         renpy.show(target.get_id() + " idle", zorder=target.get_zorder())
       else:
+        BATTLE_MESSAGES.append(target.get_name() + " dies!\n")
         renpy.show(target.get_id() + " dead", zorder=target.get_zorder())
         renpy.pause(ANIMATION_DELAYS[self.name + " " + action] - HIT_DELAYS[self.name + " " + action])
       
@@ -110,41 +121,37 @@ init python:
   class Player(Fighter):
     def __init__(self, id, health, mana):
       # TODO: set proper melee and magic damage values
-      super(Player, self).__init__(id, id, health, mana, 10, 50, 800, 480, 1)
+      super(Player, self).__init__(id, id, health, mana, 30, 50, 800, MOB_POSITIONS[1][1], 1)
         
-    def attack(self, target, action, messages):
+    def attack(self, target, action):
       attack_offset = 0
       if action == "melee":
         damage = self.damage_melee
       elif action == "magic":
         damage = self.damage_magic
         if self.name == "Roman":
-          attack_offset = ROMAN_MAGIC_OFFSET
-         
+          attack_offset = ROMAN_MAGIC_OFFSET_X
         # TODO: add any bonuses that items give
-        self.mana -= 10 
+        self.mana -= 50 
         
       # Player's crit chance may vary, using hard-coded values for now, TODO
       if random.randint(1,20) == 20:
         critical = True
         damage *= 2
-        messages.append("Critical hit!")
       else:
         critical = False
           
-      target.dec_health(damage)
-      messages.append(target.get_name() + " is hit for " + str(damage) + " points.")
-      if target.get_health() <= 0:
-        messages.append(target.get_name() + " dies.")
-          
-      Fighter.show_attack(self, target, action, damage, critical, -ATTACK_DISTANCE - attack_offset)
+      Fighter.show_attack(self, 
+                          target, action, 
+                          damage, critical, 
+                          -ATTACK_DISTANCE - attack_offset,)
        
        
   class Mob(Fighter):
     def __init__(self, name, id, health, mana, damage_melee, damage_magic, x, y, zorder):
       super(Mob, self).__init__(name, id, health, mana, damage_melee, damage_magic, x, y, zorder)
         
-    def attack(self, target, messages):
+    def attack(self, target):
       attack_offset = 0
       if self.mana > 0:
         # See if the attack should be melee or a magical one
@@ -170,16 +177,13 @@ init python:
       if random.randint(1,MOB_CRIT_CHANCE) == MOB_CRIT_CHANCE:
         critical = True
         damage *= MOB_CRIT_MULTIPLIER
-        messages.append("Critical hit!")
       else:
         critical = False
           
-      target.dec_health(damage)
-      messages.append(target.get_name() + " is hit for " + str(damage) + " points.")
-      if target.get_health() <= 0:
-        messages.append(target.get_name() + " dies.")
-          
-      Fighter.show_attack(self, target, action, damage, critical, ATTACK_DISTANCE + attack_offset)
+      Fighter.show_attack(self, 
+                          target, action, 
+                          damage, critical, 
+                          ATTACK_DISTANCE + attack_offset)
        
         
   def create_mobs(mob_name, mob_count):
@@ -260,26 +264,31 @@ init python:
     return
       
       
-  def show_battle_messages(messages):
-    messages.append("")
-    messages.append("Click to continue...")
-      
-    ui.frame(xpos=65, ypos=100, xmaximum=230, background=None)
-    ui.vbox()
-    for message in messages:
-      ui.text(message)
-    ui.close()
-      
+  def show_battle_messages():
+    BATTLE_MESSAGES.append("Click to continue...")
+
+    # full screen click-to-continue    
     ui.frame(xpos=0, ypos=0, background=None)
     ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
     ui.interact()
-      
-    del messages[:]
+    
+    del BATTLE_MESSAGES[:]
       
     return
+    
+  def battle_message_area():
+    ui.frame(xpos=65, ypos=100, xmaximum=240, background=None)
+    ui.vbox()
+    for message in BATTLE_MESSAGES:
+      ui.text("{size=-2}" + message + "{/size}")
+    ui.close()
+    
+    return
+    
+  BATTLE_MESSAGES = []
       
   def battle(player_name, mob_name, mob_count, background):
-    messages = []
+    config.overlay_functions.append(battle_message_area)
       
     # Create the combatants
     player = Player(player_name, HP, MP)
@@ -293,10 +302,10 @@ init python:
     renpy.show(background, at_list = [Position(xpos=MINIGAME_POS_X, ypos=MINIGAME_POS_Y-20), Transform(anchor=(0.0, 0.0))]) 
     show_minigame_ui(None)
     
-    renpy.show(player.get_id() + " idle", at_list = [Position(xpos=player.get_x(), ypos=player.get_y()), Transform(zoom=ZOOM)], zorder=player.get_zorder())
+    renpy.show(player.get_id() + " idle", at_list = [Position(xpos=player.get_x(), ypos=player.get_y()), Transform(zoom=ZOOM, anchor=(0,1.0))], zorder=player.get_zorder())
     
     for i in range(0,len(mobs)):
-      renpy.show(mobs[i].get_id() + " idle", at_list = [Position(xpos=mobs[i].get_x(), ypos=mobs[i].get_y()), Transform(zoom=ZOOM)], zorder=mobs[i].get_zorder())
+      renpy.show(mobs[i].get_id() + " idle", at_list = [Position(xpos=mobs[i].get_x(), ypos=mobs[i].get_y()), Transform(zoom=ZOOM, anchor=(0,1.0))], zorder=mobs[i].get_zorder())
   
     # And start the actual battle loop
     while player.get_health() > 0 and mobs_alive > 0:
@@ -305,7 +314,8 @@ init python:
       
       # temp checks?
       if target == "exit":
-        player.dec_health(1000)
+        if mobs_alive > 0:
+          player.dec_health(1000)
         break
         
       show_action_list(player, target)
@@ -313,30 +323,35 @@ init python:
       
       # temp checks?
       if target == "exit":
-        player.dec_health(1000)
+        if mobs_alive > 0:
+          player.dec_health(1000)
         break
       
       if action != "cancel":
-        player.attack(target, action, messages)
+        player.attack(target, action)
         
         update_minigame_ui(player.get_health(), player.get_mana())
-        show_battle_messages(messages)
+        show_battle_messages()
         
         mobs_alive = 0
         for i in range(0, len(mobs)):
           mob = mobs[len(mobs)-1-i]
           if mob.get_health() > 0:
             mobs_alive += 1
-            mob.attack(player, messages)
+            mob.attack(player)
             if player.get_health() <= 0:
+              post_battle_message = "You lost the fight!\n"
               break
         
         if mobs_alive > 0:
           update_minigame_ui(player.get_health(), player.get_mana())
-          show_battle_messages(messages)
+          show_battle_messages()
+        else:
+          post_battle_message = "You won the fight!\n"
 
-    messages.append("(Post-battle message)")
-    show_battle_messages(messages)
+    
+    BATTLE_MESSAGES.append(post_battle_message)
+    show_battle_messages()
     
     battle_result = player.get_health() > 0
     
@@ -351,6 +366,7 @@ init python:
     update_stats(MINIGAME_UI)
   
     renpy.transition(dissolve)
+    config.overlay_functions.remove(battle_message_area)
     hide_minigame_ui(background)
     show_main_ui()
     
