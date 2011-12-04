@@ -88,4 +88,4 @@ init python:
   persistent.unlocked_journals.append("Roman:005")
   persistent.unlocked_journals.append("Susa:019")
 
-  #persistent.garden = [None]*9
+  persistent.garden = [None]*9
