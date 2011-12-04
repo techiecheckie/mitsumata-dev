@@ -10,6 +10,11 @@ label effects:
   transform slide(delay, x, y):
     linear delay xpos x ypos y
     
+  transform pda_slide(x, y):
+    linear 0.2 alpha 0.0
+    linear 0.2 alpha 1.0
+    linear 0.6 xpos x ypos y
+    
 #-----------------------
 # GLOW EFFECT
 #----------------------
