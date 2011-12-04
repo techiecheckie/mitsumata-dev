@@ -230,8 +230,8 @@
 # eg. image eileen happy = "eileen_happy.png"
 
 #image bg shrfr = 
-image bg hall1 = "gfx/backgrounds/Hallway1.png"
-image bg hall2 = "gfx/backgrounds/Hallway2.png"
+image bg hall1 = "gfx/backgrounds/Hallway1.jpg"
+image bg hall2 = "gfx/backgrounds/Hallway2.jpg"
 image bg riroom = "gfx/backgrounds/room1.png"
 image bg roroom = "gfx/backgrounds/room2.png"
 image bg soroom = "gfx/backgrounds/room3.png"

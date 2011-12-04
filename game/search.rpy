@@ -7,10 +7,9 @@ label show_map:
     "roroom" : { "blanket":None, "cupboard":None, "doll":None, "hat":None, "jacket":None, "lamp":None, "magazines":None, "plant1":None, "plant2":None, "poster1":None, "poster2":None, "rack":None, "statue1":None, "statue2":None, "statue3":None },       
     "kitchen" : { "hood" : None, "sink" : None, "pots1" : None, "pots2" : None, "pots3" : None, "pots4" : None },
     "lib" : { "shelves1" : None, "shelves2" : None, "books1" : None, "books2" : None, "books3" : None, "books4" : None },
-    
+    "hall1" : { "flower" : None, "phone" : None },
+    "hall2" : { "flower" : None, "phone" : None, "table" : None },
     # TODO
-    "hall1" : { "stash1" : None, "stash2" : None },
-    "hall2" : { "stash1" : None, "stash2" : None, "stash3" : None },
     "bathroom" : { "stash1" : None, "stash2" : None, "stash3" : None }
   }
 
@@ -517,6 +516,37 @@ init python:
       ui.imagebutton(im.Scale("gfx/transparent.png", 211, 131),
                      "gfx/map/library/LibraryBooks4.png",
                      clicked=ui.returns(("stash", "books4")))
+                     
+    elif room == "hall1":
+      # flower
+      ui.frame(xpos=172, ypos=316, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/hall1/flower.png",
+                     "gfx/map/hall1/flower_hover.png",
+                     clicked=ui.returns(("stash", "flower")))
+                     
+      # phone
+      ui.frame(xpos=79, ypos=489, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/hall1/phone.png",
+                     "gfx/map/hall1/phone_hover.png",
+                     clicked=ui.returns(("stash", "phone")))
+    elif room == "hall2":
+      # table
+      ui.frame(xpos=12, ypos=502, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/hall2/table.png",
+                     "gfx/map/hall2/table_hover.png",
+                     clicked=ui.returns(("stash", "table")))
+    
+      # flower
+      ui.frame(xpos=142, ypos=279, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/hall2/flower.png",
+                     "gfx/map/hall2/flower_hover.png",
+                     clicked=ui.returns(("stash", "flower")))
+                     
+      # phone
+      ui.frame(xpos=79, ypos=512, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/hall2/phone.png",
+                     "gfx/map/hall2/phone_hover.png",
+                     clicked=ui.returns(("stash", "phone")))
  
     # Return button
     ui.frame(xpos=0, ypos=0, background=None)
