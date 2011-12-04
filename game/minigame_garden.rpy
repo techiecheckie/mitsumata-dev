@@ -4,22 +4,22 @@ init python:
   renpy.image("flowerpot", "gfx/backgrounds/daygrass.jpg")
 
   GARDEN_GRID = [
-    (MINIGAME_POS_X + 100, MINIGAME_POS_Y + 150),
-    (MINIGAME_POS_X + 250, MINIGAME_POS_Y + 150),
-    (MINIGAME_POS_X + 400, MINIGAME_POS_Y + 150),
+    (MINIGAME_POS_X + 120, MINIGAME_POS_Y + 170),
+    (MINIGAME_POS_X + 270, MINIGAME_POS_Y + 170),
+    (MINIGAME_POS_X + 420, MINIGAME_POS_Y + 170),
     
-    (MINIGAME_POS_X + 100, MINIGAME_POS_Y + 250),
-    (MINIGAME_POS_X + 250, MINIGAME_POS_Y + 250),
-    (MINIGAME_POS_X + 400, MINIGAME_POS_Y + 250),
+    (MINIGAME_POS_X + 120, MINIGAME_POS_Y + 270),
+    (MINIGAME_POS_X + 270, MINIGAME_POS_Y + 270),
+    (MINIGAME_POS_X + 420, MINIGAME_POS_Y + 270),
     
-    (MINIGAME_POS_X + 100, MINIGAME_POS_Y + 350),
-    (MINIGAME_POS_X + 250, MINIGAME_POS_Y + 350),
-    (MINIGAME_POS_X + 400, MINIGAME_POS_Y + 350)
+    (MINIGAME_POS_X + 120, MINIGAME_POS_Y + 370),
+    (MINIGAME_POS_X + 270, MINIGAME_POS_Y + 370),
+    (MINIGAME_POS_X + 420, MINIGAME_POS_Y + 370)
   ]
   
   GARDEN_CELL_SIZE = 80
-  
-  GARDEN_PHASE_DURATION = 60
+ 
+  GARDEN_PHASE_DURATION = 15
 
   
   # Garden's main method. Displays a field of grass and a few pieces of ground 
@@ -28,9 +28,34 @@ init python:
     renpy.transition(dissolve)
     renpy.show("flowerpot", at_list = [Position(xpos=MINIGAME_POS_X-20, ypos=MINIGAME_POS_Y-40), Transform(anchor=(0.0, 0.0))], zorder=-1)
     
-    current_time = time.time()
-    update_garden(current_time)
+    current_time    = time.time()
+    inform_withered = update_garden(current_time)
     available_seeds = get_seeds()
+    
+    # 
+    if inform_withered == True:
+      renpy.transition(dissolve)
+      ui.frame(xpos=MINIGAME_POS_X+50, 
+               ypos=MINIGAME_POS_Y+150, 
+               background="gfx/textbox.png",
+               xpadding=40,
+               ypadding=40,
+               xmaximum=490)
+      ui.hbox(spacing=40)    
+      ui.text("Some of your plants had withered and were automatically removed.\n\nClick to continue")
+      ui.close()
+      
+      # Minigame area sized invisible button
+      ui.frame(xpos=MINIGAME_POS_X,
+               ypos=MINIGAME_POS_Y,
+               background=None,
+               xmaximum=MINIGAME_WIDTH,
+               ymaximum=MINIGAME_HEIGHT)
+      ui.textbutton("", clicked=ui.returns(""), 
+                    xfill=True, yfill=True,
+                    background=None)
+      ui.interact()
+      renpy.transition(dissolve)
     
     # Wait for clicks on the patches of ground or the minigame main ui buttons.
     # If a clicked patch contains a seed/plant, a harvest dialog(?) is displayed
@@ -72,17 +97,20 @@ init python:
   # match the current state (currently only the last phase, the full grown
   # flower phase, is recognized).
   def update_garden(current_time):
+    inform_withered = False
     for i in range(0, len(persistent.garden)):
       plant = persistent.garden[i]
       if plant != None:
         plant_id    = plant[0]
         plant_time  = plant[1]
         time_diff   = int(current_time - START_TIME)
-        plant_time += time_diff
+        plant_time += time_diff - plant_time
         phase       = int(plant_time/GARDEN_PHASE_DURATION)
         
         #time_diff   = current_time - plant_time
         #phase = int(time_diff/GARDEN_PHASE_DURATION)
+        
+        #print phase, plant_time
         
         print " ", plant_id, "in phase", phase, time_diff, plant_time
         
@@ -92,26 +120,33 @@ init python:
         # phase 3 (plant)     (aop)
         # phase 4 (withered?) (aow) tms.
         
-        if phase == 1:
+        if phase == 0:
+          # first phase
+          pass
+        elif phase == 1:
           # mid phase 1
           pass
         elif phase == 2:
           # mid phase 2
           pass
-        elif phase >= 3 and phase < 5:
+        elif phase > 2 and phase < 5:
           # full grown plant
           plant_id = plant_id[:2] + "p"
         else:
-          #withered?
-          pass
+          # withered?
+          # Remove plant and inform the user that all the plants that have died
+          # have been removed from the garden.
+          inform_withered = True
         
         # There should be a 10% chance of the plant turning into a monster plant.
         # Change the graphics (plant_id etc.) or just inform the user when
         # harvesting?
-            
-        persistent.garden[i] = (plant_id, plant_time)
+        if inform_withered:
+          persistent.garden[i] = None
+        else:            
+          persistent.garden[i] = (plant_id, plant_time)
               
-    return 
+    return inform_withered
   
   # Displays a grid of patches of earth and the seeds/plants that are growing in
   # them. 
@@ -154,14 +189,14 @@ init python:
              background="gfx/textbox.png",
              xpadding=40,
              ypadding=40,
-             xmaximum=490)
+             xmaximum=520)
     ui.vbox()
-    ui.text("Harvest plant?")
+    ui.text("Harvest plant?\n\n")
     ui.textbutton("Ok", clicked=ui.returns("ok"), xfill=True)
     ui.textbutton("Cancel", clicked=ui.returns("cancel"), xfill=True)
     ui.close()
     
-    button = ui.interact(clear=False)
+    button = ui.interact()
     renpy.transition(dissolve)
     
     if button == "cancel": return
@@ -180,10 +215,10 @@ init python:
                  background="gfx/textbox.png",
                  xpadding=40,
                  ypadding=40,
-                 xmaximum=490)
+                 xmaximum=520)
         ui.hbox(spacing=40)    
         ui.image(im.Scale("gfx/items/" + item.get_id() + ".png", 75, 75))
-        ui.text(item.get_description() + "\n\n(Click to continue)")
+        ui.text(item.get_description() + "\n\nClick to continue")
         ui.close()
         
         # Minigame area sized invisible button
@@ -198,6 +233,8 @@ init python:
         ui.interact()
         renpy.transition(dissolve)
     
+    ui.clear()
+    
     persistent.garden[cell] = None
     
     return
@@ -210,12 +247,13 @@ init python:
              ypos=MINIGAME_POS_Y+150, 
              background="gfx/textbox.png",
              xpadding=40,
-             ypadding=40)
+             ypadding=40,
+             xmaximum=520)
     ui.vbox()
-    ui.text("Choose the seed you want to plant in this spot:")
+    ui.text("Choose the seed you want to plant in this spot\n\nAvailable seeds:")
     for seed in available_seeds:
-      ui.textbutton(seed.get_name(), clicked=ui.returns(seed.get_id()), background=None)
-    ui.textbutton("Cancel", clicked=ui.returns("cancel"), background=None)
+      ui.textbutton(seed.get_name(), clicked=ui.returns(seed.get_id()), xfill=True)
+    ui.textbutton("Cancel", clicked=ui.returns("cancel"), xfill=True)
     ui.close()
     
     seed_id = ui.interact()
