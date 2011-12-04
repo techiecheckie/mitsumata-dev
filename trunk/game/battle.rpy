@@ -302,10 +302,17 @@ init python:
     renpy.show(background, at_list = [Position(xpos=MINIGAME_POS_X, ypos=MINIGAME_POS_Y-20), Transform(anchor=(0.0, 0.0))]) 
     show_minigame_ui(None)
     
-    renpy.show(player.get_id() + " idle", at_list = [Position(xpos=player.get_x(), ypos=player.get_y()), Transform(zoom=ZOOM, anchor=(0,1.0))], zorder=player.get_zorder())
+    renpy.show(player.get_id() + " idle", 
+               at_list = [Position(xpos=player.get_x(), ypos=player.get_y()), Transform(zoom=ZOOM, anchor=(0,1.0))], 
+               zorder=player.get_zorder())
     
     for i in range(0,len(mobs)):
-      renpy.show(mobs[i].get_id() + " idle", at_list = [Position(xpos=mobs[i].get_x(), ypos=mobs[i].get_y()), Transform(zoom=ZOOM, anchor=(0,1.0))], zorder=mobs[i].get_zorder())
+      renpy.show(mobs[i].get_id() + " idle", 
+                 at_list = [Position(xpos=mobs[i].get_x(), ypos=mobs[i].get_y()), Transform(zoom=ZOOM, anchor=(0,1.0))], 
+                 zorder=mobs[i].get_zorder())
+
+    # initial post battle message if the user decides to quit before the battle ends
+    post_battle_message = "You lost the fight!\n"
   
     # And start the actual battle loop
     while player.get_health() > 0 and mobs_alive > 0:
@@ -340,7 +347,6 @@ init python:
             mobs_alive += 1
             mob.attack(player)
             if player.get_health() <= 0:
-              post_battle_message = "You lost the fight!\n"
               break
         
         if mobs_alive > 0:
@@ -372,11 +378,3 @@ init python:
     
   
     return battle_result
-  
-label test_battle:
-  #$hp = 100
-  #$mp = 30
-  #call battle("Riku", "Demon hunter", 2, "bg riroom")
-  $print battle("Riku", "Naomi", 1, "bg riroom")
-  
-  return

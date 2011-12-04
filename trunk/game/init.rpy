@@ -20,9 +20,9 @@ init python:
   journal_manager = Journal_manager(persistent)
   
   # New game default values
-  HP     = 0
-  MP     = 0
-  CLICKS = 0
+  HP     = 350
+  MP     = 50
+  CLICKS = 30
   decision = "0"
   pda      = False
   
@@ -60,17 +60,32 @@ init python:
   persistent.minigame_levels["force"]      = 1
   persistent.minigame_levels["power"]      = 1
   persistent.minigame_levels["squats"]     = 1
-  persistent.minigame_levels["gears"]      = 1
+  persistent.minigame_levels["gears"]      = 2
   
   persistent.unlocked_items = []
-  #persistent.unlocked_items.append("knife")
-  #persistent.unlocked_items.append("pda")
-  #persistent.unlocked_items.append("map")
-  #persistent.unlocked_items.append("garden")
-  #persistent.unlocked_items.append("aos")
-  #persistent.unlocked_items.append("bos")
+  persistent.unlocked_items.append("knife")
+  persistent.unlocked_items.append("pda")
+  persistent.unlocked_items.append("map")
+  persistent.unlocked_items.append("garden")
+  persistent.unlocked_items.append("aos")
+  persistent.unlocked_items.append("bos")
+  persistent.unlocked_items.append("ice")
+  persistent.unlocked_items.append("rose")
+  persistent.unlocked_items.append("cake")
+  persistent.unlocked_items.append("gun")
+  persistent.unlocked_items.append("gift")
+  #persistent.unlocked_items.append("decor")
+  persistent.unlocked_items.append("bircake")
+  persistent.unlocked_items.append("key")
+  persistent.unlocked_items.append("radio")
+  persistent.unlocked_items.append("parts")
+  persistent.unlocked_items.append("blue")
   
   persistent.unlocked_journals = []
-  #persistent.unlocked_journals.append("Riku:002")
+  persistent.unlocked_journals.append("Riku:001")
+  persistent.unlocked_journals.append("Riku:002")
+  persistent.unlocked_journals.append("Riku:004")
+  persistent.unlocked_journals.append("Roman:005")
+  persistent.unlocked_journals.append("Susa:019")
 
   #persistent.garden = [None]*9
