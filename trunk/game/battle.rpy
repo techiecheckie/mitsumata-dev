@@ -110,6 +110,11 @@ init python:
         BATTLE_MESSAGES.append(target.get_name() + " dies!\n")
         renpy.show(target.get_id() + " dead", zorder=target.get_zorder())
         renpy.pause(ANIMATION_DELAYS[self.name + " " + action] - HIT_DELAYS[self.name + " " + action])
+        
+        # Show a short fade animation
+        renpy.transition(Dissolve(0.5))
+        renpy.hide(target.get_id() + " dead")
+        renpy.pause(0.5)
       
       # slide back
       renpy.show(self.id + " idle", at_list = [slide(ANIMATION_DELAYS["slide"], 
