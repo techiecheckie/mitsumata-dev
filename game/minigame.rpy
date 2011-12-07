@@ -17,7 +17,8 @@ init python:
     "power" : "Click the mouse to aim and set the amount of power while the arrows are moving.\n\nPress esc to quit the game.",
     "squats" : "As the marker passes over each lit section, hit the correct arrow key (down, left, or up).\n\nPress esc to quit the game.",
     "gears" : "Use the mouse to drag cogs and lock them on axles.\n\nPress esc to quit the game.",
-    "garden" : "Insert description here. \n\nLorem ipsum dolor sit amet."
+    "garden" : "Insert description here. \n\nLorem ipsum dolor sit amet.",
+    "lock" : ""
   }
   
   CURRENT_DESCRIPTION = ""
@@ -73,6 +74,8 @@ init python:
         # exception
         if button == "garden":
           show_garden()
+        elif button == "lock":
+          show_lock()
         else:
           score = run(button)
           update_high_score(button, score)
@@ -146,6 +149,9 @@ init python:
     # exception
     if name == "garden":
       show_garden()
+      score = 0
+    elif name == "lock":
+      show_lock()
       score = 0
     else:   
       (game, bg) = choose_game(name)
