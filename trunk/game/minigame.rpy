@@ -18,7 +18,8 @@ init python:
     "squats" : "As the marker passes over each lit section, hit the correct arrow key (down, left, or up).\n\nPress esc to quit the game.",
     "gears" : "Use the mouse to drag cogs and lock them on axles.\n\nPress esc to quit the game.",
     "garden" : "Insert description here. \n\nLorem ipsum dolor sit amet.",
-    "lock" : ""
+    "lock" : "",
+    "bottles" : ""
   }
   
   CURRENT_DESCRIPTION = ""
@@ -76,6 +77,8 @@ init python:
           show_garden()
         elif button == "lock":
           show_lock()
+        elif button == "bottles":
+          show_bottles()
         else:
           score = run(button)
           update_high_score(button, score)
@@ -152,6 +155,9 @@ init python:
       score = 0
     elif name == "lock":
       show_lock()
+      score = 0
+    elif name == "bottles":
+      show_bottles()
       score = 0
     else:   
       (game, bg) = choose_game(name)
