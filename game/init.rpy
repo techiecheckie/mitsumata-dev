@@ -43,6 +43,8 @@ init python:
   persistent.unlocked_minigames.append("squats")
   persistent.unlocked_minigames.append("gears")
   persistent.unlocked_minigames.append("garden")
+  persistent.unlocked_minigames.append("lock")
+  persistent.unlocked_minigames.append("bottles")
   
   persistent.minigame_scores["mole"]       = 0
   persistent.minigame_scores["cell"]       = 0
