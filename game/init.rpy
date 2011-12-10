@@ -33,6 +33,7 @@ init python:
   print ""
   
   pda = True
+  # current unlocked minigames
   persistent.unlocked_minigames = []
   persistent.unlocked_minigames.append("mole")
   persistent.unlocked_minigames.append("cell")
@@ -46,6 +47,7 @@ init python:
   persistent.unlocked_minigames.append("lock")
   persistent.unlocked_minigames.append("bottles")
   
+  # current scores
   persistent.minigame_scores["mole"]       = 0
   persistent.minigame_scores["cell"]       = 0
   persistent.minigame_scores["platformer"] = 0
@@ -55,6 +57,7 @@ init python:
   persistent.minigame_scores["squats"]     = 0
   persistent.minigame_scores["gears"]      = 0
   
+  # current levels
   persistent.minigame_levels["mole"]       = 1
   persistent.minigame_levels["cell"]       = 1
   persistent.minigame_levels["platformer"] = 1
@@ -63,7 +66,9 @@ init python:
   persistent.minigame_levels["power"]      = 1
   persistent.minigame_levels["squats"]     = 1
   persistent.minigame_levels["gears"]      = 2
+  persistent.minigame_levels["lock"]       = 1
   
+  # current unlocked items
   persistent.unlocked_items = []
   persistent.unlocked_items.append("knife")
   persistent.unlocked_items.append("pda")
@@ -83,6 +88,7 @@ init python:
   persistent.unlocked_items.append("parts")
   persistent.unlocked_items.append("blue")
   
+  # current unlocked journals
   persistent.unlocked_journals = []
   persistent.unlocked_journals.append("Riku:001")
   persistent.unlocked_journals.append("Riku:002")
@@ -90,4 +96,5 @@ init python:
   persistent.unlocked_journals.append("Roman:005")
   persistent.unlocked_journals.append("Susa:019")
 
+  # current plants growing in the garden
   persistent.garden = [None]*9
