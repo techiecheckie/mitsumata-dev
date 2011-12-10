@@ -76,7 +76,7 @@ init python:
         if button == "garden":
           show_garden()
         elif button == "lock":
-          show_lock()
+          score = show_lock(persistent.minigame_levels["lock"])
         elif button == "bottles":
           show_bottles()
         else:
@@ -154,8 +154,7 @@ init python:
       show_garden()
       score = 0
     elif name == "lock":
-      show_lock()
-      score = 0
+      score = show_lock(level)
     elif name == "bottles":
       show_bottles()
       score = 0
