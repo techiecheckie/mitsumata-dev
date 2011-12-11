@@ -175,6 +175,8 @@ init -50 python:
                 self.current_animation.set_frameset( frameset )
 
         def on_animation_end( self ):
+            if self.current_animation == None:
+                return
             if not self.current_animation.loop_animation:
                 self.stop_animation()
             if self.user_on_animation_end:

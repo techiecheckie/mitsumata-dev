@@ -34,6 +34,18 @@ init python:
   MINIGAME_CELL_SIZE = 150
   MINIGAME_GRID_COLS = 4
   MINIGAME_GRID_ROWS = 3 
+  
+  MINIGAME_BONUSES = {
+    "mole" : [
+      (5000, ("hp", 300), ("mp", 200)),
+      (3000, ("hp", 200), ("mp", 100)),
+      (1000, ("hp", 100), ("mp", 100))
+    ],
+    "cell" : [
+      (5000, ("hp", 200)),
+      (3000, ("hp", 100))
+    ]
+  }
 
   def show_minigame_screen():
     button       = ""
@@ -72,13 +84,12 @@ init python:
         
         show_description(GAME_DESCRIPTIONS[button])
         
-        # exception
         if button == "garden":
           show_garden()
-        elif button == "lock":
-          score = show_lock(persistent.minigame_levels["lock"])
         elif button == "bottles":
           show_bottles()
+        elif button == "lock":
+          score = show_lock(persistent.minigame_levels["lock"])
         else:
           score = run(button)
           update_high_score(button, score)
@@ -135,14 +146,52 @@ init python:
     return score
   
   def update_high_score(game, score):
-    print "Got", score, "points."
-    if game in persistent.minigame_scores:
-      print "Old score:", persistent.minigame_scores[game]
-      if score > persistent.minigame_scores[game]:
-        persistent.minigame_scores[game] = score
-    else:
+    print "Got", score, "points, old score", persistent.minigame_scores[game]
+    
+    if score > persistent.minigame_scores[game]:
+      old_score = persistent.minigame_scores[game]
       persistent.minigame_scores[game] = score
+
+      score_row     = 10
+      old_score_row = 10
+
+      game_bonuses = MINIGAME_BONUSES[game]
+      for i in range(0, len(game_bonuses)):
+        if score >= game_bonuses[i][0]:
+          score_row = i
+          break
+          
+      for i in range(0, len(game_bonuses)):
+        if old_score >= game_bonuses[i][0]:
+          old_score_row = i
+          break
+          
+      if score_row < old_score_row:
+        renpy.transition(dissolve)
+        ui.frame(xpos=MINIGAME_POS_X+50, 
+                 ypos=MINIGAME_POS_Y+150, 
+                 background="gfx/textbox.png",
+                 xpadding=40,
+                 ypadding=40,
+                 xmaximum=530)
+        ui.vbox()
+        ui.text("{size=-2}Your new highscore unlocked new stat bonuses:{/size}")
+        bonus_row = game_bonuses[score_row]
+        for i in range(1, len(bonus_row)):
+          ui.text("{size=-2}    +" + str(bonus_row[i][1]) + " " + bonus_row[i][0] + "{/size}") 
+        ui.close()
+    
+        # Full screen hidden button, "click anywhere to continue" kind
+        ui.frame(xpos=0, ypos=0, background=None)
+        ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
+    
+        ui.interact()
+        renpy.transition(dissolve)
       
+        update_stats()
+        update_minigame_ui(HP, MP)
+    
+    return
       
   # running minigames without starting the pda first
   def minigame(name, level, score_to_pass):

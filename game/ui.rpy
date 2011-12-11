@@ -33,10 +33,9 @@ init python:
   
   MESSAGE_BOX_PADDING_X = 40
   MESSAGE_BOX_PADDING_Y = 40
-  
-  MAIN_UI     = True
-  MINIGAME_UI = False
 
+  # Adds main ui buttons (the stuff on the bottom of the screen) to the ui layer
+  # stack. Used as a config.overlay_functions.append() parameter
   def main_ui_buttons():
     ui.frame(xpos=98,ypos=630, xpadding=0, ypadding=0, background=None)
     ui.imagebutton(im.Scale("gfx/transparent.png", 83, 44),
@@ -62,20 +61,22 @@ init python:
       ui.image("gfx/buttons/button_palm_pilot_disabled.png")
                     
     return
-    
+  
+  # Adds minigame ui buttons to the ui layer stack. Like the function above,
+  # this is also usually passed as a parameter to config.overlay_functions.append()
+  # function.
   def minigame_ui_buttons():
-    # save
     ui.frame(xpos=40,ypos=589, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/minigame_save.png", 
                    "gfx/buttons/minigame_save_hover.png", 
                    clicked=renpy.curried_call_in_new_context("_game_menu_save"))
-    # load
+
     ui.frame(xpos=165,ypos=611, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/minigame_load.png", 
                    "gfx/buttons/minigame_load_hover.png", 
                    clicked=renpy.curried_call_in_new_context("_game_menu_load"))
                    
-    # option
+
     ui.frame(xpos=38,ypos=649, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/minigame_option.png", 
                    "gfx/buttons/minigame_option_hover.png", 
@@ -87,28 +88,34 @@ init python:
     #               "gfx/buttons/minigame_menu_hover.png", 
     #               clicked=ui.returns(""))
                   
-    # exit
+
     ui.frame(xpos=41,ypos=704, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/minigame_exit.png", 
                    "gfx/buttons/minigame_exit_hover.png", 
                    clicked=ui.returns("exit"))
                    
     return
-    
+  
+  # Calculates the positions of hp and mp bars on the main ui.
+  #
+  # How big a part should the bar cover: (0.001 * hp) * area
+  # With 1000 hp/mp, the coverage is 100%
   def calculate_new_main_ui_positions():
-    # How big a part should the bar cover: (0.01 * hp) * area
-    # so with 100 hp coverage is 100% (assuming that the value is between 0-100).
     UI_HP_X = int(UI_HP_INITIAL_X + (0.001 * HP) * UI_HP_AREA)
     UI_MP_X = int(UI_MP_INITIAL_X + (0.001 * MP) * UI_MP_AREA)
     
     return (UI_HP_X, UI_MP_X)
-    
+  
+  # Calculates the positions of hp and mp bars on the minigame ui
   def calculate_new_minigame_ui_positions(hp, mp):
     MINI_HP_X = int(MINI_HP_INITIAL_X + (0.001 * hp) * MINI_HP_AREA)
     MINI_MP_X = int(MINI_MP_INITIAL_X + (0.001 * mp) * MINI_MP_AREA)
     
     return (MINI_HP_X, MINI_MP_X)
   
+  # Displays all the elements that are part of the main ui (hp/mp bars and the
+  # actual ui on top of those). The hp/mp bar positions are recalculated each
+  # time this function is called.
   def show_main_ui():
     (UI_HP_X, UI_MP_X) = calculate_new_main_ui_positions()
   
@@ -123,11 +130,11 @@ init python:
       config.overlay_functions.append(main_ui_buttons)
 
     return
-    
+  
+  # Moves the hp and mp bar in the main ui to their new positions using a
+  # MoveTransition
   def update_main_ui():
     (UI_HP_X, UI_MP_X) = calculate_new_main_ui_positions()
-    
-    print HP,MP
     
     renpy.transition(MoveTransition(1.0))
     renpy.show("ui_mp_bar", at_list = [Position(xpos=UI_MP_X, ypos=572), Transform(anchor=(1.0, 0.0))], zorder=8)
@@ -136,7 +143,8 @@ init python:
     renpy.pause(1.0)
     
     return
-    
+  
+  # Hides all the elements of the main ui
   def hide_main_ui():
     renpy.transition(dissolve)
     renpy.hide("ui_mp_bar")
@@ -150,6 +158,8 @@ init python:
     
     return
   
+  # Displays all the elements that are part of the base minigame ui. A background
+  # can be given as a parameter to be displayed behind the minigame ui.
   def show_minigame_ui(background):
     (MINI_HP_X, MINI_MP_X) = calculate_new_minigame_ui_positions(HP, MP)
     
@@ -165,7 +175,9 @@ init python:
     config.overlay_functions.append(minigame_ui_buttons)
 
     return
-    
+  
+  # Moves the hp and mp bar in the minigame ui to their new positions using a
+  # MoveTransition.
   def update_minigame_ui(hp, mp):
     (MINI_HP_X, MINI_MP_X) = calculate_new_minigame_ui_positions(hp, mp)
     
@@ -174,7 +186,8 @@ init python:
     renpy.show("minigame_mp_bar", at_list = [Position(xpos=MINI_MP_X, ypos=18)])
     
     return
-    
+  
+  # Hides all the elements of the base minigame ui
   def hide_minigame_ui(background):
     renpy.transition(dissolve)
     if background:
@@ -188,46 +201,33 @@ init python:
     config.overlay_functions.remove(minigame_ui_buttons)
     
     return
-    
-  def confirmation_window(action_taken):
-    conf_window = ui.frame(xpos=0.4, ypos=0.4)
-    
-    ui.vbox()
-    ui.text("Are you sure you want to " + action_taken + "?")
-    ui.textbutton("Yes", clicked=ui.returns("yes"))
-    ui.textbutton("No", clicked=ui.returns("no"))
-    ui.close()
-    
-    confirmation = ui.interact(clear=False)
-    
-    ui.remove(conf_window)
-    
-    if confirmation == "yes":
-        return True
-    else:
-        return False
-        
+  
+  # Displays a message in the middle of the screen in a box of the size specified 
+  # in the parameters. The anchor values specified for each size should be about
+  # half of the background image's size to have it properly displayed in the
+  # middle of the screen.
   def show_message(message, size):
     if size == "large":
-      # these should be about half of the image's size
+      bg = "gfx/textbox.png"
       x_anchor = 265
       y_anchor = 175
-      bg = "gfx/textbox.png"
-      # how much space the content has (image width - padding (40px atm))
-      x_max = 490
+      x_max    = 490
     elif size == "medium":
+      bg = "gfx/textbox_2.png"
       x_anchor = 304
       y_anchor = 95
-      bg = "gfx/textbox_2.png"
-      x_max = 560
+      x_max    = 560
     elif size == "small":
+      bg = "gfx/textbox_mini.png"
       x_anchor = 70
       y_anchor = 40
-      bg = "gfx/textbox_mini.png"
-      x_max = 100
+      x_max    = 100
   
     renpy.transition(dissolve)
-    frame = ui.frame(xmaximum=x_max, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=x_anchor, yanchor=y_anchor, background=bg)
+    frame = ui.frame(xmaximum=x_max, xpadding=40, ypadding=40, 
+                     xpos=0.5, ypos=0.5, 
+                     xanchor=x_anchor, yanchor=y_anchor, 
+                     background=bg)
     ui.text(message)
     
     # Full screen hidden button, "click anywhere to continue" kind
@@ -240,13 +240,12 @@ init python:
     
     return
     
-  def unlock_item(item_id):
-    item = inventory.get_item(item_id)
-    
-    if item_id not in persistent.unlocked_items:
-      persistent.unlocked_items.append(item_id)
-    
-    # Box 1
+  # Displays two windows containing information about the item that was unlocked:
+  # the first one is a plain "(item name) recorded" message in a smaller window,
+  # and the second one displays the item's name, description and image in a large
+  # window using a hbox.
+  def show_item_unlock(item):    
+    # Box 1: "Knife recorded"
     renpy.transition(dissolve)
     frame = ui.frame(xmaximum=560, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=304, yanchor=95, background="gfx/textbox_2.png")
     ui.text(item.get_name() + " recorded")
@@ -259,12 +258,12 @@ init python:
     ui.remove(frame)
     renpy.transition(dissolve)
     
-    # Box 2
+    # Box 2: displays item info + image
     renpy.transition(dissolve)
     ui.frame(xmaximum=490, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=265, yanchor=175, background="gfx/textbox.png")    
     ui.hbox(spacing=40)    
     ui.image(im.Scale("gfx/items/" + item.get_id() + ".png", 75, 75))
-    ui.text(item.get_description())
+    ui.text(item.get_name() + "\n\n" + item.get_description())
     ui.close()
     
     # full screen hidden button
@@ -273,19 +272,18 @@ init python:
     
     ui.interact()
     renpy.transition(dissolve)
+    renpy.pause(1.0)
     
-    update_stats(MAIN_UI)
+    update_stats()
+    update_main_ui()
     
     return
-    
-  def unlock_entry(journal_id, entry_id):
-    journal = journal_manager.get_journal(journal_id)
-    entry   = journal.get_entry(entry_id)
-    
-    new_id = journal_id + ":" + entry_id
-    if new_id not in persistent.unlocked_journals:
-      persistent.unlocked_journals.append(new_id)
-    
+  
+  # Displays two windows containing information about the journal entry that was
+  # unlocked. This function works like the unlock_item function does: two windows,
+  # the first one being "Entry (entry_id) recorded", and the second displays
+  # the entry's image and title.
+  def show_entry_unlock(entry):
     # Box 1
     renpy.transition(dissolve)
     frame = ui.frame(xmaximum=560, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=304, yanchor=95, background="gfx/textbox_2.png")
@@ -297,7 +295,6 @@ init python:
     
     ui.interact(clear=False)
     ui.remove(frame)
-    
     renpy.transition(dissolve)
     
     # Box 2
@@ -313,52 +310,6 @@ init python:
     ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
     
     ui.interact()
-    
     renpy.transition(dissolve)
-    
-    return
-    
-  def unlock_minigame(minigame):
-    if minigame not in persistent.unlocked_minigames:
-      persistent.unlocked_minigames.append(minigame)
-      
-    return
-  
-  # Not supposed to be in ui.rpy, but it'll do for now.
-  def update_stats(ui):
-    items = inventory.get_unlocked_items()
-    hp = 0
-    mp = 0
-    clicks = 0
-    
-    for item in items:
-      bonuses = item.get_bonuses()
-      if bonuses != None:
-        print "Going through item", item.get_name()
-        if bonuses.has_key("hp"):
-          hp += int(bonuses["hp"])
-          print "  Added hp", bonuses["hp"]
-        if bonuses.has_key("mp"):
-          mp += int(bonuses["mp"])
-          print "  Added mp", bonuses["mp"]
-        if bonuses.has_key("clicks"):
-          clicks += int(bonuses["clicks"])
-          print "  Added clicks", bonuses["clicks"]
-
-    # TODO: Go through the minigame bonuses
-    
-    global HP
-    global MP
-    global CLICKS
-    
-    print "Setting HP/MP/CLICKS to", hp, mp, clicks
-    HP = hp
-    MP = mp
-    CLICKS = clicks
-    
-    if ui == MINIGAME_UI:
-      update_minigame_ui(HP, MP)
-    elif ui == MAIN_UI:
-      update_main_ui()
     
     return

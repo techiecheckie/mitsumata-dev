@@ -59,7 +59,6 @@ init python:
       if button == "exit":
         break
       else:
-        print button
         number = numbers[button]
         number += 1
         if number > 12:
