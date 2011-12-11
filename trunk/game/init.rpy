@@ -20,8 +20,8 @@ init python:
   journal_manager = Journal_manager(persistent)
   
   # New game default values
-  HP     = 350
-  MP     = 50
+  HP     = 0
+  MP     = 0
   CLICKS = 30
   decision = "0"
   pda      = False
@@ -70,7 +70,7 @@ init python:
   
   # current unlocked items
   persistent.unlocked_items = []
-  persistent.unlocked_items.append("knife")
+  '''persistent.unlocked_items.append("knife")
   persistent.unlocked_items.append("pda")
   persistent.unlocked_items.append("map")
   persistent.unlocked_items.append("garden")
@@ -81,12 +81,12 @@ init python:
   persistent.unlocked_items.append("cake")
   persistent.unlocked_items.append("gun")
   persistent.unlocked_items.append("gift")
-  #persistent.unlocked_items.append("decor")
+  persistent.unlocked_items.append("decor")
   persistent.unlocked_items.append("bircake")
   persistent.unlocked_items.append("key")
   persistent.unlocked_items.append("radio")
   persistent.unlocked_items.append("parts")
-  persistent.unlocked_items.append("blue")
+  persistent.unlocked_items.append("blue")'''
   
   # current unlocked journals
   persistent.unlocked_journals = []
@@ -98,3 +98,111 @@ init python:
 
   # current plants growing in the garden
   persistent.garden = [None]*9
+  
+  # Appends the item id to the persistent unlocked_items list and displays 
+  # information about the unlocked item by calling the function show_item_unlock
+  def unlock_item(item_id):
+    if item_id not in persistent.unlocked_items:
+      persistent.unlocked_items.append(item_id)
+    
+    item = inventory.get_item(item_id)
+    show_item_unlock(item)
+    
+    return
+  
+  # Appens the combined journal_id + entry_id to the persistent unlocked_journals
+  # list and displays information about the unlocked entry by calling the function
+  # show_entry_unlock
+  def unlock_entry(journal_id, entry_id):
+    new_id = journal_id + ":" + entry_id
+    if new_id not in persistent.unlocked_journals:
+      persistent.unlocked_journals.append(new_id)
+    
+    journal = journal_manager.get_journal(journal_id)
+    entry   = journal.get_entry(entry_id)
+    show_entry_unlock(entry)
+    
+    return
+    
+  # Appends the minigame's name to the persistent unlocked_minigames list.
+  def unlock_minigame(minigame):
+    if minigame not in persistent.unlocked_minigames:
+      persistent.unlocked_minigames.append(minigame)
+      
+    return
+  
+  # Main stat update function. Uses the variables returned by get_item_bonuses() 
+  # and get_minigame_bonuses() functions to count stat values. 
+  def update_stats():
+    hp     = 0
+    mp     = 0
+    clicks = 0
+    #battle_crit_chance  = 0
+    #battle_melee_damage = 0
+    #battle_magic_damage = 0
+  
+    (item_hp, item_mp, item_clicks) = get_item_bonuses()
+    hp += item_hp
+    mp += item_mp
+    clicks += item_clicks
+    
+    (mini_hp, mini_mp) = get_minigame_bonuses()
+    hp += mini_hp
+    mp += mini_mp
+
+    global HP
+    global MP
+    global CLICKS
+
+    HP     = hp
+    MP     = mp
+    CLICKS = clicks
+    
+    print "Bonuses: item_hp", item_hp, "item_mp", item_mp, "mini_hp", mini_hp, "mini_mp", mini_mp
+    
+    return
+  
+  # Loops through the unlocked items, adding their bonuses (if any, see items.xml
+  # and look for <bonuses> elements) to local stat variables, which are then
+  # returned to the main stat update function.
+  def get_item_bonuses():
+    hp     = 0
+    mp     = 0
+    clicks = 0
+    
+    items  = inventory.get_unlocked_items()
+    for item in items:
+      bonuses = item.get_bonuses()
+      if bonuses != None:
+        if bonuses.has_key("hp"):
+          hp += int(bonuses["hp"])
+        if bonuses.has_key("mp"):
+          mp += int(bonuses["mp"])
+        if bonuses.has_key("clicks"):
+          clicks += int(bonuses["clicks"])
+
+    return (hp, mp, clicks)
+  
+  # Loops through the unlocked minigames, matching their names to the bonus rows
+  # listed in minigame.rpy, and adding any found bonuses to local stat variables.
+  # These local variables are then returned to the main stat update function.
+  def get_minigame_bonuses():
+    hp = 0
+    mp = 0
+  
+    for game in persistent.unlocked_minigames:
+      if MINIGAME_BONUSES.has_key(game):
+        game_bonuses = MINIGAME_BONUSES[game]
+        for bonus_row in game_bonuses:
+          if persistent.minigame_scores[game] >= bonus_row[0]:
+            for i in range(1, len(bonus_row)):
+              if bonus_row[i][0] == "hp":
+                hp += bonus_row[i][1]
+              elif bonus_row[i][0] == "mp":
+                mp += bonus_row[i][1]
+            break
+      else:
+        #print "No game", game, "in MINIGAME_BONUSES"
+        pass
+    
+    return (hp,mp)

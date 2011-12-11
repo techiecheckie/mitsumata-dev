@@ -6,7 +6,7 @@ label show_map:
     "suroom" : { "blanket":None, "console":None, "drawer":None, "lamp":None, "mirror":None, "poster1":None, "poster2":None, "tv":None }, 
     "roroom" : { "blanket":None, "cupboard":None, "doll":None, "hat":None, "jacket":None, "lamp":None, "magazines":None, "plant1":None, "plant2":None, "poster1":None, "poster2":None, "rack":None, "statue1":None, "statue2":None, "statue3":None },       
     "kitchen" : { "hood" : None, "sink" : None, "pots1" : None, "pots2" : None, "pots3" : None, "pots4" : None },
-    "lib" : { "shelves1" : None, "shelves2" : None, "books1" : None, "books2" : None, "books3" : None, "books4" : None },
+    "lib" : { "shelves1" : None, "shelves2" : None, "books1" : None, "books2" : None, "books3" : None, "books4" : None , "labkit" : None},
     "hall1" : { "flower" : None, "phone" : None },
     "hall2" : { "flower" : None, "phone" : None, "table" : None },
     # TODO
@@ -516,6 +516,12 @@ init python:
       ui.imagebutton(im.Scale("gfx/transparent.png", 211, 131),
                      "gfx/map/library/LibraryBooks4.png",
                      clicked=ui.returns(("stash", "books4")))
+                     
+      # lab kit
+      ui.frame(xpos=435, ypos=369, background=None, xpadding=0, ypadding=0)
+      ui.imagebutton("gfx/map/library/labkit.png",
+                     "gfx/map/library/labkit_hover.png",
+                     clicked=ui.returns(("stash", "labkit")))
                      
     elif room == "hall1":
       # flower
