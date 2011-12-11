@@ -248,7 +248,7 @@ init python:
     # Box 1: "Knife recorded"
     renpy.transition(dissolve)
     frame = ui.frame(xmaximum=560, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=304, yanchor=95, background="gfx/textbox_2.png")
-    ui.text(item.get_name() + " recorded")
+    ui.text("{size=-2}" + item.get_name() + " recorded{/size}")
 
     # full screen hidden button    
     ui.frame(xpos=0, ypos=0, background=None)
@@ -263,7 +263,7 @@ init python:
     ui.frame(xmaximum=490, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=265, yanchor=175, background="gfx/textbox.png")    
     ui.hbox(spacing=40)    
     ui.image(im.Scale("gfx/items/" + item.get_id() + ".png", 75, 75))
-    ui.text(item.get_name() + "\n\n" + item.get_description())
+    ui.text("{size=-2}" + item.get_name() + "\n\n" + item.get_description() + "{/size}")
     ui.close()
     
     # full screen hidden button
@@ -283,11 +283,11 @@ init python:
   # unlocked. This function works like the unlock_item function does: two windows,
   # the first one being "Entry (entry_id) recorded", and the second displays
   # the entry's image and title.
-  def show_entry_unlock(entry):
+  def show_entry_unlock(journal, entry):
     # Box 1
     renpy.transition(dissolve)
     frame = ui.frame(xmaximum=560, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=304, yanchor=95, background="gfx/textbox_2.png")
-    ui.text("Entry " + entry_id + " recorded")
+    ui.text("{size=-2}Entry " + entry.get_id() + " recorded{/size}")
 
     # full screen hidden button    
     ui.frame(xpos=0, ypos=0, background=None)
@@ -301,8 +301,8 @@ init python:
     renpy.transition(dissolve)
     ui.frame(xmaximum=560, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=304, yanchor=95, background="gfx/textbox_2.png")    
     ui.hbox(spacing=40)    
-    ui.image(im.Scale("gfx/journals/" + journal_id + ".png", 75, 75))
-    ui.text(entry.get_title())
+    ui.image(im.Scale("gfx/journals/" + journal.get_id() + ".png", 75, 75))
+    ui.text("{size=-2}" + entry.get_title() + "{/size}")
     ui.close()
     
     # full screen hidden button

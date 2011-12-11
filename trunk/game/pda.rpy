@@ -7,7 +7,7 @@ init python:
   PDA_ICON_X = 270
   PDA_ICON_Y = 100
   PDA_CONTENT_X = 430
-  PDA_CONTENT_Y = 110
+  PDA_CONTENT_Y = 105
   
   # icon size will be 150x150, so here's a slight padding
   PDA_ITEM_CELL_WIDTH  = 160
@@ -151,10 +151,12 @@ init python:
         if displayed_item != item:
           renpy.hide("item_" + displayed_item.get_id())
       
-      renpy.show("item_" + item.get_id(), 
-                 at_list = [pda_slide(PDA_ICON_X, PDA_ICON_Y)])
-                 
-      renpy.pause(values[2])
+      if values[2] > 0.0:
+        renpy.show("item_" + item.get_id(), 
+                   at_list = [pda_slide(PDA_ICON_X, PDA_ICON_Y)])
+        renpy.pause(values[2])
+      else:
+        renpy.show("item_" + item.get_id())
 
       ui.frame(xpos=PDA_ICON_X, ypos=PDA_ICON_Y, xpadding=0, ypadding=0, background=None)
       ui.imagebutton("pda_transparent", 
@@ -165,7 +167,7 @@ init python:
                xpadding=0, ypadding=0, 
                xmaximum=520, xminimum=550,
                background=None)
-      ui.text(item.get_name() + "\n\n" + item.get_description())
+      ui.text("{color=#FFFFFF}{size=-2}" + item.get_name() + "\n\n" + item.get_description() + "{/size}{/color}")
       
       
   # Displays the journal manager. Just like the inventory part, this one uses 
@@ -225,22 +227,26 @@ init python:
           renpy.hide("journal_" + displayed_journal.get_id())
           renpy.hide("journal_" + displayed_journal.get_id() + "_disabled")
       
-      renpy.show("journal_" + journal.get_id(), 
-                 at_list = [pda_slide(PDA_ICON_X, PDA_ICON_Y)])
-                 
-      renpy.pause(values[2])
+      if values[2] > 0.0:
+        renpy.show("journal_" + journal.get_id(), 
+                   at_list = [pda_slide(PDA_ICON_X, PDA_ICON_Y)])
+        renpy.pause(values[2])
+      else:
+        renpy.show("journal_" + journal.get_id())
       
       ui.frame(xpos=PDA_ICON_X, ypos=PDA_ICON_Y, xpadding=0, ypadding=0, background=None)
       ui.imagebutton("pda_transparent",
                      "gfx/journals/" + journal.get_id() + "_hover.png",
                      clicked=ui.returns(("journals", "")))
       
-      ui.frame(xpos=PDA_CONTENT_X, ypos=PDA_CONTENT_Y, background=None)
+      ui.frame(xpos=PDA_CONTENT_X, ypos=PDA_CONTENT_Y, background=None, xmaximum=500)
       ui.vbox()
+      ui.text("{color=#FFFFFF}{size=-2}Available entries:{/size}{/color}\n")
       for entry in entries:
         for id in persistent.unlocked_journals:
           if id == journal.get_id() + ":" + entry.get_id():
-            ui.textbutton(entry.get_title(), clicked=ui.returns(("entry", journal, entry)))
+            ui.textbutton("{color=#FFFFFF}{size=-2}" + entry.get_title() + "{/size}{/color}", 
+                          clicked=ui.returns(("entry", journal, entry)), xfill=True)
             break
       ui.close()
         
@@ -255,10 +261,10 @@ init python:
                      clicked=ui.returns(("journal", journal, 0)))
       
       ui.frame(xpos=PDA_CONTENT_X, ypos=PDA_CONTENT_Y, 
-               xpadding=0, ypadding=0, 
+               #xpadding=0, ypadding=0, 
                xmaximum=520, xminimum=520,
                background=None)
-      ui.text(entry.get_title() + "\n" + entry.get_text())
+      ui.text("{color=#FFFFFF}{size=-2}" + entry.get_title() + "\n\n" + entry.get_text() + "{/size}{/color}")
 
   def hide_inventory(items):
     if inventory.is_enabled() == False:
