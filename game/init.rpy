@@ -70,7 +70,7 @@ init python:
   
   # current unlocked items
   persistent.unlocked_items = []
-  '''persistent.unlocked_items.append("knife")
+  persistent.unlocked_items.append("knife")
   persistent.unlocked_items.append("pda")
   persistent.unlocked_items.append("map")
   persistent.unlocked_items.append("garden")
@@ -81,12 +81,12 @@ init python:
   persistent.unlocked_items.append("cake")
   persistent.unlocked_items.append("gun")
   persistent.unlocked_items.append("gift")
-  persistent.unlocked_items.append("decor")
+  #persistent.unlocked_items.append("decor")
   persistent.unlocked_items.append("bircake")
   persistent.unlocked_items.append("key")
   persistent.unlocked_items.append("radio")
-  persistent.unlocked_items.append("parts")
-  persistent.unlocked_items.append("blue")'''
+  #persistent.unlocked_items.append("parts")
+  persistent.unlocked_items.append("blue")
   
   # current unlocked journals
   persistent.unlocked_journals = []
@@ -95,6 +95,8 @@ init python:
   persistent.unlocked_journals.append("Riku:004")
   persistent.unlocked_journals.append("Roman:005")
   persistent.unlocked_journals.append("Susa:019")
+  persistent.unlocked_journals.append("Susa:017")
+  persistent.unlocked_journals.append("Susa:020")
 
   # current plants growing in the garden
   persistent.garden = [None]*9
@@ -120,7 +122,7 @@ init python:
     
     journal = journal_manager.get_journal(journal_id)
     entry   = journal.get_entry(entry_id)
-    show_entry_unlock(entry)
+    show_entry_unlock(journal, entry)
     
     return
     
