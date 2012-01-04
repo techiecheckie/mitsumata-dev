@@ -1,7 +1,15 @@
 init python:
   import time
 
-  renpy.image("flowerpot", "gfx/backgrounds/daygrass.jpg")
+  persistent.last_time = time.time()
+
+  renpy.image("flowerpot",   "gfx/backgrounds/daygrass.jpg")
+  renpy.image("hole",        "gfx/garden/garden_dirt_0.png")
+  renpy.image("hole_hover",  "gfx/garden/garden_dirt_0.png")
+  renpy.image("dirt",        "gfx/garden/garden_dirt_1.png")
+  renpy.image("dirt_hover",  "gfx/garden/garden_dirt_1.png")
+  renpy.image("plant",       "gfx/garden/garden_dirt_2.png")
+  renpy.image("plant_hover", "gfx/garden/garden_dirt_2.png")
 
   GARDEN_GRID = [
     (MINIGAME_POS_X + 120, MINIGAME_POS_Y + 170),
@@ -28,11 +36,12 @@ init python:
     renpy.transition(dissolve)
     renpy.show("flowerpot", at_list = [Position(xpos=MINIGAME_POS_X-20, ypos=MINIGAME_POS_Y-40), Transform(anchor=(0.0, 0.0))], zorder=-1)
     
-    current_time    = time.time()
-    inform_withered = update_garden(current_time)
+    current_time         = time.time()
+    inform_withered      = update_garden(current_time)
+    persistent.last_time = current_time
+
     available_seeds = get_seeds()
     
-    # 
     if inform_withered == True:
       renpy.transition(dissolve)
       ui.frame(xpos=MINIGAME_POS_X+50, 
@@ -90,62 +99,45 @@ init python:
     
     return seeds
   
-  # Updates the phase of the planted seeds. This method checks if 15 minutes
-  # have passed since the planting and then updates the plant's growth phase
-  # accordingly (TODO). When a plant is updated (phase++), the plant's time is 
-  # set to the current time (given as a parameter) and the id gets updated to
-  # match the current state (currently only the last phase, the full grown
-  # flower phase, is recognized).
+  # Updates the phase of the planted seeds. A phase lasts for 15 minutes, and
+  # if a seed has reached phase 3, it will turn into a full grown plant. If
+  # too much time has passed since the planting (phase >= 5), the plant will
+  # wither and be marked for automatic removal.
   def update_garden(current_time):
     inform_withered = False
+
     for i in range(0, len(persistent.garden)):
       plant = persistent.garden[i]
       if plant != None:
         plant_id    = plant[0]
         plant_time  = plant[1]
-        time_diff   = int(current_time - START_TIME)
-        plant_time += time_diff - plant_time
-        phase       = int(plant_time/GARDEN_PHASE_DURATION)
+        growth_time = plant[2]
+        growth_time += (current_time - persistent.last_time)
+        plant_phase = int(growth_time/GARDEN_PHASE_DURATION)
+
+        #print " ", plant_id, "in phase", plant_phase, "after growing for", growth_time
         
-        #time_diff   = current_time - plant_time
-        #phase = int(time_diff/GARDEN_PHASE_DURATION)
+        # phase 0 (seed)
+        # phase 1
+        # phase 2
+        # phase 3  (plant)
+        # phase 5+ (withered)
         
-        #print phase, plant_time
-        
-        print " ", plant_id, "in phase", phase, time_diff, plant_time
-        
-        # phase 0 (seed)      (aos)
-        # phase 1             (aos1) tms.
-        # phase 2             (aos2) tms.
-        # phase 3 (plant)     (aop)
-        # phase 4 (withered?) (aow) tms.
-        
-        if phase == 0:
-          # first phase
-          pass
-        elif phase == 1:
-          # mid phase 1
-          pass
-        elif phase == 2:
-          # mid phase 2
-          pass
-        elif phase > 2 and phase < 5:
-          # full grown plant
-          plant_id = plant_id[:2] + "p"
-        else:
-          # withered?
-          # Remove plant and inform the user that all the plants that have died
-          # have been removed from the garden.
+        if plant_phase >= 5:
+          # Withered. Remove the plant and inform the user that all the plants 
+          # that have died have been removed from the garden.
           inform_withered = True
+          persistent.garden[i] = None
+        else:
+          if (plant_phase > 2):
+            # Full grown plant, change id from seed to plant (e.g. aos --> aop)
+            plant_id = plant_id[:2] + "p"
+          persistent.garden[i] = (plant_id, plant_time, growth_time, plant_phase)
         
         # There should be a 10% chance of the plant turning into a monster plant.
         # Change the graphics (plant_id etc.) or just inform the user when
         # harvesting?
-        if inform_withered:
-          persistent.garden[i] = None
-        else:            
-          persistent.garden[i] = (plant_id, plant_time)
-              
+
     return inform_withered
   
   # Displays a grid of patches of earth and the seeds/plants that are growing in
@@ -153,23 +145,19 @@ init python:
   def show_plant_spots():
     for i in range(0, len(GARDEN_GRID)):
       cell = GARDEN_GRID[i]
-      
-      # TODO: rather do image scaling before going through the array
-      if persistent.garden[i] != None:
-        normal_image = im.Scale("gfx/items/" + persistent.garden[i][0] + ".png", 
-                                GARDEN_CELL_SIZE, GARDEN_CELL_SIZE)
-        hover_image  = im.Scale("gfx/items/" + persistent.garden[i][0] + "_hover.png", 
-                                GARDEN_CELL_SIZE, GARDEN_CELL_SIZE)
-        
-        ui.frame(xpos=cell[0], ypos=cell[1], background=None)
-        ui.image(im.Scale("gfx/whack_a_mole/dirt.png", 
-                          GARDEN_CELL_SIZE, GARDEN_CELL_SIZE))
+      plant = persistent.garden[i]
+
+      if plant == None:
+        normal_image = "hole"
+        hover_image = "hole_hover"
       else:
-        normal_image = im.Scale("gfx/whack_a_mole/dirt.png", 
-                                GARDEN_CELL_SIZE, GARDEN_CELL_SIZE)
-        hover_image  = im.Scale("gfx/whack_a_mole/dirt_hover.png", 
-                                GARDEN_CELL_SIZE, GARDEN_CELL_SIZE)
-        
+        if plant[3] > 2:
+          normal_image = "plant"
+          hover_image = "plant_hover"
+        else:
+          normal_image = "dirt"
+          hover_image = "dirt_hover"
+
       ui.frame(xpos=cell[0], ypos=cell[1], background=None)
       ui.imagebutton(normal_image,
                      hover_image,
@@ -203,7 +191,7 @@ init python:
     
     # Check if the clicked item was a full grown plant, and if so, then add it
     # to the inventory (and display the item info)
-    if plant[0].endswith("p"):
+    if plant[2] > 2:
       if plant[0] not in persistent.unlocked_items:
         persistent.unlocked_items.append(plant[0])
         
@@ -260,7 +248,8 @@ init python:
     renpy.transition(dissolve)
     
     if seed_id != "cancel":
-      persistent.garden[button] = (seed_id, 0)
+      # (seed_id, time of planting, time since planting, current phase)
+      persistent.garden[button] = (seed_id, time.time(), 0, 0)
       print "Planted seed", seed_id, "to spot", button
     
     return
