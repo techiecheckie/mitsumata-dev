@@ -30,7 +30,7 @@ init python:
     while True:
       # Riddle
       ui.frame(xpos=DESCRIPTION_POS_X, ypos=DESCRIPTION_POS_Y, background=None)
-      ui.text("{size=-2}One is at the 12\n" +
+      ui.text("{size=-3}One is at the 12\n" +
               "Twelve is at the 1\n" + 
               "Three, Six, and Nine are\n" +
               "correctly done.\n" +

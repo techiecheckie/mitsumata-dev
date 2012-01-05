@@ -37,6 +37,11 @@ init python:
   # Adds main ui buttons (the stuff on the bottom of the screen) to the ui layer
   # stack. Used as a config.overlay_functions.append() parameter
   def main_ui_buttons():
+    # Fixes the issue with the ui buttons not working when loading a game after
+    # a clean start
+    if persistent.ui_visible == None or persistent.ui_visible == False:
+      return
+
     ui.frame(xpos=98,ypos=630, xpadding=0, ypadding=0, background=None)
     ui.imagebutton(im.Scale("gfx/transparent.png", 83, 44),
                    "gfx/buttons/button_save_hover.png", 
@@ -61,6 +66,13 @@ init python:
       ui.image("gfx/buttons/button_palm_pilot_disabled.png")
                     
     return
+
+  # Fixes an issue with the ui buttons not being added to the layout when 
+  # loading a game after a clean start. It might be a good idea to set
+  # persistent.ui_visible to false in the start label to prevent Renpy from 
+  # adding the buttons to the ui layout before the ui has been displayed for the 
+  # first time.
+  config.overlay_functions.append(main_ui_buttons)
   
   # Adds minigame ui buttons to the ui layer stack. Like the function above,
   # this is also usually passed as a parameter to config.overlay_functions.append()
@@ -129,6 +141,9 @@ init python:
     if main_ui_buttons not in config.overlay_functions:
       config.overlay_functions.append(main_ui_buttons)
 
+    # Comments @ line 70
+    persistent.ui_visible = True
+
     return
   
   # Moves the hp and mp bar in the main ui to their new positions using a
@@ -156,6 +171,8 @@ init python:
     if main_ui_buttons in config.overlay_functions:
       config.overlay_functions.remove(main_ui_buttons)
     
+    persistent.ui_visible = False
+
     return
   
   # Displays all the elements that are part of the base minigame ui. A background
@@ -165,7 +182,7 @@ init python:
     
     renpy.transition(dissolve)
     if background:
-      renpy.show(background, zorder=-2)
+      renpy.show(background, at_list=[Position(xpos=MINIGAME_POS_X-20, ypos=MINIGAME_POS_Y-40), Transform(anchor=(0.0,0.0))])
     renpy.show("minigame_mp_bg",  at_list = [Position(xpos=579,       ypos=16), Transform(anchor=(0.0, 0.0))])
     renpy.show("minigame_mp_bar", at_list = [Position(xpos=MINI_MP_X, ypos=18), Transform(anchor=(1.0, 0.0))])
     renpy.show("minigame_hp_bg",  at_list = [Position(xpos=105,       ypos=16), Transform(anchor=(0.0, 0.0))])
@@ -313,3 +330,20 @@ init python:
     renpy.transition(dissolve)
     
     return
+
+  def show_invisible_button(size):
+    if size == "full":
+      # full screen hidden button    
+      ui.frame(xpos=0, ypos=0, background=None)
+      ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
+    else:
+      # Minigame area sized invisible button
+      ui.frame(xpos=MINIGAME_POS_X,
+               ypos=MINIGAME_POS_Y,
+               background=None,
+               xmaximum=MINIGAME_WIDTH,
+               ymaximum=MINIGAME_HEIGHT)
+      ui.textbutton("", clicked=ui.returns(0), xfill=True, yfill=True, background=None)
+
+    ui.interact()
+    renpy.transition(dissolve)

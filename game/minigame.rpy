@@ -1,28 +1,32 @@
-image bg gears = "gfx/gears/background.jpg"
-image bg cells = "gfx/cells/petri_dish.jpg"
-
 init python:
+  renpy.image("bg_gears", "gfx/gears/background.jpg")
+  renpy.image("bg_cells", "gfx/cells/petri_dish.jpg")
+  renpy.image("bg_dgro", "gfx/backgrounds/daygrass.jpg")
+  renpy.image("bg_dsky", "gfx/backgrounds/daysky.jpg")
+  
+
   DESCRIPTION_POS_X = 60
   DESCRIPTION_POS_Y = 110
   DESCRIPTION_WIDTH = 250
   
+  # current description displayed by the method show_description()
+  MINIGAME_DESCRIPTION = ""
+
   MINIGAME_MAIN_DESCRIPTION = "Insert main description here."
   
   GAME_DESCRIPTIONS = {
-    "mole" : "Use the keypad or mouse to hit the moles.\n\nPress esc to quit the game.",
-    "cell" : "Use the mouse to click on the infected cells.",
+    "mole" : "Agility:\n\nUse the keypad or mouse to hit the moles.\n\nPress esc to quit the game.",
+    "cell" : "Cells:\n\nUse the mouse to click on the infected cells.",
     "platformer" : "Use spacebar to jump over obstacles and pits.\n\nPress esc to quit the game.",
-    "duck" : "Use the mouse to shoot the birds.\n\nPress esc to quit the game.",
-    "force" : "Use the keypad or keys 0-9 to type the numbers as they appear.\n\nPress esc to quit the game.",
-    "power" : "Click the mouse to aim and set the amount of power while the arrows are moving.\n\nPress esc to quit the game.",
-    "squats" : "As the marker passes over each lit section, hit the correct arrow key (down, left, or up).\n\nPress esc to quit the game.",
-    "gears" : "Use the mouse to drag cogs and lock them on axles.\n\nPress esc to quit the game.",
-    "garden" : "Insert description here. \n\nLorem ipsum dolor sit amet.",
+    "duck" : "Hunting:\n\nUse the mouse to shoot the birds.\n\nPress esc to quit the game.",
+    "force" : "Magic force:\n\nUse the keypad or keys 0-9 to type the numbers as they appear.\n\nPress esc to quit the game.",
+    "power" : "Magic control:\n\nClick the mouse to aim and set the amount of power while the arrows are moving.\n\nPress esc to quit the game.",
+    "squats" : "Strength:\n\nAs the marker passes over each lit section, hit the correct arrow key (down, left, or up).\n\nPress esc to quit the game.",
+    "gears" : "Gears:\n\nUse the mouse to drag cogs and lock them on axles.\n\nPress esc to quit the game.",
+    "garden" : "Gardening:\n\nInsert description here..",
     "lock" : "",
     "bottles" : ""
   }
-  
-  CURRENT_DESCRIPTION = ""
   
   MINIGAME_POS_X  = 363
   MINIGAME_POS_Y  = 112
@@ -44,17 +48,28 @@ init python:
     "cell" : [
       (5000, ("hp", 200)),
       (3000, ("hp", 100))
-    ]
+    ],
+    "platformer" : [],
+    "duck" : [],
+    "force" : [],
+    "power" : [],
+    "squats" : [],
+    "gears" : [],
+    "garden" : [],
+    "lock" : [],
+    "bottles" : []
   }
 
   def show_minigame_screen():
     button       = ""
     button_value = ""
 
-    background = "bg riroom"
+    background = "bg whitescr"
     show_minigame_ui(background)
   
-    while True:      
+    while True:
+      set_description(MINIGAME_MAIN_DESCRIPTION)
+
       for y in range(0, MINIGAME_GRID_ROWS):
         for x in range(0, MINIGAME_GRID_COLS):
           index = y * MINIGAME_GRID_COLS + x
@@ -69,20 +84,14 @@ init python:
           ui.imagebutton("gfx/buttons/minigame_" + minigame + ".png",
                          "gfx/buttons/minigame_" + minigame + "_hover.png",
                          clicked=ui.returns(minigame))
-    
-      ui.frame(xpos=DESCRIPTION_POS_X, 
-               ypos=DESCRIPTION_POS_Y, 
-               xmaximum=DESCRIPTION_WIDTH, 
-               background=None)
-      ui.text(MINIGAME_MAIN_DESCRIPTION)
-    
+
       button = ui.interact()
       if button == "exit":
         break
       else:
         renpy.hide(background)
         
-        show_description(GAME_DESCRIPTIONS[button])
+        set_description(GAME_DESCRIPTIONS[button])
         
         if button == "garden":
           show_garden()
@@ -95,7 +104,8 @@ init python:
           update_high_score(button, score)
           
         renpy.show(background, zorder=-1)
-        
+    
+    config.overlay_functions.remove(minigame_description)
     hide_minigame_ui(background)
      
     return
@@ -104,28 +114,31 @@ init python:
   def choose_game(name):
     if name == "mole":
       game = WhackAMole
-      bg   = "bg dgro"
+      bg   = "bg_dgro"
     elif name == "cell":
       game = Cells
-      bg   = "bg cells"
+      bg   = "bg_cells"
     elif name == "platformer":
       game = Platformer
-      bg   = "bg dgro"
+      bg   = "bg_dgro"
     elif name == "duck":
       game = DuckHunt
-      bg   = "bg dsky"
+      bg   = "bg_dsky"
     elif name == "force":
       game = MagicForce
-      bg   = "bg dgro"
+      bg   = "bg_dgro"
     elif name == "power":
       game = MagicPower
-      bg   = "bg dgro"
+      bg   = "bg_dgro"
     elif name == "squats":
       game = Squats
-      bg   = "bg dgro"
+      bg   = "bg_dgro"
     elif name == "gears":
       game = Gears
-      bg   = "bg gears"
+      bg   = "bg_gears"
+    else:
+      game = None
+      bg = None
     
     return game, bg
   
@@ -136,13 +149,16 @@ init python:
                                      ypos=MINIGAME_POS_Y-40), 
                             Transform(anchor=(0.0,0.0))], 
                             zorder=-1)
+    
     score = run_minigame( game_type = game,
                           x=MINIGAME_POS_X, 
                           y=MINIGAME_POS_Y,
                           game_width=MINIGAME_WIDTH,
                           game_height=MINIGAME_HEIGHT,
                           level_number = persistent.minigame_levels[name] )
-    
+
+    renpy.hide(bg)    
+
     return score
   
   def update_high_score(game, score):
@@ -195,10 +211,12 @@ init python:
       
   # running minigames without starting the pda first
   def minigame(name, level, score_to_pass):
-    show_minigame_ui(None)
-    show_description(GAME_DESCRIPTIONS[name])
+    (game, bg) = choose_game(name)    
+
+    hide_main_ui()
+    show_minigame_ui(bg)
+    set_description(GAME_DESCRIPTIONS[name])
     
-    # exception
     if name == "garden":
       show_garden()
       score = 0
@@ -207,12 +225,7 @@ init python:
     elif name == "bottles":
       show_bottles()
       score = 0
-    else:   
-      (game, bg) = choose_game(name)
-      renpy.show(bg, at_list=[Position(xpos=MINIGAME_POS_X-20, 
-                                       ypos=MINIGAME_POS_Y-40), 
-                              Transform(anchor=(0.0,0.0))], 
-                              zorder=-1)
+    else:
       score = run_minigame(game_type = game, 
                            x=MINIGAME_POS_X, 
                            y=MINIGAME_POS_Y,
@@ -226,16 +239,30 @@ init python:
       # if score >= score_to_pass and current_level < level:
       #   persistent.minigame_level[name] = level
     
-    hide_minigame_ui(None)
+    hide_minigame_ui(bg)
+    config.overlay_functions.remove(minigame_description)
+    show_main_ui()
     
     return score >= score_to_pass
 
-    
-  def show_description(description):
+  
+  def set_description(description):
+    # Using a global variable here, because overlay functions can't take any
+    # parameters, and we need a way to modify the description displayed in the
+    # left (parchment) part of the screen.
+    global MINIGAME_DESCRIPTION
+    MINIGAME_DESCRIPTION = description
+
+    if minigame_description not in config.overlay_functions:
+      config.overlay_functions.append(minigame_description)
+
+    return
+
+  def minigame_description():
     ui.frame(xpos=DESCRIPTION_POS_X, 
              ypos=DESCRIPTION_POS_Y, 
              xmaximum=DESCRIPTION_WIDTH, 
              background=None)
-    ui.text(description)
+    ui.text("{size=-3}" + MINIGAME_DESCRIPTION + "{/size}")
     
     return

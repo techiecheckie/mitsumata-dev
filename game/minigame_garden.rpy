@@ -27,7 +27,7 @@ init python:
   
   GARDEN_CELL_SIZE = 80
  
-  GARDEN_PHASE_DURATION = 15
+  GARDEN_PHASE_DURATION = 15*60
 
   
   # Garden's main method. Displays a field of grass and a few pieces of ground 
@@ -54,17 +54,7 @@ init python:
       ui.text("Some of your plants had withered and were automatically removed.\n\nClick to continue")
       ui.close()
       
-      # Minigame area sized invisible button
-      ui.frame(xpos=MINIGAME_POS_X,
-               ypos=MINIGAME_POS_Y,
-               background=None,
-               xmaximum=MINIGAME_WIDTH,
-               ymaximum=MINIGAME_HEIGHT)
-      ui.textbutton("", clicked=ui.returns(""), 
-                    xfill=True, yfill=True,
-                    background=None)
-      ui.interact()
-      renpy.transition(dissolve)
+      show_invisible_button("mini")
     
     # Wait for clicks on the patches of ground or the minigame main ui buttons.
     # If a clicked patch contains a seed/plant, a harvest dialog(?) is displayed
@@ -170,32 +160,60 @@ init python:
   # seeds to be planted.
   def harvest(cell):
     plant = persistent.garden[cell]
+    item_seed  = inventory.get_item(plant[0])
+    item_plant = inventory.get_item(plant[0][:2] + "p")
+
+    if plant[3] < 3:
+      info_string    = "The seed of a " + item_plant.get_name() + "\n\n"
     
-    renpy.transition(dissolve)
-    ui.frame(xpos=MINIGAME_POS_X+50, 
-             ypos=MINIGAME_POS_Y+150, 
-             background="gfx/textbox.png",
-             xpadding=40,
-             ypadding=40,
-             xmaximum=520)
-    ui.vbox()
-    ui.text("Harvest plant?\n\n")
-    ui.textbutton("Ok", clicked=ui.returns("ok"), xfill=True)
-    ui.textbutton("Cancel", clicked=ui.returns("cancel"), xfill=True)
-    ui.close()
+      bonuses = item_plant.get_bonuses()
+      if bonuses != None:
+        bonuses_string = "Once harvested, it'll give you: "
+        bonus_keys = bonuses.keys()
+        for bonus_key in bonus_keys:
+          bonuses_string += "\n    " + bonuses[bonus_key] + " " + bonus_key
+        bonuses_string += "."
+      else:
+        bonuses_string = ""
     
-    button = ui.interact()
-    renpy.transition(dissolve)
-    
-    if button == "cancel": return
-    
-    # Check if the clicked item was a full grown plant, and if so, then add it
-    # to the inventory (and display the item info)
-    if plant[2] > 2:
+      time_left = int((GARDEN_PHASE_DURATION*3 - plant[2])/60)
+      if time_left < 0:
+        time_left = 0
+      time_string = "\n\nTime left: about " + str(time_left) + " minutes"
+
+      # Item info box
+      renpy.transition(dissolve)
+      ui.frame(xpos=MINIGAME_POS_X+50, 
+               ypos=MINIGAME_POS_Y+150, 
+               background="gfx/textbox.png",
+               xpadding=60,
+               ypadding=60,
+               xmaximum=520)
+      ui.hbox(spacing=40)    
+      ui.image(im.Scale("gfx/items/" + item_seed.get_id() + ".png", 75, 75))
+      ui.text("{size=-3}" + info_string + bonuses_string + time_string + "{/size}")
+      ui.close()
+
+      show_invisible_button("mini")
+      
+    else:
+      # Item info box
+      renpy.transition(dissolve)
+      ui.frame(xpos=MINIGAME_POS_X+50, 
+               ypos=MINIGAME_POS_Y+150, 
+               background="gfx/textbox.png",
+               xpadding=40,
+               ypadding=40,
+               xmaximum=520)
+      ui.hbox(spacing=40)    
+      ui.image(im.Scale("gfx/items/" + item_plant.get_id() + ".png", 75, 75))
+      ui.text("{size=-3}You harvested " + item_plant.get_name() + ".{/size}")
+      ui.close()
+
+      show_invisible_button("mini")
+
       if plant[0] not in persistent.unlocked_items:
         persistent.unlocked_items.append(plant[0])
-        
-        item = inventory.get_item(plant[0])
         
         # Item info box
         ui.frame(xpos=MINIGAME_POS_X+50, 
@@ -205,25 +223,15 @@ init python:
                  ypadding=40,
                  xmaximum=520)
         ui.hbox(spacing=40)    
-        ui.image(im.Scale("gfx/items/" + item.get_id() + ".png", 75, 75))
-        ui.text(item.get_description() + "\n\nClick to continue")
+        ui.image(im.Scale("gfx/items/" + item_plant.get_id() + ".png", 75, 75))
+        ui.text("{size=-3}" + item_plant.get_description() + "{/size}")
         ui.close()
         
-        # Minigame area sized invisible button
-        ui.frame(xpos=MINIGAME_POS_X,
-                 ypos=MINIGAME_POS_Y,
-                 background=None,
-                 xmaximum=MINIGAME_WIDTH,
-                 ymaximum=MINIGAME_HEIGHT)
-        ui.textbutton("", clicked=ui.returns(""), 
-                      xfill=True, yfill=True,
-                      background=None)
-        ui.interact()
-        renpy.transition(dissolve)
+        show_invisible_button("mini")
+
+      persistent.garden[cell] = None
     
     ui.clear()
-    
-    persistent.garden[cell] = None
     
     return
   
@@ -238,10 +246,10 @@ init python:
              ypadding=40,
              xmaximum=520)
     ui.vbox()
-    ui.text("Choose the seed you want to plant in this spot\n\nAvailable seeds:")
+    ui.text("{size=-3}Choose the seed you want to plant in this spot\n\nAvailable seeds:{/size}")
     for seed in available_seeds:
-      ui.textbutton(seed.get_name(), clicked=ui.returns(seed.get_id()), xfill=True)
-    ui.textbutton("Cancel", clicked=ui.returns("cancel"), xfill=True)
+      ui.textbutton("{size=-3}" + seed.get_name() + "{/size}", clicked=ui.returns(seed.get_id()), xfill=True)
+    ui.textbutton("{size=-3}Cancel{/size}", clicked=ui.returns("cancel"), xfill=True)
     ui.close()
     
     seed_id = ui.interact()
