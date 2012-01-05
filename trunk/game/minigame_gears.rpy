@@ -323,7 +323,7 @@ init python:
             
         def on_key_down( self, key ):
             if key == pygame.K_ESCAPE:
-              self.state = GEARS_GAME_STATE_END
+              self.quit()
 
 
         def on_mouse_down( self, mx, my, button ):
