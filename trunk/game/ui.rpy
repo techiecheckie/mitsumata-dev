@@ -182,7 +182,7 @@ init python:
     
     renpy.transition(dissolve)
     if background:
-      renpy.show(background, at_list=[Position(xpos=MINIGAME_POS_X-20, ypos=MINIGAME_POS_Y-40), Transform(anchor=(0.0,0.0))])
+      renpy.show(background, at_list=[Position(xpos=MINIGAME_POS_X, ypos=MINIGAME_POS_Y), Transform(anchor=(0.0,0.0))])
     renpy.show("minigame_mp_bg",  at_list = [Position(xpos=579,       ypos=16), Transform(anchor=(0.0, 0.0))])
     renpy.show("minigame_mp_bar", at_list = [Position(xpos=MINI_MP_X, ypos=18), Transform(anchor=(1.0, 0.0))])
     renpy.show("minigame_hp_bg",  at_list = [Position(xpos=105,       ypos=16), Transform(anchor=(0.0, 0.0))])

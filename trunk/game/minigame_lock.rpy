@@ -5,8 +5,6 @@ init python:
   renpy.image("lock_hover", "gfx/lock/lock_button_hover.png")
   renpy.image("lock_reflection", "gfx/lock/lock_button_reflection.png")
   
-  LOCK_OFFSET_Y = 40
-  
   LOCK_BUTTON_POSITIONS = [
     (118, 309),
     (225, 310),
@@ -33,7 +31,7 @@ init python:
     renpy.transition(dissolve)
     renpy.show("lock", 
                zorder=-1,
-               at_list = [Position(xpos=MINIGAME_POS_X, ypos=MINIGAME_POS_Y-40), 
+               at_list = [Position(xpos=MINIGAME_POS_X, ypos=MINIGAME_POS_Y), 
                           Transform(anchor=(0.0, 0.0))])
     
     while True:
@@ -43,15 +41,15 @@ init python:
       for i in range(0, 8):
         position = LOCK_BUTTON_POSITIONS[i]
         if i < len(numbers):
-          ui.frame(xpos=MINIGAME_POS_X + position[0], ypos=MINIGAME_POS_Y + position[1] - LOCK_OFFSET_Y, background=None, xpadding=0, ypadding=0)
+          ui.frame(xpos=MINIGAME_POS_X + position[0], ypos=MINIGAME_POS_Y + position[1], background=None, xpadding=0, ypadding=0)
           ui.image("gfx/lock/number_" + str(numbers[i]) + ".png")
         
-          ui.frame(xpos=MINIGAME_POS_X + position[0], ypos=MINIGAME_POS_Y + position[1] - LOCK_OFFSET_Y, background=None, xpadding=0, ypadding=0)
+          ui.frame(xpos=MINIGAME_POS_X + position[0], ypos=MINIGAME_POS_Y + position[1], background=None, xpadding=0, ypadding=0)
           ui.imagebutton("lock_transparent",
                          "lock_hover",
                          clicked=ui.returns(i))
         
-        ui.frame(xpos=MINIGAME_POS_X + position[0], ypos=MINIGAME_POS_Y + position[1] - LOCK_OFFSET_Y, background=None, xpadding=0, ypadding=0)
+        ui.frame(xpos=MINIGAME_POS_X + position[0], ypos=MINIGAME_POS_Y + position[1], background=None, xpadding=0, ypadding=0)
         ui.image("gfx/lock/lock_button_reflection.png")
     
       button = ui.interact()

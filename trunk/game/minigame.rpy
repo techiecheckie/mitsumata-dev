@@ -29,9 +29,9 @@ init python:
   }
   
   MINIGAME_POS_X  = 363
-  MINIGAME_POS_Y  = 112
-  MINIGAME_WIDTH  = 648
-  MINIGAME_HEIGHT = 598
+  MINIGAME_POS_Y  = 90 #112
+  MINIGAME_WIDTH  = 646
+  MINIGAME_HEIGHT = 630 #598
   
   MINIGAME_GRID_X    = 380
   MINIGAME_GRID_Y    = 180
@@ -120,7 +120,7 @@ init python:
       bg   = "bg_cells"
     elif name == "platformer":
       game = Platformer
-      bg   = "bg_dgro"
+      bg   = "bg blackscr"
     elif name == "duck":
       game = DuckHunt
       bg   = "bg_dsky"
@@ -146,7 +146,7 @@ init python:
   def run(name):
     (game, bg) = choose_game(name)
     renpy.show(bg, at_list=[Position(xpos=MINIGAME_POS_X, 
-                                     ypos=MINIGAME_POS_Y-40), 
+                                     ypos=MINIGAME_POS_Y), 
                             Transform(anchor=(0.0,0.0))], 
                             zorder=-1)
     

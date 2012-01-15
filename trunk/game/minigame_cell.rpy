@@ -108,7 +108,7 @@ init python:
     PETRI_DISH_Y = 0
 
     GRID_OFFSET_X = 82
-    GRID_OFFSET_Y = 64
+    GRID_OFFSET_Y = 104 #64
 
     GRID_CELL_WIDTH  = 48
     GRID_CELL_HEIGHT = 48
@@ -407,11 +407,11 @@ init python:
         def create_huds( self ):
             self.start_screen_hud             = GameObject()
             self.start_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/cells/start_screen.png" ) )
-            self.start_screen_hud["transform"].set_position( 138, 50 )
+            self.start_screen_hud["transform"].set_position( 148, 50 )
 
             self.stop_screen_hud             = GameObject()
             self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/cells/stop_screen.png" ) )
-            self.stop_screen_hud["transform"].set_position( 138, 50 )
+            self.stop_screen_hud["transform"].set_position( 148, 50 )
 
             base_score             = GameObject()
             base_score["renderer"] = GameRenderer( GameText( self.get_base_score, Color( 255, 255, 255, 255 ) ) )
@@ -430,7 +430,7 @@ init python:
 
             self.elapsed_time_hud             = GameObject()
             self.elapsed_time_hud["renderer"] = GameRenderer( GameText( self.get_elapsed_time, Color( 255, 255, 255, 255 ) ) )
-            self.elapsed_time_hud["transform"].set_position( 10, 10 )
+            self.elapsed_time_hud["transform"].set_position( 30, 30 )
 
         def compute_scores( self ):
             self.base_score = (math.floor( self.elapsed_time /
@@ -564,10 +564,11 @@ init python:
                                                 GRID_OFFSET_Y )
                 for cell in itertools.chain( self.infected_cells, self.healthy_cells ):
                     cell["renderer"].render( blitter, clip_rect, cell_transform )
+
+                self.elapsed_time_hud["renderer"].render( blitter, clip_rect, world_transform )
+
             elif self.state == CELLS_GAME_STATE_END:
                 self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
-
-            self.elapsed_time_hud["renderer"].render( blitter, clip_rect, world_transform )
 
         def update( self, delta_sec ):
             if self.state == CELLS_GAME_STATE_PLAY:

@@ -219,11 +219,11 @@ init python:
         def create_huds( self ):
             self.start_screen_hud             = GameObject()
             self.start_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/magic_power/start_screen.png" ) )
-            self.start_screen_hud["transform"].set_position( 138, 50 )
+            self.start_screen_hud["transform"].set_position( 148, 50 )
 
             self.stop_screen_hud             = GameObject()
             self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/magic_power/stop_screen.png" ) )
-            self.stop_screen_hud["transform"].set_position( 138, 50 )
+            self.stop_screen_hud["transform"].set_position( 148, 50 )
 
             base_score             = GameObject()
             base_score["renderer"] = GameRenderer( GameText( self.get_base_score, Color( 255, 255, 255, 255 ) ) )
@@ -237,11 +237,11 @@ init python:
 
             self.score_hud             = GameObject()
             self.score_hud["renderer"] = GameRenderer( GameText( self.get_score, Color( 255, 255, 255, 255 ) ) )
-            self.score_hud["transform"].set_position( 400, 10 )
+            self.score_hud["transform"].set_position( 400, 30 )
 
             self.time_remaining_hud             = GameObject()
             self.time_remaining_hud["renderer"] = GameRenderer( GameText( self.get_time_remaining, Color( 255, 255, 255, 255 ) ) )
-            self.time_remaining_hud["transform"].set_position( 10, 10 )
+            self.time_remaining_hud["transform"].set_position( 30, 30 )
 
             self.message_hud = GameObject()
             self.message_hud["renderer"] = GameRenderer()
@@ -251,7 +251,7 @@ init python:
             self.message_hud["renderer"].set_frame( MESSAGE_MISS_FRAMESET, GameText( lambda : "Miss", Color( 255, 255, 255, 255 ) ) )
             self.message_hud["renderer"].set_frame( MESSAGE_DESTROYED_FRAMESET, GameText( lambda : "Destroyed", Color( 255, 255, 255, 255 ) ) )
             self.message_hud["renderer"].set_frame( MESSAGE_MISFIRE_FRAMESET, GameText( lambda : "Misfire", Color( 255, 255, 255, 255 ) ) )
-            self.message_hud["transform"].set_position( 10, 40 )
+            self.message_hud["transform"].set_position( 30, 60 )
 
         def create_bars( self, level ):
             self.force_bar             = GameObject()
@@ -386,14 +386,18 @@ init python:
             world_transform = self.get_world_transform()
             #self.background["renderer"].render( blitter, clip_rect, world_transform )
 
+            self.force_bar["renderer"].render( blitter, clip_rect, world_transform )
+            self.force_marker["renderer"].render( blitter, clip_rect, world_transform )
+            self.power_bar["renderer"].render( blitter, clip_rect, world_transform )
+            self.power_marker["renderer"].render( blitter, clip_rect, world_transform )
+
             if self.state == MAGIC_POWER_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == MAGIC_POWER_GAME_STATE_PLAY:
-                self.force_bar["renderer"].render( blitter, clip_rect, world_transform )
-                self.force_marker["renderer"].render( blitter, clip_rect, world_transform )
-                self.power_bar["renderer"].render( blitter, clip_rect, world_transform )
-                self.power_marker["renderer"].render( blitter, clip_rect, world_transform )
                 self.message_hud["renderer"].render( blitter, clip_rect, world_transform )
+                self.time_remaining_hud["renderer"].render( blitter, clip_rect, world_transform )
+                self.score_hud["renderer"].render( blitter, clip_rect, world_transform )
+
                 if self.target:
                     self.target["renderer"].render( blitter, clip_rect, world_transform )
                 
@@ -401,9 +405,6 @@ init python:
                 
             elif self.state == MAGIC_POWER_GAME_STATE_END:
                 self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
-
-            self.time_remaining_hud["renderer"].render( blitter, clip_rect, world_transform )
-            self.score_hud["renderer"].render( blitter, clip_rect, world_transform )
 
         def update( self, delta_sec ):
             if self.state == MAGIC_POWER_GAME_STATE_PLAY:

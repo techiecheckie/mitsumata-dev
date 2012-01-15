@@ -26,68 +26,11 @@ init python:
     
     MAP_SEGMENTS = [
       [
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [ 3, 4, 3, 6, 8, 9, 2, 4, 3, 4, 3, 6, 8, 9, 2, 6, 8, 9, 2, 4, 3, 4, 3],
         [10,18,20,19,18,20,10,11,12,11,12,10,18,20,10,11,12,11,10,19,18,10,11],
         [21, 0, 0, 0, 0, 0,17,20,19,18,20,21, 0, 0,17,20,19,20,21, 0, 0,17,20]
       ]
     ]
-    
-    '''
-      [
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 6, 7, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3,10,21, 0, 0, 0, 0, 1, 2, 4, 6, 7],
-        [ 1, 2, 3, 6, 8, 9, 2, 3, 6, 7,17,18,21, 0, 1, 2, 4, 6, 7,17,10,15, 0],
-        [ 0,13,12,11,10,11,10,12,15, 0, 0, 0, 0, 0, 0,13,10,16, 0, 0,13,16, 0]
-      ],
-      [
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 6, 7],
-        [ 0, 0, 0, 1, 2, 6, 8, 9, 2, 6, 8, 9, 2, 3, 4, 3, 4, 3, 6, 7,17,21, 0],
-        [ 1, 2, 3, 4,11,10,11,10,11,10,12,10,11,10,11,11,12,11,15, 0, 0, 0, 0],
-        [ 0,13,12,10,12,10,11,10,12,10,11,10,11,12,11,10,11,12,16, 0, 0, 0, 0]
-      ],
-      [
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 6, 7],
-        [ 0, 0, 0, 0, 0, 0, 1, 2, 4, 6, 8, 9, 2, 6, 8, 9, 2, 3, 4, 3,11,16, 0],
-        [ 0, 0, 0, 1, 2, 3, 4,12,11,10,11,12,11,10,11,12,11,10,11,12,11,15, 0],
-        [ 1, 2, 3, 4,11,12,18,19,20,19,18,19,20,19,18,19,20,19,12,11,10,21, 0],
-        [ 0,13,10,18,19,21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,17,10,21, 0, 0]
-      ],
-      [
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 6, 8, 9, 2, 6, 7, 0, 0, 0],
-        [ 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 3, 5,10,11,12,19,18,21, 0, 0, 0, 0],
-        [ 0, 0, 0, 1, 2, 6, 7, 0,17,19,18,19,20,19,18,21, 0, 0, 0, 0, 0, 0, 0],
-        [ 1, 2, 6, 7,17,21, 0, 1, 2, 3, 6, 8, 9, 2, 6, 8, 9, 2, 4, 3, 4, 6, 7],
-        [ 0,17,21, 1, 2, 3, 6, 7,13,10,11,10,12,11,10,12,11,10,11,10,11,14, 0],
-        [ 1, 2, 3, 4,11,12,21, 0,17,19,18,10,11,12,11,12,10,11,18,19,18,21, 0],
-        [ 0,13,10,12,10,16, 0, 0, 0, 0, 0,17,18,19,20,19,18,21, 0, 0, 0, 0, 0]
-      ]
-      '''
     
     TILE_TYPES = [
       "grass-edge-1.png",  # 1
@@ -187,7 +130,10 @@ init python:
     NUMBER_FALL_FRAMES    = 7
 
     VIEW_WIDTH = 12
-    VIEW_HEIGHT = 9
+    VIEW_HEIGHT = 3
+
+    # From the top of the minigame area
+    GROUND_LEVEL = 415
    
     TILE_WIDTH  = 64
     TILE_HEIGHT = 64
@@ -227,7 +173,7 @@ init python:
             self.runner = None
             
             if self.level_number > len( PLATFORMER_LEVELS ) or self.level_number <= 0:
-                raise ValueError( "Invalid Magic Power level number %d.  Level "
+                raise ValueError( "Invalid platformer level number %d.  Level "
                                   "number must be between 1 and %d." %
                                   (self.level_number, len( PLATFORMER_LEVELS )) )
 
@@ -237,12 +183,12 @@ init python:
                                                          0,
                                                          self.level.time_limit )
             
-            #self.create_background()
             self.create_tiles()
             self.create_obstacles()
             self.create_runner()
             self.create_huds()
             self.create_map()
+            self.create_backgrounds()
             
             self.start_game()
         
@@ -253,11 +199,11 @@ init python:
         def create_huds( self ):
             self.start_screen_hud             = GameObject()
             self.start_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/platformer/start_screen.png" ) )
-            self.start_screen_hud["transform"].set_position( 138, 50 )
+            self.start_screen_hud["transform"].set_position( 148, 50 )
 
             self.stop_screen_hud             = GameObject()
             self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/platformer/stop_screen.png" ) )
-            self.stop_screen_hud["transform"].set_position( 138, 50 )
+            self.stop_screen_hud["transform"].set_position( 148, 50 )
 
             distance_run             = GameObject()
             distance_run["renderer"] = GameRenderer( GameText( self.get_distance_run, Color( 255, 255, 255, 255 ) ) )
@@ -272,11 +218,15 @@ init python:
             
             self.distance_left_hud             = GameObject()
             self.distance_left_hud["renderer"] = GameRenderer( GameText( self.get_distance_left, Color( 255, 255, 255, 255 ) ) )
-            self.distance_left_hud["transform"].set_position( 340, 10 )
+            self.distance_left_hud["transform"].set_position( 400, 30 )
 
             self.time_remaining_hud             = GameObject()
             self.time_remaining_hud["renderer"] = GameRenderer( GameText( self.get_time_remaining, Color( 255, 255, 255, 255 ) ) )
-            self.time_remaining_hud["transform"].set_position( 10, 10 )
+            self.time_remaining_hud["transform"].set_position( 50, 30 )
+
+            self.top_border = GameObject()
+            self.top_border["renderer"] = GameRenderer( GameImage( "gfx/backgrounds/minigame_bg_top_border.png" ) )
+            self.top_border["transform"].set_position( 0, 0 )
             
         def create_background( self ):
             self.background = GameObject()
@@ -375,7 +325,7 @@ init python:
                       if self.map[y][len(self.map[y])-1].obstacle == None or self.map[y][len(self.map[y])-2].obstacle == None:
                         obstacle = self.obstacles[ random.randint( 0, len(OBSTACLE_TYPES)-1 ) ]
                 
-                  cell = Cell( x*TILE_WIDTH + k*len(segment[0])*TILE_WIDTH, y*TILE_HEIGHT )
+                  cell = Cell( x*TILE_WIDTH + k*len(segment[0])*TILE_WIDTH, GROUND_LEVEL + y*TILE_HEIGHT )
                   cell.tile      = tile
                   cell.obstacle  = obstacle
                   cell.walkable  = walkable
@@ -385,6 +335,51 @@ init python:
                   
             row = self.map[0]
             #print len(self.map), len(self.map[0]), len(self.map[0])*TILE_WIDTH
+
+        def create_backgrounds( self ):
+            self.backgrounds = []
+
+            mountains = GameObject()
+            mountains["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/7-background.png" ) )
+            mountains["transform"].set_position( 0, 0 )
+            mountains["behavior"] = BackgroundBehavior( self.runner, 1, True )
+            self.backgrounds.append( mountains )
+
+            distant_clouds = GameObject()
+            distant_clouds["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/6-clouds3.png" ) )
+            distant_clouds["transform"].set_position( 0, 0 )
+            distant_clouds["behavior"] = BackgroundBehavior( self.runner, 2, True )
+            self.backgrounds.append( distant_clouds )
+
+            low_clouds = GameObject()
+            low_clouds["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/5-clouds2.png" ) )
+            low_clouds["transform"].set_position( 0, 0 )
+            low_clouds["behavior"] = BackgroundBehavior( self.runner, 1, False )
+            self.backgrounds.append( low_clouds )
+
+            high_clouds = GameObject()
+            high_clouds["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/4-clouds1.png" ) )
+            high_clouds["transform"].set_position( 0, 0 )
+            high_clouds["behavior"] = BackgroundBehavior( self.runner, 4, False )
+            self.backgrounds.append( high_clouds )
+
+            hills = GameObject()
+            hills["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/3-hills.png" ) )
+            hills["transform"].set_position( 0, 0 )
+            hills["behavior"] = BackgroundBehavior( self.runner, 6, True )
+            self.backgrounds.append( hills )
+
+            forest = GameObject()
+            forest["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/2-trees.png" ) )
+            forest["transform"].set_position( 0, 0 )
+            forest["behavior"] = BackgroundBehavior( self.runner, 10, True )
+            self.backgrounds.append( forest )
+
+            foreground = GameObject()
+            foreground["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/1-foreground.png" ) )
+            foreground["transform"].set_position( 0, 0 )
+            foreground["behavior"] = BackgroundBehavior( self.runner, 20, True )
+            self.backgrounds.append( foreground )
 
         def get_time_remaining( self ):
             return "Time remaining: %d" % self.time_remaining.get_ceil_value()
@@ -404,8 +399,11 @@ init python:
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
             #self.background["renderer"].render( blitter, clip_rect, world_transform )
+
+            for layer in self.backgrounds:
+              layer["renderer"].render( blitter, clip_rect, world_transform )
             
-            cell_x = self.runner["behavior"].cell_x-2
+            cell_x = self.runner["behavior"].cell_x-3
             
             for y in range(0, VIEW_HEIGHT):
               for x in range(cell_x, cell_x + VIEW_WIDTH):
@@ -422,24 +420,27 @@ init python:
                   cell.obstacle["renderer"].render( blitter, clip_rect, world_transform )
 
             if self.state == PLATFORMER_GAME_STATE_BEGIN:
-                self.runner["renderer"].render( blitter, clip_rect, world_transform )
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == PLATFORMER_GAME_STATE_PLAY:
                 self.time_remaining_hud["renderer"].render( blitter, clip_rect, world_transform )
                 self.distance_left_hud["renderer"].render( blitter, clip_rect, world_transform )
-                self.runner["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == PLATFORMER_GAME_STATE_END:
-                self.runner["renderer"].render( blitter, clip_rect, world_transform )
                 self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == PLATFORMER_GAME_STATE_PAUSE:
-                self.runner["renderer"].render( blitter, clip_rect, world_transform )
                 self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
+
+            self.runner["renderer"].render( blitter, clip_rect, world_transform )
+
+            self.top_border["renderer"].render( blitter, clip_rect, world_transform )
 
         def update( self, delta_sec ):
             if self.state == PLATFORMER_GAME_STATE_PLAY:
               self.time_remaining.update( delta_sec )
   
               self.runner.update( delta_sec )
+
+              for layer in self.backgrounds:
+                layer.update( delta_sec )
               
               if self.time_remaining.get_value() <= 0 \
                   or self.runner["behavior"].dead \
@@ -468,7 +469,7 @@ init python:
             self.platformer = platformer
             
         def run( self ):
-            self.game_object["transform"].set_position( CELL_X * TILE_WIDTH, CELL_Y * TILE_HEIGHT )
+            self.game_object["transform"].set_position( CELL_X * TILE_WIDTH, GROUND_LEVEL + CELL_Y * TILE_HEIGHT )
             self.cell_x = CELL_X
             self.cell_y = CELL_Y
             self.cell = self.platformer.map[CELL_Y][CELL_X]
@@ -499,7 +500,7 @@ init python:
             
             update_cell = False
             
-            if self.sub_distance >= TILE_WIDTH:
+            if self.sub_distance + 10 >= TILE_WIDTH:
               self.sub_distance -= TILE_WIDTH
               self.cell_x += 1
               update_cell = True
@@ -588,7 +589,7 @@ init python:
                 if self.y_offset >= 0:
                   self.state = RUNNER_STATE_LANDING
                   self.game_object["renderer"].play_animation( RUNNER_ANIMATION_LAND )
-                  self.game_object["transform"].y = self.cell_y*TILE_HEIGHT
+                  self.game_object["transform"].y = GROUND_LEVEL + self.cell_y*TILE_HEIGHT
                   self.x_velocity = 0
                   self.y_velocity = 0
                   
@@ -617,3 +618,17 @@ init python:
                 self.game_object["renderer"].play_animation( RUNNER_ANIMATION_RUN )
                 self.x_velocity = RUN_SPEED                
                 self.delay_counter = 0
+
+    class BackgroundBehavior( GameComponent ):
+        def __init__( self, runner, pps, follow_runner ):
+            super( BackgroundBehavior, self ).__init__()
+            self.runner = runner
+            self.pps = pps
+            self.follow_runner = follow_runner
+
+        def update( self, delta_sec ):
+            if self.follow_runner:
+              if self.runner["behavior"].x_velocity > 0:
+                self.game_object["transform"].x -= self.pps * delta_sec
+            else:
+              self.game_object["transform"].x -= self.pps * delta_sec

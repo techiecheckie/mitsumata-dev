@@ -60,7 +60,7 @@ init python:
     SQUATS_BAR_Y = 295
 
     # 80 is half the height of the riku image after it has been scaled up by 2x.
-    SQUATS_RIKU_X = 317
+    SQUATS_RIKU_X = 327
     SQUATS_RIKU_Y = SQUATS_BAR_Y + 80
 
     # 84 is the offset from the left edge of the bar image to the left edge of
@@ -133,11 +133,11 @@ init python:
         def create_huds( self ):
             self.start_screen_hud             = GameObject()
             self.start_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/squats/start_screen.png" ) )
-            self.start_screen_hud["transform"].set_position( 138, 50 )
+            self.start_screen_hud["transform"].set_position( 148, 50 )
 
             self.stop_screen_hud             = GameObject()
             self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/squats/stop_screen.png" ) )
-            self.stop_screen_hud["transform"].set_position( 138, 50 )
+            self.stop_screen_hud["transform"].set_position( 148, 50 )
 
             base_score             = GameObject()
             base_score["renderer"] = GameRenderer( GameText( self.get_base_score, Color( 255, 255, 255, 255 ) ) )
@@ -156,11 +156,11 @@ init python:
 
             self.score_hud             = GameObject()
             self.score_hud["renderer"] = GameRenderer( GameText( self.get_score, Color( 255, 255, 255, 255 ) ) )
-            self.score_hud["transform"].set_position( 400, 10 )
+            self.score_hud["transform"].set_position( 400, 30 )
 
             self.time_remaining_hud             = GameObject()
             self.time_remaining_hud["renderer"] = GameRenderer( GameText( self.get_time_remaining, Color( 255, 255, 255, 255 ) ) )
-            self.time_remaining_hud["transform"].set_position( 10, 10 )
+            self.time_remaining_hud["transform"].set_position( 30, 30 )
 
         def create_bar( self, level ):
             self.bar             = GameObject()
@@ -276,20 +276,21 @@ init python:
             world_transform = self.get_world_transform()
             #self.background["renderer"].render( blitter, clip_rect, world_transform )
 
+            self.riku["renderer"].render( blitter, clip_rect, world_transform )
+
+            self.bar["renderer"].render( blitter, clip_rect, world_transform )
+            for bar_segment in self.bar_segments:
+                bar_segment["renderer"].render( blitter, clip_rect, world_transform )
+            self.marker["renderer"].render( blitter, clip_rect, world_transform )
+
             if self.state == SQUATS_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == SQUATS_GAME_STATE_PLAY:
-                self.riku["renderer"].render( blitter, clip_rect, world_transform )
+                self.time_remaining_hud["renderer"].render( blitter, clip_rect, world_transform )
+                self.score_hud["renderer"].render( blitter, clip_rect, world_transform )
 
-                self.bar["renderer"].render( blitter, clip_rect, world_transform )
-                for bar_segment in self.bar_segments:
-                    bar_segment["renderer"].render( blitter, clip_rect, world_transform )
-                self.marker["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == SQUATS_GAME_STATE_END:
                 self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
-
-            self.time_remaining_hud["renderer"].render( blitter, clip_rect, world_transform )
-            self.score_hud["renderer"].render( blitter, clip_rect, world_transform )
 
         def update( self, delta_sec ):
             if self.state == SQUATS_GAME_STATE_PLAY:

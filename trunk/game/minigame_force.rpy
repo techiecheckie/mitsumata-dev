@@ -72,7 +72,7 @@ init python:
     NUMBER_Y     = 200
     NUMBER_WIDTH = 96
 
-    RIKU_X = 237
+    RIKU_X = 247
     RIKU_Y = 500
 
     class MagicForce( Minigame ):
@@ -158,15 +158,15 @@ init python:
         def create_huds( self ):
             self.start_screen_hud             = GameObject()
             self.start_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/magic_force/start_screen.png" ) )
-            self.start_screen_hud["transform"].set_position( 138, 50 )
+            self.start_screen_hud["transform"].set_position( 148, 50 )
 
             self.stop_screen_hud             = GameObject()
             self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/magic_force/stop_screen.png" ) )
-            self.stop_screen_hud["transform"].set_position( 138, 50 )
+            self.stop_screen_hud["transform"].set_position( 148, 50 )
 
             self.score_hud             = GameObject()
             self.score_hud["renderer"] = GameRenderer( GameText( self.get_score, Color( 255, 255, 255, 255 ) ) )
-            self.score_hud["transform"].set_position( 400, 10 )
+            self.score_hud["transform"].set_position( 400, 30 )
 
             base_score             = GameObject()
             base_score["renderer"] = GameRenderer( GameText( self.get_base_score, Color( 255, 255, 255, 255 ) ) )
@@ -185,7 +185,7 @@ init python:
 
             self.time_remaining_hud             = GameObject()
             self.time_remaining_hud["renderer"] = GameRenderer( GameText( self.get_time_remaining, Color( 255, 255, 255, 255 ) ) )
-            self.time_remaining_hud["transform"].set_position( 10, 10 )
+            self.time_remaining_hud["transform"].set_position( 30, 30 )
 
         def pick_numbers( self ):
             # clear the current numbers.
@@ -279,11 +279,12 @@ init python:
             elif self.state == MAGIC_FORCE_GAME_STATE_PLAY:
                 for number in self.current_numbers:
                     number["renderer"].render( blitter, clip_rect, world_transform )
+
+                self.time_remaining_hud["renderer"].render( blitter, clip_rect, world_transform )
+                self.score_hud["renderer"].render( blitter, clip_rect, world_transform )
+
             elif self.state == MAGIC_FORCE_GAME_STATE_END:
                 self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
-
-            self.time_remaining_hud["renderer"].render( blitter, clip_rect, world_transform )
-            self.score_hud["renderer"].render( blitter, clip_rect, world_transform )
 
         def update( self, delta_sec ):
             if self.state == MAGIC_FORCE_GAME_STATE_PLAY:
