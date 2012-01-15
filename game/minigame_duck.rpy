@@ -26,6 +26,33 @@ init python:
                    max_hard_birds   = (0, 3),
                    spawn_time       = (0.75, 0.25),
                    bird_speed       = (80, 140),
+                   bird_scale       = (1.0, 1.5) ),
+        
+        HuntLevel( time_limit       = 60,
+                   max_birds        = (4, 10),
+                   max_easy_birds   = (3, 7),
+                   max_medium_birds = (0, 4),
+                   max_hard_birds   = (0, 3),
+                   spawn_time       = (0.75, 0.25),
+                   bird_speed       = (80, 140),
+                   bird_scale       = (1.0, 1.5) ),
+        
+        HuntLevel( time_limit       = 60,
+                   max_birds        = (4, 10),
+                   max_easy_birds   = (3, 7),
+                   max_medium_birds = (0, 4),
+                   max_hard_birds   = (0, 3),
+                   spawn_time       = (0.75, 0.25),
+                   bird_speed       = (80, 140),
+                   bird_scale       = (1.0, 1.5) ),
+                   
+        HuntLevel( time_limit       = 60,
+                   max_birds        = (4, 10),
+                   max_easy_birds   = (3, 7),
+                   max_medium_birds = (0, 4),
+                   max_hard_birds   = (0, 3),
+                   spawn_time       = (0.75, 0.25),
+                   bird_speed       = (80, 140),
                    bird_scale       = (1.0, 1.5) )
         ]
 
