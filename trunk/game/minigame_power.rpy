@@ -9,7 +9,16 @@ init python:
                          marker_speed        = 300 ),
 
         MagicPowerLevel( time_limit          = 60,
-                         marker_speed        = 325 )
+                         marker_speed        = 325 ),
+                         
+        MagicPowerLevel( time_limit          = 60,
+                         marker_speed        = 350 ),
+                         
+        MagicPowerLevel( time_limit          = 60,
+                         marker_speed        = 375 ),
+                         
+        MagicPowerLevel( time_limit          = 60,
+                         marker_speed        = 400 )
         ]
 
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####

@@ -149,6 +149,8 @@ init python:
                                      ypos=MINIGAME_POS_Y), 
                             Transform(anchor=(0.0,0.0))], 
                             zorder=-1)
+                            
+    config.overlay_functions.remove(minigame_ui_buttons)
     
     score = run_minigame( game_type = game,
                           x=MINIGAME_POS_X, 
@@ -156,6 +158,8 @@ init python:
                           game_width=MINIGAME_WIDTH,
                           game_height=MINIGAME_HEIGHT,
                           level_number = persistent.minigame_levels[name] )
+                          
+    config.overlay_functions.append(minigame_ui_buttons)
 
     renpy.hide(bg)    
 
@@ -217,6 +221,8 @@ init python:
     show_minigame_ui(bg)
     set_description(GAME_DESCRIPTIONS[name])
     
+    config.overlay_functions.remove(minigame_ui_buttons)
+    
     if name == "garden":
       show_garden()
       score = 0
@@ -238,6 +244,8 @@ init python:
       # current_level = persistent.minigame_level[name]
       # if score >= score_to_pass and current_level < level:
       #   persistent.minigame_level[name] = level
+    
+    config.overlay_functions.append(minigame_ui_buttons)
     
     hide_minigame_ui(bg)
     config.overlay_functions.remove(minigame_description)

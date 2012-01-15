@@ -99,13 +99,15 @@ init python:
     #ui.imagebutton("gfx/buttons/minigame_menu.png", 
     #               "gfx/buttons/minigame_menu_hover.png", 
     #               clicked=ui.returns(""))
-                  
-
+                   
+    return
+    
+  def minigame_exit_button():
     ui.frame(xpos=41,ypos=704, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/buttons/minigame_exit.png", 
                    "gfx/buttons/minigame_exit_hover.png", 
                    clicked=ui.returns("exit"))
-                   
+    
     return
   
   # Calculates the positions of hp and mp bars on the main ui.
@@ -190,6 +192,7 @@ init python:
     renpy.show("minigame_ui")
     
     config.overlay_functions.append(minigame_ui_buttons)
+    config.overlay_functions.append(minigame_exit_button)
 
     return
   
@@ -216,6 +219,7 @@ init python:
     renpy.hide("minigame_ui")
     
     config.overlay_functions.remove(minigame_ui_buttons)
+    config.overlay_functions.remove(minigame_exit_button)
     
     return
   

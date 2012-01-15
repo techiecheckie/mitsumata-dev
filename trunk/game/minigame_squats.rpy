@@ -20,6 +20,33 @@ init python:
                      number_bonus2_reps   = 40,
                      number_bonus3_reps   = 50,
                      segment_height       = 25,
+                     tired_timeout        = 1 ),
+                     
+        SquatsLevel( time_limit           = 60,
+                     initial_marker_speed = 50,
+                     max_marker_speed     = 160,
+                     number_bonus1_reps   = 30,
+                     number_bonus2_reps   = 40,
+                     number_bonus3_reps   = 50,
+                     segment_height       = 25,
+                     tired_timeout        = 1 ),
+                     
+        SquatsLevel( time_limit           = 60,
+                     initial_marker_speed = 50,
+                     max_marker_speed     = 160,
+                     number_bonus1_reps   = 30,
+                     number_bonus2_reps   = 40,
+                     number_bonus3_reps   = 50,
+                     segment_height       = 25,
+                     tired_timeout        = 1 ),
+                     
+        SquatsLevel( time_limit           = 60,
+                     initial_marker_speed = 50,
+                     max_marker_speed     = 160,
+                     number_bonus1_reps   = 30,
+                     number_bonus2_reps   = 40,
+                     number_bonus3_reps   = 50,
+                     segment_height       = 25,
                      tired_timeout        = 1 )
         ]
 

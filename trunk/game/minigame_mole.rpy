@@ -79,7 +79,31 @@ init python:
                    max_medium_moles = (0, 4),
                    max_hard_moles   = (0, 3),
                    spawn_time       = (0.75, 0.25),
-                   mole_duration    = (1.6, 0.36) )
+                   mole_duration    = (1.6, 0.36) ),
+                   
+        MoleLevel( time_limit       = 50,
+                   max_moles        = (2, 8),
+                   max_easy_moles   = (3, 5),
+                   max_medium_moles = (0, 4),
+                   max_hard_moles   = (0, 3),
+                   spawn_time       = (0.75, 0.25),
+                   mole_duration    = (1.6, 0.36) ),
+                   
+        MoleLevel( time_limit       = 40,
+                   max_moles        = (2, 8),
+                   max_easy_moles   = (3, 5),
+                   max_medium_moles = (0, 4),
+                   max_hard_moles   = (0, 3),
+                   spawn_time       = (0.75, 0.25),
+                   mole_duration    = (1.6, 0.36) ),
+                   
+        MoleLevel( time_limit       = 30,
+                   max_moles        = (2, 8),
+                   max_easy_moles   = (3, 5),
+                   max_medium_moles = (0, 4),
+                   max_hard_moles   = (0, 3),
+                   spawn_time       = (0.75, 0.25),
+                   mole_duration    = (1.6, 0.36) ),
         ]
 
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####

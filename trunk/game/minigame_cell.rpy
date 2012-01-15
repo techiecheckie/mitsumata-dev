@@ -19,6 +19,27 @@ init python:
                    initial_medium_infected = 0,
                    initial_hard_infected   = 0,
                    infected_idle_time      = (0.6, 0.85),
+                   healthy_idle_time       = (0.7, 0.9) ),
+                   
+        CellLevel( initial_healthy         = 2,
+                   initial_easy_infected   = 1,
+                   initial_medium_infected = 1,
+                   initial_hard_infected   = 0,
+                   infected_idle_time      = (0.6, 0.85),
+                   healthy_idle_time       = (0.7, 0.9) ),
+
+        CellLevel( initial_healthy         = 2,
+                   initial_easy_infected   = 1,
+                   initial_medium_infected = 1,
+                   initial_hard_infected   = 1,
+                   infected_idle_time      = (0.6, 0.85),
+                   healthy_idle_time       = (0.7, 0.9) ),
+
+        CellLevel( initial_healthy         = 2,
+                   initial_easy_infected   = 1,
+                   initial_medium_infected = 2,
+                   initial_hard_infected   = 1,
+                   infected_idle_time      = (0.6, 0.85),
                    healthy_idle_time       = (0.7, 0.9) )
         ]
 

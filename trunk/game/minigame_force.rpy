@@ -8,12 +8,22 @@ init python:
             self.time_limit        = time_limit
 
     MAGIC_FORCE_LEVELS = [
-        MagicForceLevel( number_digits     = (1,5),
+        MagicForceLevel( number_digits     = (1,4),
                          correct_timeout   = 0.15,
                          incorrect_timeout = 0.9,
                          time_limit        = 60 ),
 
         MagicForceLevel( number_digits     = (1,5),
+                         correct_timeout   = 0.12,
+                         incorrect_timeout = 0.7,
+                         time_limit        = 60),
+
+        MagicForceLevel( number_digits     = (1,6),
+                         correct_timeout   = 0.12,
+                         incorrect_timeout = 0.7,
+                         time_limit        = 60),
+
+        MagicForceLevel( number_digits     = (1,7),
                          correct_timeout   = 0.12,
                          incorrect_timeout = 0.7,
                          time_limit        = 60)
