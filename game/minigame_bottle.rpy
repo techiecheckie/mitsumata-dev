@@ -1,7 +1,5 @@
 init python:
   renpy.image("winerack", "gfx/bottles/winerack.jpg")
-  
-  WINERACK_OFFSET_Y = 40
     
   WINERACK_BOTTLE_LOCATIONS = [
     ( 98, 55),
@@ -24,7 +22,7 @@ init python:
     renpy.transition(dissolve)
     renpy.show("winerack",
                zorder=-1,
-               at_list = [Position(xpos=MINIGAME_POS_X, ypos=MINIGAME_POS_Y-WINERACK_OFFSET_Y), 
+               at_list = [Position(xpos=MINIGAME_POS_X, ypos=MINIGAME_POS_Y), 
                           Transform(anchor=(0.0, 0.0))])
 
     while True:
@@ -51,7 +49,7 @@ init python:
       for i in range(0,12):
         location = WINERACK_BOTTLE_LOCATIONS[i]
         ui.frame(xpos=MINIGAME_POS_X + location[0], 
-                 ypos=MINIGAME_POS_Y + location[1] - WINERACK_OFFSET_Y, 
+                 ypos=MINIGAME_POS_Y + location[1], 
                  background=None,
                  xpadding=0,
                  ypadding=0)
@@ -61,7 +59,7 @@ init python:
       
       # Shelf to cover to lower part of the highest bottles
       ui.frame(xpos=MINIGAME_POS_X + 41, 
-               ypos=MINIGAME_POS_Y + 208 - WINERACK_OFFSET_Y, 
+               ypos=MINIGAME_POS_Y + 208, 
                background=None, 
                xpadding=0, 
                ypadding=0)

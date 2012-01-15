@@ -299,11 +299,11 @@ init python:
         def create_huds( self ):
             self.start_screen_hud             = GameObject()
             self.start_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/duck_hunt/start_screen.png" ) )
-            self.start_screen_hud["transform"].set_position( 138, 50 )
+            self.start_screen_hud["transform"].set_position( 148, 50 )
 
             self.stop_screen_hud             = GameObject()
             self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/duck_hunt/stop_screen.png" ) )
-            self.stop_screen_hud["transform"].set_position( 138, 50 )
+            self.stop_screen_hud["transform"].set_position( 148, 50 )
 
             base_score             = GameObject()
             base_score["renderer"] = GameRenderer( GameText( self.get_base_score, Color( 255, 255, 255, 255 ) ) )
@@ -322,11 +322,19 @@ init python:
 
             self.score_hud             = GameObject()
             self.score_hud["renderer"] = GameRenderer( GameText( self.get_score, Color( 255, 255, 255, 255 ) ) )
-            self.score_hud["transform"].set_position( 400, 10 )
+            self.score_hud["transform"].set_position( 400, 30 )
 
             self.time_remaining_hud = GameObject()
             self.time_remaining_hud["renderer"] = GameRenderer( GameText( self.get_time_remaining, Color( 255, 255, 255, 255 ) ) )
-            self.time_remaining_hud["transform"].set_position( 10, 10 )
+            self.time_remaining_hud["transform"].set_position( 30, 30 )
+
+            self.top_border = GameObject()
+            self.top_border["renderer"] = GameRenderer( GameImage( "gfx/backgrounds/minigame_bg_top_border.png" ) )
+            self.top_border["transform"].set_position( 0, 0 )
+
+            self.bottom_border = GameObject()
+            self.bottom_border["renderer"] = GameRenderer( GameImage( "gfx/backgrounds/minigame_bg_bottom_border.png" ) )
+            self.bottom_border["transform"].set_position( 0, 606 )
 
         def compute_accuracy_bonus( self ):
             self.accuracy_bonus = 0
@@ -472,12 +480,17 @@ init python:
 
                 for boom in self.booms:
                     boom["renderer"].render( blitter, clip_rect, world_transform )
+
+                self.time_remaining_hud["renderer"].render( blitter, clip_rect, world_transform )
+                self.score_hud["renderer"].render( blitter, clip_rect, world_transform )
+
             elif self.state == HUNT_GAME_STATE_END:
                 self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
 
-            self.time_remaining_hud["renderer"].render( blitter, clip_rect, world_transform )
-            self.score_hud["renderer"].render( blitter, clip_rect, world_transform )
             self.player["renderer"].render( blitter, clip_rect, world_transform )
+
+            self.top_border["renderer"].render( blitter, clip_rect, world_transform )
+            self.bottom_border["renderer"].render( blitter, clip_rect, world_transform )
 
         def update( self, delta_sec ):
             if self.state == HUNT_GAME_STATE_COUNTDOWN:

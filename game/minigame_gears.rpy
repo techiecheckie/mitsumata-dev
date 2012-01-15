@@ -223,6 +223,7 @@ init python:
         def create_background( self ):
             self.background = GameObject()
             self.background["renderer"] = GameRenderer(GameImage("gfx/gears/background.jpg"))
+            self.background["transform"].set_position( 0, 0 )
             
             
         def create_huds( self ):
