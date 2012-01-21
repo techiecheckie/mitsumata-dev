@@ -306,6 +306,7 @@ init python:
     hide_main_ui()
     renpy.show(background, at_list = [Position(xpos=MINIGAME_POS_X, ypos=MINIGAME_POS_Y-20), Transform(anchor=(0.0, 0.0))]) 
     show_minigame_ui(None)
+    config.overlay_functions.remove(minigame_ui_buttons)
     
     renpy.show(player.get_id() + " idle", 
                at_list = [Position(xpos=player.get_x(), ypos=player.get_y()), Transform(zoom=ZOOM, anchor=(0,1.0))], 
@@ -374,7 +375,7 @@ init python:
     del mobs[:]
     player = None
   
-    update_stats(MINIGAME_UI)
+    update_stats()
   
     renpy.transition(dissolve)
     config.overlay_functions.remove(battle_message_area)

@@ -218,8 +218,10 @@ init python:
     renpy.hide("minigame_hp_bg")
     renpy.hide("minigame_ui")
     
-    config.overlay_functions.remove(minigame_ui_buttons)
-    config.overlay_functions.remove(minigame_exit_button)
+    if minigame_ui_buttons in config.overlay_functions:
+      config.overlay_functions.remove(minigame_ui_buttons)
+    if minigame_exit_button in config.overlay_functions:
+      config.overlay_functions.remove(minigame_exit_button)
     
     return
   
