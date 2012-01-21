@@ -207,14 +207,23 @@ init python:
 
             distance_run             = GameObject()
             distance_run["renderer"] = GameRenderer( GameText( self.get_distance_run, Color( 255, 255, 255, 255 ) ) )
-            distance_run["transform"].set_position( 185, 159 )
+            distance_run["transform"].set_position( 120, 148 )
             self.stop_screen_hud.add_child( distance_run )
+            
+            distance_to_pass = GameObject()
+            distance_to_pass["renderer"] = GameRenderer( GameText( self.get_distance, Color( 255, 255, 255, 255 ) ) )
+            distance_to_pass["transform"].set_position( 120, 196 )
+            self.stop_screen_hud.add_child( distance_to_pass )
 
             distance_left             = GameObject()
             distance_left["renderer"] = GameRenderer( GameText( self.get_distance, Color( 255, 255, 255, 255 ) ) )
-            distance_left["transform"].set_position( 185, 193 )
-            self.stop_screen_hud.add_child( distance_left )         
+            distance_left["transform"].set_position( 120, 323 )
             self.start_screen_hud.add_child( distance_left )
+            
+            time_left = GameObject()
+            time_left["renderer"] = GameRenderer( GameText( self.get_time, Color( 255, 255, 255, 255 ) ) )
+            time_left["transform"].set_position( 120, 353 )
+            self.start_screen_hud.add_child( time_left )
             
             self.distance_left_hud             = GameObject()
             self.distance_left_hud["renderer"] = GameRenderer( GameText( self.get_distance_left, Color( 255, 255, 255, 255 ) ) )
@@ -389,6 +398,9 @@ init python:
                 
         def get_distance( self ):
             return "%20d" % self.level.distance
+            
+        def get_time( self ):
+            return "%20d" % self.level.time_limit
                 
         def get_distance_run( self ):
             return "%20d" % self.runner["behavior"].distance
