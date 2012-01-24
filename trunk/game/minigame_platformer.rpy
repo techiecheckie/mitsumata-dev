@@ -349,25 +349,19 @@ init python:
             self.backgrounds = []
 
             mountains = GameObject()
-            mountains["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/7-background.png" ) )
+            mountains["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/6-bg.png" ) )
             mountains["transform"].set_position( 0, 0 )
             mountains["behavior"] = BackgroundBehavior( self.runner, 1, True )
             self.backgrounds.append( mountains )
 
-            distant_clouds = GameObject()
-            distant_clouds["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/6-clouds3.png" ) )
-            distant_clouds["transform"].set_position( 0, 0 )
-            distant_clouds["behavior"] = BackgroundBehavior( self.runner, 2, True )
-            self.backgrounds.append( distant_clouds )
-
             low_clouds = GameObject()
-            low_clouds["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/5-clouds2.png" ) )
+            low_clouds["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/5-clouds.png" ) )
             low_clouds["transform"].set_position( 0, 0 )
             low_clouds["behavior"] = BackgroundBehavior( self.runner, 1, False )
             self.backgrounds.append( low_clouds )
 
             high_clouds = GameObject()
-            high_clouds["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/4-clouds1.png" ) )
+            high_clouds["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/4-clouds.png" ) )
             high_clouds["transform"].set_position( 0, 0 )
             high_clouds["behavior"] = BackgroundBehavior( self.runner, 4, False )
             self.backgrounds.append( high_clouds )
