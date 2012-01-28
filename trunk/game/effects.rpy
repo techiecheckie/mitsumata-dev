@@ -1,19 +1,37 @@
 label effects:
+  # PDA item fade in
   transform fadein(delay):
     alpha 0.0
     linear delay alpha 1.0
-    
+  
+  # PDA item fade out
   transform fadeout(delay):
     alpha 1.0
     linear delay alpha 0.0
-    
-  transform slide(delay, x, y):
-    linear delay xpos x ypos y
-    
+  
+  # PDA page slide
   transform pda_slide(x, y):
     linear 0.2 alpha 0.0
     linear 0.2 alpha 1.0
     linear 0.6 xpos x ypos y
+  
+  # battle slide
+  transform slide(delay, x, y):
+    linear delay xpos x ypos y
+  
+  # Mamoru's special battle slide (jump)
+  transform mamoru_slide(x, y):
+    pause 0.2
+    parallel:
+      linear 0.6 xpos x
+    parallel:
+      linear 0.1 ypos (y - 50)
+      linear 0.1 ypos (y - 75)
+      linear 0.1 ypos (y - 80)
+      linear 0.1 ypos (y - 75)
+      linear 0.1 ypos (y - 50)
+      linear 0.1 ypos y
+    # a very clever way to fake jumping, eh?
     
 #-----------------------
 # GLOW EFFECT

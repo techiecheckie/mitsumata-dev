@@ -1,41 +1,52 @@
 init python:
-  # how long the animation lasts (how long the target waits)
-  ANIMATION_DELAYS = {}
-  # how long until the target should display hit animation
-  HIT_DELAYS = {}
+  # animation durations counted from sprite animation phases
+  ANIMATION_DURATION = {}
   
   # Default slide animation duration
-  ANIMATION_DELAYS["slide"] = 0.5
-
-  ANIMATION_DELAYS["Riku melee"] = 0.8
-  HIT_DELAYS["Riku melee"]       = 0.4
+  ANIMATION_DURATION["slide"]        = 0.5
+  # Mamoru's special slide (jump)
+  ANIMATION_DURATION["Mamoru slide"] = 1.2
   
-  ANIMATION_DELAYS["Riku magic"] = 1.2
-  HIT_DELAYS["Riku magic"]       = 0.4  
+  # attack animation duration
+  ANIMATION_DURATION["Riku melee"]       = 0.8
+  # how long until the blow falls
+  ANIMATION_DURATION["Riku melee delay"] = 0.4
+  # attack duration (total)
+  ANIMATION_DURATION["Riku magic"]       = 1.2
+  # how long until the blow falls
+  ANIMATION_DURATION["Riku magic delay"] = 0.4
+  # hit animation duration
+  ANIMATION_DURATION["Riku hit"]         = 0.6
   
-  ANIMATION_DELAYS["Roman melee"] = 1.6
-  HIT_DELAYS["Roman melee"]       = 0.6
-
-  ANIMATION_DELAYS["Roman magic"] = 2.2
-  HIT_DELAYS["Roman magic"]       = 1.0
+  ANIMATION_DURATION["Roman melee"]       = 1.6
+  ANIMATION_DURATION["Roman melee delay"] = 0.6
+  ANIMATION_DURATION["Roman magic"]       = 2.2
+  ANIMATION_DURATION["Roman magic delay"] = 1.0
+  ANIMATION_DURATION["Roman hit"]         = 0.6
   
-  ANIMATION_DELAYS["Demon hunter melee"] = 0.8
-  HIT_DELAYS["Demon hunter melee"]       = 0.4  
+  ANIMATION_DURATION["Demon hunter melee"]       = 0.8
+  ANIMATION_DURATION["Demon hunter melee delay"] = 0.4
+  ANIMATION_DURATION["Demon hunter hit"]         = 0.6
   
-  ANIMATION_DELAYS["Demon thug melee"] = 0.8
-  HIT_DELAYS["Demon thug melee"]       = 0.2
+  ANIMATION_DURATION["Demon thug melee"]       = 0.8
+  ANIMATION_DURATION["Demon thug melee delay"] = 0.2
+  ANIMATION_DURATION["Demon thug hit"]         = 0.6
   
-  ANIMATION_DELAYS["Mamoru melee"] = 1.4
-  HIT_DELAYS["Mamoru melee"]       = 0.8
+  ANIMATION_DURATION["Mamoru melee"]       = 1.4
+  ANIMATION_DURATION["Mamoru melee delay"] = 0.8
+  ANIMATION_DURATION["Mamoru magic"]       = 1.6
+  ANIMATION_DURATION["Mamoru magic delay"] = 0.2
+  ANIMATION_DURATION["Mamoru hit"]         = 0.6
   
-  ANIMATION_DELAYS["Mamoru magic"] = 1.6
-  HIT_DELAYS["Mamoru magic"]       = 0.2
+  ANIMATION_DURATION["Naomi melee"]       = 0.8
+  ANIMATION_DURATION["Naomi melee delay"] = 0.4
+  ANIMATION_DURATION["Naomi magic"]       = 2.0
+  ANIMATION_DURATION["Naomi magic delay"] = 0.6
+  ANIMATION_DURATION["Naomi hit"]         = 0.6
   
-  ANIMATION_DELAYS["Naomi melee"] = 0.8
-  HIT_DELAYS["Naomi melee"]       = 0.4
-  
-  ANIMATION_DELAYS["Naomi magic"] = 2.0
-  HIT_DELAYS["Naomi magic"]       = 0.6
+  ANIMATION_DURATION["Carniflora melee"]       = 1.0
+  ANIMATION_DURATION["Carniflora melee delay"] = 0.4
+  ANIMATION_DURATION["Carniflora hit"]         = 1.0
 
 ########
 # Riku #
@@ -55,19 +66,7 @@ image Riku hit:
   pause 0.2
   "gfx/animated/riku/riku_hitl02.png"
   pause 0.4
-  
-image Riku hit_crit:
-  "gfx/animated/riku/riku_hitwussyl01.png"
-  pause 0.2
-  "gfx/animated/riku/riku_hitwussyl02.png"
-  pause 0.4
-  
-image Riku dead:
-  "gfx/animated/riku/riku_hitwussyl01.png"
-  pause 0.2
-  "gfx/animated/riku/riku_hitwussyl02.png"
-  pause 0.4
-    
+
 image Riku melee:  
   "gfx/animated/riku/riku_attackl01.png"
   pause 0.2
@@ -106,18 +105,6 @@ image Roman idle:
   repeat
   
 image Roman hit:
-  "gfx/animated/roman/roman_hitwussyl01.png"
-  pause 0.2
-  "gfx/animated/roman/roman_hitwussyl02.png"
-  pause 0.4
-    
-image Roman hit_crit:
-  "gfx/animated/roman/roman_hitwussyl01.png"
-  pause 0.2
-  "gfx/animated/roman/roman_hitwussyl02.png"
-  pause 0.4
-  
-image Roman dead:
   "gfx/animated/roman/roman_hitwussyl01.png"
   pause 0.2
   "gfx/animated/roman/roman_hitwussyl02.png"
@@ -184,18 +171,6 @@ image DemonHunter hit:
   "gfx/animated/demonic_hunter/demoniccape_hitr02.png"
   pause 0.4
 
-image DemonHunter hit_crit:
-  "gfx/animated/demonic_hunter/demoniccape_hitr01.png"
-  pause 0.2
-  "gfx/animated/demonic_hunter/demoniccape_hitr02.png"
-  pause 0.4
-
-image DemonHunter dead:
-  "gfx/animated/demonic_hunter/demoniccape_hitr01.png"
-  pause 0.2
-  "gfx/animated/demonic_hunter/demoniccape_hitr02.png"
-  pause 0.4
-
 image DemonHunter melee:
   "gfx/animated/demonic_hunter/demoniccape_swiper01.png"
   pause 0.2
@@ -207,7 +182,7 @@ image DemonHunter melee:
   pause 0.2
   
 ################
-# Demon thug #
+# Demon thug   #
 ################
 
 image DemonThug idle:
@@ -220,18 +195,6 @@ image DemonThug idle:
   repeat
     
 image DemonThug hit:
-  "gfx/animated/demonic_thug/demonic_hitr01.png"
-  pause 0.2
-  "gfx/animated/demonic_thug/demonic_hitr02.png"
-  pause 0.4
- 
-image DemonThug hit_crit:
-  "gfx/animated/demonic_thug/demonic_hitr01.png"
-  pause 0.2
-  "gfx/animated/demonic_thug/demonic_hitr02.png"
-  pause 0.4
-  
-image DemonThug dead:
   "gfx/animated/demonic_thug/demonic_hitr01.png"
   pause 0.2
   "gfx/animated/demonic_thug/demonic_hitr02.png"
@@ -265,32 +228,6 @@ image Mamoru hit:
   pause 0.2
   "gfx/animated/mamoru/mamoru_hitr02.png"
   pause 0.4
-   
-image Mamoru hit_crit:
-  "gfx/animated/riku/riku_hitwussyr01.png"
-  pause 0.2
-  "gfx/animated/riku/riku_hitwussyr02.png"
-  pause 0.4
-  
-image Mamoru dead:
-  "gfx/animated/mamoru/mamoru_hitr01.png"
-  pause 0.2
-  "gfx/animated/mamoru/mamoru_hitr02.png"
-  pause 0.4
-
-# not in use   
-#$animation_delays["Mamoru slide"] = 1.0
-#image Mamoru slide:
-  #  "gfx/animated/mamoru/mamoru_attackr01.png"
-  #  pause 0.2
-  #  "gfx/animated/mamoru/mamoru_attackr02.png"
-  #  pause 0.2
-  #  "gfx/animated/mamoru/mamoru_attackr03.png"
-  #  pause 0.2
-  #  "gfx/animated/mamoru/mamoru_attackr04.png"
-  #  pause 0.2
-  #  "gfx/animated/mamoru/mamoru_attackr05.png"
-  #  pause 0.2
   
 image Mamoru melee:
   "gfx/animated/mamoru/mamoru_attackr06.png"
@@ -319,16 +256,28 @@ image Mamoru magic:
   pause 0.2
   "gfx/animated/mamoru/mamoru_firewhitehaughtyr04.png"
   pause 0.2
+  
+image Mamoru slide:
+  "gfx/animated/mamoru/mamoru_attackr01.png"
+  pause 0.2
+  "gfx/animated/mamoru/mamoru_attackr02.png"
+  pause 0.3
+  "gfx/animated/mamoru/mamoru_attackr03.png"
+  pause 0.3
+  "gfx/animated/mamoru/mamoru_attackr04.png"
+  pause 0.2
+  "gfx/animated/mamoru/mamoru_attackr05.png"
+  pause 0.2
     
-image Mamoru post_attack:
-  "gfx/animated/mamoru/mamoru_hairflickr01.png"
-  pause 0.2
-  "gfx/animated/mamoru/mamoru_hairflickr02.png"
-  pause 0.2
-  "gfx/animated/mamoru/mamoru_hairflickr03.png"
-  pause 0.2
-  "gfx/animated/mamoru/mamoru_hairflickr04.png"
-  pause 0.2
+#image Mamoru post_attack:
+#  "gfx/animated/mamoru/mamoru_hairflickr01.png"
+#  pause 0.2
+#  "gfx/animated/mamoru/mamoru_hairflickr02.png"
+#  pause 0.2
+#  "gfx/animated/mamoru/mamoru_hairflickr03.png"
+#  pause 0.2
+#  "gfx/animated/mamoru/mamoru_hairflickr04.png"
+#  pause 0.2
   
 #########
 # Naomi #
@@ -344,18 +293,6 @@ image Naomi idle:
   repeat
   
 image Naomi hit:
-  "gfx/animated/naomi/naomi_hitr01.png"
-  pause 0.2
-  "gfx/animated/naomi/naomi_hitr02.png"
-  pause 0.4
-  
-image Naomi hit_crit:
-  "gfx/animated/naomi/naomi_hitr01.png"
-  pause 0.2
-  "gfx/animated/naomi/naomi_hitr02.png"
-  pause 0.4
-  
-image Naomi dead:
   "gfx/animated/naomi/naomi_hitr01.png"
   pause 0.2
   "gfx/animated/naomi/naomi_hitr02.png"
@@ -395,43 +332,47 @@ image Naomi magic:
 
 
     
-########
-# Thug #
-########
+##############
+# Carniflora #
+##############
  
-image Thug idle:
-  "gfx/animated/riku/riku_idler03.png"
+image Carniflora idle:
+  "gfx/animated/carniflora/carniflora_idler01.png"
   pause 0.2
-  "gfx/animated/riku/riku_idler02.png"
+  "gfx/animated/carniflora/carniflora_idler02.png"
   pause 0.2
-  "gfx/animated/riku/riku_idler01.png"
+  "gfx/animated/carniflora/carniflora_idler03.png"
+  pause 0.2
+  "gfx/animated/carniflora/carniflora_idler04.png"
+  pause 0.2
+  "gfx/animated/carniflora/carniflora_idler05.png"
+  pause 0.2
+  "gfx/animated/carniflora/carniflora_idler06.png"
+  pause 0.2
+  "gfx/animated/carniflora/carniflora_idler07.png"
+  pause 0.2
+  "gfx/animated/carniflora/carniflora_idler08.png"
   pause 0.2
   repeat  
     
-image Thug hit:
-  "gfx/animated/riku/riku_hitr01.png"
+image Carniflora hit:
+  "gfx/animated/carniflora/carniflora_hitr01.png"
   pause 0.2
-  "gfx/animated/riku/riku_hitr02.png"
-  pause 0.4
-  
-image Thug hit_crit:
-  "gfx/animated/riku/riku_hitwussyr01.png"
+  "gfx/animated/carniflora/carniflora_hitr02.png"
   pause 0.2
-  "gfx/animated/riku/riku_hitwussyr02.png"
-  pause 0.4
-    
-image Thug dead:
-  "gfx/animated/riku/riku_hitwussyr01.png"
+  "gfx/animated/carniflora/carniflora_hitr03.png"
+  pause 0.6
+  "gfx/animated/carniflora/carniflora_hitr04.png"
   pause 0.2
-  "gfx/animated/riku/riku_hitwussyr02.png"
-  pause 0.4
    
-image Thug melee: 
-  "gfx/animated/riku/riku_attackr01.png"
+image Carniflora melee: 
+  "gfx/animated/carniflora/carniflora_attack1r01.png"
   pause 0.2
-  "gfx/animated/riku/riku_attackr02.png"
+  "gfx/animated/carniflora/carniflora_attack1r02.png"
   pause 0.2
-  "gfx/animated/riku/riku_attackr03.png"
+  "gfx/animated/carniflora/carniflora_attack1r03.png"
   pause 0.2
-  "gfx/animated/riku/riku_attackr04.png"
+  "gfx/animated/carniflora/carniflora_attack1r04.png"
+  pause 0.2
+  "gfx/animated/carniflora/carniflora_attack1r05.png"
   pause 0.2
