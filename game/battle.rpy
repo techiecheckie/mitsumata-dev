@@ -7,7 +7,7 @@ init python:
   MOB_CRIT_MULTIPLIER = 2
     
   MAMORU_HEALTH = 300
-  MAMORU_MANA   = 100
+  MAMORU_MANA   = 50
   MAMORU_MELEE  = 20
   MAMORU_MAGIC  = 25
   MAMORU_MAGIC_OFFSET = 0
@@ -183,6 +183,7 @@ init python:
     def attack(self, target):
       attack_offset = 0
       if self.mana > 0:
+        self.mana -= 50
         # See if the attack should be melee or a magical one
         # "randomize two numbers, then multiply them with each other. If  the 
         # number comes out to be odd, it' a magic attack. Even, it's a regular 
@@ -332,7 +333,8 @@ init python:
       
   def battle(player_name, mob_name, mob_count, background):
     config.overlay_functions.append(battle_message_area)
-      
+    config.rollback_enabled = False
+    
     # Create the combatants
     player = Player(player_name, HP, MP)
       
@@ -417,6 +419,7 @@ init python:
   
     renpy.transition(dissolve)
     config.overlay_functions.remove(battle_message_area)
+    config.rollback_enabled = True
     hide_minigame_ui(background)
     show_main_ui()
     
