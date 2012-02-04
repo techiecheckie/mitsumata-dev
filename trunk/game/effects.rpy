@@ -32,6 +32,17 @@ label effects:
       linear 0.1 ypos (y - 50)
       linear 0.1 ypos y
     # a very clever way to fake jumping, eh?
+  
+  # Carniflora's post-attack release
+  transform carniflora_drop(x, y):
+    parallel:
+      linear 0.5 xpos x
+    parallel:
+      linear 0.1 ypos (y - 75)
+      linear 0.1 ypos (y - 80)
+      linear 0.1 ypos (y - 75)
+      linear 0.1 ypos (y - 50)
+      linear 0.1 ypos y
     
 #-----------------------
 # GLOW EFFECT

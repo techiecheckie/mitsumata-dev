@@ -8,9 +8,9 @@ init python:
   ANIMATION_DURATION["Mamoru slide"] = 1.2
   
   # attack animation duration
-  ANIMATION_DURATION["Riku melee"]       = 0.8
+  ANIMATION_DURATION["Riku melee"]       = 0.7
   # how long until the blow falls
-  ANIMATION_DURATION["Riku melee delay"] = 0.4
+  ANIMATION_DURATION["Riku melee delay"] = 0.3
   # attack duration (total)
   ANIMATION_DURATION["Riku magic"]       = 1.2
   # how long until the blow falls
@@ -18,18 +18,18 @@ init python:
   # hit animation duration
   ANIMATION_DURATION["Riku hit"]         = 0.6
   
-  ANIMATION_DURATION["Roman melee"]       = 1.6
-  ANIMATION_DURATION["Roman melee delay"] = 0.6
-  ANIMATION_DURATION["Roman magic"]       = 2.2
+  ANIMATION_DURATION["Roman melee"]       = 1.3
+  ANIMATION_DURATION["Roman melee delay"] = 0.4
+  ANIMATION_DURATION["Roman magic"]       = 1.9
   ANIMATION_DURATION["Roman magic delay"] = 1.0
   ANIMATION_DURATION["Roman hit"]         = 0.6
   
-  ANIMATION_DURATION["Demon hunter melee"]       = 0.8
+  ANIMATION_DURATION["Demon hunter melee"]       = 0.9
   ANIMATION_DURATION["Demon hunter melee delay"] = 0.4
   ANIMATION_DURATION["Demon hunter hit"]         = 0.6
   
-  ANIMATION_DURATION["Demon thug melee"]       = 0.8
-  ANIMATION_DURATION["Demon thug melee delay"] = 0.2
+  ANIMATION_DURATION["Demon thug melee"]       = 0.9
+  ANIMATION_DURATION["Demon thug melee delay"] = 0.4
   ANIMATION_DURATION["Demon thug hit"]         = 0.6
   
   ANIMATION_DURATION["Mamoru melee"]       = 1.4
@@ -44,9 +44,9 @@ init python:
   ANIMATION_DURATION["Naomi magic delay"] = 0.6
   ANIMATION_DURATION["Naomi hit"]         = 0.6
   
-  ANIMATION_DURATION["Carniflora melee"]       = 1.0
+  ANIMATION_DURATION["Carniflora melee"]       = 0.8
   ANIMATION_DURATION["Carniflora melee delay"] = 0.4
-  ANIMATION_DURATION["Carniflora hit"]         = 1.0
+  ANIMATION_DURATION["Carniflora hit"]         = 0.6
 
 ########
 # Riku #
@@ -71,7 +71,7 @@ image Riku melee:
   "gfx/animated/riku/riku_attackl01.png"
   pause 0.2
   "gfx/animated/riku/riku_attackl02.png"
-  pause 0.2
+  pause 0.1
   "gfx/animated/riku/riku_attackl03.png"
   pause 0.2
   "gfx/animated/riku/riku_attackl04.png"
@@ -114,11 +114,11 @@ image Roman melee:
   "gfx/animated/roman/roman_kickl01.png"
   pause 0.2
   "gfx/animated/roman/roman_kickl02.png"
-  pause 0.2
+  pause 0.1
   "gfx/animated/roman/roman_kickl03.png"
-  pause 0.2
+  pause 0.1
   "gfx/animated/roman/roman_kickl04.png"
-  pause 0.2
+  pause 0.1
   "gfx/animated/roman/roman_kickl05.png"
   pause 0.2
   "gfx/animated/roman/roman_kickl06.png"
@@ -140,15 +140,15 @@ image Roman magic:
   "gfx/animated/roman/roman_iceswordl05.png"
   pause 0.2
   "gfx/animated/roman/roman_iceswordl06.png"
-  pause 0.2
+  pause 0.1
   "gfx/animated/roman/roman_iceswordl07.png"
   pause 0.2
   "gfx/animated/roman/roman_iceswordl08.png"
   pause 0.2
   "gfx/animated/roman/roman_iceswordl09.png"
-  pause 0.2
+  pause 0.1
   "gfx/animated/roman/roman_iceswordl10.png"
-  pause 0.2
+  pause 0.1
   "gfx/animated/roman/roman_iceswordl11.png"
   pause 0.2
     
@@ -179,7 +179,7 @@ image DemonHunter melee:
   "gfx/animated/demonic_hunter/demoniccape_swiper03.png"
   pause 0.2
   "gfx/animated/demonic_hunter/demoniccape_swiper04.png"
-  pause 0.2
+  pause 0.3
   
 ################
 # Demon thug   #
@@ -208,7 +208,7 @@ image DemonThug melee:
   "gfx/animated/demonic_thug/demonic_swiper03.png"
   pause 0.2
   "gfx/animated/demonic_thug/demonic_swiper04.png"
-  pause 0.2
+  pause 0.3
     
  
 ##########
@@ -357,11 +357,11 @@ image Carniflora idle:
     
 image Carniflora hit:
   "gfx/animated/carniflora/carniflora_hitr01.png"
-  pause 0.2
+  pause 0.1
   "gfx/animated/carniflora/carniflora_hitr02.png"
-  pause 0.2
+  pause 0.1
   "gfx/animated/carniflora/carniflora_hitr03.png"
-  pause 0.6
+  pause 0.2
   "gfx/animated/carniflora/carniflora_hitr04.png"
   pause 0.2
    
@@ -371,8 +371,46 @@ image Carniflora melee:
   "gfx/animated/carniflora/carniflora_attack1r02.png"
   pause 0.2
   "gfx/animated/carniflora/carniflora_attack1r03.png"
-  pause 0.2
+  pause 0.1
   "gfx/animated/carniflora/carniflora_attack1r04.png"
-  pause 0.2
+  pause 0.1
   "gfx/animated/carniflora/carniflora_attack1r05.png"
   pause 0.2
+  
+image Carniflora magic:
+  "gfx/animated/carniflora/carniflora_attack2r01.png"
+  pause 0.1
+  "gfx/animated/carniflora/carniflora_attack2r02.png"
+  pause 0.1
+  "gfx/animated/carniflora/carniflora_attack2r03.png"
+  pause 0.1
+  "gfx/animated/carniflora/carniflora_attack2r04.png"
+  pause 0.2
+  "gfx/animated/carniflora/carniflora_attack2r05.png"
+  pause 0.1
+  "gfx/animated/carniflora/carniflora_attack2r06.png"
+  pause 0.1
+  "gfx/animated/carniflora/carniflora_attack2r07.png"
+  pause 0.1
+  "gfx/animated/carniflora/carniflora_attack2r08.png"
+  pause 0.1
+  "gfx/animated/carniflora/carniflora_attack2r09.png"
+  pause 0.2
+  "gfx/animated/carniflora/carniflora_attack2r10.png"
+  pause 0.1
+  "gfx/animated/carniflora/carniflora_attack2r11.png"
+  pause 0.1
+  "gfx/animated/carniflora/carniflora_attack2r12.png"
+  pause 0.1
+  "gfx/animated/carniflora/carniflora_attack2r13.png"
+  pause 0.1
+  "gfx/animated/carniflora/carniflora_attack2r14.png"
+  pause 0.1
+  "gfx/animated/carniflora/carniflora_attack2r15.png"
+  pause 0.1
+  "gfx/animated/carniflora/carniflora_attack2r16.png"
+  pause 0.2
+  "gfx/animated/carniflora/carniflora_attack2r17.png"
+  pause 0.1
+  "gfx/animated/carniflora/carniflora_attack2r18.png"
+  pause 0.1
