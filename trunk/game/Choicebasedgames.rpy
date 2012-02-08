@@ -440,15 +440,15 @@ label sself:
                 
 label birthdayresults:    
     r  "There. I think that's everything!"
-    if count = "5":
+    if count == "5":
         jump perfectparty
-    elif count = "4":
+    elif count == "4":
         jump decentparty
-    elif count = "3":
+    elif count == "3":
         jump okparty
-    elif count = "2":
+    elif count == "2":
         jump fehparty
-    elif count = "1":
+    elif count == "1":
         jump failparty
         
 label perfectparty:
@@ -509,9 +509,9 @@ label kazuquiz:
     $q10 = False
     $count2 = q1 + q2 + q3 + q4 + q5 + q6 + q7 + q8 + q9 + q10
     
-    if hp > 200:
+    if HP >= 200:
         jump quiz1
-    elif hp < 200:
+    elif HP < 200:
         jump quiz2
         
 label nextq:
@@ -519,70 +519,70 @@ label nextq:
     return
     
 label quiz1:    
-    $show_message("Question 1")
+    $show_message("Question 1", "medium")
     menu:
         "Wrong Answer":
             call nextq
         "Right Answer":
             $q1 = True
             call nextq
-    $show_message("Question 2")
+    $show_message("Question 2", "medium")
     menu:
         "Wrong Answer":
             call nextq
         "Right Answer":
             $q2 = True
             call nextq
-    $show_message("Question 3")
+    $show_message("Question 3", "medium")
     menu:
         "Wrong Answer":
             call nextq
         "Right Answer":
             $q3 = True
             call nextq
-    $show_message("Question 4")
+    $show_message("Question 4", "medium")
     menu:
         "Wrong Answer":
             call nextq
         "Right Answer":
             $q4 = True
             call nextq
-    $show_message("Question 5")
+    $show_message("Question 5", "medium")
     menu:
         "Wrong Answer":
             call nextq
         "Right Answer":
             $q5 = True
             call nextq
-    $show_message("Question 6")
+    $show_message("Question 6", "medium")
     menu:
         "Wrong Answer":
             call nextq
         "Right Answer":
             $q6 = True
             call nextq
-    $show_message("Question 7")
+    $show_message("Question 7", "medium")
     menu:
         "Wrong Answer":
             call nextq
         "Right Answer":
             $q7 = True
             call nextq
-    $show_message("Question 8")
+    $show_message("Question 8", "medium")
     menu:
         "Wrong Answer":
             call nextq
         "Right Answer":
             $q8 = True
             call nextq
-    $show_message("Question 9")
+    $show_message("Question 9", "medium")
     menu:
         "Wrong Answer":
             call nextq
         "Right Answer":
             $q9 = True
             call nextq
-    $show_message("Question 10")
+    $show_message("Question 10", "medium")
     menu:
         "Wrong Answer":
             call nextq
@@ -591,76 +591,76 @@ label quiz1:
             call nextq    
             
 label quiz1result:
-    if count2 = "10":
+    if count2 == "10":
         jump perquiz
     else:
         jump failquiz
    
 label quiz2:    
-    $show_message("Question 1")
+    $show_message("Question 1", "medium")
     menu:
         "Wrong Answer":
             call nextq
         "Right Answer":
             $q1 = True
             call nextq
-    $show_message("Question 2")
+    $show_message("Question 2", "medium")
     menu:
         "Wrong Answer":
             call nextq
         "Right Answer":
             $q2 = True
             call nextq
-    $show_message("Question 3")
+    $show_message("Question 3", "medium")
     menu:
         "Wrong Answer":
             call nextq
         "Right Answer":
             $q3 = True
             call nextq
-    $show_message("Question 4")
+    $show_message("Question 4", "medium")
     menu:
         "Wrong Answer":
             call nextq
         "Right Answer":
             $q4 = True
             call nextq
-    $show_message("Question 5")
+    $show_message("Question 5", "medium")
     menu:
         "Wrong Answer":
             call nextq
         "Right Answer":
             $q5 = True
             call nextq
-    $show_message("Question 6")
+    $show_message("Question 6", "medium")
     menu:
         "Wrong Answer":
             call nextq
         "Right Answer":
             $q6 = True
             call nextq
-    $show_message("Question 7")
+    $show_message("Question 7", "medium")
     menu:
         "Wrong Answer":
             call nextq
         "Right Answer":
             $q7 = True
             call nextq
-    $show_message("Question 8")
+    $show_message("Question 8", "medium")
     menu:
         "Wrong Answer":
             call nextq
         "Right Answer":
             $q8 = True
             call nextq
-    $show_message("Question 9")
+    $show_message("Question 9", "medium")
     menu:
         "Wrong Answer":
             call nextq
         "Right Answer":
             $q9 = True
             call nextq
-    $show_message("Question 10")
+    $show_message("Question 10", "medium")
     menu:
         "Wrong Answer":
             call nextq
@@ -669,7 +669,7 @@ label quiz2:
             call nextq  
             
 label quiz2results:
-    if count2 = "10":
+    if count2 == "10":
         jump perquiz
     else:
         jump failquiz
