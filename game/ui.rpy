@@ -234,7 +234,7 @@ init python:
       bg = "gfx/textbox.png"
       x_anchor = 265
       y_anchor = 175
-      x_max    = 490
+      x_max    = 520 # 490
     elif size == "medium":
       bg = "gfx/textbox_2.png"
       x_anchor = 304
