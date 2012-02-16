@@ -4,15 +4,11 @@ init python:
   import time
 
   if persistent.unlocked_items == None:
-    persistent.unlocked_items = []
+    persistent.unlocked_items = {}
   if persistent.unlocked_journals == None:
-    persistent.unlocked_journals = []
+    persistent.unlocked_journals = {}
   if persistent.unlocked_minigames == None:
-    persistent.unlocked_minigames = []
-  if persistent.minigame_scores == None:
-    persistent.minigame_scores = {}
-  if persistent.minigame_levels == None:
-    persistent.minigame_levels = {}
+    persistent.unlocked_minigames = {}
   if persistent.garden == None:
     persistent.garden = [None]*9 #[None]*len(GARDEN_GRID)
   
@@ -32,97 +28,58 @@ init python:
   # testing stuff begins
   print ""
   
-  pda = True
-  # current unlocked minigames
-  persistent.unlocked_minigames = []
-  persistent.unlocked_minigames.append("mole")
-  persistent.unlocked_minigames.append("cell")
-  persistent.unlocked_minigames.append("platformer")
-  persistent.unlocked_minigames.append("duck")
-  persistent.unlocked_minigames.append("force")
-  persistent.unlocked_minigames.append("power")
-  persistent.unlocked_minigames.append("squats")
-  persistent.unlocked_minigames.append("gears")
-  persistent.unlocked_minigames.append("garden")
-  persistent.unlocked_minigames.append("lock")
-  persistent.unlocked_minigames.append("bottles")
-  
-  # current scores
-  persistent.minigame_scores["mole"]       = 0
-  persistent.minigame_scores["cell"]       = 0
-  persistent.minigame_scores["platformer"] = 0
-  persistent.minigame_scores["duck"]       = 0
-  persistent.minigame_scores["force"]      = 0
-  persistent.minigame_scores["power"]      = 0
-  persistent.minigame_scores["squats"]     = 0
-  persistent.minigame_scores["gears"]      = 0
-  
-  # current levels
-  persistent.minigame_levels["mole"]       = 1
-  persistent.minigame_levels["cell"]       = 1
-  persistent.minigame_levels["platformer"] = 1
-  persistent.minigame_levels["duck"]       = 1
-  persistent.minigame_levels["force"]      = 1
-  persistent.minigame_levels["power"]      = 1
-  persistent.minigame_levels["squats"]     = 1
-  persistent.minigame_levels["gears"]      = 2
-  persistent.minigame_levels["lock"]       = 1
+  persistent.unlocked_minigames = {}
+  persistent.unlocked_minigames["mole"]       = [100, 1]
+  persistent.unlocked_minigames["cell"]       = [100, 1]
+  #persistent.unlocked_minigames["platformer"] = [100, 1]
+  #persistent.unlocked_minigames["duck"]       = [100, 1]
+  #persistent.unlocked_minigames["force"]      = [100, 1]
+  #persistent.unlocked_minigames["power"]      = [100, 1]
+  #persistent.unlocked_minigames["squats"]     = [100, 1]
+  #persistent.unlocked_minigames["gears"]      = [100, 1]
+  #persistent.unlocked_minigames["garden"]     = [100, 1]
+  #persistent.unlocked_minigames["lock"]       = [100, 1]
+  #persistent.unlocked_minigames["bottles"]    = [100, 1]
   
   # current unlocked items
-  persistent.unlocked_items = []
-  persistent.unlocked_items.append("knife")
-  persistent.unlocked_items.append("pda")
-  persistent.unlocked_items.append("map")
-  persistent.unlocked_items.append("garden")
-  persistent.unlocked_items.append("aos")
-  persistent.unlocked_items.append("bos")
-  persistent.unlocked_items.append("ice")
-  persistent.unlocked_items.append("rose")
-  persistent.unlocked_items.append("cake")
-  persistent.unlocked_items.append("gun")
-  persistent.unlocked_items.append("gift")
-  #persistent.unlocked_items.append("decor")
-  persistent.unlocked_items.append("bircake")
-  persistent.unlocked_items.append("key")
-  persistent.unlocked_items.append("radio")
-  #persistent.unlocked_items.append("parts")
-  persistent.unlocked_items.append("blue")
+  persistent.unlocked_items = {}
+  persistent.unlocked_items["knife"] = False
   
   # current unlocked journals
-  persistent.unlocked_journals = []
-  persistent.unlocked_journals.append("Riku:001")
-  persistent.unlocked_journals.append("Riku:002")
-  persistent.unlocked_journals.append("Riku:004")
-  persistent.unlocked_journals.append("Roman:005")
-  persistent.unlocked_journals.append("Susa:019")
-  persistent.unlocked_journals.append("Susa:017")
-  persistent.unlocked_journals.append("Susa:020")
+  persistent.unlocked_journals = {}
+  persistent.unlocked_journals["Riku"]  = [False, "001", "002", "004"]
+  persistent.unlocked_journals["Roman"] = [True, "005"]
+  persistent.unlocked_journals["Susa"]  = [False, "019", "017"]
 
   # current plants growing in the garden
   persistent.garden = [None]*9
   
   # Appends the item id to the persistent unlocked_items list and displays 
   # information about the unlocked item by calling the function show_item_unlock
-  def unlock_item(item_id):
-    if item_id not in persistent.unlocked_items:
-      persistent.unlocked_items.append(item_id)
+  def unlock_item(item_id, show_messages):
+    persistent.unlocked_items[item_id] = False
     
-    item = inventory.get_item(item_id)
-    show_item_unlock(item)
+    if show_messages:
+      item = inventory.get_item(item_id)
+      show_item_unlock(item)
     
     return
   
-  # Appens the combined journal_id + entry_id to the persistent unlocked_journals
-  # list and displays information about the unlocked entry by calling the function
-  # show_entry_unlock
-  def unlock_entry(journal_id, entry_id):
-    new_id = journal_id + ":" + entry_id
-    if new_id not in persistent.unlocked_journals:
-      persistent.unlocked_journals.append(new_id)
+  # Appends entry_id to the journal specific array located in persistent.unlocked_journals dict.
+  def unlock_entry(journal_id, entry_id, show_messages):
+    journal_array = persistent.unlocked_journals[journal_id]
+    if journal_array != None:
+      journal_array[0] = False
+      if entry_id not in journal_array:
+        journal_array.append(entry_id)
+    else:
+      journal_array = [False, entry_id]
+    persistent.unlocked_journals[journal_id] = journal_array
     
-    journal = journal_manager.get_journal(journal_id)
-    entry   = journal.get_entry(entry_id)
-    show_entry_unlock(journal, entry)
+    if show_messages:
+      journal = journal_manager.get_journal(journal_id)
+      entry   = journal.get_entry(entry_id)
+      show_entry_unlock(journal, entry)
     
     return
     
@@ -166,7 +123,7 @@ init python:
   
   # Loops through the unlocked items, adding their bonuses (if any, see items.xml
   # and look for <bonuses> elements) to local stat variables, which are then
-  # returned to the main stat update function.
+  # returned to update_stats() function above.
   def get_item_bonuses():
     hp     = 0
     mp     = 0
@@ -187,16 +144,18 @@ init python:
   
   # Loops through the unlocked minigames, matching their names to the bonus rows
   # listed in minigame.rpy, and adding any found bonuses to local stat variables.
-  # These local variables are then returned to the main stat update function.
+  # These local variables are then returned to update_stats() function above.
   def get_minigame_bonuses():
     hp = 0
     mp = 0
   
-    for game in persistent.unlocked_minigames:
-      if MINIGAME_BONUSES.has_key(game):
-        game_bonuses = MINIGAME_BONUSES[game]
+    minigame_keys = persistent.unlocked_minigames.keys()
+    
+    for key in minigame_keys:
+      if MINIGAME_BONUSES.has_key(key):
+        game_bonuses = MINIGAME_BONUSES[key]
         for bonus_row in game_bonuses:
-          if persistent.minigame_scores[game] >= bonus_row[0]:
+          if persistent.unlocked_minigames[key][0] >= bonus_row[0]:
             for i in range(1, len(bonus_row)):
               if bonus_row[i][0] == "hp":
                 hp += bonus_row[i][1]
@@ -204,7 +163,7 @@ init python:
                 mp += bonus_row[i][1]
             break
       else:
-        #print "No game", game, "in MINIGAME_BONUSES"
+        print "No game", key, "in MINIGAME_BONUSES"
         pass
     
     return (hp,mp)

@@ -178,26 +178,20 @@ screen main_menu:
     # The background of the main menu.
     window:
         style "mm_root"
-
-    # The main menu buttons.
-    frame:
-        style_group "mm"
-        xalign .98
-        yalign .98
-
-        has vbox
-
-        textbutton _("Start Game") action Start()
-        textbutton _("Load Game") action ShowMenu("load")
-        textbutton _("Preferences") action ShowMenu("preferences")
-        textbutton _("Help") action Help()
-        textbutton _("Quit") action Quit(confirm=False)
+    
+    imagemap:
+        ground "gfx/menus/main.jpg"
+        hover  "gfx/menus/main_hover.jpg"
+       
+        hotspot ( 60, 252, 196, 395) action ShowMenu("preferences")
+        hotspot (295, 252, 196, 395) action ShowMenu("load")
+        hotspot (532, 252, 196, 395) action Start()
+        hotspot (768, 252, 196, 395) action Quit(confirm=False)
 
 init -2 python:
 
     # Make all the main menu buttons be the same size.
     style.mm_button.size_group = "mm"
-
 
 ##############################################################################
 # Navigation
@@ -241,48 +235,36 @@ init -2 python:
 # Since saving and loading are so similar, we combine them into
 # a single screen, file_picker. We then use the file_picker screen
 # from simple load and save screens.
-    
+
 screen file_picker:
-
     frame:
-        style "file_picker_frame"
-
-        has vbox
-
-        # The buttons at the top allow the user to pick a
-        # page of files.
-        hbox:
-            style_group "file_picker_nav"
-            
-            textbutton _("Previous"):
-                action FilePagePrevious()
-
-            textbutton _("Auto"):
-                action FilePage("auto")
-
-            for i in range(1, 9):
-                textbutton str(i):
-                    action FilePage(i)
-                    
-            textbutton _("Next"):
-                action FilePageNext()
-
-        $ columns = 2
-        $ rows = 5
+        xpos 313
+        ypos 208
+        xmaximum 395
+        ymaximum 425
+        
+        ymargin 0
+        ypadding 0
+        background None
+    
+        $ columns = 1
+        $ rows = 4
                 
         # Display a grid of file slots.
         grid columns rows:
-            transpose True
             xfill True
+            yfill True
             style_group "file_picker"
             
             # Display ten file slots, numbered 1 - 10.
             for i in range(1, columns * rows + 1):
-
+                
                 # Each file slot is a button.
                 button:
                     action FileAction(i)
                     xfill True
+                    ymargin 10
+                    #background None
 
                     has hbox
 
@@ -298,22 +280,41 @@ screen file_picker:
                     text description
 
                     key "save_delete" action FileDelete(i)
-                    
-                    
-screen save:
 
+
+
+screen save:
     # This ensures that any other menu screen is replaced.
     tag menu
-
-    use navigation
+    
+    imagemap:
+        ground         "gfx/menus/save.jpg"
+        idle           "gfx/menus/save.jpg"
+        hover          "gfx/menus/save_hover.jpg"
+        selected_idle  "gfx/menus/save_hover.jpg"
+        selected_hover "gfx/menus/save_hover.jpg"
+       
+        hotspot (  0,   0, 100, 40) action Return()        
+        hotspot (807, 145,  46, 63) action FilePagePrevious()
+        hotspot (809, 591,  46, 63) action FilePageNext()
+        
     use file_picker
 
 screen load:
-
     # This ensures that any other menu screen is replaced.
     tag menu
+    
+    imagemap:
+        ground         "gfx/menus/load.jpg"
+        idle           "gfx/menus/load.jpg"
+        hover          "gfx/menus/load_hover.jpg"
+        selected_idle  "gfx/menus/load_hover.jpg"
+        selected_hover "gfx/menus/load_hover.jpg"
+       
+        hotspot (  0,   0, 100, 40) action Return()        
+        hotspot (807, 145,  46, 63) action FilePagePrevious()
+        hotspot (809, 591,  46, 63) action FilePageNext()
 
-    use navigation
     use file_picker
 
 init -2 python:
@@ -334,109 +335,19 @@ init -2 python:
 # http://www.renpy.org/doc/html/screen_special.html#prefereces
     
 screen preferences:
-
     tag menu
 
-    # Include the navigation.
-    use navigation
+    imagemap:
+        ground         "gfx/menus/options.jpg"
+        idle           "gfx/menus/options.jpg"
+        hover          "gfx/menus/options_hover.jpg"
+        selected_idle  "gfx/menus/options_hover.jpg"
+        selected_hover "gfx/menus/options.jpg"
+       
+        hotspot (  0,   0, 100, 40) action Return()
+        hotspot (693, 249,  95, 95) action Preference("music mute", "toggle")
+        hotspot (693, 377,  95, 95) action Preference("sound mute", "toggle")
 
-    # Put the navigation columns in a three-wide grid.
-    grid 3 1:
-        style_group "prefs"
-        xfill True
-
-        # The left column.
-        vbox:
-            frame:
-                style_group "pref"
-                has vbox
-
-                label _("Display")
-                textbutton _("Window") action Preference("display", "window")
-                textbutton _("Fullscreen") action Preference("display", "fullscreen")
-
-            frame:
-                style_group "pref"
-                has vbox
-
-                label _("Transitions")
-                textbutton _("All") action Preference("transitions", "all")
-                textbutton _("None") action Preference("transitions", "none")
-
-            frame:
-                style_group "pref"
-                has vbox
-
-                label _("Text Speed")
-                bar value Preference("text speed")
-
-            frame:
-                style_group "pref"
-                has vbox
-
-                textbutton _("Joystick...") action ShowMenu("joystick_preferences")
-
-        vbox:
-            frame:
-                style_group "pref"
-                has vbox
-
-                label _("Skip")
-                textbutton _("Seen Messages") action Preference("skip", "seen")
-                textbutton _("All Messages") action Preference("skip", "all")
-
-            frame:
-                style_group "pref"
-                has vbox
-
-                textbutton _("Begin Skipping") action Skip()
-
-            frame:
-                style_group "pref"
-                has vbox
-
-                label _("After Choices")
-                textbutton _("Stop Skipping") action Preference("after choices", "stop")
-                textbutton _("Keep Skipping") action Preference("after choices", "skip")
-
-            frame:
-                style_group "pref"
-                has vbox
-
-                label _("Auto-Forward Time")
-                bar value Preference("auto-forward time")
-
-        vbox:
-            frame:
-                style_group "pref"
-                has vbox
-
-                label _("Music Volume")
-                bar value Preference("music volume")
-
-            frame:
-                style_group "pref"
-                has vbox
-
-                label _("Sound Volume")
-                bar value Preference("sound volume")
-
-                if config.sample_sound:
-                    textbutton "Test":
-                        action Play("sound", config.sample_sound)
-                        style "soundtest_button"
-
-            frame:
-                style_group "pref"
-                has vbox
-
-                label _("Voice Volume")
-                bar value Preference("voice volume")
-
-                if config.sample_voice:
-                    textbutton "Test":
-                        action Play("voice", config.sample_voice)
-                        style "soundtest_button"
 
 init -2 python:
     style.pref_frame.xfill = True

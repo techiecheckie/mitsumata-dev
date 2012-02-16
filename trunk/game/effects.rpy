@@ -1,4 +1,10 @@
 label effects:
+  transform blink(duration, start_value):
+    alpha start_value
+    linear (duration/2) alpha 1.0
+    linear (duration/2) alpha start_value
+    repeat
+
   # PDA item fade in
   transform fadein(delay):
     alpha 0.0

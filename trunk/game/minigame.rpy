@@ -39,6 +39,7 @@ init python:
   MINIGAME_GRID_COLS = 4
   MINIGAME_GRID_ROWS = 3 
   
+  # TODO
   MINIGAME_BONUSES = {
     "mole" : [
       (5000, ("hp", 300), ("mp", 200)),
@@ -66,6 +67,8 @@ init python:
 
     background = "bg whitescr"
     show_minigame_ui(background)
+    
+    minigame_keys = persistent.unlocked_minigames.keys()
   
     while True:
       set_description(MINIGAME_MAIN_DESCRIPTION)
@@ -73,17 +76,15 @@ init python:
       for y in range(0, MINIGAME_GRID_ROWS):
         for x in range(0, MINIGAME_GRID_COLS):
           index = y * MINIGAME_GRID_COLS + x
-          if index >= len(persistent.unlocked_minigames):
+          if index >= len(minigame_keys):
             break
-            
-          minigame = persistent.unlocked_minigames[index]
           
           ui.frame(xpos=MINIGAME_GRID_X + x * MINIGAME_CELL_SIZE, 
                    ypos=MINIGAME_GRID_Y + y * MINIGAME_CELL_SIZE,
                    background=None)
-          ui.imagebutton("gfx/buttons/minigame_" + minigame + ".png",
-                         "gfx/buttons/minigame_" + minigame + "_hover.png",
-                         clicked=ui.returns(minigame))
+          ui.imagebutton("gfx/buttons/minigame_" + minigame_keys[index] + ".png",
+                         "gfx/buttons/minigame_" + minigame_keys[index] + "_hover.png",
+                         clicked=ui.returns(minigame_keys[index]))
 
       button = ui.interact()
       if button == "exit":
@@ -98,7 +99,7 @@ init python:
         elif button == "bottles":
           show_bottles()
         elif button == "lock":
-          score = show_lock(persistent.minigame_levels["lock"])
+          score = show_lock()
         else:
           score = run(button)
           update_high_score(button, score)
@@ -157,7 +158,7 @@ init python:
                           y=MINIGAME_POS_Y,
                           game_width=MINIGAME_WIDTH,
                           game_height=MINIGAME_HEIGHT,
-                          level_number = persistent.minigame_levels[name] )
+                          level_number = persistent.unlocked_minigames[name][1] )
                           
     config.overlay_functions.append(minigame_ui_buttons)
 
@@ -166,11 +167,11 @@ init python:
     return score
   
   def update_high_score(game, score):
-    print "Got", score, "points, old score", persistent.minigame_scores[game]
+    print "Got", score, "points, old score", persistent.unlocked_minigames[game][0]
     
-    if score > persistent.minigame_scores[game]:
-      old_score = persistent.minigame_scores[game]
-      persistent.minigame_scores[game] = score
+    if score > persistent.unlocked_minigames[game][0]:
+      old_score = persistent.unlocked_minigames[game][0]
+      persistent.unlocked_minigames[game][0] = score
 
       score_row     = 10
       old_score_row = 10
