@@ -45,9 +45,7 @@ init python:
   renpy.image("pda_bg", "gfx/backgrounds/PDA_base.png")
   renpy.image("pda_glow", "gfx/backgrounds/PDA_glow.png")
  
-  '''
-  PDA buttons
-  '''
+
   def pda_buttons():
     renpy.transition(Dissolve(0.5))
     # inventory button
@@ -108,11 +106,6 @@ init python:
   # specific item information) is based on what button was previously pressed. 
   def show_inventory(items, values, page):
     if values[0] == "inventory" or values[0] == "scroll":
-      # Hide all the items (stupid workaround for hiding the items on other pages
-      # when scrolling through the item list)
-      #for item in items:
-      #  renpy.hide("item_" + item.get_id())
-    
       # Loop through the visible items, placing them in a grid formation
       for y in range(0, PDA_ROWS):
         for x in range(0, PDA_COLS):
@@ -121,43 +114,41 @@ init python:
             break
           item = items[index]
           
+          # Give the first item a slightly shorter slide duration
           if x == 0 and y == 0:
-            slide_delay = 0.0
+            slide_duration = 0.5
           else:
-            slide_delay = 1.0
+            slide_duration = 1.0
           
           x_pos = PDA_ICON_X + x * PDA_ITEM_CELL_WIDTH
           y_pos = PDA_ICON_Y + y * PDA_ITEM_CELL_HEIGHT
           
-          # Normal image. Doing it this way because we need a separate image to
-          # be able to move it around later (that, and because I know of no other
-          # way to do it.
-          renpy.show("item_" + item.get_id(), 
-                     at_list = [Position(xpos=x_pos, ypos=y_pos), 
-                                Transform(anchor=(0.0,0.0))])
-
+          at_items = [Position(xpos=x_pos, ypos=y_pos), Transform(anchor=(0.0,0.0))]
+          if persistent.unlocked_items[item.get_id()] == False:
+            at_items.append(blink(1.0, 0.5))
+          renpy.show("item_" + item.get_id(), at_list = at_items)
+          
           # Hover frame with invisible normal image and proper hover image
           ui.frame(xpos=x_pos, ypos=y_pos, xpadding=0, ypadding=0, background=None)
           ui.imagebutton("pda_transparent", 
                          "item_" + item.get_id() + "_hover",
-                         clicked=ui.returns(("item", item, slide_delay)))
+                         clicked=ui.returns(("item", item, slide_duration)))
       
     elif values[0] == "item":
-      # values = ("item", Item, slide_delay)
+      # values = ("item", Item, slide_duration)
       item = values[1]
+      # Disable blink animation once the item has been viewed
+      persistent.unlocked_items[item.get_id()] = True
  
       # First hide all the other images
       for displayed_item in items:
         if displayed_item != item:
           renpy.hide("item_" + displayed_item.get_id())
       
-      if values[2] > 0.0:
-        renpy.show("item_" + item.get_id(), 
-                   at_list = [pda_slide(PDA_ICON_X, PDA_ICON_Y)])
-        renpy.pause(values[2])
-      else:
-        renpy.show("item_" + item.get_id())
-
+      # Display a slide animation and wait a bit afterwards
+      renpy.show("item_" + item.get_id(), at_list = [pda_slide(PDA_ICON_X, PDA_ICON_Y)])
+      renpy.pause(values[2])
+        
       ui.frame(xpos=PDA_ICON_X, ypos=PDA_ICON_Y, xpadding=0, ypadding=0, background=None)
       ui.imagebutton("pda_transparent", 
                      "item_" + item.get_id() + "_hover",
@@ -181,29 +172,26 @@ init python:
             break
             
           journal = journals[index]
+          journal_locked = True
           
           if x == 0 and y == 0:
-            slide_delay = 0.0
+            slide_duration = 0.5
           else:
-            slide_delay = 1.0
+            slide_duration = 1.0
           
           x_pos = PDA_ICON_X + x * PDA_JOURNAL_CELL_WIDTH
           y_pos = PDA_ICON_Y + y * PDA_JOURNAL_CELL_HEIGHT
           
-          renpy.show("journal_" + journal.get_id(), 
-                     at_list = [Position(xpos=x_pos, ypos=y_pos), 
-                                Transform(anchor=(0.0,0.0))])
+          # Check whether a journal should display a lock icon instead and if the (unlocked) icon 
+          # should blink or not.
+          at_items = [Position(xpos=x_pos, ypos=y_pos), Transform(anchor=(0.0, 0.0))]
+          if journal.get_id() in persistent.unlocked_journals:
+            journal_locked = False
+            if persistent.unlocked_journals[journal.get_id()][0] == False:
+              at_items.append(blink(1.0, 0.5))
+          renpy.show("journal_" + journal.get_id(), at_list = at_items)
           
-          # Unnecessary complexity, but oh well..
-          # This goes through the ids in persistent.unlocked_journals and checks
-          # if any of those ids (xx:yy) match this journal's id (xx)
-          journal_unlocked = False
-          for id in persistent.unlocked_journals:
-            if id.startswith(journal.get_id()):
-              journal_unlocked = True
-              break
-          
-          if not journal_unlocked:
+          if journal_locked:
             # Display the lock icon
             renpy.show("journal_" + journal.get_id() + "_disabled",
                        at_list = [Position(xpos=x_pos, ypos=y_pos), 
@@ -213,13 +201,15 @@ init python:
             ui.frame(xpos=x_pos, ypos=y_pos, xpadding=0, ypadding=0, background=None)
             ui.imagebutton("pda_transparent", 
                            "journal_" + journal.get_id() + "_hover", 
-                           clicked=ui.returns(("journal", journal, slide_delay)))
+                           clicked=ui.returns(("journal", journal, slide_duration)))
            
     elif values[0] == "journal":
       # Display the journal's titles 
-      # values = ("journal", Journal, slide_delay)
+      # values = ("journal", Journal, slide_duration)
       journal = values[1]
       entries = journal.get_entries()
+      # Set journal status to "viewed"
+      persistent.unlocked_journals[journal.get_id()][0] = True
       
       # Hide all the other images
       for displayed_journal in journals:
@@ -227,12 +217,9 @@ init python:
           renpy.hide("journal_" + displayed_journal.get_id())
           renpy.hide("journal_" + displayed_journal.get_id() + "_disabled")
       
-      if values[2] > 0.0:
-        renpy.show("journal_" + journal.get_id(), 
-                   at_list = [pda_slide(PDA_ICON_X, PDA_ICON_Y)])
-        renpy.pause(values[2])
-      else:
-        renpy.show("journal_" + journal.get_id())
+      # Display a slide animation and wait a bit afterwards
+      renpy.show("journal_" + journal.get_id(), at_list = [pda_slide(PDA_ICON_X, PDA_ICON_Y)])
+      renpy.pause(values[2])
       
       ui.frame(xpos=PDA_ICON_X, ypos=PDA_ICON_Y, xpadding=0, ypadding=0, background=None)
       ui.imagebutton("pda_transparent",
@@ -243,11 +230,9 @@ init python:
       ui.vbox()
       ui.text("{color=#FFFFFF}{size=-2}Available entries:{/size}{/color}\n")
       for entry in entries:
-        for id in persistent.unlocked_journals:
-          if id == journal.get_id() + ":" + entry.get_id():
-            ui.textbutton("{color=#FFFFFF}{size=-2}" + entry.get_title() + "{/size}{/color}", 
-                          clicked=ui.returns(("entry", journal, entry)), xfill=True)
-            break
+        if entry.get_id() in persistent.unlocked_journals[journal.get_id()]:
+          ui.textbutton("{color=#FFFFFF}{size=-2}" + entry.get_title() + "{/size}{/color}", 
+                        clicked=ui.returns(("entry", journal, entry)), xfill=True)
       ui.close()
         
     # Display the entry's contents
@@ -298,11 +283,11 @@ label pda_loop:
     config.overlay_functions.append(pda_buttons)
   
     while (True):
-      #print "waiting for input..."
       values = ui.interact()
-      #print values
       
-      if values[0] == "inventory" and values[1] == None:
+      if values == 0:
+        pass
+      elif values[0] == "inventory" and values[1] == None:
         inventory.change_state()
         journal_manager.disable()
         hide_journals(journals)
@@ -330,6 +315,10 @@ label pda_loop:
         renpy.show("pda_glow", at_list = [Position(xpos=159, ypos=9), Transform(anchor=(0.0, 0.0))])
         config.overlay_functions.append(pda_buttons)
       elif values[0] == "exit":
+        inventory.disable()
+        journal_manager.disable()
+        hide_inventory(items)
+        hide_journals(journals)
         break
       elif values[0] == "scroll":
         if values[1] == "next":

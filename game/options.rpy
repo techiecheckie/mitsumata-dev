@@ -15,13 +15,18 @@ init -1 python hide:
     ## Should we enable the use of developer tools? This should be
     ## set to False before the game is released, so the user can't
     ## cheat using developer tools.
-
     config.developer = True
+    
+    # Should autosave be enabled?
+    config.has_autosave = False
 
     ## These control the width and height of the screen.
 
     config.screen_width = 1024
     config.screen_height = 768
+    
+    config.thumbnail_width = 115
+    config.thumbnail_height = 85
 
     ## This controls the title of the window, when Ren'Py is
     ## running in a window.
@@ -207,7 +212,7 @@ init -1 python hide:
     ## - A file name relative to the base directory, which is opened in a
     ##   web browser.
     ## - None, to disable help.   
-    config.help = "README.html"
+    #config.help = "README.html"
 
 
     #########################################

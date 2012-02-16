@@ -59,15 +59,6 @@ class Inventory():
       if item.get_id() == id:
         return item
     return None
-    
-  def unlock_item(self, id):
-    if id not in self.persistent.unlocked_items:
-      item = self.get_item(id)
-      if item != None:
-        self.persistent.unlocked_items.append(id)
-        return
-      print "[WARN] Could not unlock item, no such id found (id: %s)" % id
-    print "id already unlocked"
   
   def item_unlocked(self, id):
     return id in self.persistent.unlocked_items

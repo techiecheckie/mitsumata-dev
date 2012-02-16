@@ -22,7 +22,8 @@ init python:
     (6, (1,2,3,4,5,6), "Another test riddle")
   ]
   
-  def show_lock(level):
+  def show_lock():
+    #level = persistent.unlocked_minigames["lock"][1]
     level = 2
     level_settings = LOCK_LEVELS[level-1]
     numbers = [1]*level_settings[0]

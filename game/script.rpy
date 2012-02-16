@@ -266,6 +266,11 @@ image textbox_l = "gfx/textbox.png"
 image textbox_m = "gfx/textbox_2.png"
 image textbox_s = "gfx/textbox_mini.png"
 
+#image bg rikureading = ""
+#image bg rikuyouth = ""
+
+image asdf = "gfx/buttons/button_bonus.png"
+
 
 #--------------------------------
 #DECLARE CG IMAGES
@@ -490,6 +495,8 @@ label splashscreen:
      $print persistent.unlocked_journals
      $print persistent.unlocked_minigames
 
+     return
+     
      $ renpy.pause(0)
      scene bg whitescr
      show text "rosegold games presents..." with dissolve
@@ -620,10 +627,48 @@ $ magpot = inventory.item_unlocked("magpotion")
 # GAME STARTS HURR
 #--------------------------------
 
+image pda_button = "gfx/buttons/button_palm_pilot_hover.png"
+
 label start: 
-    $hp = 100
-    $mp = 30
-    $pda = True
+    #$HP = 100
+    #$MP = 100
+    #$pda = True
+    
+    "skadam"
+    
+    jump test
+
+    "srobloblob"
+    
+    #call birthdaygamemenu
+    #call kazuquiz
+    
+    #$battle("Riku", "Mamoru", 1, "bg riroom")
+    
+    #"platformer"
+    #$minigame("platformer", 1, 1)
+
+    #"mole"
+    #$minigame("mole", 4, 3)
+    
+    #"force"
+    #$minigame("force", 4, 3)
+    
+    #"power"
+    #$minigame("power", 4, 3)
+    
+    #"squats"
+    #$minigame("squats", 4, 3)
+    
+    #"duck"
+    #$minigame("duck", 4, 3)
+    
+    #"gears"
+    #$minigame("gears", 4, 3)
+    
+    #"cell"
+    #$minigame("cell", 4, 3)
+    
     #$renpy.show("bg riroom")
     #$show_main_ui()
     #$unlock_minigame("mole")
@@ -685,6 +730,7 @@ label Scene0:
 
     #play music "music/mitsumata1.mp3"
     #show bg rikureading
+    show bg riroom
     "Once upon a time, there was a prince who was not in any way different from other fairy tale princes."
     
     "He was rich, handsome, popular, destined to marry a princess, spoiled---"
@@ -994,7 +1040,7 @@ label Scene2:
         sb "Aw, you gotta head home?"
         
         "I grab my bag and stand, yawning. Just one more day of vacation left, and then it's 48 hours a week of the worst school hell ever."
-        "Fuuuuuck.The principal might as well just castrate me now and get it over with."
+        "Fuuuuuck. The principal might as well just castrate me now and get it over with."
 
         "Who in their right mind can even sit for that long, anyway? I got ADD just thinking about it."
 
@@ -1024,7 +1070,7 @@ label Scene3:
         #---Flashback---
         scene bg blackscr with fade
         
-        #scene bg rikyouth
+        #scene bg rikuyouth
         $show_main_ui()
         with slow_fade
 
@@ -1287,26 +1333,39 @@ label Scene5:
     
     r "Yeah?"
     
+label test:
+    $show_main_ui()
+    show bg riroom
+    
     ma "You start school tomorrow, right? Well...your father and I wanted to give you something to inspire you a little this year. Here. A present."
     
+    $minigame("mole", 1, 1)
+    
     r "Hm---ahh!"
-   
-    $inventory.unlock_item("pda") 
-    $ pda = True
+    
+    $pda = True
+    #$inventory.unlock_item("pda") 
+    $unlock_item("pda", False)
+    
+    # Display PDA icon blink animation
+    $renpy.show("pda_button", at_list=[blink(2.0, 0.0), Position(xpos=842, ypos=651), Transform(anchor=(0.0,0.0))], zorder=10)
     
     $ show_message("You can now access the PDA menu.", "medium")
     
-    #Stick an animation here that forces the PDA to blink.
+    # Stops the blinking animation
+    $renpy.hide("pda_button")
     
     $ show_message("Let's bring it up.", "medium")
     
     call pda_loop
+    #call pda_introduction
    
     $ show_message("The PDA is how you keep track of your items and what you learn.", "medium")
     $ show_message("It has other uses, but those come up later.", "medium")
     $ show_message("Remember to check your PDA often.", "medium")
     
-    $inventory.unlock_item("wallet")
+    #$inventory.unlock_item("wallet")
+    $unlock_item("wallet", False)
     #This goes back in the regular box.
     r "Whoa, this is the latest tech! It’s awesome! Thanks!"
     
