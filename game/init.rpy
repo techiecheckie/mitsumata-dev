@@ -31,15 +31,15 @@ init python:
   persistent.unlocked_minigames = {}
   persistent.unlocked_minigames["mole"]       = [100, 1]
   persistent.unlocked_minigames["cell"]       = [100, 1]
-  #persistent.unlocked_minigames["platformer"] = [100, 1]
-  #persistent.unlocked_minigames["duck"]       = [100, 1]
-  #persistent.unlocked_minigames["force"]      = [100, 1]
-  #persistent.unlocked_minigames["power"]      = [100, 1]
-  #persistent.unlocked_minigames["squats"]     = [100, 1]
-  #persistent.unlocked_minigames["gears"]      = [100, 1]
-  #persistent.unlocked_minigames["garden"]     = [100, 1]
-  #persistent.unlocked_minigames["lock"]       = [100, 1]
-  #persistent.unlocked_minigames["bottles"]    = [100, 1]
+  persistent.unlocked_minigames["platformer"] = [100, 1]
+  persistent.unlocked_minigames["duck"]       = [100, 1]
+  persistent.unlocked_minigames["force"]      = [100, 1]
+  persistent.unlocked_minigames["power"]      = [100, 1]
+  persistent.unlocked_minigames["squats"]     = [100, 1]
+  persistent.unlocked_minigames["gears"]      = [100, 1]
+  persistent.unlocked_minigames["garden"]     = [100, 1]
+  persistent.unlocked_minigames["lock"]       = [100, 1]
+  persistent.unlocked_minigames["bottles"]    = [100, 1]
   
   # current unlocked items
   persistent.unlocked_items = {}
