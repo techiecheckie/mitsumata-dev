@@ -629,24 +629,14 @@ $ magpot = inventory.item_unlocked("magpotion")
 
 image pda_button = "gfx/buttons/button_palm_pilot_hover.png"
 
-label start: 
-    #$HP = 100
-    #$MP = 100
-    #$pda = True
-    
-    "skadam"
-    
-    jump test
-
-    "srobloblob"
-    
+label start:
     #call birthdaygamemenu
     #call kazuquiz
     
     #$battle("Riku", "Mamoru", 1, "bg riroom")
     
     #"platformer"
-    #$minigame("platformer", 1, 1)
+    #$minigame("platformer", 4, 1) #minigame(name, level, score_to_pass)
 
     #"mole"
     #$minigame("mole", 4, 3)
@@ -1333,19 +1323,13 @@ label Scene5:
     
     r "Yeah?"
     
-label test:
-    $show_main_ui()
-    show bg riroom
-    
     ma "You start school tomorrow, right? Well...your father and I wanted to give you something to inspire you a little this year. Here. A present."
-    
-    $minigame("mole", 1, 1)
     
     r "Hm---ahh!"
     
     $pda = True
-    #$inventory.unlock_item("pda") 
-    $unlock_item("pda", False)
+    #$inventory.unlock_item("pda")
+    $unlock_item("pda", False) # False = don't show "item unlocked" messages
     
     # Display PDA icon blink animation
     $renpy.show("pda_button", at_list=[blink(2.0, 0.0), Position(xpos=842, ypos=651), Transform(anchor=(0.0,0.0))], zorder=10)
@@ -1358,7 +1342,7 @@ label test:
     $ show_message("Let's bring it up.", "medium")
     
     call pda_loop
-    #call pda_introduction
+    # or maybe call pda_introduction? Or perhaps fake the first PDA session using images only?
    
     $ show_message("The PDA is how you keep track of your items and what you learn.", "medium")
     $ show_message("It has other uses, but those come up later.", "medium")
@@ -1366,6 +1350,7 @@ label test:
     
     #$inventory.unlock_item("wallet")
     $unlock_item("wallet", False)
+    
     #This goes back in the regular box.
     r "Whoa, this is the latest tech! It’s awesome! Thanks!"
     

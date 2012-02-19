@@ -17,7 +17,7 @@ init python:
       # Level 3
       PlatformerLevel( time_limit       = 60,
                        distance         = 4500, 
-                       obstacle_density = 70),
+                       obstacle_density = 75),
       # Level 4
       PlatformerLevel( time_limit       = 60,
                        distance         = 5000, 
@@ -26,9 +26,9 @@ init python:
     
     MAP_SEGMENTS = [
       [
-        [ 3, 4, 3, 6, 8, 9, 2, 4, 3, 4, 3, 6, 8, 9, 2, 6, 8, 9, 2, 4, 3, 4, 3],
-        [10,18,20,19,18,20,10,11,12,11,12,10,18,20,10,11,12,11,10,19,18,10,11],
-        [21, 0, 0, 0, 0, 0,17,20,19,18,20,21, 0, 0,17,20,19,20,21, 0, 0,17,20]
+        [ 3, 4, 3, 4, 3, 5, 3, 6, 8, 9, 2, 4, 3, 4, 3, 4, 3, 6, 8, 9, 2, 6, 8, 9, 2, 4, 3, 4, 3, 4, 3],
+        [10,18,19,18,19,18,20,19,18,20,10,11,12,11,12,11,20,19,18,20,10,11,12,11,10,19,18,10,11,10,11],
+        [21, 0, 0, 0, 0, 0, 0, 0, 0, 0,17,20,19,18,20,21, 0, 0, 0, 0,17,20,19,20,21, 0, 0,17,18,19,20]
       ]
     ]
     
@@ -57,13 +57,21 @@ init python:
     ]
     
     OBSTACLE_TYPES = [
-      "plant1.png",
-      "plant2.png",
-      "plant3.png",
-      "plant4.png",
-      "plant5.png",
-      "plant6.png",
-      "plant7.png",
+      "plant_1.png",
+      "plant_2.png",
+      "plant_3.png",
+      "plant_4.png",
+      "plant_5.png",
+      "rock_1.png",
+      "rock_2.png",
+      "rock_3.png",
+      "rock_4.png",
+      "rock_5.png",
+      "tree_1.png",
+      "tree_2.png",
+      "tree_3.png",
+      "tree_4.png",
+      "tree_5.png"
     ]
     
     # those that can be walked on
@@ -142,6 +150,12 @@ init python:
     # runner initial cell position
     CELL_X = 2
     CELL_Y = len(MAP_SEGMENTS[0])-3
+
+    # Lacking a better name, this controls how far the next tile "protrudes" 
+    # into the previous one (the one the player currently is in). Increasing
+    # this number affects how soon the player bumps into objects or falls off 
+    # cliffs.
+    BUMPER = 5
     
     class Cell( GameObject ):
       def __init__( self, x, y ):
@@ -255,8 +269,8 @@ init python:
             
             for obstacle_type in OBSTACLE_TYPES:
               obstacle = GameObject()
-              obstacle["renderer"] = GameRenderer( GameImage( "gfx/platformer/obstacles/" + obstacle_type ) )
-              obstacle["transform"].set_scale( 0.7 )
+              obstacle["renderer"] = GameRenderer( GameImage( "gfx/platformer/obstacles/" + obstacle_type, Anchor.TOP_LEFT ) )
+              obstacle["transform"].set_scale( 1.0 )
               self.obstacles.append( obstacle )
 
         def create_runner( self ): 
@@ -303,12 +317,14 @@ init python:
             self.map = []            
             segments = []
             
+            # Calculate how many map segments are needed to cover the run distance
             map_length = 0
             while map_length < self.level.distance:
               index = random.randint(0,len(MAP_SEGMENTS)-1)
               segments.append(MAP_SEGMENTS[index])
               map_length += len(MAP_SEGMENTS[index][0]) * TILE_WIDTH
 
+            # Fill the map array with cells
             for k in range(0, len(segments)):
               segment = segments[k]
               for y in range(0, len(segment)):
@@ -328,11 +344,18 @@ init python:
                     if tile_type in DROWNABLE_TILES:
                       drownable = True
 
-                  if tile_type in OBSTACLE_TILES and x > 2:
+                  if tile_type in OBSTACLE_TILES and x > 3:
                     if random.randint( 0, 100 ) <= self.level.obstacle_density:
-                      # make sure there are no three obstacles in a row
-                      if self.map[y][len(self.map[y])-1].obstacle == None or self.map[y][len(self.map[y])-2].obstacle == None:
-                        obstacle = self.obstacles[ random.randint( 0, len(OBSTACLE_TYPES)-1 ) ]
+                      # Because the obstacles are big and long, make sure there 
+                      # are no obstacles in two consecutive tiles.                      
+                      if (self.map[y][len(self.map[y])-1].obstacle == None and
+                          self.map[y][len(self.map[y])-2].obstacle == None):
+                        # Also, because the new obstacles are bigger than the 
+                        # original ones, leave the tile next to an edge tile 
+                        # empty too to make sure there's enough jumping space.
+                          if x < len(segment[y])-1 and segment[y][x+1] != 6:
+                            obstacle = self.obstacles[ random.randint( 0, len(OBSTACLE_TYPES)-1 ) ]
+                            print x, len(segment[y])
                 
                   cell = Cell( x*TILE_WIDTH + k*len(segment[0])*TILE_WIDTH, GROUND_LEVEL + y*TILE_HEIGHT )
                   cell.tile      = tile
@@ -343,7 +366,6 @@ init python:
                   self.map[y].append( cell )
                   
             row = self.map[0]
-            #print len(self.map), len(self.map[0]), len(self.map[0])*TILE_WIDTH
 
         def create_backgrounds( self ):
             self.backgrounds = []
@@ -412,14 +434,17 @@ init python:
             cell_x = self.runner["behavior"].cell_x-3
             
             for y in range(0, VIEW_HEIGHT):
-              for x in range(cell_x, cell_x + VIEW_WIDTH):
+              for x in range(cell_x, cell_x + VIEW_WIDTH + 1):
+                # Dirty +1 increase added to have the new, bigger obstacles drawn
+                # off screen.
                   
                 cell = self.map[y][x]
                 if cell.tile != None:
                   cell.tile["transform"].x = cell.x - self.runner["behavior"].distance
                   cell.tile["transform"].y = cell.y - TILE_HEIGHT/2
                   cell.tile["renderer"].render( blitter, clip_rect, world_transform )
-                  
+                
+                cell = self.map[y][x-1]
                 if cell.obstacle != None:
                   cell.obstacle["transform"].x = cell.x - self.runner["behavior"].distance
                   cell.obstacle["transform"].y = cell.y - TILE_HEIGHT
@@ -506,13 +531,20 @@ init python:
             
             update_cell = False
             
-            if self.sub_distance + 10 >= TILE_WIDTH:
+            # Running to the next tile yet?
+            if self.sub_distance + BUMPER >= TILE_WIDTH:
               self.sub_distance -= TILE_WIDTH
               self.cell_x += 1
               update_cell = True
             
             self.y_offset += self.y_velocity * delta_sec
             
+            # Vertical stuff was used in the old version where it was possible
+            # to move verticaly too rather than running straight all the time.
+            # Now it merely checks if you've fallen down and there's water in
+            # the current tile. Most likely all of the stuff below could (should)
+            # be rewritten/simplified now that there's no need for any vertical
+            # tile changing anymore. --> TODO?
             if self.y_offset >= TILE_HEIGHT:
               self.y_offset = 0
               self.cell_y += 1
