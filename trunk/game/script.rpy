@@ -18,9 +18,6 @@
 #***********************************
 # PYTHON CODES GO HERE.
 #***********************************
-
-#init python:
-#  init()
   
 #---------------------
 #KONAMI CODE
@@ -32,23 +29,21 @@
 # the current game state isn't lost.
 
 #init python hide:
-
 #    class KonamiListener(renpy.Displayable):
-
 #        def __init__(self, target):
-
+#
 #            renpy.Displayable.__init__(self)
-
+#
 #            import pygame
-            
-            # The label we jump to when the code is entered.
+#           
+#            # The label we jump to when the code is entered.
 #            self.target = target
-
-            # This is the index (in self.code) of the key we're
-            # expecting.
+#
+#            # This is the index (in self.code) of the key we're
+#            # expecting.
 #            self.state = 0
-
-            # The code itself.
+#
+#            # The code itself.
 #            self.code = [
 #                pygame.K_UP,
 #                pygame.K_UP,
@@ -61,162 +56,209 @@
 #                pygame.K_b,
 #                pygame.K_a,
 #                ]
-
-        # This function listens for events.
+#
+#        # This function listens for events.
 #        def event(self, ev, x, y, st):
 #            import pygame
-
-            # We only care about keydown events.
+#
+#            # We only care about keydown events.
 #            if ev.type != pygame.KEYDOWN:
 #                return
-
-            # If it's not the key we want, go back to the start of the statem
-            # machine.
+#
+#            # If it's not the key we want, go back to the start of the statem
+#            # machine.
 #            if ev.key != self.code[self.state]:
 #                self.state = 0
 #                return
-
-            # Otherwise, go to the next state.
+#
+#            # Otherwise, go to the next state.
 #            self.state += 1
-
-            # If we are at the end of the code, then call the target label in
-            # the new context. (After we reset the state machine.)
+#
+#            # If we are at the end of the code, then call the target label in
+#            # the new context. (After we reset the state machine.)
 #            if self.state == len(self.code):
 #                self.state = 0
 #                renpy.call_in_new_context(self.target)
-
+#
 #            return
-
-        # Return a small empty render, so we get events.
+#
+#        # Return a small empty render, so we get events.
 #        def render(self, width, height, st, at):
 #            return renpy.Render(1, 1)
-
-
-    # Create a KonamiListener to actually listen for the code.
+#
+#
+#    # Create a KonamiListener to actually listen for the code.
 #    store.konami_listener = KonamiListener('konami_code')
-
-    # This adds konami_listener to each interaction.
+#
+#    # This adds konami_listener to each interaction.
 #    def konami_overlay():
 #        ui.add(store.konami_listener)
-
+#
 #    config.overlay_functions.append(konami_overlay)
-
 
 # This is called in a new context when the konami code is entered.
 #label konami_code:
-
 #    "GJ YOU ACTIVATED SOME SPECIAL SCENE OR SMTH!"
-
 #    return
    
 
-    
-#-----------------------------------------
-# CREATING AMBIENT MUSIC
-#-----------------------------------------
-    
-# The below code allows us to separate music between silence so that we may make an ambient, cool sounding immersive game. Likely useful.   
-# This goes in init block
-#    python:
-#       def ambient(songlist, interval):
-#            playlist = ["sounds/pause_5s.ogg"]
-#           for song in songlist:
-#                playlist.append(song)
-#                j = renpy.random.randint(2, interval)
-#                for i in range(0, j):
-#                    playlist.append("sounds/pause_5s.ogg")
-#            return renpy.music.play(playlist, channel=6)
+init:
+  #python:
+    #if lang == "english":
+    #    style.default.font = "DejaVuSans.ttf"
+    #elif lang == "japanese":
+    #    style.default.font = "enksh.ttf"
+    #    style.default.language = "eastasian"
+    #    style.default.size = 19 
+    #    config.translations["Language"] = u"言語を選択"
 
-# This is used a the beginning of label, as the most logical place for ambient noises to begin.. :P
-#$ ambient(("sounds/ambient02.ogg","sounds/ambient06.ogg","sounds/ambient09.ogg"), 4)
+    #-----------------------------------------
+    # CREATING AMBIENT MUSIC
+    #-----------------------------------------
+    # The below code allows us to separate music between silence so that we may make an ambient, cool
+    # sounding immersive game. Likely useful.   
+    # def ambient(songlist, interval):
+    #     playlist = ["sounds/pause_5s.ogg"]
+    #     for song in songlist:
+    #         playlist.append(song)
+    #         j = renpy.random.randint(2, interval)
+    #         for i in range(0, j):
+    #             playlist.append("sounds/pause_5s.ogg")
+    #     return renpy.music.play(playlist, channel=6)
 
-
-#--------------------------------------
-# SOUNDS DURING TYPING  
-#--------------------------------------    
-
-# This stuff here allows you to play a sound while the callback character is talking. 
-#init python:
-#    def callback(event, **kwargs):
-#      if event == "show":
-#            renpy.music.play("MUSICFILENAMEHERE", channel="SOUNDHERE")
-#       elif event == "slow_done" or event == "end":
-#            renpy.music.stop(channel="sound")
-
-# This code here declares who the call back character is. The init and $ signs must be included.
-# init:
-#    $ r = Character("Riku", callback=callback)
+    # This is used a the beginning of label, as the most logical place for ambient noises to begin.
+    #$ ambient(("sounds/ambient02.ogg","sounds/ambient06.ogg","sounds/ambient09.ogg"), 4)
 
 
+    #--------------------------------------
+    # SOUNDS DURING TYPING  
+    #--------------------------------------    
+    # This stuff here allows you to play a sound while the callback character is talking. 
+    # def callback(event, **kwargs):
+    #     if event == "show":
+    #         renpy.music.play("MUSICFILENAMEHERE", channel="SOUNDHERE")
+    #     elif event == "slow_done" or event == "end":
+    #         renpy.music.stop(channel="sound")
 
-#--------------------------------------------------------------------
-# CODE TO MAKE A MUSIC ROOM IN THE MENU
-#--------------------------------------------------------------------
-#init python:
+    # This code here declares who the call back character is. The init and $ signs must be included.
+    # init:
+    #    $ r = Character("Riku", callback=callback)
 
-#    def set_playing_(track):
-#        store.playing = track
-#        return True
 
-#    set_playing = renpy.curry(set_playing_)
-
-    # Call this with a button name and a track to define a music
-    # button.
-#    def music_button(name, track):
-
-#        if store.playing == track:
-#            role = "selected_"
-#        else:
-#            role = ""
-
-#        if not renpy.seen_audio(track):
-#            name = "u"
-#            clicked = None
-#        else:
-#            clicked = set_playing(track)
-        
-            
-#        ui.textbutton(
-#            name,
-#            clicked=clicked,
-#            role=role,
-#            size_group="music")
-    
+    #--------------------------------------------------------------------
+    # CODE TO MAKE A MUSIC ROOM IN THE MENU
+    #--------------------------------------------------------------------
+    # def set_playing_(track):
+    #     store.playing = track
+    #     return True
+    #
+    # set_playing = renpy.curry(set_playing_)
+    #
+    # Call this with a button name and a track to define a music button.
+    # def music_button(name, track):
+    #     if store.playing == track:
+    #         role = "selected_"
+    #     else:
+    #         role = ""
+    #
+    #     if not renpy.seen_audio(track):
+    #         name = "u"
+    #         clicked = None
+    #     else:
+    #         clicked = set_playing(track)
+    #          
+    #     ui.textbutton(
+    #         name,
+    #         clicked=clicked,
+    #         role=role,
+    #         size_group="music")
+    #  
     # Add to the main menu.
-#    config.main_menu.insert(3, ("Music Room", "music_room", "True"))
+    # config.main_menu.insert(3, ("Music Room", "music_room", "True"))
+    
+  #*******************************
+  # EFFECT COMMANDS
+  #*******************************
+  $ slow_dissolve = Dissolve(3.0)
+  $ slow_fade = Fade(2, 2, 3)
+  $ flash = Fade(0.1, 0.0, 0.5, color="#fff")
+   
+  # The two pan commands do the following.
+  # Panltr pans the screen from left to right 1600 pixels, taking 10 seconds to do so.
+  # Panutd pans the screen from up to down 1600 pixels, taking 10 seconds to do so.
+  # The $renpy.pause() command MUST be used to delay other programming while panning is going on.
+  # There must always be a full screen's worth of pixels during the pan or it will cause a problem
+  #  with rendering.
+  $ panltr = Pan((0, 0), (1600, 0), 10.0)
+  $ panutd = Pan((0,1600), (0, 0), 10.0)
 
-        
+  # The below all take with commands.   
+  # For example, in "wiperight", a wipe from left to right, first the left edge of the image is 
+  # revealed at the left edge of the screen, then the center of the image, and finally the 
+  # right side of the image at the right of the screen.   
+  $ wiperight = CropMove(1.0, "wiperight")
+  $ wipeleft = CropMove(1.0, "wipeleft")
+  $ wipeup = CropMove(1.0, "wipeup")
+  $ wipedown = CropMove(1.0, "wipedown")
+
+  # In a "slideright", the right edge of the image starts at the left edge of the screen, 
+  # and moves to the right as the transition progresses.   
+  $ slideright = CropMove(1.0, "slideright")
+  $ slideleft = CropMove(1.0, "slideleft")
+  $ slideup = CropMove(1.0, "slideup")
+  $ slidedown = CropMove(1.0, "slidedown")
+
+  # There are also slideaways, in which the old image moves on top of the new image.   
+  $ slideawayright = CropMove(1.0, "slideawayright")
+  $ slideawayleft = CropMove(1.0, "slideawayleft")
+  $ slideawayup = CropMove(1.0, "slideawayup")
+  $ slideawaydown = CropMove(1.0, "slideawaydown")
+
+  $ irisout = CropMove(1.0, "irisout")
+  $ irisin = CropMove(1.0, "irisin")
+
+  $ noise_dissolve = ImageDissolve(im.Tile("gfx/effects/noisetile.png"), 2.0, 1)
+
+  #Shaky uses the at command    
+  $ shaky = Shake((0, 0, 0, 0), 2.5, dist=20)
+
+  #Shorter dissolve command for teleport
+  $ sho_dis = Dissolve(0.2)
+  
+  #Teleport uses the with command    
+  #$ teleport = MultipleTransition([False, sho_dis, "#fff", sho_dis, False, sho_dis, "#fff", sho_dis,
+  #                                     True, sho_dis, "#fff", sho_dis, True])
+  
+  image snow = Snow("gfx/effects/snowflake.png")
+
+  
 #label music_room:
-
 #    scene black
-
 #    python:
 #        _game_menu_screen = None
-
-        # The default track of music.
+#        # The default track of music.
 #        playing = "11-Yesterday.ogg"
         
 #label music_room_loop:
-
-    # Play the playing music, if it changed.
+#    # Play the playing music, if it changed.
 #    python:
 #        renpy.music.play(playing, if_changed=True, fadeout=1)
-
-        # Display the various music buttons.
+#
+#        # Display the various music buttons.
 #        ui.vbox(xalign=0.5, ypos=100)
 #        music_button("Yesterday", "11-Yesterday.ogg")
 #        music_button("Yellow Submarine", "15-Yellow_Submarine.ogg")
 #        music_button("Hey Jude", "21-Hey_Jude.ogg")
 #        ui.close()
-
-        # This is how we return to the main menu.
+#
+#        # This is how we return to the main menu.
 #        ui.textbutton(
 #            "Return",
 #            clicked=ui.returns(False),
 #            xalign=0.5,
 #            ypos=450,
 #            size_group="music")
-
+#
 #    if ui.interact():
 #        jump music_room_loop
 #    else:
@@ -228,8 +270,27 @@
 # DECLARE BG IMAGES
 #----------------------------------
 # eg. image eileen happy = "eileen_happy.png"
+#image bg bar = ""
+#image bg barcg = ""
+#image bg bath = ""
+#image bg firstview = ""
+#image bg mameat1 = ""
+#image bg mameat2 = ""
+#image bg maminpain = ""
+#image bg mamview = ""
+#image bg rikureading = ""
+#image bg rikuyouth = ""
+#image bg shrfr = ""
+#image bg soumeheal = ""
+#image bg soupowers = ""
+#image bg souwithplants = ""
+#image bg suhit = ""
+#image bg traingr1 = ""
+#image bg traingr2 = ""
+#image bg train1 = ""
+#image bg train2 = ""
 
-#image bg shrfr = 
+image bg backalley = "gfx/backgrounds/streetalley2.png"
 image bg hall1 = "gfx/backgrounds/Hallway1.jpg"
 image bg hall2 = "gfx/backgrounds/Hallway2.jpg"
 image bg riroom = "gfx/backgrounds/room1.png"
@@ -243,55 +304,46 @@ image bg dfor3 = "gfx/backgrounds/dforest3.png"
 image bg nfor1 = "gfx/backgrounds/nforest1.png"
 image bg nfor2 = "gfx/backgrounds/nforest2.png"
 image bg nfor3 = "gfx/backgrounds/nforest3.png"
-#image bg shrfr = "shrinefront.png"
 image bg kitchen = "gfx/backgrounds/kitchen.jpg"
-#image bg train1 = ""
-#image bg train2 = ""
 image bg gar1 = "gfx/backgrounds/garden1.png"
 image bg gar2 = "gfx/backgrounds/garden2.png"
 image bg street = "gfx/backgrounds/streetalley1.png"
 image bg store = "gfx/backgrounds/store.png"
-image bg backalley = "gfx/backgrounds/streetalley2.png"
-image bg blackscr = "gfx/backgrounds/blackscr.png"
-image bg redscr = "gfx/backgrounds/redscr.jpg"
-image bg whitescr = "gfx/backgrounds/whitescr.jpg"
-
 image bg ngro = "gfx/backgrounds/nightgrass.jpg"
 image bg nsky = "gfx/backgrounds/nightsky.jpg"
 image bg dgro = "gfx/backgrounds/daygrass.jpg"
 image bg dsky = "gfx/backgrounds/daysky.jpg"
 
+image bg blackscr = "gfx/backgrounds/blackscr.png"
+image bg redscr = "gfx/backgrounds/redscr.jpg"
+image bg whitescr = "gfx/backgrounds/whitescr.jpg"
+
 image map = "gfx/backgrounds/map.png"
 image textbox_l = "gfx/textbox.png"
 image textbox_m = "gfx/textbox_2.png"
 image textbox_s = "gfx/textbox_mini.png"
-
-#image bg rikureading = ""
-#image bg rikuyouth = ""
-
-image asdf = "gfx/buttons/button_bonus.png"
-
+image pda_button = "gfx/buttons/button_palm_pilot_hover.png"
 
 #--------------------------------
 #DECLARE CG IMAGES
 #--------------------------------
-
 image bg dream = "gfx/backgrounds/dream.jpg"
-
 
 #-----------------------------------------------
 #DECLARE RIKU SPRITE IMAGES
 #-----------------------------------------------
-image r happy = "gfx/sprites/rhappy.png"
-#image r sad = ""
-#image r scare = ""
-#image r grin = ""
-#image r fight = ""
-#image r blush = ""
-#image r upset = ""
-#image r neu = ""
-#image r mad = ""
+image r blush = "gfx/sprites/riku_8.png"
 #image r confu = ""
+#image r excite = ""
+#image r fight = ""
+image r grin = "gfx/sprites/riku_6.png"
+image r happy = "gfx/sprites/riku_2.png"
+image r mad = "gfx/sprites/riku_7.png"
+image r neu = "gfx/sprites/riku_1.png"
+image r sad = "gfx/sprites/riku_4.png"
+image r scare = "gfx/sprites/riku_3.png"
+#image r surp = ""
+#image r upset = ""
 
 #---------------------------------------------------
 #DECLARE ROMAN SPRITE IMAGES
@@ -304,6 +356,11 @@ image ro sad = "gfx/sprites/rosad.png"
 image ro worry = "gfx/sprites/roworried.png"
 image ro neu = "gfx/sprites/roneutral.png"
 image ro pout = "gfx/sprites/ropout.png"
+#image ro surp = ""
+#image ro frown = ""
+#image ro smile = ""
+#image ro sweat = ""
+#image ro flush = ""
 
 #------------------------------------------------
 #DECLARE SUSA SPRITE IMAGES
@@ -340,6 +397,8 @@ image you flirt = "gfx/sprites/youflirt.png"
 image you misch = "gfx/sprites/youmis.png"
 image you neu = "gfx/sprites/youneu.png"
 image you bore = "gfx/sprites/youbored.png"
+#image so grin = ""
+#image so frown = ""
 
 #----------------------------------------------
 #DECLARE LIZA SPRITE IMAGES
@@ -358,6 +417,7 @@ image you bore = "gfx/sprites/youbored.png"
 #image m mad = ""
 #image m fight = ""
 #image m gentle = ""
+#image m unhappy = ""
 
 #-------------------------------------------------------
 #DECLARE KAZUTAKA SPRITE IMAGES
@@ -376,10 +436,10 @@ image you bore = "gfx/sprites/youbored.png"
 #----------------------------------------------------------------
 #DECLARE DEMON HUNTER SPRITE IMAGES
 #----------------------------------------------------------------
-#image dg neu = ""
-#image dg grin = ""
-#image db neu = ""
-#image db grin = ""
+image dg neu = "gfx/sprites/huntergirl_serious.png"
+image dg grin = "gfx/sprites/huntergirl_smile.png"
+image db neu = "gfx/sprites/hunterboy_serious.png"
+image db grin = "gfx/sprites/hunterboy_smile.png"
 
 #-----------------------------------------------------
 #DECLARE STUDENT SPRITE IMAGES
@@ -402,15 +462,13 @@ image st bmad = "gfx/sprites/boystumad.png"
 #-----------------------------------------------
 #image p = ""
 #image u = ""
+#image pa = ""
+#image ma = ""
 
 
 #-----------------------------------
 #DECLARE GAME CHARS
 #-----------------------------------
-#init python:
-
-    #if lang == "english":
-    #    style.default.font = "DejaVuSans.ttf"
         
 define su = Character('Susa', show_two_window=False)
 define r = Character('Riku', show_two_window=False)
@@ -442,12 +500,6 @@ define ob1 = Character('Older Boy 2', show_two_window=False)
 define a = Character('Audra', show_two_window=False )
 define na = Character('Naomi', show_two_window=False )
 define ak = Character('Akiko', show_two_window=False)
-   # elif lang == "japanese":
-   #         style.default.font = "enksh.ttf"
-   #         style.default.language = "eastasian"
-   #         style.default.size = 19
-    
-   #         config.translations["Language"] = u"言語を選択"
 
 #*****************************************
 # DYNAMIC CHARACTER NAMING
@@ -479,157 +531,76 @@ define ak = Character('Akiko', show_two_window=False)
 #***********************
 # The splashscreen is called, if it exists, before the main menu is
 # shown the first time. It is not called if the game has restarted.
-
 # We'll comment it out for now.
 #
 #label splashscreen1:
-
 #    if not persistent.chose_lang:
 #        $ persistent.chose_lang = True
 #        jump language_chooser
-
 #    return
 
 label splashscreen:
-     $print persistent.unlocked_items
-     $print persistent.unlocked_journals
-     $print persistent.unlocked_minigames
-
-     return
+    #$ renpy.pause(0)
+    #scene bg whitescr
+    #show text "rosegold games presents..." with dissolve
+    #$ renpy.pause(5.0)
+    #hide text with dissolve
+    #show text "Mitsumata: The First Act" with dissolve
+    #$ renpy.pause(5.0)
+    #hide text with dissolve
+    #show text "Part I" with dissolve
+    #$ renpy.pause(1.0)
+    #hide text with dissolve
      
-     $ renpy.pause(0)
-     scene bg whitescr
-     show text "rosegold games presents..." with dissolve
-     $ renpy.pause(5.0)
-     hide text with dissolve
-     show text "Mitsumata: The First Act" with dissolve
-     $ renpy.pause(5.0)
-     hide text with dissolve
-     show text "Part I" with dissolve
-     $ renpy.pause(1.0)
-     hide text with dissolve
+    #$print persistent.unlocked_items
+    #$print persistent.unlocked_journals
+    #$print persistent.unlocked_minigames
 
-     return
-    
+    return
 
-#*******************************
-# EFFECT COMMANDS
-#*******************************
-init:
-   $ slow_dissolve = Dissolve(3.0)
-   $ slow_fade = Fade(2, 2, 3)
-   $ flash = Fade(0.1, 0.0, 0.5, color="#fff")
-   
-# The two pan commands do the following.
-# Panltr pans the screen from left to right 1600 pixels, taking 10 seconds to do so.
-# Panutd pans the screen from up to down 1600 pixels, taking 10 seconds to do so.
-# The $renpy.pause() command MUST be used to delay other programming while panning is going on.
-# There must always be a full screen's worth of pixels during the pan or it will cause a problem with rendering.
-   $ panltr = Pan((0, 0), (1600, 0), 10.0)
-   $ panutd = Pan((0,1600), (0, 0), 10.0)
-
-#The below all take with commands.   
-#For example, in "wiperight", a wipe from left to right, first the left edge of the image is 
-#revealed at the left edge of the screen, then the center of the image, and finally the 
-#right side of the image at the right of the screen.   
-   $ wiperight = CropMove(1.0, "wiperight")
-   $ wipeleft = CropMove(1.0, "wipeleft")
-   $ wipeup = CropMove(1.0, "wipeup")
-   $ wipedown = CropMove(1.0, "wipedown")
-
-#In a "slideright", the right edge of the image starts at the left edge of the screen, 
-#and moves to the right as the transition progresses.   
-   $ slideright = CropMove(1.0, "slideright")
-   $ slideleft = CropMove(1.0, "slideleft")
-   $ slideup = CropMove(1.0, "slideup")
-   $ slidedown = CropMove(1.0, "slidedown")
-
-#There are also slideaways, in which the old image moves on top of the new image.   
-   $ slideawayright = CropMove(1.0, "slideawayright")
-   $ slideawayleft = CropMove(1.0, "slideawayleft")
-   $ slideawayup = CropMove(1.0, "slideawayup")
-   $ slideawaydown = CropMove(1.0, "slideawaydown")
-
-   $ irisout = CropMove(1.0, "irisout")
-   $ irisin = CropMove(1.0, "irisin")
-
-   $ noise_dissolve = ImageDissolve(im.Tile("gfx/effects/noisetile.png"), 2.0, 1)
-   
-init:
-    image snow = Snow("gfx/effects/snowflake.png")
-
-#Shaky uses the at command    
-init:
-    $ shaky = Shake((0, 0, 0, 0), 2.5, dist=20)
-
-#Shorter dissolve command for teleport
-init:
-    $ sho_dis = Dissolve(0.2)
-
-#Teleport uses the with command    
-#init:
-#$ teleport = MultipleTransition([False, sho_dis, "#fff", sho_dis, False, sho_dis, "#fff", sho_dis,
-#                                     True, sho_dis, "#fff", sho_dis, True])
-   
 #***********************
 # ITEM LABELS
 #***********************
-#This unlocks an item.
-#inventory.unlock_item("id")
-#This locks it again.
-#inventory.lock_item("id")
-#This checks to see if an item is unlocked.
-#inventory.item_unlocked("id")
-#This checks to see if an item is locked.
-#inventory.item_locked("id")
-
-#For simplistic use during checking for unlocked items
-$ pda = inventory.item_unlocked("pda")
-$ knife = inventory.item_unlocked("knife")
-$ wallet = inventory.item_unlocked("wallet")
-$ fullwallet = inventory.item_unlocked("fullwallet")
-$ signet = inventory.item_unlocked("signet")
-$ redjewel = inventory.item_unlocked("redjewel")
-$ map = inventory.item_unlocked("map")
-$ salve = inventory.item_unlocked("salve")
-$ ice = inventory.item_unlocked("ice")
-$ rose = inventory.item_unlocked("rose")
-$ cake = inventory.item_unlocked("cake")
-$ goodice = inventory.item_unlocked("goodice")
-$ trackseed = inventory.item_unlocked("trackseed")
-$ memo = inventory.item_unlocked("memo")
-$ pic = inventory.item_unlocked("pic")
-$ coin = inventory.item_unlocked("coin")
-$ seal = inventory.item_unlocked("seal")
-$ sake = inventory.item_unlocked("sake")
-$ spice = inventory.item_unlocked("spice")
-$ meat = inventory.item_unlocked("meat")
-$ veg = inventory.item_unlocked("veg")
-$ herb = inventory.item_unlocked("herb")
-$ pollen = inventory.item_unlocked("pollen")
-$ clara = inventory.item_unlocked("clara")
-$ terra = inventory.item_unlocked("terra")
-$ vita = inventory.item_unlocked("vita")
-$ mitsumata = inventory.item_unlocked("mitsumata")
-$ uni = inventory.item_unlocked("uni")
-$ gun = inventory.item_unlocked("gun")
-$ book1 = inventory.item_unlocked("book1")
-$ book2 = inventory.item_unlocked("book2")
-$ book3 = inventory.item_unlocked("book3")
-$ book4 = inventory.item_unlocked("book4")
-$ garden = inventory.item_unlocked("garden")
-$ phone = inventory.item_unlocked("phone")
-$ game = inventory.item_unlocked("game")
-$ strpot = inventory.item_unlocked("strpotion")
-$ magpot = inventory.item_unlocked("magpotion")
+# This unlocks an item.
+#   $unlock_item("id", True|False), True to display a message, False to not.
+#
+# This locks it again.
+#   $lock_item("id", True|False), the boolean has no effect here yet, because the
+#   message part hasn't been implemented yet (if ever). It can be done if necessary.
+#
+# This checks to see if an item is unlocked.
+#   inventory.item_unlocked("id"), returns True is unlocked, else False.
+#
+#   A shorter version of this has been added to init.rpy:
+#   item_unlocked("id)
 
 #--------------------------------
 # GAME STARTS HURR
 #--------------------------------
-
-image pda_button = "gfx/buttons/button_palm_pilot_hover.png"
-
 label start:
+    menu:
+        "Jump to Scene17 to test Magic Control Game.":
+                jump Scene17
+        "Jump to Scene26 to test all nightly choices.":
+                jump Scene26
+        "Jump to Scene33 to test a battle.":
+                jump battle1
+        "Jump to Scene37 to test Duck Hunt Game.":
+                jump Scene37
+        "Jump to Scene40a to test Platformer.":
+                jump Scene40a
+        "Jump to Scene41 to test Gear puzzle.":
+                jump Scene41
+        "Jump to Scene46a to test another battle.":
+                jump Scene46a
+        "Jump to Scene47 to test a third battle.":
+                jump Scene47
+        "Jump to Scene52 to test HP/MP values.":
+                jump Scene52
+        "Start from beginning.":
+                jump Scene0
+                
+label test_stuff:
     #call birthdaygamemenu
     #call kazuquiz
     
@@ -665,34 +636,12 @@ label start:
     #call shop_loop
     #$decision = "16"
     #call show_map
-
-menu:
-        "Jump to Scene17 to test Magic Control Game.":
-                jump Scene17
-        "Jump to Scene26 to test all nightly choices.":
-                jump Scene26
-        "Jump to Scene33 to test a battle.":
-                jump battle1
-        "Jump to Scene37 to test Duck Hunt Game.":
-                jump Scene37
-        "Jump to Scene40a to test Platformer.":
-                jump Scene40a
-        "Jump to Scene41 to test Gear puzzle.":
-                jump Scene41
-        "Jump to Scene46a to test another battle.":
-                jump Scene46a
-        "Jump to Scene47 to test a third battle.":
-                jump Scene47
-        "Jump to Scene52 to test HP/MP values.":
-                jump Scene52
-        "Start from beginning.":
-                jump Scene0
                 
 label Scene0:    
     scene bg blackscr
     $show_main_ui()
     
-# All of the below commented out effects have proven to work.     
+    # All of the below commented out effects have proven to work.     
     #show bg riroom at shaky with dissolve 
     #$renpy.pause(3.0)
     
@@ -1328,8 +1277,7 @@ label Scene5:
     r "Hm---ahh!"
     
     $pda = True
-    #$inventory.unlock_item("pda")
-    $unlock_item("pda", False) # False = don't show "item unlocked" messages
+    $unlock_item("pda", True) # False = don't show "item unlocked" messages
     
     # Display PDA icon blink animation
     $renpy.show("pda_button", at_list=[blink(2.0, 0.0), Position(xpos=842, ypos=651), Transform(anchor=(0.0,0.0))], zorder=10)
@@ -1348,8 +1296,7 @@ label Scene5:
     $ show_message("It has other uses, but those come up later.", "medium")
     $ show_message("Remember to check your PDA often.", "medium")
     
-    #$inventory.unlock_item("wallet")
-    $unlock_item("wallet", False)
+    $unlock_item("wallet", True)
     
     #This goes back in the regular box.
     r "Whoa, this is the latest tech! It’s awesome! Thanks!"
@@ -1489,7 +1436,7 @@ label Scene6:
 label getknife:
         #Message box should go here, too...
         $show_message("You picked up the knife.", "medium")
-        $inventory.unlock_item("knife")
+        $unlock_item("knife", True)
         
         #This goes in the regular textbox.
         "Might as well keep it. If I can’t use it, I can pawn it."
@@ -1616,7 +1563,7 @@ label Scene8:
     m "Nngh." 
     #stop sound
     m "Oi. Chemical burns? How positively droll."
-    $unlock_entry("Mamoru","021")
+    $unlock_entry("Mamoru", "021", True)
     
     $ Roman = "Awkward Kid"
     #hide r scare
@@ -1665,7 +1612,7 @@ label Scene8:
             jump noknife
         
 label useknife:
-    if inventory.item_unlocked("knife"):
+    if item_unlocked("knife"):
         "Thank god I picked up that knife!"
         jump useknife1
     else:
@@ -1829,10 +1776,10 @@ label Scene10:
     #with dissolve
     #Put some nice little soft green glowing effect here.
     
-    #show bg street 
+    show bg street 
     #show r excite at left
-    #show s smile at right
-    #with slow_dissolve
+    show s smile at right
+    with slow_dissolve
    
     r "Whoa--! You just grew a plant...in your hand!"
     
@@ -1944,7 +1891,7 @@ label Scene11:
     ma "Riku, listen to me." 
     ma "No matter what happens, we’ll be here. You remember what I told you about staying safe. Those--those rules still apply, you hear? And take this."
     
-    $inventory.unlock_item("redjewel")
+    $unlock_item("redjewel", True)
     
     r "Yeah. Thanks, Mom."
     
@@ -2207,9 +2154,9 @@ label Scene13:
     
     ro "Well, first—here."
     
-    $inventory.unlock_item("map")
-    $unlock_entry("Humans", "055")
-    $unlock_entry("Majin", "043")
+    $unlock_item("map", True)
+    $unlock_entry("Humans", "055", True)
+    $unlock_entry("Majin", "043", True)
     
     ro "It’s a map of the whole place, and some basic information on Majin. You can just put it in your PDA if you want to read it later."
         
@@ -2263,7 +2210,7 @@ label Scene13:
     ro "Yes, but...that’s because as a Majin, you’re still essentially a baby. Approximately 80 or so years from physical maturity."
     
     r "...80 years before I grow up?"
-    $unlock_entry("Majin","048")
+    $unlock_entry("Majin", "048", True)
     
     ro "Something like that, yes."
     
@@ -2294,8 +2241,8 @@ label Scene13:
     ro "Some of them do. I’m not sure what they’re called...there doesn't seem to be a word for them."
     ro "But a lot of them side with that Church of the Acts."
     
-    $unlock_entry("Humans", "056")
-    $unlock_entry("Church of the Acts", "041")
+    $unlock_entry("Humans", "056", True)
+    $unlock_entry("Church of the Acts", "041", True)
     
     r "That new popular religion that opened up in the country?"
     
@@ -2324,7 +2271,7 @@ label Scene13:
     ro "The people here train, learn about the human world and how to survive. So that we can find more of us, and protect them."
     
     r "From being food, right?"
-    $unlock_entry("Humans","061")
+    $unlock_entry("Humans", "061", True)
     
     ro "Or worse. They’ll keep you alive and use you as a science experiment, or a slave..."
     
@@ -2363,7 +2310,7 @@ label Scene13:
     ro "That much, there's no information at all on."
     ro "I don't know myself."
     r "Hmmm."
-    $unlock_entry("Humans","063")
+    $unlock_entry("Humans", "063", True)
     
     ro "But, funny enough, all those stories you hear about boogeymen and demons?"
     ro "They're based on us. Humans do a very decent job of demonizing us, but we certainly aren't perfect..."
@@ -2374,8 +2321,8 @@ label Scene13:
     ro "Right, right—your powers. Ours are self explanatory. We're elemental users."
     ro "You use fire, I use ice. Soume can control plants."
     
-    $unlock_entry("Majin", "044")
-    $unlock_entry("Majin", "047")
+    $unlock_entry("Majin", "044", True)
+    $unlock_entry("Majin", "047", True)
     r "Is it hard?"
     
     ro "Immensely. I’m still trying to get it right in the heat of battle, myself..."
@@ -2429,7 +2376,7 @@ label Scene14A:
         show r grin at left with dissolve
         r "And why is that? Afraid I'll singe the foliage?"
         
-        $unlock_entry("Soume", "010")
+        $unlock_entry("Soume", "010",True)
         
         s "Hahahahaha~"
         "He starts to flit around the room."
@@ -2527,7 +2474,7 @@ label Scene14B:
         show ro smile at right with dissolve
         ro "You can ask Soume about it later. But fire’s a strong element, even against other fire."
         
-        $unlock_entry("Riku","004")
+        $unlock_entry("Riku","004",True)
         
         show r grin at left with dissolve
         r "So next time I run into that guy, he's toast!"  
@@ -2555,7 +2502,7 @@ label dec1:
     $show_message("Try to save before each one, and make different choices.", "medium")
     
     $ decision = "1"        
-menu:   
+    menu:   
         "Sleep.":
              call sleep  
              jump Scene16
@@ -2603,7 +2550,7 @@ label Scene16:
     
     n "Well, I brought some fire salve. I could at least wrap it for you, and bring you a meal?"
     
-    $inventory.unlock_item("salve")
+    $unlock_item("salve", True)
     
     m "You’re a good girl, Norah. My favorite sister."
     
@@ -2765,7 +2712,7 @@ label Scene17:
     r "How old are you, anyway?"
     
     s "Ohhh, a few thousand or so, give or take..."
-    $unlock_entry("Soume","066")
+    $unlock_entry("Soume", "066", True)
     
     show r confu at left with dissolve
     r "Whaaa--? No way!"
@@ -2789,12 +2736,14 @@ label Scene17:
     s  "No need to rush; holding it for a few minutes untrained is a feat by itself."
     $hide_main_ui()
     $unlock_minigame("force")
+    
 label magcontrol1:    
-    $result = minigame("force", 1, 1000)
-    if result == True: 
+    $passed = minigame("force", 1, 1000)
+    if passed: 
             jump controlsucceed1
     else: 
             jump controlfailure1
+            
 label controlfailure1:
     scene bg train1
     $show_main_ui()
@@ -2939,7 +2888,7 @@ label Scene18:
     
     ro "All right. Soume’s supposed to be my partner, but he makes me awfully nervous."
     ro "I’ve known him a pretty long while, since the first day I came here, and I don’t feel as if I know any more about him now than I did then."
-    $unlock_entry("Roman","067")
+    $unlock_entry("Roman","067",True)
     
     r "He IS pretty out there."
     
@@ -3106,7 +3055,7 @@ label Scene22:
     
     r "AAAAAAAAAAAAAAAAAAAAAGHHHHHDLFS--"
 
-    $unlock_entry("Susa","016")
+    $unlock_entry("Susa","016",True)
     show bg blackscr
     $hide_main_ui()
     with slow_fade
@@ -3159,12 +3108,14 @@ label Scene23:
     
     ro "All right...I guess..."
     $hide_main_ui()
+    
 label magcontrol2:    
-    $result = minigame("force", 1, 2000, "bg ngro")
-    if result == True: 
+    $passed = minigame("force", 1, 2000)
+    if passed:
             jump controlsucceed2
     else: 
             jump controlfailure2
+            
 label controlfailure2:
     scene bg train1
     $show_main_ui()
@@ -3321,7 +3272,7 @@ label Scene26:
     
     k "I am \"Dr. Osamu Kazutaka.\" You must be Riku...I should’ve told by your stature, the way your jaw is so positively narrow. Barely above an infant, I’d wager."
     $ Kazutaka = "Doctor Osamu"
-    $unlock_entry("Kazutaka","025")
+    $unlock_entry("Kazutaka","025",True)
     
     r "You always this great with patients?"
     
@@ -3345,9 +3296,9 @@ label Scene26:
     
     k "All right, you are hereby given a clean bill of health. But, to make sure it stays that way, take this literature on Majin, your species type, and our enemies."
     
-    $unlock_entry("Majin", "050")
-    $unlock_entry("Church of the Three Acts","039")
-    $unlock_entry("Church of the Three Acts", "040")
+    $unlock_entry("Majin", "050",True)
+    $unlock_entry("Church of the Three Acts","039",True)
+    $unlock_entry("Church of the Three Acts", "040",True)
     
     r "My...species type?"
     
@@ -3371,7 +3322,7 @@ label Scene26:
     "I decide to hold off getting pissed for a minute."
     
     r "They seem pretty cool...always having some kind of fundraiser, or feeding the poor, housing the homeless...stuff like that."
-    $unlock_entry("Church of the Three Acts","038")
+    $unlock_entry("Church of the Three Acts","038",True)
     
     k "Oh, well, it is very easy to gain the money to do great things when you are selling our kind into slavery and onto dinner plates, I suppose."
     
@@ -3386,7 +3337,7 @@ label Scene26:
     
     r "They...SLAVERY?"
     r "Wouldn't that be like, ALL OVER THE NEWS?"
-    $unlock_entry("Church of the Three Acts", "042")
+    $unlock_entry("Church of the Three Acts", "042", True)
     
     k "Would you, prior to us finding you, have believed in the slavery of a mythical being unless you saw it with your own eyes?"
     k "Would your friends? Your family?"
@@ -3396,7 +3347,7 @@ label Scene26:
     k "Those people lure in humans, and not just any ones—humans with special abilities, like Miss Susa. The ability to hunt our kind down."
     
     r "Special humans?"
-    $unlock_entry("Humans","058")
+    $unlock_entry("Humans", "058", True)
     
     k "{size=17}The Church of Three Acts is a front for a small society of humans far beyond the capabilities of the normal...their strength, speed, agility and physical prowess are much more similar to Majin.{/size}"
     k "That is why they are able to capture us and hold us." 
@@ -3436,7 +3387,7 @@ menu:
         $show_message("From now on, you will be allowed to research with Kazutaka.", "medium")
         $show_message("You will be able to learn a lot about the world from the information you receive here.", "medium")
         call research_loop
-        $unlock_entry("something", "031")    
+        $unlock_entry("something", "031", True)    
 
 label Scene27:
     scene bg hall1
@@ -3459,7 +3410,7 @@ label Scene27:
     "Something really hard and painful breaks right over my head."
     
     su "--fuck! Now look what you did! That’s my fucking Hunt Duck gun and your fucking hard head broke it in two!"
-    $unlock_entry("Susa","017")
+    $unlock_entry("Susa", "017", True)
     
     r "Remind me again how -I- broke it?"
     
@@ -3574,12 +3525,12 @@ label Scene28:
     ro "What a wonderful idea. You must remember that I would need a vegan option at the restaurant, but beyond that-"
     
     l "Vegan? Roman, you can’t still mean that silly notion that you mustn’t eat meat--"
-    $unlock_entry("Roman","006")
+    $unlock_entry("Roman", "006", True)
     
     ro "I assure you that this isn’t some phase I’m going through. I decided to become a vegan long ago and I can’t imagine ever deviating from my diet."
     
     l "Roman, it’s unnatural for Majin, and likely to be very harmful. Please, I know a very good place; they will cook a lovely veal for you--"
-    $unlock_entry("Majin","045")
+    $unlock_entry("Majin", "045", True)
     ro "Veal? That’s baby deer, isn’t it? I couldn’t."
     
     l "If you insist..."
@@ -3596,7 +3547,7 @@ label Scene28:
     
     #Liza chuckles.
     l "I’m afraid not."
-    $ unlock_entry("Liza", "031")
+    $ unlock_entry("Liza", "031", True)
     show bg blackscr
     $hide_main_ui()
     with slow_fade
@@ -3698,7 +3649,7 @@ label Scene29:
     #play sound scary noise medley
     
     m "Special indeed."
-    $unlock_entry("Mamoru","023")
+    $unlock_entry("Mamoru", "023", True)
     
     #show screen flash 
     #play sound lightning
@@ -3713,7 +3664,7 @@ menu:
         call sleep
     "Research.":
         call research_loop
-        $unlock_entry("something", "031")    
+        $unlock_entry("something", "031", True)    
 
 label Scene30:
     scene bg riroom
@@ -3815,7 +3766,7 @@ label Scene30a:
     r "Whoa."
     
     "That’s a lot of money. This is way better than a card."
-    $inventory.unlock_item("fullwallet")
+    $unlock_item("fullwallet", True)
     
     r "Sweeeeeeeeeet. I need some new clothes. Some smokes would be cool too..."
     
@@ -3850,7 +3801,7 @@ label Scene30b:
     "The scent creeping out and working its way through my nose means only one thing: Mom got me a cake."  
     
     "It’s a fucking strawberry shortcake. It’s the biggest fucking strawberry shortcake I’ve ever seen. I might actually manage to leave some until tomorrow!"
-    $inventory.unlock_item("cake")
+    $unlock_item("cake", True)
     
 menu:
     "Share cake with Soume and Roman.":
@@ -3861,8 +3812,8 @@ menu:
 
 label Scene30c:
     r "What the heck was I thinking? This is the first treat I’ve had since I got here. Let THEIR parents send THEM cake."
-    $hp+=20
-    $mp+=20
+    $HP+=20
+    $MP+=20
     show bg blackscr
     $hide_main_ui()
     with fade
@@ -3967,8 +3918,8 @@ label Scene31:
     ro "His stomach is quite sensitive. I was rather surprised he took your offer at all."
     
     r "Oh--hm, y’know, I don’t think I’ve ever seen him eat. Like, since I got here, actually."
-    $unlock_entry("Soume","011")
-    $unlock_entry("Soume","012")
+    $unlock_entry("Soume", "011", True)
+    $unlock_entry("Soume", "012", True)
     
     ro "I have, but it’s never much, and he rarely accepts food from others."
     
@@ -4048,7 +3999,7 @@ label dec5:
             call sleep
         "Research.":
             call research_loop
-            $unlock_entry("something", "031")
+            $unlock_entry("something", "031", True)
             
 label Scene32:
     scene bg riroom
@@ -4087,7 +4038,7 @@ label Scene32:
     "I really hate when I can’t tell if Soume’s joking or not."
     
     "Especially since Ku-chan has teeth. Sharp teeth. Even though it’s just a small plant, I don’t think I’d want to get my hands anywhere near it."
-    $unlock_entry("Soume","014")
+    $unlock_entry("Soume", "014", True)
     
     r "So, training today? What are we doing?"
     
@@ -4132,12 +4083,13 @@ label Scene32:
     $hide_main_ui()
 
     $unlock_minigame("power")
+    
 label power1:    
-    $result = minigame("power", 1, 1000, "bg dsky")
-    if result == True: 
-            jump powerfail1
-    else: 
+    $passed = minigame("power", 1, 1000)
+    if passed: 
             jump powersucceed1
+    else: 
+            jump powerfail1
 
 label powerfail1:
     scene bg train1
@@ -4274,11 +4226,10 @@ label Scene33:
     s "Let me go over the basics of a serious battle with you."
     $hide_main_ui()
 label battle1:
-  $hp = 500
-  $mp = 100        
-  call battle("Riku", "Demon thug", 1, "bg dgro")
-  $print battle("Riku", "Demon thug", 1, "bg dgro")
-  if hp > 0:
+  $HP = 500
+  $MP = 100        
+  $victory = battle("Riku", "Demon thug", 1, "bg dgro")
+  if victory:
       jump battle1vic
   else:
       jump battle1fail
@@ -4480,9 +4431,9 @@ label Scene34:
     #Roman chuckles.
     ro "I’m sure you are leaving something out! Hobbies? A long-lost love?"
     
-    r "My hobbies? Sports and cutting class. Oh, and drinking. Long-lost love? Yeah, right. I’m seventeen. That’s barely enough time for a first love. 
-    There is this one girl I want to ask out, but I dunno. I’m not really all that interested yet."
-    $unlock_entry("Riku","002")
+    r "My hobbies? Sports and cutting class. Oh, and drinking. Long-lost love? Yeah, right. I’m seventeen. That’s barely enough time for a first love."
+    r "There is this one girl I want to ask out, but I dunno. I’m not really all that interested yet."
+    $unlock_entry("Riku", "002", True)
     ro "You are still you---"
     
     r "I mean, heck. I’m not fully mature yet, right? You said that. So like, when do our kind like...usually lose our virginities? When’d you lose yours?"
@@ -4630,7 +4581,7 @@ label Scene35:
     "Something clicks."
     
     r "I got it!"
-    $unlock_item("coin")
+    $unlock_item("coin", True)
     show bg blackscr
     $hide_main_ui()
     with fade
@@ -4693,7 +4644,7 @@ label Scene36:
     w "Unghanteelerentflaf. BONK BONK BONK! Heh heh heh."
     
     "Something tells me she knows more than she’s letting on."
-    $inventory.unlock_item("gun")
+    $unlock_item("gun", True)
     
     r "Uh, yeah, I’ll take that. Hmm…well, now what?"
     
@@ -4702,7 +4653,7 @@ label Scene36:
     $show_message("'Shop' has now been added to your nightly options." "medium") 
     $show_message("You may shop by selecting that choice.", "medium") 
     $show_message ("Inventory changes frequently, so be sure to check back as often as you can!","medium")
-    $unlock_entry("Humans","070")
+    $unlock_entry("Humans", "070", True)
     show bg blackscr
     $hide_main_ui()
     with fade
@@ -4795,8 +4746,8 @@ label Scene37:
     
     $hide_main_ui()
 label duckhunt1:    
-    $result = minigame("duck", 1, 1000, "bg dsky")
-    if result == True:
+    $passed = minigame("duck", 1, 1000)
+    if passed:
             jump Scene37b
     else: 
             jump Scene37b
@@ -4835,7 +4786,7 @@ menu:
         call shop_loop
     "Research.":
         call research_loop
-        $unlock_entry("something", "031")
+        $unlock_entry("something", "031", True)
 
 label Scene38:
     scene bg blackscr
@@ -4894,7 +4845,7 @@ label Scene38:
     with fade
     $renpy.pause(1.0)
 
-    $unlock_entry("Mamoru","071")
+    $unlock_entry("Mamoru", "071", True)
     call XS4
     
 label Scene39:
@@ -5008,7 +4959,7 @@ menu:
         call shop_loop
     "Research.":
         call research_loop
-        $unlock_entry("something", "031")
+        $unlock_entry("something", "031", True)
         
 label Scene40:
     show bg blackscr
@@ -5085,7 +5036,7 @@ label Scene40:
     ro "If it isn’t too much trouble for you..."
     
     s "It’s none at all. Now, watch carefully: I’ll show you how to set the pot up..."
-    $inventory.unlock_item("ios")
+    $unlock_item("ios", True)
     ########################
     # CALL FARM GAME HERE
     ########################
@@ -5285,8 +5236,8 @@ label daychal1:
 
     su  "Cocky. As always. That’s fine with me; it’ll just be more enjoyable when you fail."
     $hide_main_ui()
-    $result = minigame("platformer", 1, 3000)
-    if result == True: 
+    $passed = minigame("platformer", 1, 3000)
+    if passed: 
             jump daychal1suc
     else: 
             jump daychal1fail
@@ -5398,7 +5349,7 @@ label Scene41:
     k  "The average IQ for Majin is 87 on the human scale. Eighty-seven, Riku. Did you know that?"
 
     r  "No. Issat bad?"
-    $unlock_entry("Majin", "054")
+    $unlock_entry("Majin", "054", True)
 
     k "............"
     #Doctor Osamu sighs.
@@ -5461,7 +5412,7 @@ label majhumdiff:
     
     $renpy.pause(3.0)
     "...can't say I didn't try."
-    $unlock_entry("Kazutaka","072")
+    $unlock_entry("Kazutaka", "072", True)
     
 label urite:
     r  "Okay, okayyyy." 
@@ -5499,7 +5450,7 @@ label urite:
     "I'm pretty sure I know where this is going."
     
     k  "Here, take these!"
-    $unlock_item("parts")
+    $unlock_item("parts", True)
 
     r  "What the heck am I supposed to do with this?"
 
@@ -5536,12 +5487,13 @@ label dowhatkazsays:
     k  "Oh, what an excellent attitude! I knew I could count on you." 
     k "The quicker you fix everything, the faster I can clear you and the sooner you can go out and get yourself killed."
     $hide_main_ui()
+    
 label gear1:    
-    $result = minigame("gear", 1, 1000)
-    if result == True: 
-            jump gearfail1
-    else: 
+    $passed = minigame("gears", 1, 1000)
+    if passed: 
             jump gearsuc1
+    else: 
+            jump gearfail1
 
 label gearfail1:
     scene bg train1
@@ -5601,7 +5553,7 @@ label gearsuc1:
     k "The thrill of the unknown, the tension one feels during the chase of the answer, the satisfying climax of discovering something new, I--"
 
     "...does he get off on science, or what?"
-    $unlock_entry("Kazutaka", "028")
+    $unlock_entry("Kazutaka", "028", True)
     r  "Hey, Doc! Yo, I’m still here. You need to clear me."
     
     k "Hush child, I'm trying to help you learn a little about yourself!"
@@ -5659,7 +5611,7 @@ label gearsuc1:
     
     r "Cool! Thanks!"
     
-    $inventory.unlock_item("book5")
+    $unlock_item("book5", True)
     
     r "So uh...about my clearance?"
 
@@ -5717,7 +5669,7 @@ label Scene42:
 
     r "........."
     r  "So look...I got to get going. Thanks for the clearance."
-    $unlock_entry("Kazutaka","027")
+    $unlock_entry("Kazutaka", "027", True)
     "He pauses. I think he notices I’m uncomfortable, because his demeanor suddenly changes."
 
     k  "Ahem. You’re right...I’m overreacting. You’re free to go."
@@ -5850,7 +5802,7 @@ label Scene43:
 
     ro  "Well, I can’t say I’d blame him for that. The Doctor is a genius, but I myself worry about his...enthusiasm at times."
 
-    $unlock_entry("Kazutaka","029")
+    $unlock_entry("Kazutaka", "029", True)
     r "I know what you mean."
     
     "I sure as heck wasn’t in any hurry to get back to the lab anytime soon."
@@ -5880,7 +5832,7 @@ label Scene43:
     ro "He can tell you which way to go by instinct, and how to avoid danger." 
     ro "He IS very good at it; I don’t think we’ve ever been ambushed when he accompanies us."
 
-    $unlock_entry("Majin","053")
+    $unlock_entry("Majin", "053", True)
     r  "So?"
 
     ro  "Well, he really only gets flashes of what’s going on." 
@@ -5909,7 +5861,7 @@ label Scene43:
     r  "He drank my blood!?"
 
     ro  "SSSSHHHHHH!"
-    $unlock_entry("Kazutaka", "030")
+    $unlock_entry("Kazutaka", "030", True)
 
     "Roman clasps his hand over my mouth while looking around again."
 
@@ -6007,7 +5959,7 @@ menu:
         call shop_loop
     "Research.":
         call research_loop
-        $unlock_entry("something", "031")
+        $unlock_entry("something", "031", True)
         
 label Scene44:
     scene bg suroom
@@ -6019,7 +5971,7 @@ label Scene44:
     "Susa keeps on interrupting herself to make sure I'm paying attention." 
     "I dunno why—I haven’t nodded off once during her whole lecture, which is kind of a miracle for me."
     "I'm not very good at paying attention."
-    $unlock_entry("Riku","064")
+    $unlock_entry("Riku", "064", True)
 
     r  "Yeah, yeah. I’m listening."
 
@@ -6119,7 +6071,7 @@ label Scene44:
     r  "You want me to have this?"
 
     ro  "Yes. Consider it a gift in celebration of your first successful mission!"
-    $inventory.unlock_item("rose")
+    $unlock_item("rose", True)
 
     r  "Thanks, Roman."
     
@@ -6396,8 +6348,8 @@ label Scene46a:
     $hide_main_ui()
     
 label battle2:
-  call battle("Riku", "Demon thug", 2, "bg ngro")
-  if hp > 0:
+  $victory = battle("Riku", "Demon thug", 2, "bg ngro")
+  if victory:
       jump battle2vic
   else:
       jump game_over            
@@ -6668,8 +6620,8 @@ label Scene47:
     #play sound Swords clashing
     $hide_main_ui()
 label battle3:
-  call battle("Roman", "Demon hunter", 3, "bg ngro")
-  if hp > 0:
+  $victory = battle("Roman", "Demon hunter", 3, "bg ngro")
+  if victory:
       jump battle3vic
   else:
       jump game_over            
@@ -7224,8 +7176,11 @@ label Scene51:
     s  "You may be right. Do have a lovely day, Doctor."
     show bg blackscr with dissolve
     $renpy.pause(2.0)
+    
 label Scene52:
-    show bg riroom with dissolve
+    show bg riroom 
+    $show_main_ui()
+    with dissolve
     "I finish taking whatever gross thing Doctor Osamu just gave me."
 
     #Riku is gargling something here.
@@ -7304,10 +7259,12 @@ label Scene52:
     "I guess I won't mind training more. I’d rather not explode and take out a city block."
 
     r "Well, thanks for the burger. I feel much better."
-    $hp+=150
-    $mp+=100
+    
+    $HP+=150
+    $MP+=100
     $update_main_ui()
-    $inventory.unlock_item("meat")
+    $unlock_item("meat", True)
+    
     s "........."
     s "I'm glad."
     s  "Now that you're full, lie back down. I’m sure Doctor Osamu will be back to check in on you shortly."

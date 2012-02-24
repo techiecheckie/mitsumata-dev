@@ -15,6 +15,9 @@ init python:
   inventory = Inventory(persistent)
   journal_manager = Journal_manager(persistent)
   
+  # To simplify the usage of inventory.item_unlocked(id).
+  item_unlocked = inventory.item_unlocked
+  
   # New game default values
   HP     = 0
   MP     = 0
@@ -57,29 +60,43 @@ init python:
   # Appends the item id to the persistent unlocked_items list and displays 
   # information about the unlocked item by calling the function show_item_unlock
   def unlock_item(item_id, show_messages):
-    persistent.unlocked_items[item_id] = False
+    item = inventory.get_item(item_id)
+    if (item != None):
+      persistent.unlocked_items[item_id] = False
+      if show_messages:
+        show_item_unlock(item)
+    else:
+      show_message("Warning: item \"" + entry_id + "\" not found.", "medium")
     
-    if show_messages:
-      item = inventory.get_item(item_id)
-      show_item_unlock(item)
-    
+    return
+  
+  # Removes the item id from the persistent unlocked_items list.
+  def lock_item(item_id, show_messages):
+    del persistent.unlocked_items[item_id]
     return
   
   # Appends entry_id to the journal specific array located in persistent.unlocked_journals dict.
   def unlock_entry(journal_id, entry_id, show_messages):
-    journal_array = persistent.unlocked_journals[journal_id]
-    if journal_array != None:
-      journal_array[0] = False
-      if entry_id not in journal_array:
-        journal_array.append(entry_id)
+    journal = journal_manager.get_journal(journal_id)
+    if (journal != None):
+      entry = journal.get_entry(entry_id)
+      if (entry != None):
+        if (journal_id in persistent.unlocked_journals):
+          journal_array = persistent.unlocked_journals[journal_id]
+          journal_array[0] = False
+          if (entry_id not in journal_array):
+            journal_array.append(entry_id)
+        else:
+          journal_array = [False, entry_id]
+          
+        persistent.unlocked_journals[journal_id] = journal_array
+        
+        if (show_messages):
+          show_entry_unlock(journal, entry)
+      else:
+        show_message("Warning: entry \"" + entry_id + "\" not found.", "medium")
     else:
-      journal_array = [False, entry_id]
-    persistent.unlocked_journals[journal_id] = journal_array
-    
-    if show_messages:
-      journal = journal_manager.get_journal(journal_id)
-      entry   = journal.get_entry(entry_id)
-      show_entry_unlock(journal, entry)
+      show_message("Warning: journal \"" + journal_id + "\" not found.", "medium")
     
     return
     
