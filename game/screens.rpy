@@ -183,10 +183,10 @@ screen main_menu:
         ground "gfx/menus/main.jpg"
         hover  "gfx/menus/main_hover.jpg"
        
-        hotspot ( 60, 252, 196, 395) action ShowMenu("preferences")
-        hotspot (295, 252, 196, 395) action ShowMenu("load")
-        hotspot (532, 252, 196, 395) action Start()
-        hotspot (768, 252, 196, 395) action Quit(confirm=False)
+        hotspot (138, 340, 135, 285) action Start()
+        hotspot (344, 340, 135, 285) action ShowMenu("load")
+        hotspot (550, 340, 135, 285) action ShowMenu("preferences")
+        hotspot (756, 340, 135, 285) action Quit(confirm=False)
 
 init -2 python:
 
@@ -238,10 +238,10 @@ init -2 python:
 
 screen file_picker:
     frame:
-        xpos 313
-        ypos 208
-        xmaximum 395
-        ymaximum 425
+        xpos 330
+        ypos 228
+        xmaximum 365
+        ymaximum 390
         
         ymargin 0
         ypadding 0
@@ -263,7 +263,7 @@ screen file_picker:
                 button:
                     action FileAction(i)
                     xfill True
-                    ymargin 10
+                    #ymargin 10
                     #background None
 
                     has hbox
@@ -295,8 +295,8 @@ screen save:
         selected_hover "gfx/menus/save_hover.jpg"
        
         hotspot (  0,   0, 100, 40) action Return()        
-        hotspot (807, 145,  46, 63) action FilePagePrevious()
-        hotspot (809, 591,  46, 63) action FilePageNext()
+        hotspot (780, 157,  52, 68) action FilePagePrevious()
+        hotspot (780, 561,  52, 68) action FilePageNext()
         
     use file_picker
 
@@ -312,8 +312,8 @@ screen load:
         selected_hover "gfx/menus/load_hover.jpg"
        
         hotspot (  0,   0, 100, 40) action Return()        
-        hotspot (807, 145,  46, 63) action FilePagePrevious()
-        hotspot (809, 591,  46, 63) action FilePageNext()
+        hotspot (780, 157,  52, 68) action FilePagePrevious()
+        hotspot (780, 561,  52, 68) action FilePageNext()
 
     use file_picker
 
@@ -341,12 +341,14 @@ screen preferences:
         ground         "gfx/menus/options.jpg"
         idle           "gfx/menus/options.jpg"
         hover          "gfx/menus/options_hover.jpg"
-        selected_idle  "gfx/menus/options_hover.jpg"
-        selected_hover "gfx/menus/options.jpg"
+        selected_idle  "gfx/menus/options_selected_idle.jpg"
+        selected_hover "gfx/menus/options_selected_hover.jpg"
        
         hotspot (  0,   0, 100, 40) action Return()
-        hotspot (693, 249,  95, 95) action Preference("music mute", "toggle")
-        hotspot (693, 377,  95, 95) action Preference("sound mute", "toggle")
+        hotspot (274, 270, 355, 60) action Preference("music mute", "toggle")
+        hotspot (694, 273,  60, 60) action Preference("music mute", "toggle")
+        hotspot (274, 384, 355, 60) action Preference("sound mute", "toggle")
+        hotspot (694, 384,  60, 60) action Preference("sound mute", "toggle")
 
 
 init -2 python:

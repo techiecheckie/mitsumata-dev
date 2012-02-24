@@ -436,4 +436,7 @@ init python:
             self.state = GEARS_GAME_STATE_END
             
         def get_result( self ):
-            return self.level_number * 1000
+            if self.state == GEARS_GAME_STATE_END:
+              return self.level_number * 1000
+            else:
+              return 0
