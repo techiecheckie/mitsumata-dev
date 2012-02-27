@@ -183,10 +183,10 @@ screen main_menu:
         ground "gfx/menus/main.jpg"
         hover  "gfx/menus/main_hover.jpg"
        
-        hotspot (138, 340, 135, 285) action Start()
-        hotspot (344, 340, 135, 285) action ShowMenu("load")
-        hotspot (550, 340, 135, 285) action ShowMenu("preferences")
-        hotspot (756, 340, 135, 285) action Quit(confirm=False)
+        hotspot (185, 450, 105, 220) action Start()
+        hotspot (365, 450, 105, 220) action ShowMenu("load")
+        hotspot (555, 450, 105, 220) action ShowMenu("preferences")
+        hotspot (740, 450, 105, 220) action Quit(confirm=False)
 
 init -2 python:
 
@@ -238,7 +238,7 @@ init -2 python:
 
 screen file_picker:
     frame:
-        xpos 330
+        xpos 310
         ypos 228
         xmaximum 365
         ymaximum 390
@@ -294,9 +294,9 @@ screen save:
         selected_idle  "gfx/menus/save_hover.jpg"
         selected_hover "gfx/menus/save_hover.jpg"
        
-        hotspot (  0,   0, 100, 40) action Return()        
-        hotspot (780, 157,  52, 68) action FilePagePrevious()
-        hotspot (780, 561,  52, 68) action FilePageNext()
+        hotspot (830,  70, 55, 55) action Return()      
+        hotspot (760, 157, 52, 68) action FilePagePrevious()
+        hotspot (760, 561, 52, 68) action FilePageNext()
         
     use file_picker
 
@@ -311,9 +311,9 @@ screen load:
         selected_idle  "gfx/menus/load_hover.jpg"
         selected_hover "gfx/menus/load_hover.jpg"
        
-        hotspot (  0,   0, 100, 40) action Return()        
-        hotspot (780, 157,  52, 68) action FilePagePrevious()
-        hotspot (780, 561,  52, 68) action FilePageNext()
+        hotspot (830,  70, 55, 55) action Return()       
+        hotspot (760, 157, 52, 68) action FilePagePrevious()
+        hotspot (760, 561, 52, 68) action FilePageNext()
 
     use file_picker
 
@@ -344,11 +344,36 @@ screen preferences:
         selected_idle  "gfx/menus/options_selected_idle.jpg"
         selected_hover "gfx/menus/options_selected_hover.jpg"
        
-        hotspot (  0,   0, 100, 40) action Return()
-        hotspot (274, 270, 355, 60) action Preference("music mute", "toggle")
-        hotspot (694, 273,  60, 60) action Preference("music mute", "toggle")
-        hotspot (274, 384, 355, 60) action Preference("sound mute", "toggle")
-        hotspot (694, 384,  60, 60) action Preference("sound mute", "toggle")
+        hotspot (830,  70,  55, 55) action Return()   
+        hotspot (274, 250, 355, 60) action Preference("music mute", "toggle")
+        hotspot (694, 250,  60, 60) action Preference("music mute", "toggle")
+        hotspot (274, 480, 355, 60) action Preference("sound mute", "toggle")
+        hotspot (694, 480,  60, 60) action Preference("sound mute", "toggle")
+        
+    frame:
+        background None
+        
+        bar:
+            value Preference("music volume")
+            xpos 285
+            ypos 341
+            xmaximum 440
+            ymaximum 60
+            thumb Image("gfx/menus/slider_thumb.png")
+            thumb_offset 31
+            left_bar None
+            right_bar None
+            
+        bar:
+            value Preference("sound volume")
+            xpos 285
+            ypos 568
+            xmaximum 440
+            ymaximum 60
+            thumb Image("gfx/menus/slider_thumb.png")
+            thumb_offset 31
+            left_bar None
+            right_bar None
 
 
 init -2 python:
