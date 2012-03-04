@@ -187,6 +187,7 @@ screen main_menu:
         hotspot (365, 450, 105, 220) action ShowMenu("load")
         hotspot (555, 450, 105, 220) action ShowMenu("preferences")
         hotspot (740, 450, 105, 220) action Quit(confirm=False)
+        hotspot (0, 0, 100, 100) action Preference("display", "window")
 
 init -2 python:
 
@@ -295,8 +296,9 @@ screen save:
         selected_hover "gfx/menus/save_hover.jpg"
        
         hotspot (830,  70, 55, 55) action Return()      
-        hotspot (760, 157, 52, 68) action FilePagePrevious()
-        hotspot (760, 561, 52, 68) action FilePageNext()
+        hotspot (771, 157, 52, 68) action FilePagePrevious()
+        hotspot (771, 561, 52, 68) action FilePageNext()
+        hotspot (767, 264, 60, 256) action MainMenu(confirm=True)
         
     use file_picker
 
@@ -311,9 +313,10 @@ screen load:
         selected_idle  "gfx/menus/load_hover.jpg"
         selected_hover "gfx/menus/load_hover.jpg"
        
-        hotspot (830,  70, 55, 55) action Return()       
-        hotspot (760, 157, 52, 68) action FilePagePrevious()
-        hotspot (760, 561, 52, 68) action FilePageNext()
+        hotspot (830,  70, 55,  55) action Return()       
+        hotspot (771, 157, 52,  68) action FilePagePrevious()
+        hotspot (771, 561, 52,  68) action FilePageNext()
+        hotspot (767, 264, 60, 256) action MainMenu(confirm=True)
 
     use file_picker
 
