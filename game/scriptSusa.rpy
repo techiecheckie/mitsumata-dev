@@ -165,6 +165,7 @@ label su1:
     l "Please don't worry about me. I won't get caught. Not when our son may still be alive."
     #Journal entry son go hurr
     return
+
 label su2:
     "Of all the people I thought I'd ask for advice, she's last on the list."
     
