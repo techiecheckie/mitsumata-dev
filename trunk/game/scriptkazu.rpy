@@ -9,8 +9,6 @@
 #Scene w/Riku asking Kaz about his past.
 
 label kaz1:
-    #Riku talks to Kazu about the mission, Cell Game II. Riku gives Kazu
-    # the Makai Rose. Kazu blames Soume.
     "I could go check on the doctor. He was the most shaken up."  
     "Seeing him freak out...well, it's good to know I wasn't the only one."
     
@@ -18,7 +16,7 @@ label kaz1:
     
     k  "Yes?  Who is it?"
     
-    r  "Uh…it’s me.  Riku."
+    r  "Uh...it’s me.  Riku."
     
     k  "Riku?"
     ".........................."    
@@ -93,7 +91,7 @@ label kaz1:
     
     r "But I like my body parts where they are."
     
-    k  "It is perfectly safe! The bacteria will be behind this glass hood at all times! All you need to do is replate the bacteria."  
+    k  "It is perfectly safe! The bacteria will be behind this glass hood at all times! All you need to do is replate it."  
     k "I fear they are rather delicate outside of their natural habitat, so this is a more arduous process than it typically is."
     
     "How do I get roped into these things?"
@@ -114,11 +112,14 @@ label kaz1:
     
     k "Ah, well, I guess I better explain it to you."
 
-label minigame10:
-    #Minigame!  Help Doctor Kazutaka regrow his cells.  His cells need heat to grow.  Be sure to apply heat when a colony shaped like (whatever shape) shows up.  
-    #However, be wary; other bacterial strains can also grow.  Be sure to apply cold to them when they do or they will use up all of the nutrients.
+label cells2:  
+    $result = minigame("cell", 2, 1000)
+    if result == True: 
+            jump cellsucceed2
+    else: 
+            jump cellfailure2
     
-    #Failure:
+label cellfailure2:
     k  "No no no no no!  My bacteria!  You’re killing them Riku."
     
     r "This is harder than I thought it would be."
@@ -126,8 +127,9 @@ label minigame10:
     k "Hmph.  You are quite lucky I have more stock we can use.  Be careful this time!"
     
     r "Sure thing.  Sorry Doc, I know I can do it this time."
-    
-    #Success:
+    jump cells2
+
+label cellsucceed2:
     k "Brilliant, simply brilliant, Riku!" 
     k "Of course, I could have done the same task in a fraction of the time.  And these colonies are much smaller than the ones I am capable of growing.  They don’t seem as viable, either..."
     
@@ -197,15 +199,11 @@ label minigame10:
     r "Just...remember that you aren’t alone here. We all have your back.  Even Soume.  Whether you want to recognize it or not."
 
     k "..."   
-    
-    r "Hey, Doc?"
-    
-    #Kazutaka mutters
-    k "Hmm…no.  Certainly not an extremophile.  But maybe if…no, that can’t work.  But then how else?  Oh.  OH!  Ah, how silly of me."
-    
-    "I wanted to ask him about the drinking blood thing, but he’s alrady back to work. I’ll ask him later."
-    
-    r "See ya later, Doc."
+    r "I'll talk to you later, okay?"
+    k "...idiot."
+    "....."
+    "I think I might actually understand him a little better..."
+	
     $ decison ="9"
 menu:
     "Search.":
@@ -217,6 +215,8 @@ menu:
     "Research.":
         call research_loop
         $journal.unlock_entry("something", "031")    
+
+
 label kaz2:
     #Roman tries to convince Kazu to lighten up on Soume.
     ro "Doctor Osamu!"
@@ -238,8 +238,8 @@ label kaz2:
     #Sarcastically.
     k "Lovely."
     
-    "I should just turn around and leave.  The doctor has made his feelings on Soume and I perfectly clear for some time."
-    "He only started disliking me once he found out that Soume and I were to work together."
+    "I should just turn around and leave.  The doctor has made his feelings on Soume perfectly clear."
+    "He even started disliking me once he found out that Soume and I were close."
     "I should give up, like Soume said."
     "Still, we are all fighting for the same goal."  
     "We have the same enemy." 
@@ -312,10 +312,12 @@ label kaz2:
     
     k "Well, Roman, perhaps you should talk to your beloved...'friend' about it. And tell him to hurry and finish it as well, or I might sample his supply."
     
-    "Kazutaka walks off laughing and talking to himself. I’m trying to think of a time I’ve seen him happier, but, unfortunately, nothing comes to mind."
+    "Doctor Osamu walks off laughing and talking to himself."
+
     ################
     call su1 #Susa has a phone convo with Liza about their son.
     #################
+
 label kaz3:
     #Roman and Soume talk about the convo with Kazu and his not easing up on Soume.
     #Roman explains his veganism, moralizes at Soume, and angers Soume.
@@ -522,12 +524,12 @@ label kaz3:
     "Soume is forcing me down into the tatami, his face ferocious."
     "The hairs on the back of my neck stand. That feeling of imminent death..."
     "It's the first time it really hits me..."
-    "Soume is so, so far above my station in every way."
+    "Soume is far above my station in every way."
     
-    s "Your body can tolerate the garbage you eat, barely, but you're still breathing. Yet you look down at those who cannot do otherwise, to appease your human moralizing. What do YOU know?"
+    s "Your body can tolerate the garbage you eat. Barely, but you're still breathing. Yet you look down at those who cannot do otherwise, to appease your human moralizing. What do YOU know?"
     
     "He is leaning towards me now, his breath in my face. It's an awful smell...I wonder why I never noticed it before."
-    "Like acid..."
+    "Like acid...like rotting."
     "I turn, but I catch his robe falling open. I can see his chest...what remains of it."
     
     ro "Soume---"
@@ -570,7 +572,7 @@ label kaz3:
     
     s "Not for some time. I barely get any energy, any strength from corpses.  Fresh meat is the only thing that really satiates my hunger."
     
-    ro "Soume…I...I was so insensitive, I didn't think that you...you never ate anything...god, I'm so STUPID, how could I just---"
+    ro "Soume...I...I was so insensitive, I didn't think that you...you never ate anything...god, I'm so STUPID, how could I just---"
     
     s "As for the Doctor, he's worried that I'll give him a bit of payback for his actions against me, but tell him not to worry, I've no interest in his stringy tough flesh."
     
@@ -582,6 +584,7 @@ label kaz3:
     "But he smells so powerful, and this is Soume we're talking about..."
     "What should I do?"
     $bc1 = False
+
 menu:
     "Pull away.": 
     #This will divert to the Soume/Roman scenes at the end of the game (instead of Kazutaka's ending, and go to a bad ending where Soume will kill Roman, as well.
@@ -596,7 +599,8 @@ label pullaway:
     s "............."
     s "I see."
     $ bc1 = True
-    jump kaz4
+    jump goshop
+
 label kaz3b:
     "I stay within his grasp, and allow him to hold me."
     "This is the right decision. There are times where one must throw away their ideas to accommodate the fact that others, different from us, must co-exist with us."
@@ -618,6 +622,7 @@ label kaz3b:
     "For the first time, I feel like I have a chance to touch this...otherwordly being that Soume is."
     
     ro "You're special to me too."
+
     $ decision = "10"
 menu:
     "Search.":
@@ -630,7 +635,7 @@ menu:
         call research_loop
         $journal.unlock_entry("something", "031")    
 
-label kaz4:
+label goshop:
     
     su "You. Roman. A new mission."
     
@@ -684,7 +689,7 @@ label colorvar:
     jump kaz4b
 
 label kaz4b:       
-    s "Hmm…I don’t know about this."
+    s "Hmm...I don’t know about this."
     
     ro "Come on, it will be fun! And you haven't been off the shrine grounds in a while, right?"
     
@@ -737,7 +742,7 @@ label kaz4b:
     
     s "Oooooh!  I could wear that! What a lovely fabric~"
     
-    ro "Er…that is a curtain store..."
+    ro "Er...that is a curtain store..."
     
     s "Can we look in there?"
     
@@ -758,7 +763,7 @@ label kaz4b:
     
     ro "Hold on, let me find someone.  Miss?  Excuse me, miss?"
     
-    Clerk "Yes.  Can I…uh…help you two?  Find anything you like?"
+    cl "Yes.  Can I…uh…help you two?  Find anything you like?"
     
     "Soume is--STRIPPING--oh god--calm down--okay, just to an undershirt of sorts, it seems. He pulls the jacket over it." 
     "I don't think he's ever worn a suit in his life."
@@ -766,19 +771,19 @@ label kaz4b:
     
     ro "Yes, there are a couple things he’d like to try on.  Is there a dressing room available?"
     
-    Clerk  "Yes, he can-sir!  SIR!  Please do not step into the pants already.  He can use dressing room number-SIR!  Please stop tugging, you’re going to rip the collar!"
+    cl  "Yes, he can-sir!  SIR!  Please do not step into the pants already.  He can use dressing room number-SIR!  Please stop tugging, you’re going to rip the collar!"
     
     "She’s ushering Soume across the store, and is dragging him by the sleeve while he reaches out and grabs whatever article of clothing catches his eye."
     
     s "Oooh~!  This one is nice, don’t you think Roman?"
     
-    Clerk "You can use dressing room five.  Please be careful with the clothing, if you don’t mind."
+    cl "You can use dressing room five.  Please be careful with the clothing, if you don’t mind."
     
     s  "Of course~!"
     
-    "Soume shut the door behind him.  I can hear movement behind it, and from the shadows it looks like he has started changing."
+    "Soume shuts the door behind him.  I can hear movement behind it, and from the shadows it looks like he has started changing."
     
-    Clerk "Are you two looking for anything in particular?"
+    cl "Are you two looking for anything in particular?"
     
     ro "Uh…not really.  He just needs some new clothing.  Something that will fit him.  He has a rather slender frame so I don’t know if-"
     
@@ -792,18 +797,18 @@ label kaz4b:
     
     s "No, the whole outfit is just too baggy.  I look so awful."
     
-    Clerk "Let us see so we can get an idea of your size, please, sir.  It will be easier for me to go find a suitable replacement."
+    cl "Let us see so we can get an idea of your size, please, sir.  It will be easier for me to go find a suitable replacement."
     
     s "Eh…"
     
     "I hear the door unlock and Soume steps through.  The size itself looks close, at least in terms of height and length."  
     "But Soume was right; he looks absurd in the suit. There's something about the way he's...standing, perhaps, that makes me realize just how well his normal clothes suit him."
     
-    Clerk "Oh dear.  No, this is not even close.  Your legs are much too long for these pants!"
+    cl "Oh dear.  No, this is not even close.  Your legs are much too long for these pants!"
     
     ro "Could you maybe go look for another size?"
     
-    Clerk "I'll see what I can do..."
+    cl "I'll see what I can do..."
     
     s "I told you this was horrible…"
     
@@ -819,7 +824,7 @@ label kaz4b:
     
     ro "Any luck?"
     
-    Clerk "I'm afraid not. He's just a bit too tall for our tallest size...perhaps try the store a little farther down..."
+    cl "I'm afraid not. He's just a bit too tall for our tallest size...perhaps try the store a little farther down..."
     $bc3 = False
 menu:
     "Try the kimono store, like Soume wanted.":
@@ -858,9 +863,9 @@ label kaz5:
     "Soume walks out shortly after, looking...stunning."  
     
     #Roman flushes.
-    ro "I…uh…well, it…"
+    ro "I...uh...well, it..."
     
-    s  "…?"
+    s  "...?"
     
     s "Oh, are you having trouble with the tie? Allow me. I'm good at this."
     
@@ -948,7 +953,7 @@ label kaz5:
     ro "Of course!"
     s "Have a lovely evening."
     
-    "Liza turns and I can see her heading towards the stairs.  She does at least have the appearance of one in a hurry, as she darts in and out of the slower people walking either up or down the staircase."
+    "Liza turns and I can see her heading towards the stairs. She does at least have the appearance of one in a hurry, as she darts in and out of the slower people walking either up or down the staircase."
     
     ro "Well, that was a pleasant surprise! I can’t remember the last time I saw Liza in person. What are the odds we’d run into each other here?"
     
@@ -989,6 +994,7 @@ label kaz5:
     "This might be the happiest I’ve ever been in my life."
 
     $inventory.unlock_item("kimono")
+
 label kaz6:
     m  "Damn. Hmph."
     
@@ -998,15 +1004,19 @@ label kaz6:
     
     #play sound knocking
     
-    na "You all right?  Took a hell of a beating the other day.  That fucking tree trunk came outta nowhere, huh?  WHAM!"
+    na "You all right?  Took a hell of a beating the other day.  That tree trunk came outta nowhere, huh?  WHAM!"
     
     m  "Don't patronize me."
     
     na "I'm just saying. I think we should have just killed that plant asshole." 
     na "I'll off him myself."
     
-    m "Naomi, somehow, you always manage to cheer me up. I’m often surprised when a simpleton manages to live as long as you have without ending up dead."
+    m "..."
+    m "Naomi, you somehow manage to cheer me up..."
+
+    m "I’m often surprised when a simpleton manages to live as long as you have. In one piece."
     
+    na "......."
     na  "I'm just looking out for you."
     
     m "It's unnecessary. And you'll do well to remember your orders, and not your feelings."
@@ -1015,19 +1025,26 @@ label kaz6:
     
     m "If you had distracted him a moment longer..."
 
-    na "Boss, if I may...this is unlike you. I've worked with you for five years now."
+    na "Boss, if I may...this is unlike you." 
+
+    m "You'd do well to stop now."
+
+    na "Look--I've worked with you for five years now! I can tell!"
     na "You're distracted by that youko."
+
+    m "Naomi--"
     na "The plan was to grab the doctor, but you went and played with the little runty whateverhisname."
     
     m "..."
     
-    na "A guy of his calibre isn't even worth being your food!"
+    na "A guy of his calibre isn't even worth being your food."
     na "Why did you abort the mission?"
     
-    m "You have no right to question me, and your life is treading on thin ice."
+    m "......."
+    m "Your life is treading on thin ice."
     
-    na "We've had this plan in the works for months. That doctor almost never leaves the temple and getting another chance this good will never happen again!"
-    na "You BLEW the whole thing up to get your hands on that stupid worthless, cowardly piglet."
+    na "We've had this plan in the works for months. That doctor almost never leaves the temple and getting another chance that good will never happen again!"
+    na "You BLEW the whole thing up to get your hands on that kid."
     
     m "..."
     m  "I have my reasons."
@@ -1042,6 +1059,7 @@ label kaz6:
     na "With you."
     
     m "Very well then. Here is the new plan..."
+
     $ decision ="11"
 menu:
     "Search.":
@@ -1058,27 +1076,63 @@ label kaz7a:
     s "Good morning, Riku. Are you ready to move on to the next level of your training?"
     r "The next level, huh?"
     r "Alright. Lay it on me!"
-    #Strength Training I
+
+label power2:     
+    $result = minigame("power", 2, 2000, "bg dsky")
+    if result == True: 
+            jump powerfail2
+    else: 
+            jump powersucceed2
+
+label powerfail2:
+    r "Ugh...harder than I thought. Let's do it!"
+    s "Oh my..."
+    s "That's...would you like to try again?"
+
+menu:
+    "Of course! No way I'll quit!":
+	jump power2
+    "Nah, this is too much."
+        jump endpower2
+
+label endpower2:
+    s "Alright. You can try to practice this anytime you want, okay?"
+    r "Thanks, Soume."
+    jump kaz7b
+
+label powersucceed2:
+    $hp += 50
+    $mp += 10
+    s "Excellent work, Riku. I think we're done for today, since you got the hang of it so quickly."
+    r "Whew! I didn't think I could take anymore!"
+    s "You did well. Have a good night's sleep, alright?"
+    r "Definitely."
+
 label kaz7b:
-        r "Hey Soume, how come our training has changed all of a sudden?"
-        r "We didn't used to do this kind of stuff before."
-        s "Well, your powers still get out of hand here and there."
-        s "Training your body, your spirit and your mind will help you to put some of that wayward energy toward a very powerful focus."
-        r "I thought I was getting the hang of this stuff..."
-        s "You are, Riku, make no mistake."
-        s "There is just always room for improvement."
-        r "Alright. Let's go a little while longer..."
+    r "Actually Soume, before I go..."
+    r "How come our training has changed all of a sudden?"
+    r "We didn't used to do this kind of intense stuff before."
+    s "Well, your powers still get out of hand here and there."
+    s "Training your body, your spirit and your mind will help you to put some of that wayward energy toward a very powerful focus."
+    r "I thought I was getting the hang of this stuff..."
+    s "You are, Riku, make no mistake."
+    s "There is just always room for improvement."
+    r "Mmmmrgh. Can we go a little while longer, tonight, then?"
+    s "Anything you wish."
+    "......"
+    "We end up training so late I collapse right into bed..."
+    call sleep
         
 label kaz7c:
     "Sunday. My favorite day. I just get to lie around doing nothing."
     r "Teeeeeeveeeeeeee, teeeeeeeveeeeeeee..."
-    "I head for the main room, the only room with a decent television in the whole joint."
+    "I head for the main room, the only room with a decent television in this whole place."
     r "....aw."
     "Miss Susa's already on it."
     "Doesn't she have a TV in her room? Why does she gotta get on THIS one out HERE?"
     su "DIE! DIE DIE DIE!"
     su "HA! EAT THAT! TAKE IT AND SHOVE IT RIGHT UP YOUR---"
-    "...interesting TV."
+    "...interesting."
     #play sound footsteps
     r "Oh cool! You've got one of those game things!"
     "It looks like some kind of shooting game...like the one I had to replace the gun for."
@@ -1101,7 +1155,26 @@ label kaz7c:
     su "You mind?"
     r "....mmrph. My hands aren't that small."
     su "Sure kid. Whatever makes you feel good."
-    #Gear Puzzle II
+
+label gear2:    
+    $result = minigame("gear", 2, 1000)
+    if result == True: 
+            jump gearfail1
+    else: 
+            jump gearsuc1
+
+label gearfail2:
+    su "Oh GIVE ME THAT! You're terrible!"
+    r "I told you my hands weren't that small! Sheesh!"
+    "I don't think I'll ever please this lady!"
+    jump kaz7
+
+label gearsuc2:
+    su "Hey, I guess you aren't completely worthless at this."
+    r "......"
+    su "Well, thanks. Come sometime and play."
+    r "...sure." 	
+
 label kaz7:
     k  "No.  No, that can’t be right…"
     k  "I’m sure I checked all the variables."
@@ -1113,7 +1186,7 @@ label kaz7:
     #play sound hand slamming on desk
     
     k "........."
-    k  "…why couldn’t I sense the danger in that forest?"
+    k  "...why couldn’t I sense the danger in that forest?"
     
     k "........."
     
@@ -1144,7 +1217,7 @@ label kaz7:
     k "To muddle my senses without my knowledge...for a youko, that is a trivial power display."
     k "By that alone, it must be him."
     k "......."
-    k  "…oh. I’ve confused my variables here. No wonder my equations were off."
+    k  "...oh. I’ve confused my variables here. No wonder my equations were off."
     
     k  "But they’ve found me."
     k "They want to take me back there."
@@ -1154,7 +1227,7 @@ label kaz7:
     k "...."
     k  "Of course they were after me! I am the most useful to their goals..."
     k "...."    
-    k  "My work can wait.  I need to talk to Miss Susa now.  She must know; she has to help me."  
+    k  "I have to...ARGH!"
     
     #play sound  Footsteps and door opening
     show bg hallway
@@ -1171,7 +1244,7 @@ label kaz7:
     s  "..."
     s "I’m sure I don’t have the moral high ground that you do, Doctor. Tell me again about those experiments you used to do?"  
     
-    k  ".......…"
+    k  "......."
     k "...you know I was under orders. I had no choice."
     s  "Then you understand that concept well."
     k "Tch..."
@@ -1190,6 +1263,7 @@ label kaz7:
     #play footsteps
     
     k  "Hmph. Keep that smile on your face while you still have the opportunity, Soume."
+
     $ decision ="12"
 menu:
     "Search.":
@@ -1206,7 +1280,36 @@ label kaz8a:
     s "Good morning, Riku. Are you ready to move on to the next level of your training?"
     r "The next level, huh?"
     r "Alright. Lay it on me!"
-    #Agility Training I    
+
+label mole1:
+    $result = minigame("mole", 1, 3000)
+    if result == True: 
+            jump molesuc1
+    else: 
+            jump molefail1
+
+label molefail1:
+    r "Errrr...that wasn't good, was it."
+    s "Well, at the very least I don't have to explain it..."
+    s "Perhaps another attempt..."
+menu:
+    "Try again?":
+       jump mole1
+    "Some other time.":
+       jump endmole1	
+
+label endmole1:
+    s "...if you wish. You can try again whenever you feel like."
+    r "Thanks, Soume. See you tomorrow?"
+    s "Same time."
+    jump kaz8
+
+label molesuc1:
+    s "Very good!"
+    r "Those damn things are fast, but I'm WAY faster!"
+    s "Alright, I think we're done for today."
+    r "Whew! Free afternoon!"
+    
 label kaz8:
     #play sound  Knocking
     
@@ -1218,7 +1321,7 @@ label kaz8:
     
     su  "I’m kind of in the middle of the something here...once I finish looking at these documents, I can get back to you..."
     
-    k  "Well…ah.  You see, this is rather important…can we possibly discuss it now? I am afraid time may not be a luxury we have."
+    k  "Well…ah.  You see, this is rather important...can we possibly discuss it now? I am afraid time may not be a luxury we have."
     
     su "Doctor, if this-"
     
@@ -1226,7 +1329,7 @@ label kaz8:
     
     su  "No!"
     k "....."
-    su "…I don’t want to trouble you with this. It's…trifling business, really. I’ll just put this aside for now."
+    su "...I don’t want to trouble you with this. It's...trifling business, really. I’ll just put this aside for now."
     
     k "What was that a map of, if you don’t mind? I am ashamed to admit the area outlined on it did not look familiar to me."
     
@@ -1262,10 +1365,10 @@ label kaz8:
     
     su  "CALM yourself. You're acting completely irrational!"
     k "........"
-    k  "Y-you're correct. I…apologize."  
+    k  "Y-you're correct. I...apologize."  
     k "But please, you must understand the severity of this situation."
     
-    su " And you need to understand you’re not in any danger. You’re safe here, Kazutaka."  
+    su "And you need to understand you’re not in any danger."  
     
     k  "I’m not!  Miss Susa, we need to at the very least search his things, quarantine those plants, something---"
     
@@ -1273,7 +1376,7 @@ label kaz8:
     su "That is not a suggestion."  
     su "Soume is not a spy. Trust my judgment, or bring me concrete proof."
     k "..........."
-    k  "…I understand. Forgive my brashness, Miss Susa."
+    k  "...I understand. Forgive my brashness, Miss Susa."
     
     su  "It's fine, but I’m pulling you off missions temporarily."
     
@@ -1295,9 +1398,9 @@ label kaz8:
     k "I suppose...it might be a good idea..."
     
     su "Take the Riku kid."    
-    su "We need someone to help you with your work, and he’s the most promising Majin we’ve had in years."
+    su "He seems to improve your mood, and it'd keep you occupied from your little delu--well, you'd be occupied."
     
-    k  "He does have…potential. I do not know if he has what it takes to become a true doctor though."
+    k  "Hmph. I suppose he does have...potential, but I don't think he has the ability to last long-term."
     
     su  "He doesn't. Not yet at least. Give him a couple hundred years."     
     k  "...if I have that long."
@@ -1330,23 +1433,23 @@ label kaz8:
     
     k  "..."
     k "But I cannot face any of them alone. Proof. I need proof."
-    k  "And I need someone else to confide in…someone to help me."
+    k  "And I need someone to help me."
     k "Hmmm."
    
 label kaz9:
     #Roman vegetarian food scene!
-    r " Ehh…what did you say this, er, thing is?  Somethin’ about this don’t look right to me…"
+    r " Ehh...what did you say this, er, thing is?  Somethin’ about this don’t look right to me…"
     
     #Roman chuckles.
     ro  "Riku, I believe you are being rather overdramatic.  It is called a Falafel Seitan Bratwurst.  Something I picked up from my time in Germany."   
-    r " …yeeeeah.  This doesn’t look like any Bratwurst I know."  
+    r " ...yeeeeah.  This doesn’t look like any Bratwurst I know."  
     
-    "I turn over what Roman is trying to get me to eat with my fingers."  
+    "I turn over...whatever this thing is...with my fingers."  
     "It's nice and all for him to cook for me, but I'm just not interested in this vegan stuff."
  
     ro  "Riku, please just try it. You wouldn’t even know it was vegan if I hadn’t told you."
-    r  "Yeah.  I’m…uh…getting around to it. It’s just a little hot, is all.  Yup."
-    ro  "…"
+    r  "Yeah.  I’m...uh...getting around to it. It’s just a little hot, is all.  Yup."
+    ro  "..."
     ro "You owe me for the cake, before."
     
     r  "...do I gotta?"
@@ -1408,6 +1511,8 @@ label eatthefood:
     r  "Relax, Roman! I’m just teasing ya."
     ro "Oh, yes. Of course. I knew that."
     "Poor naive bastard. I don't know how he lives with Soume's brand of teasing."
+    $hp+=50
+    $mp+=30
     $inventory.unlock_item("book5")
     jump kaz10a
     
@@ -1442,7 +1547,25 @@ label kaz10b:
     "Uh oh."
     k "Nothing you haven't done before, but I have this other little tiny mechanism that needs a little fixer-upper~"
     r "Alright, lemme see it."
-    #GEAR PUZZLE III
+
+label gear3:    
+    $result = minigame("gear", 3, 1000)
+    if result == True: 
+            jump gearfail3
+    else: 
+            jump gearsuc3
+
+label gearfail3:
+    k "You've just messed it up further! Arghhh!"
+    r "Well maybe you should fix your own stuff!"
+    "SHEESH!"
+    jump kaz10
+
+label gearsuc3:
+    k "An admirable display. I thank you."
+    r "You're we--"
+    "He's already slunk back into his lair."
+    "Huh."
     
 label kaz10:    
     su  "Oi!  Hey brat, get over here."
@@ -1708,17 +1831,15 @@ label kaz12:
     $renpy.pause(2.0)
     r "Hahahaha, look at Soume dancing!"
     
-    "Soume is dancing fairly awkwardly with one of the younger students."  
+    "Soume is dancing awkwardly with one of the younger students."  
     "He's awfully good at it."
     "I don't have any rhythm at all."
     $renpy.pause(1.0)
     "Maybe he'll teach me."
     "Maybe I should ask him."
-    "I..."
-    if perparty:
-        jump kaz13
-    else: 
-        jump kaz13d    
+    "Heh, I couldn't possibly!"
+    "............" 
+  
 label kaz13:
     l  "Oh, leaving already?  This is hardly a way to great an old friend, I would think."
     
@@ -1814,6 +1935,7 @@ label kaz13a:
     l "Just be careful, Roman. Be careful."
     ro "I will. I promise."
     jump kaz13c
+
 label kaz13b:    
     jump neuend00
     
@@ -1826,7 +1948,14 @@ label kaz13c:
     l "But I wanted to, so take it and keep it."
    
     "With that, we head back inside, and Susa and Liza rush off to talk."
-    "I'm sad that evening fell so quickly, there's not much time left to enjoy my birthday."
+
+    if perparty:
+        jump kaz13d
+    else: 
+        jump kaz13e
+ 
+label kaz13d:
+    "Evening fell so quickly, there's not much time left to enjoy my birthday."
     "What should I spend the last few hours doing?"
 menu:
         "Talking to Soume.":
@@ -1835,11 +1964,66 @@ menu:
             jump ribirtalk
    
 label sobirtalk:
-    "STICK THE SOUME/ROMAN YOUKO DISCUSSION HERE."
+    
+    ro "Soume?"
+    s "Ahh, Roman, come in."
+    ro "Sorry to bother you...I just uh--"
+    s "Hm?"
+    "He still makes me so tongue tied.
+    s "It's alright. Come sit down."
+    ro "Thanks..."
+    "It looks like he's been staring at a full moon."
+    ro "Do you like the moon, Soume?"
+    s "...hm?"
+    s "Oh, ah...a little. It's so big and round tonight."
+    s "I suppose it has an effect on me..."
+    ro "Really? What sort?"
+    s "...mm. Who knows."
+    "Something brushes by my hand."
+    "It disappears underneath Soume's robe!"
+    ro "Soume...there...your robe...something just..."
+    s "Oh, did I catch you? I'm sorry."
+    "He starts to pull his robe OPEN--"
+    ro "WAIT WAIT! I don't need to see--"
+    "Tails! Two tails, twisting and turning."
+    s "I have to let them out sometimes...it's much more comfortable like this."
+    ro "...w-wow..."
+    "I settle back down, but I know my face is pretty flushed."
+    ro "...ahem."
+    ro "Hey Soume...can you maybe...tell me about youko, a little more?"
+    ro "I mean, since we're partners..."
+    s "Hmm. You are right. It would be better for us both if you understood my biology, I suppose."
+    s "How should I start..."
+    ro "...how about with the tails?"
+    s "Haha, alright."
+    s "Well, youko start out with no tails at all. After they reach the first thousand years of life, they gain the first one, and one every thousand years afterward.
+    ro "...you're TWO THOUSAND years old?!"
+    s "Give or take a few decades..."
+    ro "Wow..."
+    s "At any rate, my weakest form is that of a basic fox. My human form is of course, a disguise, but my most powerful form is the youko form itself, which is a...hm. A blend of human and fox, so to speak. It gives me the greatest control over my abilities."
+    ro "The youko form? Have I seen you use that...?"
+    s "I try to refrain. It can be a bit overwhelming at times."
+    ro "I see...but still, Soume. Two thousand years old. You must've seen all of history?"
+    "Soume's mood suddenly sours. He turns away from me."
+    "Was it something I said?"
+    s "No. Not particularly."
+    ro "But you must have! All the events in the bible...all sorts of wars...perhaps you even know the writers of the Bible! Jesus Christ! Was he real, like they describe?"
+    s "......"
+    "But Soume's staring at me blankly."
+    ro "...what is it?"
+    s "Nothing. I'm just not...sure what you're talking about."
+    ro "Not sure? The Bible? Jesus Christ?"
+    s "Never heard of them~"
+    ro "...oh..."
+    s "Well, I am awfully tired now, Roman. You should get some sleep too~"
+    ro "Huh--oh. Yes. Good night, Soume."
+    s "Good night~"
     $unlock_entry("Majin","046")
     jump kaz13e
     
 label ribirtalk:
+    "I'm. Really. Drunk."
+    "I don't know how I continue to let Riku convince me to do these things..."
     r "Heeeeeeey...you ever realize how when you get reaaaaaaaaaaaally close to Soume...he smells really good."
     ro "Oh my yes...he smells like heaven..."
     r "Right? I thought it was just me..."
@@ -1869,41 +2053,10 @@ label ribirtalk:
     jump kaz13e
     
 label kaz13e:
-     "It's really late now. Time for bed."
-     $ decision = "14"
-menu:
-    "Search.":
-        call show_map
-    "Sleep.":
-        call sleep
-    "Store.":
-        call shop_loop
-    "Research.":
-        call research_loop
-        $journal.unlock_entry("something", "031")
-        
+     "It's really late now."
+     "I could just pass out..."
+
 label kaz14:
-    "This morning is an unlucky morning, I think."
-    "I stepped on something really hard hiding under all my clothes when I got up."
-    "And now this..."
-   
-    k  "Riku, would you please come see me in my lab at some point this evening?  I have something I would like to talk to you about."
-    r  "...something like...?"    
-    k  "Stop talking back and just BE here tonight."
-    
-    "He probably just wants me so he can test his new strain of bacteria out."
-    
-    r "Can't you just gimme a hint? A little one?"
-    
-    "...guess not, with the way he's looking at me."
-    
-    r "Fine, fine. I'll be there."
-    
-    k "Much obliged."
-    
-    "Grrrr..."
-    
-label kaz15:
     k  "I want to thank you for coming here to meet with me."
     
     l  "I already told you, Doctor, I came here for Roman. Having the extra time to meet with you was only a fortunate coincidence."
@@ -1953,20 +2106,20 @@ label kaz15:
     l "I think that what you claim is not impossible."
     l "But two people I hold in very high regard trust Soume with their lives."
     l "If you can pin even one thing on Soume, I will personally face him."
-    l  "Find out what is interfering with your sensory powers, and we may be able to use that to make a case."
+    l "Find out what is interfering with your sensory powers, and we may be able to use that to make a case."
     l "If there is one."
     
-    k  "I have been able to find nothing out of the ordinary."
+    k "I have been able to find nothing out of the ordinary."
     
-    l  "Well, I would recommend you think of something, quickly, if the problem is as urgent as you believe it to be."  
+    l "Well, I would recommend you think of something, quickly, if the problem is as urgent as you believe it to be."  
     l "I’ll do what I can from my end, but until we have an actual link to a suspect, I won’t be able to do anything substantial."
     
-    k  "And what about Miss Susa?  She told me to stop investigating matters, and that I should trust her judgement."
+    k "And what about Miss Susa?  She told me to stop investigating matters, and that I should trust her judgement."
     
-    l  "Well then, it would be to your benefit to not get caught."
+    l "Well then, it would be to your benefit to not get caught."
     l "I shall keep quiet about our dealings.  If the time comes that something needs to be done, I will speak to her directly."
     
-    k  "May I ask you something?"
+    k "May I ask you something?"
     
     l "You may ask. I don't guarantee an answer."
     
@@ -1985,23 +2138,57 @@ label kaz15:
     l "I am merely entertaining the possibility that you are correct."
     l "And, I worry about Roman's safety."
     
-    k  "Of course.  You will forgive me, I suspect, if I misspoke."
+    k "Of course.  You will forgive me, I suspect, if I misspoke."
     
-    l  "It is nothing."
+    l "It is nothing."
     l "Take this. It is my direct line."  
     l "You may call this number immediately if you find anything out. I will call you if I manage to discover anything on my end."
     
-    k  "Do you believe you will?"
+    k "Do you believe you will?"
     
-    l  "I cannot say anything for certain."
+    l "I cannot say anything for certain."
     
-    k  "Right, well, keep in touch, if you don’t mind."
+    k "Right, well, keep in touch, if you don’t mind."
     
-    l  "I’ll call when I feel like I have some information you need to know, and not before that."
+    l "I’ll call when I feel like I have some information you need to know, and not before that."
     
-    k  "Understood."
+    k "Understood."
     
     l "Then, Doctor, I bid you good evening."
+
+    $ decision = "14"
+menu:
+    "Search.":
+        call show_map
+    "Sleep.":
+        call sleep
+    "Store.":
+        call shop_loop
+    "Research.":
+        call research_loop
+        $journal.unlock_entry("something", "031")
+        
+label kaz14:
+    "This morning is an unlucky morning, I think."
+    "I'm hungover..."
+    "I stepped on something hiding under a pile of laundry."
+    "And now this..."
+   
+    k  "Riku, would you please come see me in my lab at some point this evening?  I have something I would like to talk to you about."
+    r  "...something like...?"    
+    k  "Stop talking back and just BE here tonight."
+    
+    "He probably just wants me so he can test his new strain of bacteria out."
+    
+    r "Can't you just gimme a hint? A little one?"
+    
+    "...guess not, with the way he's looking at me."
+    
+    r "Fine, fine. I'll be there."
+    
+    k "Much obliged."
+    
+    "Grrrr..."
     
 label scavenge:
 
@@ -2021,11 +2208,13 @@ label scavenge:
     ro  "C'mon. Partner up with me!"
     
     r  "..........."
+    r "Alright already! SHEEESH!"
     call scav_hunt    
     
 label kaz16:
     #play sound Knocking at door-
-
+    r "Thank god that's over..."
+    r "But it's nice to relax every now and then."
     r  "Hey, Doc? You in?"
     
     
@@ -2038,11 +2227,11 @@ label kaz16:
     #play sound Knocking-
     #play sound door opening
     
-    k  "Hrm…yes, that might be a possibility…no, no, what am I saying?  I would have had other symptoms.  But then what?"
+    k  "Hrm...yes, that might be a possibility...no, no, what am I saying?  I would have had other symptoms.  But then what?"
     
-    r  "Doctor Osamu? …you said you wanted to see me?"
+    r  "Doctor Osamu? ...you said you wanted to see me?"
     
-    k  "Hrm? Oh…Riku. Yes, please do come in. Take a seat over there, and be careful not to touch anything."
+    k  "Hrm? Oh...Riku. Yes, please do come in. Take a seat over there, and be careful not to touch anything."
     
     "He clears off a spot for me on one of his chairs, which had previously been covered with a couple of old journals and loose papers, and returns to his chair."  
     "He goes to move his books to the side to clear off a little space on his desk, but before he finishes I manage to take a look at one of the titles."
@@ -2127,18 +2316,75 @@ label kaz16b:
     r "I do not get this guy..."
     
 label kaz16c:
-        "Mamoru flirts with someone here."
+    m "Mmmm. I'm bored...and I haven't been in the city for some time."
+    db "Sir, please remember you have an appointment with the head in three hours."
+    m "Well that leaves plenty of time for fun, doesn't it?"    
+    db "Yes, but sir..."
+    m "Oh, come off it. I'll only be gone a little bit."
+    db "Sir please--"
+    db "...."
+    db "He's already gone...I'm in so much trouble if he doesn't get back on time..."
+    
+    m "Alright...for the best time...who should I play with..."
+	
 menu:
-    "Flirt with a chick.":
+    "A woman.":
         jump chickflirt
-    "Flirt with a dude.":
+    "A man.":
         jump dudeflirt
 label chickflirt:
-    "Mamoru flirts with the girl then eats her yay!"
-    jump dec15
+    m "Definitely a girl."
+    m "And there's one now..."
+    m "Hiya~"
+    sg "Oh--oh. Hello there. Um. Wow."
+    m "I'm a little bit new to the area and I haven't eaten in hours...would you mind showing me a good place?"
+    sg "...I was supposed to meet someone..."
+    m "It will only take a few moments, you look like you know this area so very well..."
+    sg "Heheh, I guess. Since you specifically asked me, I could take you to a nice little shop..."
+
+    m "Ahh, this place looks wonderful~"
+
+    "Two hours later..."
+    sg "Oh Mamoru, you're so funny! I don't think I've ever met a man quite as alluring as you..."
+    m "Well, I try to keep up..."
+    sg "So you're in Japan to for work...what kind do you do?"
+    m "Ohhh, this and that, management. Talking about work on the first date isn't any fun, is it?
+    sg "You're right...how rude of me."
+    m "Not at all. I see you have a keen eye for good taste...perhaps you would like to accompany me to a show tonight."
+    sg "A show? What kind?"
+    m "A musical affair. I've got tickets, but I was dumped..."
+    sg "That's so terrible! Whoever did that must not have known what they had..."
+
+    #play sound RING RING RING
+    sg "Oh, that's me...ahaha, it's just the friend from earlier. I'll text her back later."
+    sg "Shall we?"
+    m "...let's."
+
+    sg "This doesn't look like the right place."
+    m "It doesn't, does it?"
+    sg "W-why are we back here?
+    m "Well, I couldn't very well let the whole world see."
+    sg "...s-see? Don't touch me, if you do, I'll scream."
+    m "That would be unfortunate, when you could just fight me."
+    sg "...how did you know about me?"
+    m "That's easy. My food always has a certain smell..."
+    #play sounds medley of dark crunchy munchy sounding shit and a scream.
+
+    jump doneeating
+
 label dudeflirt:
       "Mamoru flirts with the dude and then eats him yay!"
-      jump dec15      
+      jump doneeating
+
+label doneeating:
+    db "Where have you been! You're nearly late, I almost had a heart att--!!!"
+    m "I really hate when people lecture me like they're my parent. Shut up."
+    db "U--urrrggh."
+    "...."
+    Voice "The smell of Majin blood. You've arrived finally, Mamoru."
+    Voice "Clean yourself and come in. And call a maid for that mess outside."
+    m "Hn."
+    m "You're the same as always...Father." 
     
 label dec15:      
     $ decision = "15"
@@ -2166,11 +2412,29 @@ label kaz17:
     k "My precious bacteria..."
     
     k "Just pay attention!"
+    r "What's the point of this today, anyway?"
+    k "We're trying to find a mix of bacteria that results in a certain biological outcome."
+    r "...what?"
+    k "If I sneeze, you'll know you have it right! Just do it!"
     
-    #Level 2 of Kaz's cell game goes here.
-    #Time passes
-label cellgame2suc:    
-    k  "Ngh.  Hmm…not exactly right but very close."
+label cell3:    
+    $result = minigame("cell", 3, 1000)
+    if result == True: 
+            jump cellfail3
+    else: 
+            jump cellsuc3
+
+label cellfail3:
+    k "Murderer, murderer, murderer!!!"
+    r "They're just CELLS!"
+    k "Do it over!"
+    jump cell3	
+
+label cellsuc3:
+    k "Achoo!"
+    k "ACHOO! ACHOO! ACHOO!"
+    r "Looks like sneezing to me!"    
+    k  "ACHOO--ngh. Hmm...not exactly right but very close."
     
     r  "No way, I did pretty well on it!"
     
@@ -2178,19 +2442,18 @@ label cellgame2suc:
     r "..........."    
     k  "Anyway, this shall be enough for one day.  Which compounds did you use for the last mixture?"
     
-    r  "Uh…these three, I think."
+    r  "Uh...these three, I think."
     
     k  "You think?!"  
     k "Riku, where are your notes on the experiment?  How can you expect to be a real scientist if you aren’t documenting each of your steps?  How can I possibly reproduce your results?"
     
-    r  "Err…sorry.  I didn’t know I needed to do that."
+    r  "Err...sorry.  I didn’t know I needed to do that."
     
     k  "I thought you would have had enough sense to deduce that on your own!  My, you certainly have a lot to learn."
     r "I toldja, I'm not GOOD at this--"        
     k  "Hmph.  Excuses.  Nevermind, you are dismissed. I have a lot of work to do."
     
     r  "........."
-    "One day...he's gonna cross me wrong."
     r "Fine. Same time tomorrow?"
     k  "Yes, certainly.  Oh, and Riku?"
     
@@ -2200,29 +2463,24 @@ label cellgame2suc:
     
     r  "......."
     r "Will do."
-    "I really, really don't get him."
-    
-label kaz18:
-    
-    k  "Hrm…bizarre."
-    
-    k  "At least Riku was correct in his assertion.  These three compounds do indeed appear to impair my sensory powers."
-    
-    k  "Why exactly this means though, I have no idea."
+    #play sound door open and close.
     
     #play sound phone ringing-
     
-    k  "Someone please get that.  The noise is annoying me."
+    k  "Riku, please get that.  The noise is annoying me."
     
     #play sound phone ringing-
+    k "Right. I dismissed him. Argh."
+
+    #play sound phone ringing
     
-    k  "Ugh.  This is why I fought so hard to put a phone in my lab.  This is nothing but a distraction."
+    k  "This is nothing but a distraction."
     
     k  "Hello.  This is Doctor Osamu speaking.  Who is calling?"
     
     l  "Doctor?"
     
-    k  "Ah, Liza, one moment..."
+    k  "Ah! Liza, one moment..."
     
     l "This will only take a moment, Doctor..."    
     l  "I’m afraid I won't be able to help you for the forseeable future..."
@@ -2230,12 +2488,12 @@ label kaz18:
     k "W-what? But why?"
     k  "I simply must impress upon you how urgent the matter is."
     
-    l  "I understand that, and I am treating this with the appropriate amount of urgency."
-    l "However, something more pressing has arriven that must be dealt."
+    l "I understand that, and I am treating this with the appropriate amount of urgency."
+    l "However, something more pressing has arriven that must be dealt with."
     
     k  "More important than the safety of the shrine?!"
     
-    l  "Doctor, like I made clear last time, there is only so much I can do until you provide me with more legitimate evidence."  
+    l "Doctor, like I made clear last time, there is only so much I can do until you provide me with more legitimate evidence."  
     l "Until then I will work to find out what I can.  I promise you that if I hear something, you will be the first to know."
     
     k  "F---fine. Please hurry and finish with your business."
@@ -2248,32 +2506,54 @@ label kaz18:
     k  "DAMNIT!"
     
 label kaz19:
-        "Kazu goes to the store and gets accosted oh noes very bad."
-        $inventory.unlock_item("book6")
-    
-label kaz19b:
-    "Kaz throws a tantrum and nearly destroys the Makai Rose Riku gave him."
+    k "Fine. FINE. I don't need anyone. If she won't help me, I'll do it myself."
+    k "I don't need them. I don't need anyone..."
+    cl "Frreeejndndgth."
+    k "Yes yes. Hello. I don't have time for idle chat today...do you have this book on hand?"
+    cl "Shhdleme in the back."
+    k "Much obliged."
+    k "I can research this alone. I am the greatest, the ONLY Majin doctor with my knowledge, my credentials. This is simple!"
+    db "Hello doctor. It's been a while."
+    k "AAAAAGH! No...no I can't...I should've sensed you--"
+    db "Shhh. No need to worry. I'm only here to talk."
+    k "T-there's nothing to discuss."
+    db "Let's not play games."
+    db "This will be our last offer to you. Rejoin us."
+    db "If you do our work, we will allow you unlimited funding for your own."
+    db "All the equipment you could possibly desire...and of course, a state of the art laboratory."
+    k "...state of the art...?"
+    db "Nothing less."
+    db "The request comes straight down from our leader."
+    k "....."
+    db "Your answer?"
+    k "I...refuse. I will never, ever join you again. Not after--"
+    db "Mm. My master said you may need more persuading than that. I will report this to him...we'll be seeing you soon, Doctor Osamu."
+    k "......"
+    k "He's gone..."
+    k "Oh god..."
+    k "Why didn't he kill me...? I-I HAVE to figure out what's wrong."
+    $inventory.unlock_item("book6")
     
 label kaz20:
-    su  "Yes.  No, I agree, Liza.  I have a couple of things left I need to do, but I am almost ready.  I will contact you when I am leaving."
-    
-    su  "Sounds good.  Yes.  Bye."
+    su  "Yes."
+    su "No, I agree, Liza. I have a couple of things left I need to do, but I am almost ready. I will contact you when I am leaving."
+    su  "Sounds good. Yes. Bye."
     
     #play sound knocking-
     
-    su  "Eh?  Whoever is there needs to learn how to make a fucking appointment."
+    su  "Eh? Whoever is there needs to learn how to make a fucking appointment."
     
-    k  "Forgive my intrusion, Miss Susa, but I feel like we need to talk."
+    k  "Forgive my intrusion, Miss Susa, but we must talk."
     
     su  "Oh, Doctor Osamu.  You know I didn’t really invite you in, right?"
     
-    k  "Yes, and I do apologize for the intrusion, but I feel like we really need to talk.  I wanted to see if I could-"
+    k  "Yes, and I do apologize for the intrusion, but I--I was just--"
     
     k  "Ahem.  Miss Susa?  Perhaps you could stop rummaging around your file cabinet and listen to what I am about to say?"
     
-    su  "Just a sec. I need to find something… I tell you, once of these days I’m actually going to fucking organize this thing.  Never can find what I am looking for when I need it."
+    su  "Just a sec. I need to find something... I tell you, once of these days I’m actually going to fucking organize this thing.  Never can find what I am looking for when I need it."
     
-    k  "Well, perhaps you can look for whatever you need in a couple of moments?"  
+    k  "Perhaps you can look for whatever you need in a couple of moments?"  
     
     su  "No need. I can guess what you’re going to say anyway."
     
@@ -2281,66 +2561,90 @@ label kaz20:
     
     su  "Soume blah blah blah ambush his fault blah blah your sensory abilities blah.  Something along those lines?"
     
-    k  "Well…sort of, but I would prefer it if you took me a bit more seriously.  I am not some delirious child caught up in some outrageous fancy!"  
+    k  "Miss Susa, I...I was attacked in the bookstore! 
+    "She stares me up and down."
+    su "Well, you look very good for someone who's been attacked."
+    k "Well, it wasn't an attack, exactly...I was approached by the Church. They want me to return to work for them."
     
-    su  "And I already told you, trust my judgment.  Soume has been here over twenty years.  And he-shit, where did I put it?"
+    k  "I believe the safety of this entire shrine is at risk."
     
-    k  "Miss Susa, I am nearly positive there is a spy in our midst!"
-    
-    su  "…eh?  A spy?  For who?"
-    
-    k  "The Church of the Three Acts, if I had to guess.  And I believe the safety of this entire shrine is at risk."
-    
-    su  "Fuck, Osamu.  No one can find us.  I don’t know how many times we’ve been over that.  This is literally the safest place on the entire planet for us."
+    su  "Fuck, Osamu. I don't have time for this. Did you bring it up with Soume?"
+
+    k "Miss Susa! I believe that Soume is the one leading everyone here!"
     
     k  "I beg of you, do not take my warnings lightly!  I am sure it is him!  I am positive he is behind all of this!  I am in very grave danger!"
     
     su  "OSAMU!  Relax.  Now.  Calm yourself and sit down."
     
-    k  "But-"
+    k  "But--"
     
-    su  "No.  Sit your ass down now.  I was trying to ignore this, but you are making it very hard for me to do so."  
+    su  "No.  Sit your ass down now."  
     
-    k  "…yes, Miss Susa."
+    k  "...yes, Miss Susa."
     
-    su  "You have been becoming increasingly paranoid these past couple of years.  It isn’t healthy.  For you, for Soume, fuck for me because I have to listen to this shit every other month."
+    su  "You have been becoming increasingly paranoid these past couple of years. It isn’t healthy. For you, for Soume, fuck for me because I have to listen to this shit every other month."
     
     k  "This isn’t paranoia!  This-"
     
-    su  "Osamu, since Soume arrived, you have beelined to him as a spy."
+    su  "Osamu, since Soume arrived, you've beelined on him as a spy."
     
-    k  "Er…well...yes, but I was su---"
+    k  "Er...well...yes, but now I am absolutely sure..."
     
-    #Susa sighs.
+    su  "Shut it! You are by far the most brilliant mind here, but you convince yourself of these crazy conspiracy theories!"  
     
-    su  "Shut it! You are by far the most brilliant mind here, but you convince yourself of these outlandish conspiracy theories."  
+    k  "C-crazy?"
     
-    k  "Out-outlandish?"
-    
-    su  "Outlandish."
-    su "I already know what you did to Soume under the human orders."
+    su "PSYCHO."
+    su "Look."
+    su "I already know what you did to Soume, under the Church's order."
     su "I understand you aren't comfortable with his presence here, but he deserves a chance just as well as you do."
     
-    k  "I-I haven’t even thought about that in years."
+    k  "What I did? This has n-nothing to do with--I-I haven’t even thought about that in years."
     
     su "Sell that line to someone who'll buy it."
-    su  "You don't like him because you are afraid. But not once have you been able to prove a thing."
+    su  "You don't like him. You've never liked him because you were afraid."
+    su "You've accused him several times already. But not once have you been able to prove a thing."
     
     k "Well maybe you protect him because you feel bad for what you and yours did to him!"
     su "............."
-    k  "Don’t think I forgot what you used to be, before you opened up this rescue out of the goodness of your heart."
+    k  "Don’t think I forgot what you used to be, before you opened up this rescue out of the goodness of your heart!"
     
-    su  "…............."
+    su  "............."
     
-    k  "Perhaps a case of overcompensation, yes?"
+    k  "Perhaps...perhaps your failing to believe me is a case of overcompensation, yes?"
     k "Indeed! Maybe it is your own bias!"
     
     su "........."
     su "This conversation is over."
-    su "Do not bring it to me again, short of concrete proof. I am too busy for your bullshit."
-    
+    su "Get the fuck out of my room."
+    k "Wait...I didn't mean--"
+    su "GET THE FUCK OUT!"
     k "................."
-    $ decision = "11"
+
+    "............"
+    "Roman, Soume and I are playing cards in the main room."
+    "Free evenings are pretty nice, we can just relax and chat."
+    "~*~ GET THE FUCK OUT ~*~"
+    r "Whoa."
+    ro "...I wonder what's gotten Miss Susa so mad..."
+    s "She's been a bit on edge lately..."
+    ro "Do you know why?"
+    s "Oh, no. I don't know things like that."
+    r "Maybe someone didn't iron the linens right. Hehehe."
+    ro "No...that's...more than usual."
+    s "Much more."
+    r "......"
+    r "Come to think of it, she's been pretty nice to me, lately."
+    ro "Oh?"
+    r "Even let me check out her video game."
+    r "It's pretty nice. I'll probably check it out again if she lets me."
+    ro "That is...exceptionally nice of her."
+    s "Well, I'm sure it will work out."
+    r "Yeah, I think so too!"
+    "............"
+
+    $kbc = False
+    $ decision = "16"
 menu:
     "Search.":
         call show_map
@@ -2349,19 +2653,17 @@ menu:
     "Store.":
         call shop_loop
     "Research.":
-        call research_loop
+        call label kaz22
+        $kbc = True
         $journal.unlock_entry("something", "031")
 
-label nexttraining2:
-    s "Good morning, Riku. Are you ready to move on to the next level of your training?"
-    r "The next level, huh? So I can gain better control of my powers?"
-    s "Precisely."
-    r "Alright. Lay it on me!"
-    
+#############################################################
+Kaz22 need massive fixing.
+#############################################################    
 label kaz22:
-    k  "No!  Ngh…another dead end!"
+    k  "No!  Ngh...another dead end!"
     
-    k  "Unless…perhaps I misread the results.  That has to be it."  
+    k  "Unless...perhaps I misread the results.  That has to be it."  
     
     k  "Let me see…if I just recalibrate the instruments…hmm…and then…"
     
@@ -2449,11 +2751,9 @@ label kaz22:
     
     k "I…guess I am…just another…stupid animal."
     
-label kaz23:
     r  "Uh…you in there Doc?"  
     
-    "I’m hoping it was him in there."  
-    "I heard crashing and screaming from the other end of the hallway, so either it was him or he’s doing some sort of experiment on whatever unfortunate sod he talked into coming into his lab."
+    "There're no sounds."
     
     #play sound Knocking
     
@@ -2470,7 +2770,7 @@ label kaz23:
     "I look around the lab once I open the door, and then entire room looks like a bull just ran through the place."  
     "There is broken equipment everywhere and I need to watch where I’m walking because there are shards of glass everywhere."
     
-    "The weirdest sight, however, is Kazu himself.  He is in the corner of the room, curled on the floor with his arms around his legs.  His eyes are all swollen and it looks like he’s been crying."
+    "The weirdest sight, however, is the doctor himself.  He is in the corner of the room, curled on the floor with his arms around his legs.  His eyes are all swollen and it looks like he’s been crying."
     
     r  "Holy hell…you alright Doc?"
     
@@ -2480,7 +2780,7 @@ label kaz23:
     
     r  "Huh?"
     
-    k  "The plant you gave me.  I broke it.  I’m…really sorry."
+    k  "The plant you gave me. I destroyed it. This is an APOLOGY!"
     
     r  "Oh…uh, no worries, Doc.  I’ll get you a new one."
     
@@ -2506,33 +2806,33 @@ label kaz23:
     
     k  "Well, you’re just like the others.  You don’t believe me."
     
-    r  "No, I…I believe you."
+    r  "No, I...I believe you."
     
-    "I don’t really.  But I had to tell him something.  He looks too sad for me to throw salt on the wound."
+    "I don’t really.  But I have to tell him something.  He looks too sad for me to throw salt on the wound."
     
     k  "You do?"
     
-    r  "Yeah…and even if they do get you, you won’t just be another body.  All the work you’ve done will live on.  It isn’t like that’s just gonna disappear, y’know?"
+    r  "Yeah...and even if they do get you, you won’t just be another body.  All the work you’ve done will live on.  It isn’t like that’s just gonna disappear, y’know?"
     
-    k  "…that is true.  My journals will outlive me.  My work…"
+    k  "...that is true.  My journals will outlive me.  My work..."
     
     "He suddenly looks at me urgently.  His eyes widen."
     
-    k  "Promise me…promise me, you’ll continue it."
+    k  "Promise me...promise me, you’ll continue it."
     
     r  "Huh?  What do you mean?"
     
-    k  "If I die…if they get me…promise me you’ll continue what I’ve started.  I cannot be the last Majin doctor.  There must be others, or our kind is doomed."  
+    k  "If I die...if they get me...promise me you’ll continue what I’ve started.  I cannot be the last Majin doctor.  There must be others, or our kind is doomed."  
     
-    r  "Uh…sure.  Yeah.  I will."
+    r  "Sure, whatever you want. Yeah.  I will."
     
     "Kazu rest his head against the wall and smiles.  He looks relieved."
     
     r  "But we don’t have to worry about that.  Cuz you and I are gonna figure this out."
     
-    k  "So…you’ll help me?  Help me show the others it is Soume?  You’ll help me with the investigation?"
+    k  "So...you’ll help me?  Help me show the others it is Soume?  You’ll help me with the investigation?"
     
-    r  "Ah…yeeeah.  Yes.  Course I will, Doc."
+    r  "Ah...yeeeah.  Yes.  Course I will, Doc."
     
     "I know it isn’t Soume.  It probably is Mamoru, if I had to guess.  But if I can help him figure out how, then I’m guessing we’ll be able to find out who, and eliminate Soume from his list of suspects."
     
@@ -2548,17 +2848,10 @@ label kaz23:
     
     r  "Nah, I don’t know what you’re talking about.  I didn’t even come to your lab today, so I wouldn’t know what condition it was in if I was asked."
     
-    k  "…thank you, Riku.  I’ll have this cleaned up by tomorrow.  We can start our research again then.  Please arrive here by noon.  I will not tolerate lateness, as I’m afraid we have limited time."
+    k  "...thank you, Riku.  I’ll have this cleaned up by tomorrow.  We can start our research again then.  Please arrive here by noon.  I will not tolerate lateness, as I’m afraid we have limited time."
     
     r  "Sure thing, Doc."
-    
-    k  "Oh, one more thing."
-    
-    r  "Yeah?"
-    
-    k  "Call me Kazu."
-    
-    r  "Uh…sure thing, Kazu."
+####################################################################################    
     
 label kaz24:
     s  "Riku, please, focus.  I understand that channeling this much youki at once must be difficult, especially for one as young as you.  You can do it though~!  Just concentrate."
@@ -2578,148 +2871,93 @@ label kaz24:
     "He seems confident that with enough training, I’ll be able to burst like that whenever I want.  That I’ll be able to control it.  I’m not so sure."
     
     s  "Here, we will try again.  This time, make sure-"
+######################################################################
+
+    "The next morning is weird, even for this place."
+    "Susa woke everyone up at 3am...for some conference, or something."
     
-    su  "Oi.  Just the two I wanted to see."
+    su "For the next few days, I'll be out on a private mission."
+    sg "A private mission..."
+    sb "That's really weird..."
+    sg "Has she done this before?"
+    sb "Not that I remember..."
+
+    su "Quiet!"
+    su "Nothing changes while I'm away."
+    su "If I see this place dirty when I get back, each and every one of you is going to regret it!"
+    su "Keep to your training!"
+    su "Soume will make sure things run smoothly until I return!"
+    "Soume's flushing, I can tell."
+    su "I have to leave now, but Soume will spend the next hour explaining all the details, got it?"
+    ev "Understood!"
     
-    s  "Miss Susa~!  How are you doing today?  It is simply lovely out, isn’t it?"
-    
-    su  "Eh?  ‘s alright, I suppose.  Listen though, this is important."
-    
-    r  "What are you carrying around that bag for?  Going camping?"
-    
-    su  "That’s what I wanted to talk to you two about, so if you could shut your face for a couple of seconds I might be able to explain it to you."
-    
-    s  "Yes, Miss Susa?"
-    
-    su  "I…will leaving the rescue for a little while.  I expect to be back before too long, but I don’t know how long this will take me."
-    
-    r  "Whaaa?  You’re leaving?  Where you going?"
-    
-    su  "Don’t worry about that.  I’ll be back soon, alright.  You won’t be missing me for too long, kid."
-    
-    "Yeah, that wasn’t exactly what I was worried about.  Still, it’s going to be weird around here without Susa around."
-    
-    su  "Soume, I’m leaving you in charge during my absence."
-    
-    s  "Me?  Miss Susa, perhaps you should reconsider.  I hardly think that I-"
-    
-    su  "Oh, nonsense.  Enough with your modesty.  You’ve been here the longest, you are the most capable, and you have the respect of all the students.  And me too."  
-    
-    s  "But-"
-    
-    su  "Sorry, Soume, but no really isn’t an option for you.  I need you to take care of things, for perhaps a week."
-    
-    s  "Ah…yes, Miss Susa.  But doesn’t Doctor Kazutaka usually handle these-"
-    
-    su  "Ah, yes.  Another thing.  Here is the key to my office.  Do not, under any circumstances, let him in.  There is something wrong with him, and I don’t trust him around my belongings."
+    ".................."
+
+    na "Sir, we can be ready to leave at any time."
+    m "Then make sure your team is prepared."
+    na "If you please, sir...I...wanted to apologize."
+    na "For my behavior before. It was presumptuous of me."
+    m "....."
+    m "I believe I gave you a direct order."
+    na "........"
+    na "Yes sir. Forgive my intrusion."
+
+    "..............."
+
+    su  "Here is the key to my office, and the main key. And keep an eye on Kazutaka, will you?"
     
     s  "Miss Susa?"
     
-    su  "I’m worried about him, but I’m afraid I can’t deal with him right now.  There are other, more urgent, things that I need to take care of first.  So just try to ignore him while I’m gone."
+    su  "Supposedly he was ambushed at the bookstore...send the sprogs to figure out what happened and make sure the clerk is okay."
     
-    "Apparently I’m not the only one that has noticed how weird Kazu has been acting lately."  
-    "There definitely is something wrong with him, but I’m not really sure it is something that even Susa can help with.  Last time I talked to him, he seemed almost broken."
+    "Soume plays with the key nervously in his hands."
     
-    "Soume plays with the key nervously in his hands.  He looks like he really doesn’t want to have it and looks back at Susa."
+    s  "Are you sure you have to leave now? Perhaps you can do this at another time."
     
-    s  "Are you sure you have to leave now?  Perhaps you can do this at another time.  I just-"
+    su  "You'll be fine. You've been here the longest, you know all the ins and outs." 
+    su "I need to take care of this. I trust you to handle everything over here when I’m gone. The brats shouldn’t give you too much trouble."
     
-    su  "Soume, you’ll be fine, alright?  I need to take care of this, but I trust you to handle everything over here when I’m gone.  The brats shouldn’t give you too much trouble."
+    s  "Is it...about your son?"
     
-    s  "Yeah…"
+    su "........"
+    su "Forgot that amazing memory of yours."
+    s "Forgive me, if that was rude to ask..."
+    su "Take care of business for me, and we'll call it even, okay?"
+    s "I...I hope you find him, Miss Susa."
+    su "........"
+    su "Me too."
+    "..................."
+       
+label kaz25:
+    r "Well at least this is just an escort...checking mission or something."
+    ro "A mission with just us two? It seems like Miss Susa isn't thinking clearly..."
+    k  "Ahem."
+    ro "Er I mean--it's just...Soume usually..."
     
-    "Soume nods his head, and while he agrees, I can tell from the look on his face that this is one of the last things he wants to do."
+    k "It's fine."
+    r "What happened last time?"
+    k "It...was a demon hunter. He approached me. Asked me to switch sides."
+    ro "To switch sides...?"
+    k "Ahm. What I do is very important to them. Let's leave it there."
+    r "And then he just let you go?"
+    ro "...seems like they're waiting to try to get you some other time..."
+    k "...yes. I...imagine so."
+    r "Are you okay to be...out...now?"
+    k "There is something else I need to pick up at the store."
     
-    su  "Speaking of brats, you there."
+    "Susa has already been gone three days.  With Soume working to keep the shrine running, Roman, me, and a couple of other better trainees have had our hands full conducting all of the training."  
     
-    r  "I have a name, y’know."
+    "It would be kinda fun at times, if I didn’t only have to deal with the youngest kids."
     
-    su  "Fine.  Riku.  You’ll need to help Soume with training."
-    
-    r  "Huh?  What d’ya mean help with training?"
-    
-    su  "He’ll be busy actually running the rescue, eh?  So someone else will need to handle the daily training."  
-    su "I’ve already talked to Roman about it, but he thought that perhaps you can help him ease the burden."
-    
-    r  "Uh…I’m not even done training myself yet.  How am I supposed to help all the others?"
-    
-    su  "Look, either you help Roman, or you’ll be cleaning the shower drains while I’m gone.  Your choice, kid."
-    
-    r   "…I suppose training sounds good."
-    
-    "I don’t know what the fuck I’m supposed to be doing out there.  Beating all of them in combat again does sound appealing, but somehow I doubt that is exactly what Susa had in mind."
-    
-    su  "You’ll be fine.  Besides Roman, you’re most likely the most talented one here.  Ask Soume exactly what you should be doing, but it won’t be that hard."
-    
-    r  "If you say so."
-    
-    su  "Well, I’ll be off now.  I will contact you when we have completed our objective."
-    
-    r  "So do you have any idea how long you’ll be gone?"
-    
-    su  "How about this:  I’ll be back whenever the fuck I’m finished and not a moment sooner.  That clear enough for you?"
-    
-    r  "Oh yeah.  Perfect.  Thanks."
-    
-    su  "You two take good care of my rescue.  I’m holding you personally responsible for any messes that happen in my absence, sprog."
-    
-    r  "‘Kay.  …wait, why me?"
-    
-    "Susa has already picked up her bags and started walking away though.  She’s waving and heading towards the exit, saying something to Roman as she passes him."
-    
-    s  "Want to switch with me~?"
-    
-    "Soume is smiling and holding out the key in my direction.  The look in his eyes makes it seem like he’s pleading with me to take the key from him."
-    
-    r  "Nah, that’s alright.  I’d rather not even imagine what would happen if Susa found out we switched."  
-    r "Why don’t you just tell me how I’m supposed to train all of these Majin, most of whom are already older than I am."
-    
-    s  "Hmph.  Fiiiiine~!"  
-    
-label laz25:
-    k  "I would like to thank the two of you for accompanying me to the store.  Don’t feel quite safe out here on my own."
-    
-    ro  "It isn’t a problem, really.  I had to come out this way anyway.  I’m running low on some cooking ingredients."
-    
-    r  "Yeah.  And besides it wasn’t like I had anything else to do.  Any excuse to get away from all the trainees works for me."
-    
-    #Roman chuckles.
-    
-    ro  "Riku, certainly it isn’t that bad.  You seem to even be enjoying yourself at times!"
-    
-    r  "Well, I mean, it could be worse, I suppose."
-    
-    "Susa has already been gone three days.  With Soume working just to keep the shrine running, Roman and I have had our hands full conducting all of the training."  
-    "I’ve been more letting Roman lead while I just sort of help people that need some extra attention."
-    
-    "It would be kinda fun at times, if I didn’t have to deal with some of the younger kids."  
-    "Some of them have no idea what they’re doing, and spend most of the training sessions running around and just hitting each other."
-    
-    "…I probably need to remember to thank Soume again for dealing with me next time I see him."
-    
-    k  "So, where is this store?  Coming up soon, I would hope."
-    
-    ro  "Oh yes, it really isn’t much longer.  Just around that bunch of trees, actually."
-    
-    k  "Good.  Eh…you said there was some sort of puzzle to get in?  Is there any other way?  I am in a bit of a rush, you see."
-    
-    ro  "Well, if you give me the money, Riku and I can just go in and buy it for you.  I’m actually surprised you haven’t been down here before."
-    
-    k  "Never had the need.  There are specialty stores with much nicer equipment than this that I usually attend."  
-    k "However, this is the closest, so as longs as they have some sort of glassware I can use I’d be happy."
-    
-    r  "I think I saw some last time I was here.  The assortment of stuff they got is kinda crazy."
-    
-    k  "I hope you are right.  Here, Roman, if you don’t mind here is the money."
-    
-    ro  "Great!  And I don’t mind at all."  
-    
-    "I was honestly pretty fucking surprised that Kazutaka let Roman come with."  
-    "I was sitting with Roman when he came up to ask me to accompany him to the store, and Roman just sort of volunteered himself to go to."
-    
-    "Normally, I would have expected a pretty big fucking fit, but Kazutaka didn’t seem phased at all."  
-    "Or even displeased, really.  Might have something to do with his powers returning."  
-    "When we were in the lab the other day, he knew I was going to break some glassware before I did, and pulled me out of the way of a falling book before it even started to tumble."
+    "...I probably need to remember to thank Soume again for dealing with me next time I see him."
+
+    "Hard to believe I've been here nearly a year already. It's just flown by..."
+
+#################################################################################
+#This part beneath here needs to be rewritten/redrafted.
+
+#Start from Kazu Arc 40 on the Susa.Kazu page.
+#################################################################################    
     
     "I have to admit, when he’s at full strength like that, he’s pretty damn impressive."
     
@@ -3266,7 +3504,8 @@ label kaz28d:
     k  "I’m not sure yet.  Riku, after you check on Roman, meet me back in my lab.  It is urgent."
     
     "We both run back towards the rescue.  It would be easy enough to find even if we didn’t know where it was at.  The blood trail from Roman’s body would lead us to it."
-    
+
+
 label kaz28:
     "I’m sitting in Kazu’s lab, shaking.  I just got back from seeing Roman.  He isn’t conscious yet.  Soume told me he should be fine, but the look in his eyes seemed to indicate he wasn’t so sure."
     
