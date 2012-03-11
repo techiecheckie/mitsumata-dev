@@ -379,13 +379,13 @@ init python:
             low_clouds = GameObject()
             low_clouds["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/5-clouds.png" ) )
             low_clouds["transform"].set_position( 0, 0 )
-            low_clouds["behavior"] = BackgroundBehavior( self.runner, 4, False )
+            low_clouds["behavior"] = BackgroundBehavior( self.runner, 5, False )
             self.backgrounds.append( low_clouds )
 
             high_clouds = GameObject()
             high_clouds["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/4-clouds.png" ) )
             high_clouds["transform"].set_position( 0, 0 )
-            high_clouds["behavior"] = BackgroundBehavior( self.runner, 7, False )
+            high_clouds["behavior"] = BackgroundBehavior( self.runner, 15, False )
             self.backgrounds.append( high_clouds )
 
             hills = GameObject()

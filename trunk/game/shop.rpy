@@ -28,7 +28,7 @@ init python:
 label shop_loop: 
   python: 
     button = ""
-    items = inventory.get_items(decision, "shop") 
+    items = inventory.get_items(decision, "store") 
     
     hide_main_ui()
     renpy.transition(dissolve)
@@ -71,16 +71,15 @@ label shop_loop:
         renpy.transition(dissolve)
         
         if accepted:
-          if button.get_id() not in persistent.unlocked_items:
-            persistent.unlocked_items.append(button.get_id())
-            update_stats()
-            update_minigame_ui(HP, MP)
-            renpy.pause(1.0)
+          unlock_item(button.get_id(), False)
+          update_stats()
+          update_minigame_ui(HP, MP)
+          renpy.pause(1.0)
           break
     
     ui.clear()
     renpy.transition(dissolve)
-    hide_minigame_ui("background_shop")
+    hide_minigame_ui("shop_background")
     show_main_ui()
   
   return
