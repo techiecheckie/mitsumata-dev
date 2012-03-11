@@ -36,10 +36,10 @@ class Inventory():
         
          item_locations.append(item_location)
         
-        shop_locations = locations.findall("shop")
+        shop_locations = locations.findall("store")
         for shop_location in shop_locations:
           item_location = {}
-          item_location["location"] = "shop"
+          item_location["location"] = "store"
           item_location["decision"] = shop_location.get("decision")
       
           item_locations.append(item_location)
