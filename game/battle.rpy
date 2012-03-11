@@ -351,7 +351,7 @@ init python:
     config.rollback_enabled = False
     
     # Create the combatants
-    player = Player(player_name, HP, MP)
+    player = Player(player_name, HP + BONUS_HP, MP + BONUS_MP)
       
     mobs = create_mobs(mob_name, mob_count)
     mobs_alive = len(mobs)

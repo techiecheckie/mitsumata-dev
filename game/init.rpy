@@ -19,9 +19,11 @@ init python:
   item_unlocked = inventory.item_unlocked
   
   # New game default values
-  HP     = 0
-  MP     = 0
-  CLICKS = 30
+  HP       = 0
+  MP       = 0
+  BONUS_HP = 0
+  BONUS_MP = 0
+  CLICKS   = 30
   decision = "0"
   pda      = False
   
@@ -68,6 +70,8 @@ init python:
     else:
       show_message("Warning: item \"" + entry_id + "\" not found.", "medium")
     
+    update_stats()
+    
     return
   
   # Removes the item id from the persistent unlocked_items list.
@@ -110,31 +114,28 @@ init python:
   # Main stat update function. Uses the variables returned by get_item_bonuses() 
   # and get_minigame_bonuses() functions to count stat values. 
   def update_stats():
-    hp     = 0
-    mp     = 0
-    clicks = 0
+    global BONUS_HP
+    global BONUS_MP
+    global CLICKS
+    
+    BONUS_HP = 0
+    BONUS_MP = 0
+    CLICKS = 0
     #battle_crit_chance  = 0
     #battle_melee_damage = 0
     #battle_magic_damage = 0
   
     (item_hp, item_mp, item_clicks) = get_item_bonuses()
-    hp += item_hp
-    mp += item_mp
-    clicks += item_clicks
+    BONUS_HP += item_hp
+    BONUS_MP += item_mp
+    CLICKS += item_clicks
     
     (mini_hp, mini_mp) = get_minigame_bonuses()
-    hp += mini_hp
-    mp += mini_mp
-
-    global HP
-    global MP
-    global CLICKS
-
-    HP     = hp
-    MP     = mp
-    CLICKS = clicks
+    BONUS_HP += mini_hp
+    BONUS_MP += mini_mp
     
-    print "Bonuses: item_hp", item_hp, "item_mp", item_mp, "mini_hp", mini_hp, "mini_mp", mini_mp
+    print "Base values: HP", HP, "MP", MP
+    print "Bonuses: BONUS_HP", BONUS_HP, "BONUS_MP", BONUS_MP, "CLICKS", CLICKS
     
     return
   

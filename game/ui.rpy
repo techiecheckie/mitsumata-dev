@@ -115,8 +115,8 @@ init python:
   # How big a part should the bar cover: (0.001 * hp) * area
   # With 1000 hp/mp, the coverage is 100%
   def calculate_new_main_ui_positions():
-    UI_HP_X = int(UI_HP_INITIAL_X + (0.001 * HP) * UI_HP_AREA)
-    UI_MP_X = int(UI_MP_INITIAL_X + (0.001 * MP) * UI_MP_AREA)
+    UI_HP_X = int(UI_HP_INITIAL_X + (0.001 * (HP + BONUS_HP)) * UI_HP_AREA)
+    UI_MP_X = int(UI_MP_INITIAL_X + (0.001 * (MP + BONUS_MP)) * UI_MP_AREA)
     
     return (UI_HP_X, UI_MP_X)
   
@@ -180,7 +180,7 @@ init python:
   # Displays all the elements that are part of the base minigame ui. A background
   # can be given as a parameter to be displayed behind the minigame ui.
   def show_minigame_ui(background):
-    (MINI_HP_X, MINI_MP_X) = calculate_new_minigame_ui_positions(HP, MP)
+    (MINI_HP_X, MINI_MP_X) = calculate_new_minigame_ui_positions(HP + BONUS_HP, MP + BONUS_MP)
     
     renpy.transition(dissolve)
     if background:
