@@ -1,50 +1,81 @@
 init python:
-  # Sprite zoom value
-  ZOOM = 2.0
-  ATTACK_DISTANCE = 240 # the distance between the attacker and the target (visual effect only)
-    
-  MOB_CRIT_CHANCE     = 20 # 5% chance, 1-20
+  # Mob stats, feel free to modify
+  MOB_CRIT_CHANCE     = 20 # 5% chance, a random number between 1-MOB_CRIT_CHANCE
   MOB_CRIT_MULTIPLIER = 2
-    
+  
+  # Default magic cost for all combatants
+  MAGIC_COST = 50
+  
+  # Default damage values for Riku and Roman
+  PLAYER_MELEE = 30
+  PLAYER_MAGIC = 50
+  
+  # Name to use: "Mamoru"
   MAMORU_HEALTH = 300
   MAMORU_MANA   = 50
   MAMORU_MELEE  = 20
   MAMORU_MAGIC  = 25
-  MAMORU_MAGIC_OFFSET = 0
   
+  # Name to use: "Naomi"
   NAOMI_HEALTH  = 100
   NAOMI_MANA    = 100
   NAOMI_MELEE   = 5
   NAOMI_MAGIC   = 10
-  NAOMI_MAGIC_OFFSET = 50
-    
+  
+  # Name to use: "Demon thug"
   DEMON_THUG_HEALTH = 50
   DEMON_THUG_MANA   = 0
   DEMON_THUG_MELEE  = 20
   DEMON_THUG_MAGIC  = 0
     
+  # Name to use: "Demon hunter"
   DEMON_HUNTER_HEALTH = 50
   DEMON_HUNTER_MANA   = 0
   DEMON_HUNTER_MELEE  = 30
   DEMON_HUNTER_MAGIC  = 0
   
+  # Name to use: "Carniflora"
   CARNIFLORA_HEALTH = 500
   CARNIFLORA_MANA   = 100
   CARNIFLORA_MELEE  = 10
   CARNIFLORA_MAGIC  = 10
-  CARNIFLORA_MELEE_OFFSET  = 200
-  CARNIFLORA_MAGIC_OFFSET  = 0
+  
+  MESSAGE_VICTORY = "You won the fight!"
+  MESSAGE_DEFEAT  = "You lost the fight."
+  MESSAGE_FLEE    = "You flee from the fight!"
+  MESSAGE_TO_BITTER_END = "Don't be so weak-willed, you can't run from this battle!"
+  
+  # Don't touch any of the values listed below this point!
+  
+  # Sprite zoom value
+  ZOOM = 2.0
+  # Default (visual) distance between the attacker and the target in pixels
+  ATTACK_DISTANCE = 240
+  
+  # Extra (visual, stacking) distances between the attacker and the target
   # Stops the attacker from running into the plant
   CARNIFLORA_TARGET_OFFSET = 80
+  # Stops Carniflora from running into the target
+  CARNIFLORA_MELEE_OFFSET  = 200
+  # Magic animation offsets (if larger (wider) sprites than the melee ones)
+  CARNIFLORA_MAGIC_OFFSET = 0
+  MAMORU_MAGIC_OFFSET     = 0
+  NAOMI_MAGIC_OFFSET      = 50
+  ROMAN_MAGIC_OFFSET      = 10
   
-  ROMAN_MAGIC_OFFSET_X = 10
-  ROMAN_MAGIC_OFFSET_Y = 0
-  
+  # Mob positions on the screen from the top left corner of the screen
   MOB_POSITIONS = [(420,520), (400,550), (450,580)]
+  # Player sprite position
   PLAYER_X = 960
   PLAYER_Y = MOB_POSITIONS[1][1]
   
+  # Something to hold the messages during the fight
   BATTLE_MESSAGES = []
+  
+  # Battle states
+  BATTLE_STATE_TARGET      = "battle_state_target"
+  BATTLE_STATE_ATTACK_TYPE = "battle_state_attack_type"
+  BATTLE_STATE_END         = "battle_state_end"
   
   
   class Fighter(object):
@@ -88,7 +119,7 @@ init python:
         
     def can_afford_magic(self):
       # TODO: use proper spell cost values
-      return self.mana >= 50
+      return self.mana >= MAGIC_COST
 
     def show_attack(self, target, action, damage, critical, attack_distance):
       BATTLE_MESSAGES.append(self.get_name() + " attacks " + target.get_name() + "\n")
@@ -162,7 +193,7 @@ init python:
   class Player(Fighter):
     def __init__(self, id, health, mana):
       # TODO: set proper melee and magic damage values
-      super(Player, self).__init__(id, id, health, mana, 30, 50, PLAYER_X, PLAYER_Y, 1)
+      super(Player, self).__init__(id, id, health, mana, PLAYER_MELEE, PLAYER_MAGIC, PLAYER_X, PLAYER_Y, 1)
         
     def attack(self, target, action):
       attack_offset = 0
@@ -175,10 +206,10 @@ init python:
         if target.name == "Carniflora":
           attack_offset = CARNIFLORA_TARGET_OFFSET
         elif self.name == "Roman":
-          attack_offset = ROMAN_MAGIC_OFFSET_X
+          attack_offset = ROMAN_MAGIC_OFFSET
         
         # TODO: add any (magic cost reducing) bonuses that items give
-        self.mana -= 50 
+        self.mana -= MAGIC_COST 
         
       # Player's crit chance may vary, using hard-coded values for now, TODO
       if random.randint(1,20) == 20:
@@ -198,7 +229,7 @@ init python:
       attack_offset = 0
       if self.mana > 0:
         # TODO: use proper mana cost values
-        self.mana -= 50
+        self.mana -= MAGIC_COST
         
         # See if the attack should be melee or a magical one
         # "randomize two numbers, then multiply them with each other. If  the 
@@ -346,13 +377,13 @@ init python:
     return
     
     
-  def battle(player_name, mob_name, mob_count, background):
+  def battle(player_name, mob_name, mob_count, background, to_bitter_end):
     config.overlay_functions.append(battle_message_area)
     config.rollback_enabled = False
     
     # Create the combatants
     player = Player(player_name, HP + BONUS_HP, MP + BONUS_MP)
-      
+    
     mobs = create_mobs(mob_name, mob_count)
     mobs_alive = len(mobs)
     
@@ -363,6 +394,7 @@ init python:
     show_minigame_ui(None)
     config.overlay_functions.remove(minigame_ui_buttons)
     
+    # Place player and mob sprites on the screen
     renpy.show(player.get_id() + " idle", 
                at_list = [Position(xpos=player.get_x(), ypos=player.get_y()), Transform(zoom=ZOOM, anchor=(1.0,1.0))], 
                zorder=player.get_zorder())
@@ -371,53 +403,66 @@ init python:
       renpy.show(mobs[i].get_id() + " idle", 
                  at_list = [Position(xpos=mobs[i].get_x(), ypos=mobs[i].get_y()), Transform(zoom=ZOOM, anchor=(0,1.0))], 
                  zorder=mobs[i].get_zorder())
-
-    # initial post battle message if the user decides to quit before the battle ends
-    post_battle_message = "You lost the fight!\n"
-  
-    # And start the actual battle loop
-    while player.get_health() > 0 and mobs_alive > 0:
-      show_target_list(mobs)
-      target = ui.interact()
-      
-      # temp checks?
-      if target == "exit":
-        if mobs_alive > 0:
-          player.dec_health(1000)
-        break
-        
-      show_action_list(player, target)
-      action = ui.interact()
-      
-      # temp checks?
-      if target == "exit":
-        if mobs_alive > 0:
-          player.dec_health(1000)
-        break
-      
-      if action != "cancel":
-        player.attack(target, action)
-        
-        update_minigame_ui(player.get_health(), player.get_mana())
-        show_battle_messages()
-        
-        mobs_alive = 0
-        for i in range(0, len(mobs)):
-          mob = mobs[len(mobs)-1-i]
-          if mob.get_health() > 0:
-            mobs_alive += 1
-            mob.attack(player)
-            if player.get_health() <= 0:
-              break
-        
-        if mobs_alive > 0:
-          update_minigame_ui(player.get_health(), player.get_mana())
-          show_battle_messages()
-        else:
-          post_battle_message = "You won the fight!\n"
-
     
-    BATTLE_MESSAGES.append(post_battle_message)
+    # Initialize some variables for the battle
+    state = BATTLE_STATE_TARGET
+    target = None
+    action = None
+    post_battle_message = None
+    
+    while state != BATTLE_STATE_END:
+      if state == BATTLE_STATE_TARGET:
+        show_target_list(mobs)
+      elif state == BATTLE_STATE_ATTACK_TYPE:
+        show_action_list(player, target)
+      
+      button = ui.interact()
+      
+      if button == "exit":
+        if to_bitter_end:
+          show_message(MESSAGE_TO_BITTER_END, "medium")
+        else:
+          post_battle_message = MESSAGE_FLEE
+          state = BATTLE_STATE_END
+      else:
+        if state == BATTLE_STATE_TARGET:
+          target = button
+          state = BATTLE_STATE_ATTACK_TYPE
+        else:
+          action = button
+          state = BATTLE_STATE_TARGET
+          
+          # Attack stuff begins
+          if button != "cancel":
+            # Display player attack animation
+            player.attack(target, action)
+            # Update HP and MP bars
+            update_minigame_ui(player.get_health(), player.get_mana())
+            # Update battle messages list
+            show_battle_messages()
+        
+            # Loop through the mobs, displaying their attack animations
+            mobs_alive = 0
+            for i in range(0, len(mobs)):
+              mob = mobs[len(mobs)-1-i]
+              # Do stuff only if the mob is alive (= not hidden)
+              if mob.get_health() > 0:
+                mobs_alive += 1
+                mob.attack(player)
+                if player.get_health() <= 0:
+                  post_battle_message = MESSAGE_DEFEAT
+                  state = BATTLE_STATE_END
+                  break
+        
+            if mobs_alive > 0:
+              update_minigame_ui(player.get_health(), player.get_mana())
+              show_battle_messages()
+            else:
+              post_battle_message = MESSAGE_VICTORY
+              state = BATTLE_STATE_END
+
+    # Display post battle messages
+    BATTLE_MESSAGES.append(post_battle_message + "\n")
     show_battle_messages()
     
     battle_result = player.get_health() > 0
@@ -438,5 +483,4 @@ init python:
     hide_minigame_ui(background)
     show_main_ui()
     
-  
     return battle_result
