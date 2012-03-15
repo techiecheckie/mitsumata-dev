@@ -251,7 +251,7 @@ init python:
                      xpos=0.5, ypos=0.5, 
                      xanchor=x_anchor, yanchor=y_anchor, 
                      background=bg)
-    ui.text(message)
+    ui.text("{size=-2}" + message + "{/size}")
     
     # Full screen hidden button, "click anywhere to continue" kind
     ui.frame(xpos=0, ypos=0, background=None)

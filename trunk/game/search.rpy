@@ -1,63 +1,14 @@
 label show_map:
-  # A dict containing the rooms and their items
-  $rooms = { 
-    "riroom" : { "backpack":None, "ball1":None, "ball2":None, "blanket":None, "books":None, "clothes":None, "trophy_big":None, "trophy_medium":None, "trophy_small":None},
-    "soroom" : { "blanket":None, "brush":None, "bucket":None, "clothes":None, "flower_blue":None, "flower_cactus":None, "flower_red":None, "flower_white":None, "hairclips":None, "jewelry":None, "mirror":None, "paperbag":None, "vines":None }, 
-    "suroom" : { "blanket":None, "console":None, "drawer":None, "lamp":None, "mirror":None, "poster1":None, "poster2":None, "tv":None }, 
-    "roroom" : { "blanket":None, "cupboard":None, "doll":None, "hat":None, "jacket":None, "lamp":None, "magazines":None, "plant1":None, "plant2":None, "poster1":None, "poster2":None, "rack":None, "statue1":None, "statue2":None, "statue3":None },       
-    "kitchen" : { "hood" : None, "sink" : None, "pots1" : None, "pots2" : None, "pots3" : None, "pots4" : None },
-    "lib" : { "shelves1" : None, "shelves2" : None, "books1" : None, "books2" : None, "books3" : None, "books4" : None , "labkit" : None},
-    "hall1" : { "flower" : None, "phone" : None },
-    "hall2" : { "flower" : None, "phone" : None, "table" : None },
-    # TODO
-    "bathroom" : { "stash1" : None, "stash2" : None, "stash3" : None }
-  }
-
-  # A list of items that match the decision value
-  $items = inventory.get_items(decision, "map") 
-  
-  python:  
-    # If an item has a place set (items.xml) for this decision, put that item
-    # in the room where it is supposed to be. Otherwise randomize the room
-    for item in items:
-      location = item.get_map_location(decision)
-      
-      if location["room"] != "any":
-        stash_list = rooms[location["room"]]
-        stash_keys = stash_list.keys()
-
-        # Place the item to the first free stash. If the item has a stash set
-        # for the current decision, ignore that for now.
-        for stash_key in stash_keys:
-          if stash_list[stash_key] == None:
-            stash_list[stash_key] = item
-            break
-            
-      else:     
-        # Try randomizing the spot three times before breaking the loop.
-        #
-        # Could do something smarter here, like removing full stashes from the 
-        # list or even putting the items to the first available stash, but 
-        # that'll have to be seen to later.
-        rand_attempts = 3
-        while (rand_attempts > 0):
-          # Get a random room key
-          room_key = rooms.keys()[random.randint(0, len(rooms)-1)]
-          # Get its stash list and grab a random stash key from it
-          stashes = rooms[room_key]
-          stash_key = stashes.keys()[random.randint(0, len(stashes)-1)]
-          # Place the item in the stash (if it is empty, otherwise try again)
-          if stashes[stash_key] == None:
-            stashes[stash_key] = item
-            break
-            
-          rand_attempts -= 1
+  # Grab the current max click amount the player can use.
+  $clicks_left = CLICKS + BONUS_CLICKS
+  # A list of items that match the decision value.
+  $items = inventory.get_items(decision, "map")
+  # Hide the items in stashes all around the house.
+  $hide_items(items)
         
-    renpy.transition(dissolve)
-    renpy.show("map")
-    hide_main_ui()
-    
-    clicks_left = CLICKS
+  $renpy.transition(dissolve)
+  $renpy.show("map")
+  $hide_main_ui()
        
   # Start the map screen loop. 
   while (clicks_left > 0):
@@ -69,12 +20,12 @@ label show_map:
     if room != "return":
       # See if an event should happen when entering the room
       call run_event
-      # Break the loop if an event happened. (... set tries to 0 because Renpy
+      # Break the loop if an event happened (= set tries to 0 because Renpy
       # doesn't understand words like "break" and such)
       if event_triggered:
         $clicks_left = 0
       else:
-       $clicks_left = show_room(room, decision, clicks_left, rooms[room])
+        $clicks_left = show_room(room, clicks_left)
     else:
      $clicks_left = 0
      
@@ -82,12 +33,12 @@ label show_map:
     # Display a message box before returning to the script
     $show_clicks(clicks_left)
     $renpy.pause(0.2)
-    $show_message("(\"0 clicks left\" message)", "large")
+    $show_message(SEARCH_END, "large")
     
   $renpy.transition(dissolve)
   $renpy.hide("map")
   $show_main_ui()  
-  $update_stats(MAIN_UI)
+  $update_stats()
   
   return
   
@@ -95,11 +46,129 @@ init python:
   import random
   from mitsugame.item import Item
   
+  # A dict containing all the rooms and their clickables
+  CLICKABLES = {}
+  # A tree containing all the room elements listed in rooms.xml
+  ROOMS_XML = xml.parse(renpy.loader.transfn("../rooms.xml")).findall("room")
+  
+  # Some search messages for easier modification. Will have to do something "centralized" for all of
+  # the messages used throughout the game, especially if there'll be some need to translate all this 
+  # stuff to Japanese. 
+  SEARCH_PROMPT = "Do you wish to take a closer look at this item?"
+  YES = "Yes"
+  NO  = "No"
+  FOUND_NOTHING = "You found nothing of interest."
+  FOUND_ITEM = "You found an item: "
+  SEARCH_END = "'0 clicks left' message)"
+  
+  # Populates the CLICKABLES dict with clickables listed in rooms.xml. The elements in the
+  # CLICKABLES dict are sub-dicts containing lists of all the clickables specified for that room.
+  # Basically, the format is 
+  #   CLICKABLES = { 
+  #     "riroom" : { "stash_id" : {"click_count" : 0, "item": None }, "stash_id" : { ... } },
+  #     "soroom" : { "misc_id"  : {"click_count" : 0               }, "stash_id" : { ... } },
+  #     ...
+  #   }
+  # where each stash dict contains the click count and the possible item, and each misc clickable
+  # contains only the click count. The click counts are used to control whether the player should
+  # be allowed to search that stash again or if the misc clickable should display some other message
+  # (defined in rooms.xml as description elements).
+  def create_clickables():
+    for room_node in ROOMS_XML:
+      room_clickables_list = {}
+      item_nodes = room_node.getchildren()
+      for item_node in item_nodes:
+        if item_node.tag == "stash":
+          clickable_data = { "click_count" : 0, "item" : None }
+        else:
+          clickable_data = { "click_count" : 0 }
+        room_clickables_list[item_node.get("id")] = clickable_data
+          
+      CLICKABLES[room_node.get("id")] = room_clickables_list
+      
+  def reset_clickables():
+    room_keys = CLICKABLES.keys()
+    for room_key in room_keys:
+      clickable_keys = CLICKABLES[room_key].keys()
+      for clickable_key in clickable_keys:
+        clickable_data = CLICKABLES[room_key][clickable_key]
+        clickable_data["click_count"] = 0
+        if "item" in clickable_data:
+          clickable_data["item"] = None
+    return
+  
+  # Places items in different stashes all around the house based on what location values
+  # they have been given in items.xml matching the current decision (nightly choice). 
+  # Possible values for attributes "room" and "stash" are listed in rooms.xml, but they
+  # can also be given "any" values. Any items with "any" values in either "room" or "stash"
+  # are randomly placed, either randomizing the room AND stash, or only the stash. Currently
+  # randomization is being tried for a maximum of three times, after which the item will be
+  # ignored for the current search session (= not placed anywhere because all the stashes
+  # were occupied). This could be easily remedied by re-randomizing the room, too, but nah,
+  # that'll have to wait for later.
+  def hide_items(items):
+    if len(CLICKABLES.keys()) == 0:
+      create_clickables()
+    else:
+      reset_clickables()
+  
+    # Grab the room keys for later use in item placement randomization
+    room_keys = CLICKABLES.keys()
+    
+    for item in items:
+      # Get the item's location information set in items.xml
+      location = item.get_map_location(decision)
+      
+      # Randomize the room if the location is set to "any", else don't.
+      if location["room"] != "any":
+        room = CLICKABLES[location["room"]]
+        
+        # If the item is set to some specific stash, place it there, else randomize the stash
+        if location["stash"] != "any":
+          room[location["stash"]]["item"] = item
+          print "Placed", item.get_name(), "to", location["room"], location["stash"]
+        else:
+          # Randomize the stash and grab the key for debugging purposes
+          clickable_key = randomize_clickable(room, item)
+          print "Randomly placed", item.get_name(), "to", location["room"], clickable_key
+          
+      else:
+        # Randomize the room
+        room_number = random.randint(0, len(room_keys)-1)
+        room = CLICKABLES[room_keys[room_number]]
+        
+        # Randomize the stash and grab the key for debugging purposes
+        clickable_key = randomize_clickable(room, item)
+        print "Completely randomly placed", item.get_name(), "to", room_keys[room_number], clickable_key
+    
+    return
+  
+  # Places an item to one of the room's stashes, randomly choosing the stash until the item
+  # fits into one of the stashes (= stash ain't occupied). Current implementation has been
+  # set to fail if all three attempts to stash the item have been used. Items that fail are
+  # then ignored for the rest of the search session.
+  def randomize_clickable(room, item):
+    clickable_keys = room.keys()
+    rand_attempts = 3
+    
+    while rand_attempts > 0:
+      # Randomize the stash
+      clickable_number = random.randint(0, len(clickable_keys)-1)
+      clickable_data = room[clickable_keys[clickable_number]]
+      # Place the item in the stash if it ain't occupied, else roll again
+      if "item" in clickable_data.keys() and clickable_data["item"] == None:
+        room[clickable_keys[clickable_number]]["item"] = item
+        return clickable_keys[clickable_number]
+      
+      print "  Clickable", clickable_keys[clickable_number], "occupied, trying again..."
+      rand_attempts -= 1
+    
+    return "None, randomization failed"
+  
   # Displays the amount of tries/clicks the player has.
   def show_clicks(clicks_left):
     ui.frame(xpos=25, ypos=723, xmaximum=50, ymaximum=50, background=None)
     ui.text('%d' % clicks_left, xfill=True, yfill=True)
-      
     return
     
   def show_room_icons(decision):
@@ -131,14 +200,14 @@ init python:
     ui.frame(xpos=686, ypos=383, xmaximum=17, ymaximum=158, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/map/room_hall2.png", "gfx/map/room_hall2_hover.png", clicked=ui.returns("hall2"))
 
-    # Bathroom
+    # Bathroom, TODO-note --> decision == "0" ??
     if decision == "0":
       ui.frame(xpos=566, ypos=382, xmaximum=91, ymaximum=115, xpadding=0, ypadding=0, background=None)
       ui.imagebutton("gfx/map/room_bathroom.png", "gfx/map/room_bathroom_hover.png", clicked=ui.returns("bathroom"))
     
     # Library    
     ui.frame(xpos=546, ypos=523, xmaximum=233, ymaximum=64, xpadding=0, ypadding=0, background=None)
-    ui.imagebutton("gfx/map/room_library.png", "gfx/map/room_library_hover.png", clicked=ui.returns("lib"))
+    ui.imagebutton("gfx/map/room_library.png", "gfx/map/room_library_hover.png", clicked=ui.returns("library"))
     
     # Return
     ui.frame(xpos=0, ypos=0, background=None)
@@ -146,462 +215,161 @@ init python:
     
     return
     
-  def show_room(room, decision, clicks_left, items):   
+  # Displays the room, selecting the proper background for the room and populating the screen
+  # with clickables.
+  def show_room(room, clicks_left):   
     renpy.transition(dissolve)
+    # Room background names are defined in script.rpy.
     renpy.show("bg " + room, zorder=1)
-    # room background names defined in script.rpy
     
+    # Grab all the room's item nodes for clickables creation.
+    item_nodes = None
+    for room_node in ROOMS_XML:
+      if room_node.get("id") == room:
+        item_nodes = room_node.getchildren()
+        break
+    
+    # Start the loop, repeating as long as there are clicks left or the player presses the
+    # exit button to change the room.
     while (clicks_left > 0):
-      show_room_clickables(room)
+      show_room_clickables(room, item_nodes)
       show_clicks(clicks_left)
       
       selection = ui.interact(suppress_overlay=True, clear=False)
       if selection == "return":
         break
       else:
-        clicks_left = show_info(selection, items, clicks_left)
+        clicks_left = show_info(selection, room, item_nodes, clicks_left)
+        ui.clear()
       
     renpy.transition(dissolve)
     renpy.hide("bg " + room)
     ui.clear()
     
     return clicks_left
-    
-  def show_room_clickables(room):
-    if room == "riroom":
-      # backpack
-      ui.frame(xpos=638, ypos=454, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/riroom/backpack.png",
-                     "gfx/map/riroom/backpack_hover.png",
-                     clicked=ui.returns(("stash", "backpack")))
-                     
-      # ball1
-      ui.frame(xpos=876, ypos=401, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/riroom/ball1.png",
-                     "gfx/map/riroom/ball1_hover.png",
-                     clicked=ui.returns(("stash", "ball1")))
-                     
-      # ball2
-      ui.frame(xpos=78, ypos=556, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/riroom/ball2.png",
-                     "gfx/map/riroom/ball2_hover.png",
-                     clicked=ui.returns(("stash", "ball2")))
-                     
-      # blanket
-      ui.frame(xpos=234, ypos=573, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/riroom/blanket.png",
-                     "gfx/map/riroom/blanket_hover.png",
-                     clicked=ui.returns(("stash", "blanket")))
-                     
-      # books
-      ui.frame(xpos=852, ypos=583, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/riroom/books.png",
-                     "gfx/map/riroom/books_hover.png",
-                     clicked=ui.returns(("stash", "books")))
-                     
-      # clothes
-      ui.frame(xpos=208, ypos=519, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/riroom/clothes.png",
-                     "gfx/map/riroom/clothes_hover.png",
-                     clicked=ui.returns(("stash", "clothes")))
-     
-      # trophy_big
-      ui.frame(xpos=748, ypos=335, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/riroom/trophy_big.png",
-                     "gfx/map/riroom/trophy_big_hover.png",
-                     clicked=ui.returns(("stash", "trophy_big")))
-                     
-      # trophy_medium
-      ui.frame(xpos=799, ypos=344, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/riroom/trophy_medium.png",
-                     "gfx/map/riroom/trophy_medium_hover.png",
-                     clicked=ui.returns(("stash", "trophy_medium")))
-                     
-      # trophy_small
-      ui.frame(xpos=728, ypos=348, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/riroom/trophy_small.png",
-                     "gfx/map/riroom/trophy_small_hover.png",
-                     clicked=ui.returns(("stash", "trophy_small")))
-                     
+  
+  # Creates clickables to the room using the info read from rooms.xml. There can be two
+  # different kind of clickables: ones that can be searched (stashes) and ones that just
+  # display maybe not-so-relevant information about the world. The information clickables
+  # are invisible clickables, while stashes are the ones that highlight on mouse hover.
+  def show_room_clickables(room, item_nodes):
+    for item_node in item_nodes:
+      id = item_node.get("id")
+      x = int(item_node.get("x"))
+      y = int(item_node.get("y"))
       
-    elif room == "roroom":    
-      # blanket
-      ui.frame(xpos=234, ypos=573, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/roroom/blanket.png",
-                     "gfx/map/roroom/blanket_hover.png",
-                     clicked=ui.returns(("stash", "blanket")))
-      
-      # cupboard
-      ui.frame(xpos=561, ypos=403, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/roroom/cupboard.png",
-                     "gfx/map/roroom/cupboard_hover.png",
-                     clicked=ui.returns(("stash", "cupboard")))
-      
-      # doll               
-      ui.frame(xpos=883, ypos=501, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/roroom/doll.png",
-                     "gfx/map/roroom/doll_hover.png",
-                     clicked=ui.returns(("stash", "doll")))
-      
-      # jacket
-      ui.frame(xpos=104, ypos=248, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/roroom/jacket.png",
-                     "gfx/map/roroom/jacket_hover.png",
-                     clicked=ui.returns(("stash", "jacket")))
-      
-      # rack               
-      ui.frame(xpos=54, ypos=262, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/roroom/rack.png",
-                     "gfx/map/roroom/rack_hover.png",
-                     clicked=ui.returns(("stash", "rack")))
-
-      # hat
-      ui.frame(xpos=30, ypos=268, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/roroom/hat.png",
-                     "gfx/map/roroom/hat_hover.png",
-                     clicked=ui.returns(("stash", "hat")))
+      if item_node.tag == "stash":
+        ui.frame(xpos=x, ypos=y, background=None, xpadding=0, ypadding=0)
+        ui.imagebutton("gfx/map/" + room + "/" + id + ".png",
+                       "gfx/map/" + room + "/" + id + "_hover.png",
+                       clicked=ui.returns(("stash", id)))
+      else:
+        xmax = int(item_node.get("xmax"))
+        ymax = int(item_node.get("ymax"))
+        
+        ui.frame(xpos=x, ypos=y, xmaximum=xmax, ymaximum=ymax, background=None)
+        ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(("misc", id)), background=None)
                      
-      # magazines
-      ui.frame(xpos=597, ypos=628, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/roroom/magazines.png",
-                     "gfx/map/roroom/magazines_hover.png",
-                     clicked=ui.returns(("stash", "magazines")))
-                     
-      # plant1
-      ui.frame(xpos=640, ypos=296, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/roroom/plant1.png",
-                     "gfx/map/roroom/plant1_hover.png",
-                     clicked=ui.returns(("stash", "plant1")))
-                     
-      # plant2
-      ui.frame(xpos=443, ypos=367, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/roroom/plant2.png",
-                     "gfx/map/roroom/plant2_hover.png",
-                     clicked=ui.returns(("stash", "plant2")))
-      
-      # poster1               
-      ui.frame(xpos=571, ypos=253, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/roroom/poster1.png",
-                     "gfx/map/roroom/poster1_hover.png",
-                     clicked=ui.returns(("stash", "poster1")))
-                     
-      # poster2
-      ui.frame(xpos=762, ypos=210, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/roroom/poster2.png",
-                     "gfx/map/roroom/poster2_hover.png",
-                     clicked=ui.returns(("stash", "poster2")))
-                     
-      # lamp
-      ui.frame(xpos=721, ypos=331, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/roroom/lamp.png",
-                     "gfx/map/roroom/lamp_hover.png",
-                     clicked=ui.returns(("stash", "lamp")))                     
-                           
-      # statue1
-      ui.frame(xpos=830, ypos=325, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/roroom/statue1.png",
-                     "gfx/map/roroom/statue1_hover.png",
-                     clicked=ui.returns(("stash", "statue1")))
-                     
-      # statue2
-      ui.frame(xpos=796, ypos=354, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/roroom/statue2.png",
-                     "gfx/map/roroom/statue2_hover.png",
-                     clicked=ui.returns(("stash", "statue2")))
-                     
-      # statue3
-      ui.frame(xpos=876, ypos=331, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/roroom/statue3.png",
-                     "gfx/map/roroom/statue3_hover.png",
-                     clicked=ui.returns(("stash", "statue3")))
-      
-    elif room == "soroom":
-      # blanket
-      ui.frame(xpos=234, ypos=573, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/soroom/blanket.png",
-                     "gfx/map/soroom/blanket_hover.png",
-                     clicked=ui.returns(("stash", "blanket")))
-                     
-      # vines
-      ui.frame(xpos=544, ypos=3, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/soroom/vines.png",
-                     "gfx/map/soroom/vines_hover.png",
-                     clicked=ui.returns(("stash", "vines")))
-      
-      # brush
-      ui.frame(xpos=637, ypos=651, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/soroom/brush.png",
-                     "gfx/map/soroom/brush_hover.png",
-                     clicked=ui.returns(("stash", "brush")))
-                     
-      # bucket
-      ui.frame(xpos=37, ypos=449, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/soroom/bucket.png",
-                     "gfx/map/soroom/bucket_hover.png",
-                     clicked=ui.returns(("stash", "bucket")))
-                     
-      # clothes
-      ui.frame(xpos=286, ypos=629, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/soroom/clothes.png",
-                     "gfx/map/soroom/clothes_hover.png",
-                     clicked=ui.returns(("stash", "clothes")))
-                     
-      # mirror
-      ui.frame(xpos=810, ypos=215, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/soroom/mirror.png",
-                     "gfx/map/soroom/mirror_hover.png",
-                     clicked=ui.returns(("stash", "mirror")))
-                                          
-      # flower_blue
-      ui.frame(xpos=752, ypos=310, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/soroom/flower_blue.png",
-                     "gfx/map/soroom/flower_blue_hover.png",
-                     clicked=ui.returns(("stash", "flower_blue")))
-                     
-      # flower_cactus
-      ui.frame(xpos=787, ypos=334, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/soroom/flower_cactus.png",
-                     "gfx/map/soroom/flower_cactus_hover.png",
-                     clicked=ui.returns(("stash", "flower_cactus")))
-                     
-      # flower_red
-      ui.frame(xpos=446, ypos=351, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/soroom/flower_red.png",
-                     "gfx/map/soroom/flower_red_hover.png",
-                     clicked=ui.returns(("stash", "flower_red")))
-                     
-      # flower_white
-      ui.frame(xpos=499, ypos=391, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/soroom/flower_white.png",
-                     "gfx/map/soroom/flower_white_hover.png",
-                     clicked=ui.returns(("stash", "flower_white")))
-                     
-      # hairclips
-      ui.frame(xpos=597, ypos=674, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/soroom/hairclips.png",
-                     "gfx/map/soroom/hairclips_hover.png",
-                     clicked=ui.returns(("stash", "hairclips")))
-      
-      # jewelry
-      ui.frame(xpos=878, ypos=356, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/soroom/jewelry.png",
-                     "gfx/map/soroom/jewelry_hover.png",
-                     clicked=ui.returns(("stash", "jewelry")))
-                     
-      # paperbag
-      ui.frame(xpos=911, ypos=495, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/soroom/paperbag.png",
-                     "gfx/map/soroom/paperbag_hover.png",
-                     clicked=ui.returns(("stash", "paperbag")))
-      
-    elif room == "suroom":
-      # Blanket
-      ui.frame(xpos=234, ypos=573, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/suroom/blanket.png",
-                     "gfx/map/suroom/blanket_hover.png",
-                     clicked=ui.returns(("stash", "blanket")))
-
-      # Console
-      ui.frame(xpos=713, ypos=493, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/suroom/console.png",
-                     "gfx/map/suroom/console_hover.png",
-                     clicked=ui.returns(("stash", "console")))
-
-      # Drawer
-      ui.frame(xpos=597, ypos=416, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/suroom/drawer.png",
-                     "gfx/map/suroom/drawer_hover.png",
-                     clicked=ui.returns(("stash", "drawer")))
-
-      # Lamp
-      ui.frame(xpos=482, ypos=465, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/suroom/lamp.png",
-                     "gfx/map/suroom/lamp_hover.png",
-                     clicked=ui.returns(("stash", "lamp")))
-
-      # Mirror
-      ui.frame(xpos=871, ypos=203, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/suroom/mirror.png",
-                     "gfx/map/suroom/mirror_hover.png",
-                     clicked=ui.returns(("stash", "mirror")))
-
-      # Poster 1
-      ui.frame(xpos=586, ypos=246, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/suroom/poster1.png",
-                     "gfx/map/suroom/poster1_hover.png",
-                     clicked=ui.returns(("stash", "poster1")))
-
-      # Poster 2
-      ui.frame(xpos=7, ypos=224, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/suroom/poster2.png",
-                     "gfx/map/suroom/poster2_hover.png",
-                     clicked=ui.returns(("stash", "poster2")))
-
-      # TV
-      ui.frame(xpos=729, ypos=293, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/suroom/tv.png",
-                     "gfx/map/suroom/tv_hover.png",
-                     clicked=ui.returns(("stash", "tv")))
-
-    elif room == "kitchen":
-      # Cooker hood
-      ui.frame(xpos=273, ypos=0, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton(im.Scale("gfx/transparent.png", 431, 314),
-                     "gfx/map/kitchen/KitchenCabinets1.png",
-                     clicked=ui.returns(("stash", "hood")))
-      
-      # Sink
-      ui.frame(xpos=893, ypos=429, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton(im.Scale("gfx/transparent.png", 131, 339),
-                     "gfx/map/kitchen/KitchenCabinets2.png",
-                     clicked=ui.returns(("stash", "sink")))
-      
-      # Hanging pots (pots1)
-      ui.frame(xpos=842, ypos=0, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton(im.Scale("gfx/transparent.png", 182, 341),
-                     "gfx/map/kitchen/KitchenPots1.png",
-                     clicked=ui.returns(("stash", "pots1")))
-      
-      # Small pot (pots2)
-      ui.frame(xpos=326, ypos=408, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton(im.Scale("gfx/transparent.png", 77, 53),
-                     "gfx/map/kitchen/KitchenPots2.png",
-                     clicked=ui.returns(("stash", "pots2")))
-      
-      # Large pot (pots3)
-      ui.frame(xpos=424, ypos=391, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton(im.Scale("gfx/transparent.png", 98, 92),
-                     "gfx/map/kitchen/KitchenPots3.png",
-                     clicked=ui.returns(("stash", "pots3")))
-      
-      # Frying pan + pot (pots4)
-      ui.frame(xpos=544, ypos=406, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton(im.Scale("gfx/transparent.png", 131, 339),
-                     "gfx/map/kitchen/KitchenPots4.png",
-                     clicked=ui.returns(("stash", "pots4")))
-                     
-    elif room == "lib":
-      # Shelves 1
-      ui.frame(xpos=0, ypos=270, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton(im.Scale("gfx/transparent.png", 261, 491),
-                     "gfx/map/library/LibraryShelves1.png",
-                     clicked=ui.returns(("stash", "shelves1")))
-                     
-      # Shelves 2
-      ui.frame(xpos=802, ypos=279, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton(im.Scale("gfx/transparent.png", 222, 483),
-                     "gfx/map/library/LibraryShelves2.png",
-                     clicked=ui.returns(("stash", "shelves2")))
-    
-      # Books 1
-      ui.frame(xpos=448, ypos=446, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton(im.Scale("gfx/transparent.png", 255, 68),
-                     "gfx/map/library/LibraryBooks1.png",
-                     clicked=ui.returns(("stash", "books1")))
-
-      # Books 2
-      ui.frame(xpos=47, ypos=577, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton(im.Scale("gfx/transparent.png", 206, 187),
-                     "gfx/map/library/LibraryBooks2.png",
-                     clicked=ui.returns(("stash", "books2")))
-      
-      # Books 3
-      ui.frame(xpos=252, ypos=565, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton(im.Scale("gfx/transparent.png", 534, 203),
-                     "gfx/map/library/LibraryBooks3.png",
-                     clicked=ui.returns(("stash", "books3")))
-                     
-      # Books 4
-      ui.frame(xpos=790, ypos=614, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton(im.Scale("gfx/transparent.png", 211, 131),
-                     "gfx/map/library/LibraryBooks4.png",
-                     clicked=ui.returns(("stash", "books4")))
-                     
-      # lab kit
-      ui.frame(xpos=435, ypos=369, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/library/labkit.png",
-                     "gfx/map/library/labkit_hover.png",
-                     clicked=ui.returns(("stash", "labkit")))
-                     
-    elif room == "hall1":
-      # flower
-      ui.frame(xpos=172, ypos=316, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/hall1/flower.png",
-                     "gfx/map/hall1/flower_hover.png",
-                     clicked=ui.returns(("stash", "flower")))
-                     
-      # phone
-      ui.frame(xpos=79, ypos=489, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/hall1/phone.png",
-                     "gfx/map/hall1/phone_hover.png",
-                     clicked=ui.returns(("stash", "phone")))
-    elif room == "hall2":
-      # table
-      ui.frame(xpos=12, ypos=502, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/hall2/table.png",
-                     "gfx/map/hall2/table_hover.png",
-                     clicked=ui.returns(("stash", "table")))
-    
-      # flower
-      ui.frame(xpos=142, ypos=279, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/hall2/flower.png",
-                     "gfx/map/hall2/flower_hover.png",
-                     clicked=ui.returns(("stash", "flower")))
-                     
-      # phone
-      ui.frame(xpos=79, ypos=512, background=None, xpadding=0, ypadding=0)
-      ui.imagebutton("gfx/map/hall2/phone.png",
-                     "gfx/map/hall2/phone_hover.png",
-                     clicked=ui.returns(("stash", "phone")))
- 
     # Return button
     ui.frame(xpos=0, ypos=0, background=None)
     ui.textbutton("Return", clicked=ui.returns("return"))
     
     return
-    
-  def show_info(selection, items, clicks_left):
+  
+  def show_info(selection, room, item_nodes, clicks_left):
     # FIXME: something returns 0 as selection when clicking at nothing, so find
-    # out what that is and fix that.
+    # out what that is and do something about it.
     if selection == 0:
       return clicks_left
     
-    # First, check what info should be displayed
-    if selection[0] == "tidbit":
-      message = "You found a tidbit."
+    # Separate the info that came with the click
+    (clickable_type, clickable_id) = selection
+    # Use that info to get the clickable from the dict
+    clickable_data = CLICKABLES[room][clickable_id]
+    
+    # Grab the clickable's rooms.xml node from the items sub-tree containing all the descriptions.
+    selected_item_node = None
+    for item_node in item_nodes:
+      if item_node.get("id") == clickable_id:
+        selected_item_node = item_node
+        break 
+    
+    # Select the right description for the clickable. Two types: stashes have just the default one,
+    # misc ones have several. The one that's supposed to be displayed depends on how many clicks
+    # the misc clickable has already received.
+    description = None
+    if clickable_type == "stash":
+      description = selected_item_node.text
     else:
-      item = items[selection[1]]
-      if item == None:
-        message = "You found nothing of interest."
-        show_message(message, "medium")
+      description_nodes = selected_item_node.findall("description")
+      for description_node in description_nodes:
+        click_count = int(description_node.get("level"))
+        if clickable_data["click_count"] < click_count or description_node == description_nodes[len(description_nodes)-1]:
+          description = description_node.text
+          break
+      
+    # Display an info box about the clickable.
+    renpy.transition(dissolve)
+    ui.frame(xmaximum=520, 
+             xpadding=40, ypadding=40, 
+             xpos=0.5, ypos=0.5,
+             xanchor = 265, yanchor=175,
+             background="gfx/textbox.png")
+    ui.vbox()
+    ui.text("{size=-2}" + description + "{/size}")
+    
+    print "Clickable data:", clickable_data
+    
+    # Don't bother displaying search prompts if the clickable was a misc clickable or if the player
+    # has already taken a look at the stash clickable.
+    if clickable_data["click_count"] > 0 or clickable_type == "misc":
+      ui.close()
+      # Full screen hidden button, "click anywhere to continue" kind.
+      ui.frame(xpos=0, ypos=0, background=None)
+      ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns("no"), background=None)
+      clickable_data["click_count"] += 1
+    else:
+      ui.text("{size=-2}\n" + SEARCH_PROMPT + "{/size}")
+      ui.textbutton("{size=-2}" + YES + "{/size}", clicked=ui.returns("yes"), xfill=True)
+      ui.textbutton("{size=-2}" + NO + "{/size}", clicked=ui.returns("no"), xfill=True)
+      ui.close()
+      
+    answer = ui.interact(clear=False)
+    
+    if answer == "yes":
+      if clickable_data["item"] == None:
+        show_message(FOUND_NOTHING, "large")
       else:
-        message = "You found an item: " + item.get_name() + "\n"
-        
+        item = clickable_data["item"]
+      
         renpy.transition(dissolve)
-        ui.frame(xmaximum=480, 
+        ui.frame(xmaximum=420, 
                  xpadding=40, ypadding=40, 
-                 xpos=0.5, ypos=0.5, 
-                 xanchor=304, yanchor=95, 
-                 background="gfx/textbox_2.png")
+                 xpos=0.5, ypos=0.5,
+                 xanchor = 265, yanchor=175,
+                 background="gfx/textbox.png")
         
         ui.hbox(spacing=40)
-        ui.text("You found an item: " + item.get_name() + "\n\n" + item.get_description())
+        ui.text("{size=-2}" + FOUND_ITEM + item.get_name() + "\n\n" + item.get_description() + "{/size}")
         ui.image(im.Scale("gfx/items/" + item.get_id() + ".png", 100, 100))
         ui.close()
     
-        # Full screen hidden button, "click anywhere to continue" kind
+        # Full screen hidden button, "click anywhere to continue" kind.
         ui.frame(xpos=0, ypos=0, background=None)
         ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
     
         ui.interact()
         renpy.transition(dissolve)
         
-        if item.get_id() not in persistent.unlocked_items:
-          persistent.unlocked_items.append(item.get_id())
-        print "Unlocked item", item.get_id()
-        
-        items[selection[1]] = None
-        
-        clicks_left -= 1      
+        # Do a silent unlock because we've displayed the item information already.
+        unlock_item(item.get_id(), False)
+        # Finally, clear the stash.
+        clickable_data["item"] = None
+      
+      # Increase the stash's click count so that we know the player has searched this place before.
+      clickable_data["click_count"] += 1
+      
+      # And reduce the overall click count so that the search event might end someday soon.
+      clicks_left -= 1
     
     return clicks_left

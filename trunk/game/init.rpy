@@ -21,9 +21,10 @@ init python:
   # New game default values
   HP       = 0
   MP       = 0
-  BONUS_HP = 0
-  BONUS_MP = 0
-  CLICKS   = 30
+  CLICKS   = 5
+  BONUS_HP     = 0
+  BONUS_MP     = 0
+  BONUS_CLICKS = 0
   decision = "0"
   pda      = False
   
@@ -33,6 +34,7 @@ init python:
   # testing stuff begins
   print ""
   
+  # Unlocking some minigames for now (best score = 100, level = 1)
   persistent.unlocked_minigames = {}
   persistent.unlocked_minigames["mole"]       = [100, 1]
   persistent.unlocked_minigames["cell"]       = [100, 1]
@@ -116,11 +118,11 @@ init python:
   def update_stats():
     global BONUS_HP
     global BONUS_MP
-    global CLICKS
+    global BONUS_CLICKS
     
-    BONUS_HP = 0
-    BONUS_MP = 0
-    CLICKS = 0
+    BONUS_HP     = 0
+    BONUS_MP     = 0
+    BONUS_CLICKS = 0
     #battle_crit_chance  = 0
     #battle_melee_damage = 0
     #battle_magic_damage = 0
@@ -128,14 +130,14 @@ init python:
     (item_hp, item_mp, item_clicks) = get_item_bonuses()
     BONUS_HP += item_hp
     BONUS_MP += item_mp
-    CLICKS += item_clicks
+    BONUS_CLICKS += item_clicks
     
     (mini_hp, mini_mp) = get_minigame_bonuses()
     BONUS_HP += mini_hp
     BONUS_MP += mini_mp
     
-    print "Base values: HP", HP, "MP", MP
-    print "Bonuses: BONUS_HP", BONUS_HP, "BONUS_MP", BONUS_MP, "CLICKS", CLICKS
+    print "Base values: HP", HP, "MP", MP, "CLICKS", CLICKS
+    print "Bonuses: BONUS_HP", BONUS_HP, "BONUS_MP", BONUS_MP, "CLICKS", BONUS_CLICKS
     
     return
   
