@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="ISO-8859-1"?> 
+<rooms>
+  <room id="riroom">
+    <stash id="backpack" x="638" y="454">A backpack</stash>
+    <stash id="ball1" x="876" y="401">A ball</stash>
+    <stash id="ball2" x="78" y="556">A ball</stash>
+    <stash id="blanket" x="234" y="573">A blanket</stash>
+    <stash id="books" x="852" y="583">A pile of books</stash>
+    <stash id="clothes" x="208" y="519">A pile of clothes</stash>
+    <stash id="trophy_big" x="748" y="335">A big trophy</stash>
+    <stash id="trophy_medium" x="799" y="344">A trophy</stash>
+    <stash id="trophy_small" x="728" y="348">A small trophy</stash>
+    <misc id="cupboard" x="100" y="100" xmax="100" ymax="100">
+      <description level="3">A small cupboard</description>
+      <description level="5">Yes, it's still the same small cupboard.</description>
+      <description level="10">You really like this cupboard, don't you?</description>
+    </misc>
+  </room>
+  <room id="roroom">
+    <stash id="blanket" x="234" y="573">A blanket</stash>
+    <stash id="cupboard" x="561" y="403">A cupboard</stash>
+    <stash id="doll" x="883" y="501">A doll</stash>
+    <stash id="jacket" x="104" y="248">A jacket</stash>
+    <stash id="rack" x="54" y="262">A rack</stash>
+    <stash id="hat" x="30" y="268">A hat</stash>
+    <stash id="magazines" x="597" y="628">A pile of magazines</stash>
+    <stash id="plant1" x="640" y="296">A plant</stash>
+    <stash id="plant2" x="443" y="367">Some other plant</stash>
+    <stash id="poster1" x="571" y="253">A poster</stash>
+    <stash id="poster2" x="762" y="210">Another poster</stash>
+    <stash id="lamp" x="721" y="331">A lamp</stash>
+    <stash id="statue1" x="830" y="325">A statue</stash>
+    <stash id="statue2" x="796" y="354">Another statue</stash>
+    <stash id="statue3" x="876" y="331">Yet another statue</stash>
+  </room>
+  <room id="soroom">
+    <stash id="blanket" x="234" y="573">A blanket</stash>
+    <stash id="vines" x="544" y="3">Vines</stash>
+    <stash id="brush" x="637" y="651">A brush</stash>
+    <stash id="bucket" x="37" y="449">A bucket</stash>
+    <stash id="clothes" x="286" y="629">A pile of clothes</stash>
+    <stash id="mirror" x="810" y="215">A mirror</stash>
+    <stash id="flower_blue" x="752" y="310">A blue flower</stash>
+    <stash id="flower_cactus" x="787" y="334">A cactus</stash>
+    <stash id="flower_red" x="446" y="351">A red flower</stash>
+    <stash id="flower_white" x="499" y="391">A white flower</stash>
+    <stash id="hairclips" x="597" y="674">Hairclips</stash>
+    <stash id="jewelry" x="878" y="356">Jewelry</stash>
+    <stash id="paperbag" x="911" y="495">A paperbag</stash>
+  </room>
+  <room id="suroom">
+    <stash id="blanket" x="234" y="573">A blanket</stash>
+    <stash id="console" x="713" y="493">A console</stash>
+    <stash id="drawer" x="597" y="416">A drawer</stash>
+    <stash id="lamp" x="482" y="465">A lamp</stash>
+    <stash id="mirror" x="871" y="203">A mirror</stash>
+    <stash id="poster1" x="586" y="246">A poster</stash>
+    <stash id="poster2" x="7" y="224">Another poster</stash>
+    <stash id="tv" x="729" y="293">A TV</stash>
+  </room>   
+  <room id="kitchen">
+    <stash id="hood" x="273" y="0">A cooker hood</stash>
+    <stash id="sink" x="893" y="429">A sink</stash>
+    <stash id="pots1" x="842" y="0">A few hanging pots</stash>
+    <stash id="pots2" x="326" y="408">A few smaller pots</stash>
+    <stash id="pots3" x="424" y="391">Large pots</stash>
+    <stash id="pots4" x="544" y="406">A frying pan and a few other pots</stash>
+  </room>
+  <room id="library">
+    <stash id="shelves1" x="0" y="270">Some shelves</stash>
+    <stash id="shelves2" x="802" y="279">Some more shelves</stash>
+    <stash id="books1" x="448" y="446">Some books</stash>
+    <stash id="books2" x="47" y="577">Some more books</stash>
+    <stash id="books3" x="252" y="565">And yet some more books</stash>
+    <stash id="books4" x="790" y="614">And yes, some more books</stash>
+    <stash id="labkit" x="435" y="369">A labkit</stash>
+  </room>
+  <room id="hall1">
+    <stash id="flower" x="172" y="316">A flower</stash>
+    <stash id="phone" x="79" y="489">A phone</stash>
+  </room>
+  <room id="hall2">
+    <stash id="table" x="12" y="502">A table</stash>
+    <stash id="flower" x="142" y="279">A flower</stash>
+    <stash id="phone" x="79" y="512">A phone</stash>
+  </room>
+  <room id="bathroom">
+    <stash id="thing1" x="12" y="502">A table</stash>
+    <stash id="thing2" x="142" y="279">A flower</stash>
+    <stash id="thing3" x="79" y="512">A phone</stash>
+    <!-- 
+      Note: entering the bathroom will crash Renpy, because image files
+        /gfx/map/bathroom/thing1.png,
+        /gfx/map/bathroom/thing2.png, and
+        /gfx/map/bathroom/thing3.png
+      do not exist. Just to warn you, and also to inform you that the stash id always 
+      points to the stash's image file + the hover version of it.
+      
+      /gfx/map/[room id]/[stash id].png
+      /gfx/map/[room id]/[stash id]_hover.png
+    -->
+  </room>
+</rooms>

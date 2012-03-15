@@ -31,8 +31,7 @@ class Inventory():
          item_location["location"] = "map"
          item_location["decision"] = map_location.get("decision")
          item_location["room"]     = map_location.get("room")
-         # Not used yet (if ever)
-         #item_location["stash"]    = map_location.get("stash")
+         item_location["stash"]    = map_location.get("stash")
         
          item_locations.append(item_location)
         
