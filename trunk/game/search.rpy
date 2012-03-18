@@ -45,6 +45,7 @@ label show_map:
 init python:
   import random
   from mitsugame.item import Item
+  import xml.etree.ElementTree as xml
   
   # A dict containing all the rooms and their clickables
   CLICKABLES = {}
