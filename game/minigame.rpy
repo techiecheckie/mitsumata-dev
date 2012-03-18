@@ -3,7 +3,7 @@ init python:
   renpy.image("bg_cells", "gfx/cells/petri_dish.jpg")
   renpy.image("bg_dgro", "gfx/backgrounds/daygrass.jpg")
   renpy.image("bg_dsky", "gfx/backgrounds/daysky.jpg")
-  
+  renpy.image("bg_mini", "gfx/backgrounds/whitescr.jpg")
 
   DESCRIPTION_POS_X = 60
   DESCRIPTION_POS_Y = 110
@@ -29,9 +29,9 @@ init python:
   }
   
   MINIGAME_POS_X  = 363
-  MINIGAME_POS_Y  = 90 #112
+  MINIGAME_POS_Y  = 90
   MINIGAME_WIDTH  = 646
-  MINIGAME_HEIGHT = 630 #598
+  MINIGAME_HEIGHT = 630
   
   MINIGAME_GRID_X    = 380
   MINIGAME_GRID_Y    = 180
@@ -65,8 +65,7 @@ init python:
     button       = ""
     button_value = ""
 
-    background = "bg whitescr"
-    show_minigame_ui(background)
+    show_minigame_ui("bg_mini")
     
     minigame_keys = persistent.unlocked_minigames.keys()
   
@@ -107,7 +106,7 @@ init python:
         renpy.show(background, zorder=-1)
     
     config.overlay_functions.remove(minigame_description)
-    hide_minigame_ui(background)
+    hide_minigame_ui("bg_mini")
      
     return
 
