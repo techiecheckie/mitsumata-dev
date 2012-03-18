@@ -8,7 +8,6 @@ image minigame_hp_bar = "gfx/minigame_hp_bar.png"
 image minigame_hp_bg  = "gfx/minigame_hp_bg.png"
 image minigame_mp_bar = "gfx/minigame_mp_bar.png"
 image minigame_mp_bg  = "gfx/minigame_mp_bg.png"
-image minigame_bg     = Solid( "#000" )
 
 init python:
   # the distance the health bar can move
@@ -37,11 +36,6 @@ init python:
   # Adds main ui buttons (the stuff on the bottom of the screen) to the ui layer
   # stack. Used as a config.overlay_functions.append() parameter
   def main_ui_buttons():
-    # Fixes the issue with the ui buttons not working when loading a game after
-    # a clean start
-    if persistent.ui_visible == None or persistent.ui_visible == False:
-      return
-
     ui.frame(xpos=98,ypos=630, xpadding=0, ypadding=0, background=None)
     ui.imagebutton(im.Scale("gfx/transparent.png", 83, 44),
                    "gfx/buttons/button_save_hover.png", 
@@ -57,21 +51,16 @@ init python:
                    "gfx/buttons/button_options_hover.png", 
                    clicked=renpy.curried_call_in_new_context("_game_menu_preferences"))
 
-    ui.frame(xpos=842,ypos=651, xpadding=0, ypadding=0, background=None)    
     if pda:
-      ui.imagebutton(im.Scale("gfx/transparent.png", 145, 111), 
+      ui.frame(xpos=842,ypos=651, xpadding=0, ypadding=0, background=None)    
+      ui.imagebutton("gfx/buttons/button_palm_pilot.png", 
                      "gfx/buttons/button_palm_pilot_hover.png",
                      clicked=renpy.curried_call_in_new_context("pda_loop"))
-    else:
-      ui.image("gfx/buttons/button_palm_pilot_disabled.png")
                     
     return
 
   # Fixes an issue with the ui buttons not being added to the layout when 
-  # loading a game after a clean start. It might be a good idea to set
-  # persistent.ui_visible to false in the start label to prevent Renpy from 
-  # adding the buttons to the ui layout before the ui has been displayed for the 
-  # first time.
+  # loading a game after a clean start. 
   config.overlay_functions.append(main_ui_buttons)
   
   # Adds minigame ui buttons to the ui layer stack. Like the function above,
@@ -143,9 +132,6 @@ init python:
     if main_ui_buttons not in config.overlay_functions:
       config.overlay_functions.append(main_ui_buttons)
 
-    # Comments @ line 70
-    persistent.ui_visible = True
-
     return
   
   # Moves the hp and mp bar in the main ui to their new positions using a
@@ -172,8 +158,6 @@ init python:
 
     if main_ui_buttons in config.overlay_functions:
       config.overlay_functions.remove(main_ui_buttons)
-    
-    persistent.ui_visible = False
 
     return
   
@@ -234,7 +218,7 @@ init python:
       bg = "gfx/textbox.png"
       x_anchor = 265
       y_anchor = 175
-      x_max    = 520 # 490
+      x_max    = 520
     elif size == "medium":
       bg = "gfx/textbox_2.png"
       x_anchor = 304
