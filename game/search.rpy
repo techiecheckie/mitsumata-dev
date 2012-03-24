@@ -9,7 +9,7 @@ label show_map:
   $renpy.transition(dissolve)
   $renpy.show("map")
   $hide_main_ui()
-       
+  
   # Start the map screen loop. 
   while (clicks_left > 0):
     $show_clicks(clicks_left)  
@@ -202,17 +202,13 @@ init python:
     ui.imagebutton("gfx/map/room_hall2.png", "gfx/map/room_hall2_hover.png", clicked=ui.returns("hall2"))
 
     # Bathroom, TODO-note --> decision == "0" ??
-    if decision == "0":
+    if decision == "7":
       ui.frame(xpos=566, ypos=382, xmaximum=91, ymaximum=115, xpadding=0, ypadding=0, background=None)
       ui.imagebutton("gfx/map/room_bathroom.png", "gfx/map/room_bathroom_hover.png", clicked=ui.returns("bathroom"))
     
     # Library    
     ui.frame(xpos=546, ypos=523, xmaximum=233, ymaximum=64, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/map/room_library.png", "gfx/map/room_library_hover.png", clicked=ui.returns("library"))
-    
-    # Return
-    ui.frame(xpos=0, ypos=0, background=None)
-    ui.textbutton("Temporary cancel button", clicked=ui.returns("return"))
     
     return
     
@@ -273,7 +269,7 @@ init python:
                      
     # Return button
     ui.frame(xpos=0, ypos=0, background=None)
-    ui.textbutton("Return", clicked=ui.returns("return"))
+    ui.imagebutton("gfx/buttons/minigame_exit.png", "gfx/buttons/minigame_exit_hover.png", clicked=ui.returns("return"))
     
     return
   
@@ -355,12 +351,7 @@ init python:
         ui.image(im.Scale("gfx/items/" + item.get_id() + ".png", 100, 100))
         ui.close()
     
-        # Full screen hidden button, "click anywhere to continue" kind.
-        ui.frame(xpos=0, ypos=0, background=None)
-        ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
-    
-        ui.interact()
-        renpy.transition(dissolve)
+        show_invisible_button("full")
         
         # Do a silent unlock because we've displayed the item information already.
         unlock_item(item.get_id(), False)

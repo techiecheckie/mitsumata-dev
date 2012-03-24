@@ -295,7 +295,7 @@ screen save:
         selected_idle  "gfx/menus/save_hover.jpg"
         selected_hover "gfx/menus/save_hover.jpg"
        
-        hotspot (830,  70, 55, 55) action Return()      
+        hotspot (830,  70, 55, 55) action Return()          
         hotspot (771, 157, 52, 68) action FilePagePrevious()
         hotspot (771, 561, 52, 68) action FilePageNext()
         hotspot (767, 264, 60, 256) action MainMenu(confirm=True)
@@ -403,34 +403,35 @@ init -2 python:
     
 screen yesno_prompt:
 
+    add "gfx/menus/quit.jpg"
+    
     modal True
-
-    window:
-        style "gm_root"
 
     frame:
         style_group "yesno"
 
         xfill True
-        xmargin .05
-        ypos .1
+        xpos 0.3
+        xmaximum 380
+        ypos .25
         yanchor 0
         ypadding .05
-        
-        has vbox:
-            xalign .5
-            yalign .5
-            spacing 30
-            
-        label _(message):
-            xalign 0.5
+        background None
 
-        hbox:
+        vbox:
             xalign 0.5
-            spacing 100
+            xfill True
             
-            textbutton _("Yes") action yes_action
-            textbutton _("No") action no_action
+            # TODO: change font sizes in a way that actually makes some sense
+            label _("{size=-4}" + message + "{/size}"):
+                bottom_padding 50
+            
+            textbutton _("Yes"):
+                action yes_action
+                xfill True
+            textbutton _("No"):
+                action no_action
+                xfill True
 
 
 init -2 python:    
