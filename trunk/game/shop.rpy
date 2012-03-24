@@ -71,10 +71,25 @@ label shop_loop:
         renpy.transition(dissolve)
         
         if accepted:
+          create_grid(items)
+          renpy.transition(dissolve)
+          ui.frame(xpos=MINIGAME_POS_X+50, 
+                   ypos=MINIGAME_POS_Y+150, 
+                   background="gfx/textbox.png",
+                   xpadding=40,
+                   ypadding=40,
+                   xmaximum=530)
+          ui.hbox(spacing=20)
+          ui.image(im.Scale("gfx/items/" + button.get_id() + ".png", 100, 100))
+          ui.text("{size=-3}Item bought: " + button.get_name() + ".\n\nThe shopkeeper waves you goodbye as you leave the store.{/size}")
+          ui.close()
+          
+          show_invisible_button("full")
+        
           unlock_item(button.get_id(), False)
           update_stats()
           update_minigame_ui(HP, MP)
-          renpy.pause(1.0)
+          
           break
     
     ui.clear()

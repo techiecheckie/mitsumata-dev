@@ -240,11 +240,6 @@ init python:
                            level_number = level)
       update_high_score(name, score)
     
-      # update max level? (when playing through the PDA)
-      # current_level = persistent.minigame_level[name]
-      # if score >= score_to_pass and current_level < level:
-      #   persistent.minigame_level[name] = level
-    
     config.overlay_functions.append(minigame_ui_buttons)
     
     hide_minigame_ui(bg)
