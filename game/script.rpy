@@ -577,7 +577,7 @@ label splashscreen:
 #   inventory.item_unlocked("id"), returns True is unlocked, else False.
 #
 #   A shorter version of this has been added to init.rpy:
-#   item_unlocked("id)
+#   item_unlocked("id")
 
 #--------------------------------
 # GAME STARTS HURR
@@ -612,6 +612,11 @@ label test_stuff:
     
     #call show_map
     #call shop_loop
+    #$passed = minigame("force", 1, 1000, "bg_dsky")
+    #$print passed
+    #$passed = minigame("platformer", 1, 1000, None)
+    #$print passed
+    $minigame("bottles", 0, 0, None)
     
     #pass
                 
@@ -2721,7 +2726,7 @@ label Scene17:
     $unlock_minigame("force")
     
 label magcontrol1:    
-    $passed = minigame("force", 1, 1000) # which background here?
+    $passed = minigame("force", 1, 1000, "bg_dsky")
     if passed: 
             jump controlsucceed1
     else: 
@@ -3093,7 +3098,7 @@ label Scene23:
     $hide_main_ui()
     
 label magcontrol2:    
-    $passed = minigame("force", 1, 2000) # TODO: "bg ngro"
+    $passed = minigame("force", 1, 2000, "bg_ngro")
     if passed:
             jump controlsucceed2
     else: 
@@ -4068,7 +4073,7 @@ label Scene32:
     $unlock_minigame("power")
     
 label power1:    
-    $passed = minigame("power", 1, 1000) # TODO: "bg dsky"
+    $passed = minigame("power", 1, 1000, "bg_dsky")
     if passed: 
             jump powersucceed1
     else: 
@@ -4543,7 +4548,7 @@ label Scene35:
     
     "Looks like I’ll have to play along for now. I’m not sure what’s waiting for me, but it better be good or next time I’ll just hang out with Soume."
 #label lockpuzzle1:    
-#    $result = minigame(lock, 1, 1000)
+#    $result = minigame(lock, 1, 1000, None) # no need to define a background here (hence None)
 #        if result == True: 
 #            jump lockfail1
 #        else: 
@@ -4732,7 +4737,7 @@ label Scene37:
     
     $hide_main_ui()
 label duckhunt1:    
-    $passed = minigame("duck", 1, 1000) # TODO: "bg dsky"
+    $passed = minigame("duck", 1, 1000, "bg_dsky")
     if passed:
             jump Scene37b
     else: 
@@ -5222,7 +5227,7 @@ label daychal1:
 
     su  "Cocky. As always. That’s fine with me; it’ll just be more enjoyable when you fail."
     $hide_main_ui()
-    $passed = minigame("platformer", 1, 3000)
+    $passed = minigame("platformer", 1, 3000, None)
     if passed: 
             jump daychal1suc
     else: 
@@ -5475,7 +5480,7 @@ label dowhatkazsays:
     $hide_main_ui()
     
 label gear1:    
-    $passed = minigame("gears", 1, 1000)
+    $passed = minigame("gears", 1, 1000, "bg_gears")
     if passed: 
             jump gearsuc1
     else: 

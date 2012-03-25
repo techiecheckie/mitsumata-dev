@@ -254,7 +254,7 @@ label looksuroom:
     "Hiding underneath a video game manual is a tiny slip of paper."
     "Looks like a photo. I pick it up."
     
-    $inventory.unlock_item("memo")
+    $unlock_item("memo", True)
     jump su2b
     
 label nolook:

@@ -92,8 +92,9 @@ init python:
     
     # See if the correct choice was made
     if button == 2:
-      if "sake" not in persistent.unlocked_items:
-        persistent.unlocked_items.append("sake")
+      #if "sake" not in persistent.unlocked_items:
+      #  persistent.unlocked_items.append("sake")
+      unlock_item("sake", False)
       
       item = inventory.get_item("sake")
       
@@ -109,12 +110,8 @@ init python:
       ui.text("{size=-2}You found an item: " + item.get_name() + "\n\n" + item.get_description() + "{/size}")
       ui.image(im.Scale("gfx/items/" + item.get_id() + ".png", 100, 100))
       ui.close()
-    
-      # Full screen hidden button, "click anywhere to continue" kind
-      ui.frame(xpos=0, ypos=0, background=None)
-      ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
       
-      ui.interact()
+      show_invisible_button("full")
     
     renpy.transition(dissolve)
     renpy.hide("winerack")

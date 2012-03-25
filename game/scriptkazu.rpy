@@ -113,7 +113,7 @@ label kaz1:
     k "Ah, well, I guess I better explain it to you."
 
 label cells2:  
-    $result = minigame("cell", 2, 1000)
+    $result = minigame("cell", 2, 1000, "bg_cells")
     if result == True: 
             jump cellsucceed2
     else: 
@@ -203,8 +203,8 @@ label cellsucceed2:
     k "...idiot."
     "....."
     "I think I might actually understand him a little better..."
-	
-    $ decison ="9"
+
+    $ decision ="9"
 menu:
     "Search.":
         call show_map
@@ -214,7 +214,7 @@ menu:
         call shop_loop
     "Research.":
         call research_loop
-        $journal.unlock_entry("something", "031")    
+        $unlock_entry("something", "031", True)
 
 
 label kaz2:
@@ -321,8 +321,8 @@ label kaz2:
 label kaz3:
     #Roman and Soume talk about the convo with Kazu and his not easing up on Soume.
     #Roman explains his veganism, moralizes at Soume, and angers Soume.
-    $unlock_entry("Soume","082")
-    $unlock_entry("Majin","049")
+    $unlock_entry("Soume","082", True)
+    $unlock_entry("Majin","049", True)
     ro "It does smell wonderful here, you know."
     
     s "Why, certainly.  You can thank my precious children for that."
@@ -633,7 +633,7 @@ menu:
         call shop_loop
     "Research.":
         call research_loop
-        $journal.unlock_entry("something", "031")    
+        $unlock_entry("something", "031", True)    
 
 label goshop:
     
@@ -993,7 +993,7 @@ label kaz5:
     "Soume winks at me and, with renewed energy, runs back up the stairs to explore the other side of the mall."
     "This might be the happiest I’ve ever been in my life."
 
-    $inventory.unlock_item("kimono")
+    $unlock_item("kimono", True)
 
 label kaz6:
     m  "Damn. Hmph."
@@ -1070,7 +1070,7 @@ menu:
         call shop_loop
     "Research.":
         call research_loop
-        $journal.unlock_entry("something", "031")    
+        $unlock_entry("something", "031", True)    
 
 label kaz7a:
     s "Good morning, Riku. Are you ready to move on to the next level of your training?"
@@ -1078,7 +1078,7 @@ label kaz7a:
     r "Alright. Lay it on me!"
 
 label power2:     
-    $result = minigame("power", 2, 2000, "bg dsky")
+    $result = minigame("power", 2, 2000, "bg_dsky")
     if result == True: 
             jump powerfail2
     else: 
@@ -1091,8 +1091,8 @@ label powerfail2:
 
 menu:
     "Of course! No way I'll quit!":
-	jump power2
-    "Nah, this is too much."
+        jump power2
+    "Nah, this is too much.":
         jump endpower2
 
 label endpower2:
@@ -1157,7 +1157,7 @@ label kaz7c:
     su "Sure kid. Whatever makes you feel good."
 
 label gear2:    
-    $result = minigame("gear", 2, 1000)
+    $result = minigame("gears", 2, 1000, "bg_gears")
     if result == True: 
             jump gearfail1
     else: 
@@ -1173,7 +1173,7 @@ label gearsuc2:
     su "Hey, I guess you aren't completely worthless at this."
     r "......"
     su "Well, thanks. Come sometime and play."
-    r "...sure." 	
+    r "...sure."
 
 label kaz7:
     k  "No.  No, that can’t be right…"
@@ -1274,7 +1274,7 @@ menu:
         call shop_loop
     "Research.":
         call research_loop
-        $journal.unlock_entry("something", "031")
+        $unlock_entry("something", "031", True)
         
 label kaz8a:
     s "Good morning, Riku. Are you ready to move on to the next level of your training?"
@@ -1282,7 +1282,7 @@ label kaz8a:
     r "Alright. Lay it on me!"
 
 label mole1:
-    $result = minigame("mole", 1, 3000)
+    $result = minigame("mole", 1, 3000, "bg_dgro")
     if result == True: 
             jump molesuc1
     else: 
@@ -1296,7 +1296,7 @@ menu:
     "Try again?":
        jump mole1
     "Some other time.":
-       jump endmole1	
+       jump endmole1
 
 label endmole1:
     s "...if you wish. You can try again whenever you feel like."
@@ -1513,7 +1513,7 @@ label eatthefood:
     "Poor naive bastard. I don't know how he lives with Soume's brand of teasing."
     $hp+=50
     $mp+=30
-    $inventory.unlock_item("book5")
+    $unlock_item("book5", True)
     jump kaz10a
     
 label canteatit:
@@ -1540,7 +1540,7 @@ menu:
         call shop_loop
     "Research.":
         call research_loop
-        $journal.unlock_entry("something", "031")
+        $unlock_entry("something", "031", True)
         
 label kaz10b:
     k "Oh Riku~ I need a little bit of your assistance, if you don't miiiiiind~"
@@ -1549,7 +1549,7 @@ label kaz10b:
     r "Alright, lemme see it."
 
 label gear3:    
-    $result = minigame("gear", 3, 1000)
+    $result = minigame("gears", 3, 1000, "bg_gears")
     if result == True: 
             jump gearfail3
     else: 
@@ -1942,7 +1942,7 @@ label kaz13b:
 label kaz13c:    
     l "I'll need to go have my conference with Susa, but I did want to give you this."
     
-    $inventory.unlock_item("gift")
+    $unlock_item("gift", True)
     
     ro "Oh Liza, you didn't have to."
     l "But I wanted to, so take it and keep it."
@@ -1969,7 +1969,7 @@ label sobirtalk:
     s "Ahh, Roman, come in."
     ro "Sorry to bother you...I just uh--"
     s "Hm?"
-    "He still makes me so tongue tied.
+    "He still makes me so tongue tied."
     s "It's alright. Come sit down."
     ro "Thanks..."
     "It looks like he's been staring at a full moon."
@@ -1996,7 +1996,7 @@ label sobirtalk:
     s "How should I start..."
     ro "...how about with the tails?"
     s "Haha, alright."
-    s "Well, youko start out with no tails at all. After they reach the first thousand years of life, they gain the first one, and one every thousand years afterward.
+    s "Well, youko start out with no tails at all. After they reach the first thousand years of life, they gain the first one, and one every thousand years afterward."
     ro "...you're TWO THOUSAND years old?!"
     s "Give or take a few decades..."
     ro "Wow..."
@@ -2018,7 +2018,7 @@ label sobirtalk:
     s "Well, I am awfully tired now, Roman. You should get some sleep too~"
     ro "Huh--oh. Yes. Good night, Soume."
     s "Good night~"
-    $unlock_entry("Majin","046")
+    $unlock_entry("Majin","046", True)
     jump kaz13e
     
 label ribirtalk:
@@ -2166,9 +2166,9 @@ menu:
         call shop_loop
     "Research.":
         call research_loop
-        $journal.unlock_entry("something", "031")
+        $unlock_entry("something", "031", True)
         
-label kaz14:
+label kaz15:
     "This morning is an unlucky morning, I think."
     "I'm hungover..."
     "I stepped on something hiding under a pile of laundry."
@@ -2326,7 +2326,7 @@ label kaz16c:
     db "He's already gone...I'm in so much trouble if he doesn't get back on time..."
     
     m "Alright...for the best time...who should I play with..."
-	
+
 menu:
     "A woman.":
         jump chickflirt
@@ -2348,7 +2348,7 @@ label chickflirt:
     sg "Oh Mamoru, you're so funny! I don't think I've ever met a man quite as alluring as you..."
     m "Well, I try to keep up..."
     sg "So you're in Japan to for work...what kind do you do?"
-    m "Ohhh, this and that, management. Talking about work on the first date isn't any fun, is it?
+    m "Ohhh, this and that, management. Talking about work on the first date isn't any fun, is it?"
     sg "You're right...how rude of me."
     m "Not at all. I see you have a keen eye for good taste...perhaps you would like to accompany me to a show tonight."
     sg "A show? What kind?"
@@ -2362,7 +2362,7 @@ label chickflirt:
 
     sg "This doesn't look like the right place."
     m "It doesn't, does it?"
-    sg "W-why are we back here?
+    sg "W-why are we back here?"
     m "Well, I couldn't very well let the whole world see."
     sg "...s-see? Don't touch me, if you do, I'll scream."
     m "That would be unfortunate, when you could just fight me."
@@ -2397,7 +2397,7 @@ menu:
         call shop_loop
     "Research.":
         call research_loop
-        $journal.unlock_entry("something", "031")
+        $unlock_entry("something", "031", True)
     
 label kaz17:      
     "The next morning, I'm in the lab, smelling like decaying...something."
@@ -2418,7 +2418,7 @@ label kaz17:
     k "If I sneeze, you'll know you have it right! Just do it!"
     
 label cell3:    
-    $result = minigame("cell", 3, 1000)
+    $result = minigame("cell", 3, 1000, "bg_cells")
     if result == True: 
             jump cellfail3
     else: 
@@ -2428,7 +2428,7 @@ label cellfail3:
     k "Murderer, murderer, murderer!!!"
     r "They're just CELLS!"
     k "Do it over!"
-    jump cell3	
+    jump cell3
 
 label cellsuc3:
     k "Achoo!"
@@ -2532,7 +2532,7 @@ label kaz19:
     k "He's gone..."
     k "Oh god..."
     k "Why didn't he kill me...? I-I HAVE to figure out what's wrong."
-    $inventory.unlock_item("book6")
+    $unlock_item("book6", True)
     
 label kaz20:
     su  "Yes."
@@ -2561,7 +2561,7 @@ label kaz20:
     
     su  "Soume blah blah blah ambush his fault blah blah your sensory abilities blah.  Something along those lines?"
     
-    k  "Miss Susa, I...I was attacked in the bookstore! 
+    k  "Miss Susa, I...I was attacked in the bookstore!"
     "She stares me up and down."
     su "Well, you look very good for someone who's been attacked."
     k "Well, it wasn't an attack, exactly...I was approached by the Church. They want me to return to work for them."
@@ -2653,12 +2653,12 @@ menu:
     "Store.":
         call shop_loop
     "Research.":
-        call label kaz22
+        call kaz22
         $kbc = True
-        $journal.unlock_entry("something", "031")
+        $unlock_entry("something", "031", True)
 
 #############################################################
-Kaz22 need massive fixing.
+# Kaz22 need massive fixing.
 #############################################################    
 label kaz22:
     k  "No!  Ngh...another dead end!"

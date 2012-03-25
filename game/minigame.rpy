@@ -4,6 +4,7 @@ init python:
   renpy.image("bg_dgro", "gfx/backgrounds/daygrass.jpg")
   renpy.image("bg_dsky", "gfx/backgrounds/daysky.jpg")
   renpy.image("bg_mini", "gfx/backgrounds/whitescr.jpg")
+  renpy.image("bg_blackscr", "gfx/backgrounds/blackscr.jpg")
 
   DESCRIPTION_POS_X = 60
   DESCRIPTION_POS_Y = 110
@@ -120,7 +121,7 @@ init python:
       bg   = "bg_cells"
     elif name == "platformer":
       game = Platformer
-      bg   = "bg blackscr"
+      bg   = "bg_blackscr"
     elif name == "duck":
       game = DuckHunt
       bg   = "bg_dsky"
@@ -212,13 +213,14 @@ init python:
         update_minigame_ui(HP, MP)
     
     return
-      
-  # running minigames without starting the pda first
-  def minigame(name, level, score_to_pass):
-    (game, bg) = choose_game(name)    
 
+
+  # Starts a minigame without having to call the PDA first. 
+  def minigame(name, level, score_to_pass, background):
+    game = choose_game(name)[0]
+  
     hide_main_ui()
-    show_minigame_ui(bg)
+    show_minigame_ui(background)
     set_description(GAME_DESCRIPTIONS[name])
     
     config.overlay_functions.remove(minigame_ui_buttons)
@@ -242,7 +244,7 @@ init python:
     
     config.overlay_functions.append(minigame_ui_buttons)
     
-    hide_minigame_ui(bg)
+    hide_minigame_ui(background)
     config.overlay_functions.remove(minigame_description)
     show_main_ui()
     

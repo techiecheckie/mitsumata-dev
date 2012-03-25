@@ -71,7 +71,7 @@ label Scene15:
     
     show ro neu at right with dissolve
     ro "That’s correct. I'm a vegan."
-    $journal.unlock_entry("Roman","006")
+    $unlock_entry("Roman","006", True)
  
     ro "Their animal friends may not exact revenge, but I just can't stand to think of eating a creature that can cry out in pain." 
     ro "To humans, we're every bit an animal as any cow, chicken or lamb."
@@ -83,7 +83,7 @@ label Scene15:
     ro "Oh, forgive me. I didn’t mean---"
     ro "I agree with you. Many are very kind people, and I also don’t support Majin eating humans either, and some do."
     
-    $journal.unlock_entry("Majin","045")
+    $unlock_entry("Majin","045", True)
 
     show ro neu at right with dissolve
     ro "I just like to check. For my own sake. Were...you hungry?"
@@ -152,7 +152,7 @@ label Scene21:
     r "G’night, Soume."
     
     "If he has a last name, he’s keeping that as secret as the rest of him. I wonder if I’ll ever understand him, really."
-    $ unlock_entry("Soume","009")
+    $ unlock_entry("Soume","009", True)
     $ Scene21 = True
     return
     
@@ -487,6 +487,7 @@ label sualcohol:
     ro "One is PLENTY, and you aren't even of legal age, yet!"
     r "Fine fine. Which one should we take?"
     #stick the alcohol minigame here
+    #$minigame("bottles", 0, 0, None) # just defining the name is enough here
     return
     
 label sorodirty1:
