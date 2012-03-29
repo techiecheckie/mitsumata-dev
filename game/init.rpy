@@ -11,6 +11,15 @@ init python:
     persistent.unlocked_minigames = {}
   if persistent.garden == None:
     persistent.garden = [None]*9 #[None]*len(GARDEN_GRID)
+  if persistent.bonus == None:
+    # This is actually done in screens.rpy already to make sure Renpy doesn't 
+    # vomit a bunch of exceptions when creating the menus on startup. Will
+    # probably remove this some time later.
+    persistent.bonus = {}
+    persistent.bonus["unlocked"]      = True
+    persistent.bonus["cg_gallery"]    = [False]
+    persistent.bonus["music_gallery"] = [False]
+    persistent.bonus["trophy_room"]   = [False]
   
   inventory = Inventory(persistent)
   journal_manager = Journal_manager(persistent)
@@ -187,3 +196,19 @@ init python:
         pass
     
     return (hp,mp)
+  
+  # Unlocks a bonus (clickable element?) in the bonus section of the main menu.
+  # The bonus section is hidden by default until one item that unlocks one of
+  # the bonus sub-menus is unlocked (item = item, journal, minigame bonus, or
+  # ending). Feels rather... clumsy, and it probably is just that, but it will
+  # also probably be redefined once the details of the bonus section are laid
+  # out.
+  def unlock_bonus(bonus_area, bonus_id):
+    if (bonus_area not in persistent.bonus.keys()):
+      print "No bonus area '", bonus_area, "' found."
+      return
+      
+    if (bonus_id not in persistent.bonus[bonus_area]):
+      persistent.bonus[bonus_area].append(bonus_id)
+      persistent.bonus[bonus_area][0] = True
+      persistent.bonus["unlocked"]    = True

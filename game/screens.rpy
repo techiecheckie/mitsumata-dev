@@ -164,6 +164,16 @@ screen nvl:
 
     add SideImage() xalign 0.0 yalign 1.0
         
+# Make sure the bonus menu stuff actually exists before trying to do anything
+# with them (line 201 below and all the way to the bottom, too). 
+init -2 python:
+  if persistent.bonus == None:
+    persistent.bonus = {}
+    persistent.bonus["unlocked"]      = False
+    persistent.bonus["cg_gallery"]    = [False]
+    persistent.bonus["music_gallery"] = [False]
+    persistent.bonus["trophy_room"]   = [False]
+
 ##############################################################################
 # Main Menu 
 #
@@ -187,7 +197,10 @@ screen main_menu:
         hotspot (365, 450, 105, 220) action ShowMenu("load")
         hotspot (555, 450, 105, 220) action ShowMenu("preferences")
         hotspot (740, 450, 105, 220) action Quit(confirm=False)
-        hotspot (0, 0, 100, 100) action Preference("display", "window")
+    
+    if (persistent.bonus["unlocked"] == True):
+      frame:
+        textbutton _("Bonus") action ShowMenu("bonus")
 
 init -2 python:
 
@@ -490,4 +503,21 @@ init -2 python:
 #        hotspot (522, 378, 722, 426) action ShowMenu('preferences')
 #        hotspot (522, 443, 722, 492) action Help()
 #        hotspot (522, 506, 722, 554) action Quit(confirm=False)   
+
+# A very simple placeholder for the bonus menu.
+screen bonus:
+    # This ensures that any other menu screen is replaced.
+    tag menu
+    
+    add "gfx/menus/quit.jpg"
+    
+    frame:
+        has vbox
         
+        if persistent.bonus["cg_gallery"][0] == True:
+          textbutton _("CG Gallery") action ShowMenu("bonus")
+        if persistent.bonus["music_gallery"][0] == True:
+          textbutton _("Music Gallery") action ShowMenu("bonus")
+        if persistent.bonus["trophy_room"][0] == True:
+          textbutton _("Trophy Room") action ShowMenu("bonus")
+        textbutton _("Return") action Return()
