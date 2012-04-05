@@ -572,8 +572,8 @@ init python:
                 self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
 
         def on_key_down( self, key ):
-            if key == pygame.K_ESCAPE:
-                self.quit()
+#            if key == pygame.K_ESCAPE:
+#                self.quit()
 
             if self.state == MOLE_GAME_STATE_PLAY:
                 mole = None

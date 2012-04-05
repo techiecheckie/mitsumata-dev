@@ -391,7 +391,7 @@ init python:
     renpy.transition(dissolve)
     hide_main_ui()
     renpy.show(background, at_list = [Position(xpos=MINIGAME_POS_X, ypos=MINIGAME_POS_Y-20), Transform(anchor=(0.0, 0.0))]) 
-    show_minigame_ui(None)
+    show_minigame_ui(None, True)
     config.overlay_functions.remove(minigame_ui_buttons)
     
     # Place player and mob sprites on the screen

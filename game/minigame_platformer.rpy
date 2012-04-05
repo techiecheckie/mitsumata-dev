@@ -355,7 +355,6 @@ init python:
                         # empty too to make sure there's enough jumping space.
                           if x < len(segment[y])-1 and segment[y][x+1] != 6:
                             obstacle = self.obstacles[ random.randint( 0, len(OBSTACLE_TYPES)-1 ) ]
-                            print x, len(segment[y])
                 
                   cell = Cell( x*TILE_WIDTH + k*len(segment[0])*TILE_WIDTH, GROUND_LEVEL + y*TILE_HEIGHT )
                   cell.tile      = tile
@@ -480,8 +479,8 @@ init python:
                 
 
         def on_key_down( self, key ):
-            if key == pygame.K_ESCAPE:
-                self.quit()
+#            if key == pygame.K_ESCAPE:
+#                self.quit()
         
             if self.state == PLATFORMER_GAME_STATE_PLAY:
               if key == pygame.K_SPACE:

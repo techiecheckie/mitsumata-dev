@@ -11,7 +11,7 @@ init python:
         MagicForceLevel( number_digits     = (1,4),
                          correct_timeout   = 0.15,
                          incorrect_timeout = 0.9,
-                         time_limit        = 60 ),
+                         time_limit        = 10 ),
 
         MagicForceLevel( number_digits     = (1,5),
                          correct_timeout   = 0.12,
@@ -317,8 +317,8 @@ init python:
                     self.total_score = self.base_score + self.completion_bonus
 
         def on_key_down( self, key ):
-            if key == pygame.K_ESCAPE:
-                self.quit()
+#            if key == pygame.K_ESCAPE:
+#                self.quit()
 
             if (self.state == MAGIC_FORCE_GAME_STATE_PLAY and
                 self.number_countdown <= 0):

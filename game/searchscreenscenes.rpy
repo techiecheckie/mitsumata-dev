@@ -487,7 +487,7 @@ label sualcohol:
     ro "One is PLENTY, and you aren't even of legal age, yet!"
     r "Fine fine. Which one should we take?"
     #stick the alcohol minigame here
-    #$minigame("bottles", 0, 0, None) # just defining the name is enough here
+    #$minigame("bottles", 0, 0, None, True) # just defining the game name is enough here
     return
     
 label sorodirty1:

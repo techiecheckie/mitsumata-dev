@@ -163,20 +163,21 @@ init python:
   
   # Displays all the elements that are part of the base minigame ui. A background
   # can be given as a parameter to be displayed behind the minigame ui.
-  def show_minigame_ui(background):
+  def show_minigame_ui(background, exit_enabled):
     (MINI_HP_X, MINI_MP_X) = calculate_new_minigame_ui_positions(HP + BONUS_HP, MP + BONUS_MP)
     
     renpy.transition(dissolve)
     if background:
       renpy.show(background, at_list=[Position(xpos=MINIGAME_POS_X, ypos=MINIGAME_POS_Y), Transform(anchor=(0.0,0.0))])
-    renpy.show("minigame_mp_bg",  at_list = [Position(xpos=579,       ypos=16), Transform(anchor=(0.0, 0.0))])
-    renpy.show("minigame_mp_bar", at_list = [Position(xpos=MINI_MP_X, ypos=18), Transform(anchor=(1.0, 0.0))])
-    renpy.show("minigame_hp_bg",  at_list = [Position(xpos=105,       ypos=16), Transform(anchor=(0.0, 0.0))])
-    renpy.show("minigame_hp_bar", at_list = [Position(xpos=MINI_HP_X, ypos=16), Transform(anchor=(1.0, 0.0))])
-    renpy.show("minigame_ui")
+    renpy.show("minigame_mp_bg",  at_list = [Position(xpos=579,       ypos=16), Transform(anchor=(0.0, 0.0))], zorder=1)
+    renpy.show("minigame_mp_bar", at_list = [Position(xpos=MINI_MP_X, ypos=18), Transform(anchor=(1.0, 0.0))], zorder=1)
+    renpy.show("minigame_hp_bg",  at_list = [Position(xpos=105,       ypos=16), Transform(anchor=(0.0, 0.0))], zorder=1)
+    renpy.show("minigame_hp_bar", at_list = [Position(xpos=MINI_HP_X, ypos=16), Transform(anchor=(1.0, 0.0))], zorder=1)
+    renpy.show("minigame_ui", zorder=1)
     
     config.overlay_functions.append(minigame_ui_buttons)
-    config.overlay_functions.append(minigame_exit_button)
+    if (exit_enabled):
+      config.overlay_functions.append(minigame_exit_button)
 
     return
   
@@ -252,7 +253,7 @@ init python:
   # and the second one displays the item's name, description and image in a large
   # window using a hbox.
   def show_item_unlock(item):    
-    # Box 1: "Knife recorded"
+    # Box 1: e.g. "Knife recorded"
     renpy.transition(dissolve)
     frame = ui.frame(xmaximum=560, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=304, yanchor=95, background="gfx/textbox_2.png")
     ui.text("{size=-2}" + item.get_name() + " recorded{/size}")
@@ -272,13 +273,9 @@ init python:
     ui.image(im.Scale("gfx/items/" + item.get_id() + ".png", 75, 75))
     ui.text("{size=-2}" + item.get_name() + "\n\n" + item.get_description() + "{/size}")
     ui.close()
-    
-    # full screen hidden button
-    ui.frame(xpos=0, ypos=0, background=None)
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
-    
-    ui.interact()
-    renpy.transition(dissolve)
+
+    show_invisible_button("full")
+
     renpy.pause(1.0)
     
     update_stats()
