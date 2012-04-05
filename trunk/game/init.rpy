@@ -15,11 +15,12 @@ init python:
     # This is actually done in screens.rpy already to make sure Renpy doesn't 
     # vomit a bunch of exceptions when creating the menus on startup. Will
     # probably remove this some time later.
-    persistent.bonus = {}
-    persistent.bonus["unlocked"]      = True
-    persistent.bonus["cg_gallery"]    = [False]
-    persistent.bonus["music_gallery"] = [False]
-    persistent.bonus["trophy_room"]   = [False]
+    #persistent.bonus = {}
+    #persistent.bonus["unlocked"]      = True
+    #persistent.bonus["cg_gallery"]    = [False]
+    #persistent.bonus["music_gallery"] = [False]
+    #persistent.bonus["trophy_room"]   = [False]
+    pass
   
   inventory = Inventory(persistent)
   journal_manager = Journal_manager(persistent)
@@ -54,8 +55,8 @@ init python:
   persistent.unlocked_minigames["squats"]     = [100, 1]
   persistent.unlocked_minigames["gears"]      = [100, 1]
   persistent.unlocked_minigames["garden"]     = [100, 1]
-  persistent.unlocked_minigames["lock"]       = [100, 1]
-  persistent.unlocked_minigames["bottles"]    = [100, 1]
+  #persistent.unlocked_minigames["lock"]       = [100, 1]
+  #persistent.unlocked_minigames["bottles"]    = [100, 1]
   
   # current unlocked items
   persistent.unlocked_items = {}

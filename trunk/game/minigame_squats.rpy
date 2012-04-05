@@ -334,8 +334,8 @@ init python:
                     self.compute_scores()
 
         def on_key_down( self, key ):
-            if key == pygame.K_ESCAPE:
-                self.quit()
+#            if key == pygame.K_ESCAPE:
+#                self.quit()
 
             if self.state == SQUATS_GAME_STATE_PLAY:
                 if (key in (pygame.K_UP, pygame.K_LEFT, pygame.K_DOWN) and

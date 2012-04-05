@@ -4,27 +4,29 @@ init python:
   renpy.image("bg_dgro", "gfx/backgrounds/daygrass.jpg")
   renpy.image("bg_dsky", "gfx/backgrounds/daysky.jpg")
   renpy.image("bg_mini", "gfx/backgrounds/whitescr.jpg")
-  renpy.image("bg_blackscr", "gfx/backgrounds/blackscr.jpg")
+  renpy.image("bg_blackscr", "gfx/backgrounds/blackscr.png")
 
   DESCRIPTION_POS_X = 60
   DESCRIPTION_POS_Y = 110
   DESCRIPTION_WIDTH = 250
   
-  # current description displayed by the method show_description()
+  # default description displayed by the method show_description()
   MINIGAME_DESCRIPTION = ""
 
   MINIGAME_MAIN_DESCRIPTION = "Insert main description here."
+  MINIGAME_STAT_BONUS_UNLOCKED = "Your new highscore unlocked new stat bonuses:"
   
   GAME_DESCRIPTIONS = {
-    "mole" : "Agility:\n\nUse the keypad or mouse to hit the moles.\n\nPress esc to quit the game.",
+    "mole" : "Agility:\n\nUse the keypad or mouse to hit the moles.",
     "cell" : "Cells:\n\nUse the mouse to click on the infected cells.",
-    "platformer" : "Use spacebar to jump over obstacles and pits.\n\nPress esc to quit the game.",
-    "duck" : "Hunting:\n\nUse the mouse to shoot the birds.\n\nPress esc to quit the game.",
-    "force" : "Magic force:\n\nUse the keypad or keys 0-9 to type the numbers as they appear.\n\nPress esc to quit the game.",
-    "power" : "Magic control:\n\nClick the mouse to aim and set the amount of power while the arrows are moving.\n\nPress esc to quit the game.",
-    "squats" : "Strength:\n\nAs the marker passes over each lit section, hit the correct arrow key (down, left, or up).\n\nPress esc to quit the game.",
-    "gears" : "Gears:\n\nUse the mouse to drag cogs and lock them on axles.\n\nPress esc to quit the game.",
+    "platformer" : "Use spacebar to jump over obstacles and pits.",
+    "duck" : "Hunting:\n\nUse the mouse to shoot the birds.",
+    "force" : "Magic force:\n\nUse the keypad or keys 0-9 to type the numbers as they appear.",
+    "power" : "Magic control:\n\nClick the mouse to aim and set the amount of power while the arrows are moving.",
+    "squats" : "Strength:\n\nAs the marker passes over each lit section, hit the correct arrow key (down, left, or up).",
+    "gears" : "Gears:\n\nUse the mouse to drag cogs and lock them on axles.",
     "garden" : "Gardening:\n\nInsert description here..",
+    # Lock and bottles have their own level-based descriptions, no need to fill.
     "lock" : "",
     "bottles" : ""
   }
@@ -40,7 +42,8 @@ init python:
   MINIGAME_GRID_COLS = 4
   MINIGAME_GRID_ROWS = 3 
   
-  # TODO
+  # TODO fill in the rest
+  # Bonus format: (points_to_unlock, (stat, amount) (, ...))
   MINIGAME_BONUSES = {
     "mole" : [
       (5000, ("hp", 300), ("mp", 200)),
@@ -62,11 +65,13 @@ init python:
     "bottles" : []
   }
 
+  # Displays the minigame screen, filling the grid with available (unlocked)
+  # minigames in the order they've been acquired.
   def show_minigame_screen():
     button       = ""
     button_value = ""
 
-    show_minigame_ui("bg_mini")
+    show_minigame_ui("bg_mini", True)
     
     minigame_keys = persistent.unlocked_minigames.keys()
   
@@ -90,29 +95,25 @@ init python:
       if button == "exit":
         break
       else:
-        renpy.hide(background)
+        renpy.hide("bg_mini")
         
         set_description(GAME_DESCRIPTIONS[button])
         
         if button == "garden":
           show_garden()
-        elif button == "bottles":
-          show_bottles()
-        elif button == "lock":
-          score = show_lock()
         else:
           score = run(button)
           update_high_score(button, score)
           
-        renpy.show(background, zorder=-1)
+        renpy.show("bg_mini")
     
     config.overlay_functions.remove(minigame_description)
     hide_minigame_ui("bg_mini")
      
     return
 
-    
-  def choose_game(name):
+  # Returns a game instance and a background based on the name that was given.
+  def get_game(name):
     if name == "mole":
       game = WhackAMole
       bg   = "bg_dgro"
@@ -138,19 +139,18 @@ init python:
       game = Gears
       bg   = "bg_gears"
     else:
+      # Potential crash when returning None values?
       game = None
       bg = None
     
     return game, bg
   
-  
+  # Runs a minigame and returns its score. 
   def run(name):
-    (game, bg) = choose_game(name)
+    (game, bg) = get_game(name)
     renpy.show(bg, at_list=[Position(xpos=MINIGAME_POS_X, 
                                      ypos=MINIGAME_POS_Y), 
-                            Transform(anchor=(0.0,0.0))], 
-                            zorder=-1)
-                            
+                            Transform(anchor=(0.0,0.0))])
     config.overlay_functions.remove(minigame_ui_buttons)
     
     score = run_minigame( game_type = game,
@@ -161,11 +161,15 @@ init python:
                           level_number = persistent.unlocked_minigames[name][1] )
                           
     config.overlay_functions.append(minigame_ui_buttons)
-
-    renpy.hide(bg)    
-
+    renpy.hide(bg)
+    
     return score
   
+  # Updates highscores stored in persistent.unlocked_minigames[game]. If the
+  # vallue returned by the minigame as parameter 'score' is higher than the
+  # current value stored in the persistent dictionary, this method loops through
+  # the game's bonuses (MINIGAME_BONUSES[game], above), looking for new (stat)
+  # bonuses to unlock. 
   def update_high_score(game, score):
     print "Got", score, "points, old score", persistent.unlocked_minigames[game][0]
     
@@ -173,21 +177,28 @@ init python:
       old_score = persistent.unlocked_minigames[game][0]
       persistent.unlocked_minigames[game][0] = score
 
-      score_row     = 10
-      old_score_row = 10
+      # To make sure we're not giving the same bonuses more than once, a 
+      # comparison of (new_score_row < old_score_row) must be done. This happens 
+      # by comparing the new and old score values to the ones listed in the 
+      # minigame's bonus arrays' first indices, e.g.
+      #   "mole" : [ (5000, ("hp", 300), ...), (3000, ("hp", 200), ...), ... ] 
+      new_score_row = len(MINIGAME_BONUSES[game])
+      old_score_row = new_score_row
 
       game_bonuses = MINIGAME_BONUSES[game]
       for i in range(0, len(game_bonuses)):
         if score >= game_bonuses[i][0]:
-          score_row = i
+          new_score_row = i
           break
           
       for i in range(0, len(game_bonuses)):
         if old_score >= game_bonuses[i][0]:
           old_score_row = i
           break
-          
-      if score_row < old_score_row:
+      
+      if new_score_row < old_score_row:
+        bonus_row = game_bonuses[new_score_row]
+      
         renpy.transition(dissolve)
         ui.frame(xpos=MINIGAME_POS_X+50, 
                  ypos=MINIGAME_POS_Y+150, 
@@ -196,31 +207,25 @@ init python:
                  ypadding=40,
                  xmaximum=530)
         ui.vbox()
-        ui.text("{size=-2}Your new highscore unlocked new stat bonuses:{/size}")
-        bonus_row = game_bonuses[score_row]
+        ui.text("{size=-2}" + MINIGAME_STAT_BONUS_UNLOCKED + "{/size}")
         for i in range(1, len(bonus_row)):
           ui.text("{size=-2}    +" + str(bonus_row[i][1]) + " " + bonus_row[i][0] + "{/size}") 
         ui.close()
-    
-        # Full screen hidden button, "click anywhere to continue" kind
-        ui.frame(xpos=0, ypos=0, background=None)
-        ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
-    
-        ui.interact()
-        renpy.transition(dissolve)
+        
+        show_invisible_button("full")
       
         update_stats()
         update_minigame_ui(HP, MP)
     
     return
 
-
-  # Starts a minigame without having to call the PDA first. 
-  def minigame(name, level, score_to_pass, background):
-    game = choose_game(name)[0]
+  # Starts a minigame without having to call the PDA first. Compares the value
+  # returned by the minigame, returning boolean score >= score_to_pass.
+  def minigame(name, level, score_to_pass, background, exit_enabled):
+    game = get_game(name)[0]
   
     hide_main_ui()
-    show_minigame_ui(background)
+    show_minigame_ui(background, exit_enabled)
     set_description(GAME_DESCRIPTIONS[name])
     
     config.overlay_functions.remove(minigame_ui_buttons)
@@ -229,7 +234,7 @@ init python:
       show_garden()
       score = 0
     elif name == "lock":
-      score = show_lock(level)
+      score = show_lock()
     elif name == "bottles":
       show_bottles()
       score = 0
@@ -250,11 +255,10 @@ init python:
     
     return score >= score_to_pass
 
-  
+  # Sets the current minigame description. Using a global variable here, because 
+  # overlay functions can't take any parameters, and we need a way to modify the 
+  # description displayed in the left (parchment) part of the screen.
   def set_description(description):
-    # Using a global variable here, because overlay functions can't take any
-    # parameters, and we need a way to modify the description displayed in the
-    # left (parchment) part of the screen.
     global MINIGAME_DESCRIPTION
     MINIGAME_DESCRIPTION = description
 
@@ -262,7 +266,11 @@ init python:
       config.overlay_functions.append(minigame_description)
 
     return
-
+    
+  # An UI element method that's appended to Renpy's UI stack (or whatever it is
+  # called), removing the need of having to do this repeatedly in, say, the
+  # garden, where Renpy interactions tend to clear all the screen elements after
+  # a mouse click.
   def minigame_description():
     ui.frame(xpos=DESCRIPTION_POS_X, 
              ypos=DESCRIPTION_POS_Y, 

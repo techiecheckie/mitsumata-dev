@@ -462,9 +462,9 @@ init python:
                     self.state = MAGIC_POWER_GAME_STATE_END
                     self.total_score = self.base_score
 
-        def on_key_down( self, key ):
-            if key == pygame.K_ESCAPE:
-                self.quit()
+#        def on_key_down( self, key ):
+#            if key == pygame.K_ESCAPE:
+#                self.quit()
 
         def on_mouse_up( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:

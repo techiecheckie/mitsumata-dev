@@ -32,7 +32,7 @@ label shop_loop:
     
     hide_main_ui()
     renpy.transition(dissolve)
-    show_minigame_ui("shop_background")
+    show_minigame_ui("shop_background", False)
     
     while (True):
       create_grid(items)

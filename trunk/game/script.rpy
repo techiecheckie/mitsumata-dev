@@ -608,17 +608,7 @@ label start:
                 jump test_stuff
                 
 label test_stuff:
-    "test stuff"
-    
-    #call show_map
-    #call shop_loop
-    #$passed = minigame("force", 1, 1000, "bg_dsky")
-    #$print passed
-    #$passed = minigame("platformer", 1, 1000, None)
-    #$print passed
-    $minigame("bottles", 0, 0, None)
-    
-    #pass
+    pass
                 
 label Scene0:    
     scene bg blackscr
@@ -2726,7 +2716,7 @@ label Scene17:
     $unlock_minigame("force")
     
 label magcontrol1:    
-    $passed = minigame("force", 1, 1000, "bg_dsky")
+    $passed = minigame("force", 1, 1000, "bg_dsky", True)
     if passed: 
             jump controlsucceed1
     else: 
@@ -3098,7 +3088,7 @@ label Scene23:
     $hide_main_ui()
     
 label magcontrol2:    
-    $passed = minigame("force", 1, 2000, "bg_ngro")
+    $passed = minigame("force", 1, 2000, "bg_ngro", True)
     if passed:
             jump controlsucceed2
     else: 
@@ -4073,7 +4063,7 @@ label Scene32:
     $unlock_minigame("power")
     
 label power1:    
-    $passed = minigame("power", 1, 1000, "bg_dsky")
+    $passed = minigame("power", 1, 1000, "bg_dsky", True)
     if passed: 
             jump powersucceed1
     else: 
@@ -4548,7 +4538,7 @@ label Scene35:
     
     "Looks like I’ll have to play along for now. I’m not sure what’s waiting for me, but it better be good or next time I’ll just hang out with Soume."
 #label lockpuzzle1:    
-#    $result = minigame(lock, 1, 1000, None) # no need to define a background here (hence None)
+#    $result = minigame(lock, 1, 1000, None, True) # no need to define a background here (hence None)
 #        if result == True: 
 #            jump lockfail1
 #        else: 
@@ -4737,7 +4727,7 @@ label Scene37:
     
     $hide_main_ui()
 label duckhunt1:    
-    $passed = minigame("duck", 1, 1000, "bg_dsky")
+    $passed = minigame("duck", 1, 1000, "bg_dsky", True)
     if passed:
             jump Scene37b
     else: 
@@ -5200,6 +5190,7 @@ label Scene40a:
     "...why does she have to make everything sound so much scarier than it is?"
     
     r "...got it."
+
     $renpy.pause(1.0)
     su "We usually give out this test after the trainees have been here a full year, but..." 
     su "You pass it now, I’ll let you go out on a mission. You fail, and I don’t have to hear shit about this again until you turn 20."
@@ -5227,7 +5218,7 @@ label daychal1:
 
     su  "Cocky. As always. That’s fine with me; it’ll just be more enjoyable when you fail."
     $hide_main_ui()
-    $passed = minigame("platformer", 1, 3000, None)
+    $passed = minigame("platformer", 1, 3000, None, True)
     if passed: 
             jump daychal1suc
     else: 
@@ -5480,7 +5471,7 @@ label dowhatkazsays:
     $hide_main_ui()
     
 label gear1:    
-    $passed = minigame("gears", 1, 1000, "bg_gears")
+    $passed = minigame("gears", 1, 1000, "bg_gears", True)
     if passed: 
             jump gearsuc1
     else: 
@@ -6829,6 +6820,7 @@ label Scene48:
 
     s "I TOLD YOU to be quiet." 
     
+
     "Now I'm really scared."
     "I've never heard Soume raise his voice."
     "Ever."

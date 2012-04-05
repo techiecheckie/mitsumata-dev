@@ -17,33 +17,38 @@ init python:
     (377,437),
     (490,436)
   ]
+  
+  BOTTLES_CONFIRMATION = "Are you sure you want to select this bottle?\n\n"
+  BOTTLES_RIDDLE = """{size=-3}
+  One is at the 12
+  Twelve is at the 1
+  Three, Six, and Nine are
+  correctly done.
+  Two heads to 4
+  Four heads to 8
+  Five goes twice
+  Ten is half late
+  Number Eight ends the race
+  And goes in the last spot
+  on this face.
+  
+  From there your answer is
+  easy at least
+  Just choose the one North
+  between South and East.
+  {/size}"""
 
   def show_bottles():
     renpy.transition(dissolve)
     renpy.show("winerack",
-               zorder=-1,
+               zorder=0,
                at_list = [Position(xpos=MINIGAME_POS_X, ypos=MINIGAME_POS_Y), 
                           Transform(anchor=(0.0, 0.0))])
 
     while True:
       # Riddle
       ui.frame(xpos=DESCRIPTION_POS_X, ypos=DESCRIPTION_POS_Y, background=None)
-      ui.text("{size=-3}One is at the 12\n" +
-              "Twelve is at the 1\n" + 
-              "Three, Six, and Nine are\n" +
-              "correctly done.\n" +
-              "Two heads to 4\n" +
-              "Four heads to 8\n" +
-              "Five goes twice\n" +
-              "Ten is half late\n" + 
-              "Number Eight ends the race\n" + 
-              "And goes in the last spot\n" + 
-              "on this face.\n" +
-              "\n" +
-              "From there your answer is\n" + 
-              "easy at least\n" +
-              "Just choose the one North\n" + 
-              "between South and East.{/size}")
+      ui.text(BOTTLES_RIDDLE)
       
       # Bottles
       for i in range(0,12):
@@ -79,9 +84,9 @@ init python:
                  ypadding=40,
                  xmaximum=520)
         ui.vbox()
-        ui.text("Are you sure you want to select this bottle?\n\n")
-        ui.textbutton("Ok", clicked=ui.returns("ok"), xfill=True)
-        ui.textbutton("Cancel", clicked=ui.returns("cancel"), xfill=True)
+        ui.text("{size=-2}" + BOTTLES_CONFIRMATION + "{/size}")
+        ui.textbutton("{size=-2}" + YES + "{/size}", clicked=ui.returns("ok"), xfill=True)
+        ui.textbutton("{size=-2}" + NO + "{/size}", clicked=ui.returns("cancel"), xfill=True)
         ui.close()
         
         confirm = ui.interact()

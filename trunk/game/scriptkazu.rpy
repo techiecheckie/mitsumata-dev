@@ -113,7 +113,7 @@ label kaz1:
     k "Ah, well, I guess I better explain it to you."
 
 label cells2:  
-    $result = minigame("cell", 2, 1000, "bg_cells")
+    $result = minigame("cell", 2, 1000, "bg_cells", True)
     if result == True: 
             jump cellsucceed2
     else: 
@@ -1078,7 +1078,7 @@ label kaz7a:
     r "Alright. Lay it on me!"
 
 label power2:     
-    $result = minigame("power", 2, 2000, "bg_dsky")
+    $result = minigame("power", 2, 2000, "bg_dsky", True)
     if result == True: 
             jump powerfail2
     else: 
@@ -1157,7 +1157,7 @@ label kaz7c:
     su "Sure kid. Whatever makes you feel good."
 
 label gear2:    
-    $result = minigame("gears", 2, 1000, "bg_gears")
+    $result = minigame("gears", 2, 1000, "bg_gears", True)
     if result == True: 
             jump gearfail1
     else: 
@@ -1282,7 +1282,7 @@ label kaz8a:
     r "Alright. Lay it on me!"
 
 label mole1:
-    $result = minigame("mole", 1, 3000, "bg_dgro")
+    $result = minigame("mole", 1, 3000, "bg_dgro", True)
     if result == True: 
             jump molesuc1
     else: 
@@ -1549,7 +1549,7 @@ label kaz10b:
     r "Alright, lemme see it."
 
 label gear3:    
-    $result = minigame("gears", 3, 1000, "bg_gears")
+    $result = minigame("gears", 3, 1000, "bg_gears", True)
     if result == True: 
             jump gearfail3
     else: 
@@ -2418,7 +2418,7 @@ label kaz17:
     k "If I sneeze, you'll know you have it right! Just do it!"
     
 label cell3:    
-    $result = minigame("cell", 3, 1000, "bg_cells")
+    $result = minigame("cell", 3, 1000, "bg_cells", True)
     if result == True: 
             jump cellfail3
     else: 

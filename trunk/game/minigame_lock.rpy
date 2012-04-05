@@ -22,6 +22,8 @@ init python:
     (6, (1,2,3,4,5,6), "Another test riddle")
   ]
   
+  LOCK_SUCCESS = "You found the right combination and managed to open the lock.\n\nClick to continue."
+  
   def show_lock():
     #level = persistent.unlocked_minigames["lock"][1]
     level = 2
@@ -31,7 +33,7 @@ init python:
   
     renpy.transition(dissolve)
     renpy.show("lock", 
-               zorder=-1,
+               zorder=0,
                at_list = [Position(xpos=MINIGAME_POS_X, ypos=MINIGAME_POS_Y), 
                           Transform(anchor=(0.0, 0.0))])
     
@@ -72,23 +74,17 @@ init python:
             
         if solved:
           renpy.transition(dissolve)
-          renpy.transition(dissolve)
           ui.frame(xpos=MINIGAME_POS_X+50, 
                    ypos=MINIGAME_POS_Y+150, 
                    background="gfx/textbox.png",
                    xpadding=40,
                    ypadding=40,
                    xmaximum=520)
-          ui.text("You found the right combination and managed to open the lock.\n\nClick to continue.")
+          ui.text("{size=-2}" + LOCK_SUCCESS + "{/size}")
           
-          # Full screen hidden button, "click anywhere to continue" kind
-          ui.frame(xpos=0, ypos=0, background=None)
-          ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
-      
-          ui.interact()
-          renpy.transition(dissolve)
+          show_invisible_button("full")
           
-          score = 1
+          score = 1000
           
           break
           

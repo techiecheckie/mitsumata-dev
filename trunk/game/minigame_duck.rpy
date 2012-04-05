@@ -609,9 +609,9 @@ init python:
                     self.compute_accuracy_bonus()
                     self.total_score = self.base_score + self.accuracy_bonus
 
-        def on_key_down( self, key ):
-            if key == pygame.K_ESCAPE:
-                self.quit()
+#        def on_key_down( self, key ):
+#            if key == pygame.K_ESCAPE:
+#                self.quit()
 
         def on_mouse_move( self, mx, my ):
             # for whatever reason, Ren'Py sometimes gives (-1,-1) for the mouse

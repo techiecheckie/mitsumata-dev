@@ -34,7 +34,7 @@ init python:
   # using the minigame ui.
   def show_garden():
     renpy.transition(dissolve)
-    renpy.show("flowerpot", at_list = [Position(xpos=MINIGAME_POS_X-20, ypos=MINIGAME_POS_Y-40), Transform(anchor=(0.0, 0.0))], zorder=-1)
+    renpy.show("flowerpot", at_list = [Position(xpos=MINIGAME_POS_X-20, ypos=MINIGAME_POS_Y-40), Transform(anchor=(0.0, 0.0))], zorder=0)
     
     current_time         = time.time()
     inform_withered      = update_garden(current_time)

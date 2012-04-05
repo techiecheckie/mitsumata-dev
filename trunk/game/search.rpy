@@ -58,8 +58,8 @@ init python:
   SEARCH_PROMPT = "Do you wish to take a closer look at this item?"
   YES = "Yes"
   NO  = "No"
-  FOUND_NOTHING = "You found nothing of interest."
-  FOUND_ITEM = "You found an item: "
+  SEARCH_FOUND_NOTHING = "You found nothing of interest."
+  SEARCH_FOUND_ITEM = "You found an item: "
   SEARCH_END = "'0 clicks left' message)"
   
   # Populates the CLICKABLES dict with clickables listed in rooms.xml. The elements in the
@@ -335,7 +335,7 @@ init python:
     
     if answer == "yes":
       if clickable_data["item"] == None:
-        show_message(FOUND_NOTHING, "large")
+        show_message(SEARCH_FOUND_NOTHING, "large")
       else:
         item = clickable_data["item"]
       
@@ -347,7 +347,7 @@ init python:
                  background="gfx/textbox.png")
         
         ui.hbox(spacing=40)
-        ui.text("{size=-2}" + FOUND_ITEM + item.get_name() + "\n\n" + item.get_description() + "{/size}")
+        ui.text("{size=-2}" + SEARCH_FOUND_ITEM + item.get_name() + "\n\n" + item.get_description() + "{/size}")
         ui.image(im.Scale("gfx/items/" + item.get_id() + ".png", 100, 100))
         ui.close()
     

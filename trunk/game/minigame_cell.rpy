@@ -627,9 +627,9 @@ init python:
                         self.compute_scores()
                         self.state = CELLS_GAME_STATE_END
 
-        def on_key_down( self, key ):
-            if key == pygame.K_ESCAPE:
-                self.quit()
+#        def on_key_down( self, key ):
+#            if key == pygame.K_ESCAPE:
+#                self.quit()
 
         def on_mouse_up( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
