@@ -46,6 +46,8 @@ init python:
   
   ANIMATION_DURATION["Carniflora melee"]       = 0.8
   ANIMATION_DURATION["Carniflora melee delay"] = 0.4
+  ANIMATION_DURATION["Carniflora magic"]       = 1.3
+  ANIMATION_DURATION["Carniflora magic delay"] = 0.7
   ANIMATION_DURATION["Carniflora hit"]         = 0.6
 
 ########
@@ -221,6 +223,7 @@ image Mamoru idle:
   "gfx/animated/mamoru/mamoru_idle2r02.png"
   pause 0.2
   "gfx/animated/mamoru/mamoru_idle2r03.png"
+  pause 0.2
   repeat
    
 image Mamoru hit:
@@ -301,6 +304,7 @@ image Naomi hit:
 image Naomi melee:
   "gfx/animated/naomi/naomi_swiper01.png"
   pause 0.2
+
   "gfx/animated/naomi/naomi_swiper02.png"
   pause 0.2
   "gfx/animated/naomi/naomi_swiper03.png"
