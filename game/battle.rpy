@@ -9,36 +9,14 @@ init python:
   # Default damage values for Riku and Roman
   PLAYER_MELEE = 30
   PLAYER_MAGIC = 50
+  PLAYER_CRIT_MULTIPLIER = 2
   
-  # Name to use: "Mamoru"
-  MAMORU_HEALTH = 300
-  MAMORU_MANA   = 50
-  MAMORU_MELEE  = 20
-  MAMORU_MAGIC  = 25
-  
-  # Name to use: "Naomi"
-  NAOMI_HEALTH  = 100
-  NAOMI_MANA    = 100
-  NAOMI_MELEE   = 5
-  NAOMI_MAGIC   = 10
-  
-  # Name to use: "Demon thug"
-  DEMON_THUG_HEALTH = 50
-  DEMON_THUG_MANA   = 0
-  DEMON_THUG_MELEE  = 20
-  DEMON_THUG_MAGIC  = 0
-    
-  # Name to use: "Demon hunter"
-  DEMON_HUNTER_HEALTH = 50
-  DEMON_HUNTER_MANA   = 0
-  DEMON_HUNTER_MELEE  = 30
-  DEMON_HUNTER_MAGIC  = 0
-  
-  # Name to use: "Carniflora"
-  CARNIFLORA_HEALTH = 500
-  CARNIFLORA_MANA   = 100
-  CARNIFLORA_MELEE  = 10
-  CARNIFLORA_MAGIC  = 10
+  MOB_VARIABLES = {}
+  MOB_VARIABLES["Mamoru"]       = { "health":300, "mana":100, "melee":10, "magic":30, "zorder":4, "picture":"Mamoru" }
+  MOB_VARIABLES["Naomi"]        = { "health":100, "mana":100, "melee":5,  "magic":10, "zorder":4, "picture":"Naomi" }
+  MOB_VARIABLES["Demon thug"]   = { "health":50,  "mana":0,   "melee":20, "magic":0,  "zorder":4, "picture":"DemonThug" }
+  MOB_VARIABLES["Demon hunter"] = { "health":50,  "mana":0,   "melee":30, "magic":0,  "zorder":4, "picture":"DemonHunter" }
+  MOB_VARIABLES["Carniflora"]   = { "health":500, "mana":100, "melee":10, "magic":10, "zorder":0, "picture":"Carniflora" }
   
   MESSAGE_VICTORY = "You won the fight!"
   MESSAGE_DEFEAT  = "You lost the fight."
@@ -53,21 +31,22 @@ init python:
   ATTACK_DISTANCE = 240
   
   # Extra (visual, stacking) distances between the attacker and the target
+  ATTACK_OFFSETS = {}
   # Stops the attacker from running into the plant
-  CARNIFLORA_TARGET_OFFSET = 80
+  ATTACK_OFFSETS["Carniflora target"] = 80
   # Stops Carniflora from running into the target
-  CARNIFLORA_MELEE_OFFSET  = 200
+  ATTACK_OFFSETS["Carniflora melee"] = 200
   # Magic animation offsets (if larger (wider) sprites than the melee ones)
-  CARNIFLORA_MAGIC_OFFSET = 0
-  MAMORU_MAGIC_OFFSET     = 0
-  NAOMI_MAGIC_OFFSET      = 50
-  ROMAN_MAGIC_OFFSET      = 10
+  ATTACK_OFFSETS["Naomi magic"] = 50
+  ATTACK_OFFSETS["Roman magic"] = 10
   
   # Mob positions on the screen from the top left corner of the screen
   MOB_POSITIONS = [(420,520), (400,550), (450,580)]
+  
   # Player sprite position
   PLAYER_X = 960
   PLAYER_Y = MOB_POSITIONS[1][1]
+  PLAYER_ZORDER = 1
   
   # Something to hold the messages during the fight
   BATTLE_MESSAGES = []
@@ -77,24 +56,24 @@ init python:
   BATTLE_STATE_ATTACK_TYPE = "battle_state_attack_type"
   BATTLE_STATE_END         = "battle_state_end"
   
-  
+  # Base fighter class. 
   class Fighter(object):
-    def __init__(self, name, id, health, mana, damage_melee, damage_magic, x, y, zorder):
+    def __init__(self, name, health, mana, damage_melee, damage_magic, pic_name, zorder, x, y):
       self.name = name
-      self.id = id
       self.health = health
       self.mana = mana
       self.damage_melee = damage_melee
       self.damage_magic = damage_magic
+      self.pic_name = pic_name
+      self.zorder = zorder
       self.x = x
       self.y = y
-      self.zorder = zorder
         
     def get_name(self):
       return self.name
         
     def get_id(self):
-      return self.id
+      return self.pic_name
         
     def get_x(self):
       return self.x
@@ -118,38 +97,44 @@ init python:
       self.mana -= amount
         
     def can_afford_magic(self):
-      # TODO: use proper spell cost values
       return self.mana >= MAGIC_COST
-
-    def show_attack(self, target, action, damage, critical, attack_distance):
-      BATTLE_MESSAGES.append(self.get_name() + " attacks " + target.get_name() + "\n")
       
-      # Carniflora's custom grab-pull-pound-release attack
-      if self.id == "Carniflora" and action == "magic":
-        renpy.show(self.id + " magic")
-        renpy.pause(0.7)
+    # A big n' messy animation method. Animations have three (3) phases: charge,
+    # hit, and retreat. Each phase is timed differently using the values set in
+    # battle_animations.rpy, and these values tell things like how long should
+    # the target wait for the blow to fall and how long should s/he flinch
+    # afterwards, etc. The custom animations added for Mamoru and Carniflora are
+    # the only special ones, while the rest of the fighters use the same basic
+    # stuff for different actions.
+    def show_attack(self, target, action, damage, critical, attack_distance):
+      BATTLE_MESSAGES.append(self.get_name() + " attacks " + target.get_name() + ".\n")
+      
+      # Carniflora's custom grab-pull-pound-release attack.
+      if self.pic_name.startswith("Carniflora") and action == "magic":
+        renpy.show(self.pic_name + " " + action)
+        renpy.pause(ANIMATION_DURATION[self.name + " " + action + " delay"])
         renpy.show(target.get_id() + " hit", 
                    at_list = [slide(0.2, self.x + 220, self.y - 60)])
-        renpy.pause(1.3)
+        renpy.pause(ANIMATION_DURATION[self.name + " " + action])
         renpy.show(target.get_id() + " idle", 
                    at_list = [carniflora_drop(PLAYER_X, PLAYER_Y)], 
                    zorder=self.zorder) 
       else:
-        # use default animation stuff
+        # Use default animation timing for the attack.
         pre_attack_duration    = ANIMATION_DURATION[self.name + " " + action + " delay"]
         attack_duration        = ANIMATION_DURATION[self.name + " " + action]
         post_attack_duration   = attack_duration - pre_attack_duration
         hit_duration           = ANIMATION_DURATION[target.get_name() + " hit"]
         attacker_idle_duration = hit_duration - post_attack_duration
 
-        # slide in
-        if self.id == "Mamoru" and action == "melee":
-          renpy.show(self.id + " slide", 
+        # Mamoru has his own custom slide, so display that if needed.
+        if self.pic_name.startswith("Mamoru") and action == "melee":
+          renpy.show(self.pic_name + " slide", 
                      at_list = [mamoru_slide(target.get_x()-attack_distance, target.get_y())], 
                      zorder=self.zorder)
-          renpy.pause(ANIMATION_DURATION["Mamoru slide"])
+          renpy.pause(ANIMATION_DURATION[self.name + " slide"])
         else:
-          renpy.show(self.id + " idle", 
+          renpy.show(self.pic_name + " idle", 
                      at_list = [slide(ANIMATION_DURATION["slide"],
                                       target.get_x()-attack_distance, 
                                       target.get_y())], 
@@ -157,7 +142,7 @@ init python:
           renpy.pause(ANIMATION_DURATION["slide"])
         
         # (1) start attack animation
-        renpy.show(self.id + " " + action, zorder=target.get_zorder())
+        renpy.show(self.pic_name + " " + action, zorder=target.get_zorder())
         # wait a bit for the blow to fall
         renpy.pause(pre_attack_duration)
         # (2) start the target hit animation
@@ -165,7 +150,7 @@ init python:
         # wait for the attack animation to finish
         renpy.pause(post_attack_duration)
         # (3) start attacker idle animation
-        renpy.show(self.id + " idle", zorder=self.get_zorder())
+        renpy.show(self.pic_name + " idle", zorder=self.get_zorder())
         # wait for the hit animation to end
         renpy.pause(attacker_idle_duration)
         # (4) start the target idle animation
@@ -173,7 +158,7 @@ init python:
       
       target.dec_health(damage)
       
-      BATTLE_MESSAGES.append(target.get_name() + " is hit for " + str(damage) + " points\n")
+      BATTLE_MESSAGES.append(target.get_name() + " is hit for " + str(damage) + " points.\n")
       if critical:
         BATTLE_MESSAGES.append("Critical hit!\n")
       
@@ -184,148 +169,136 @@ init python:
         renpy.pause(0.5)
       
       # slide out
-      renpy.show(self.id + " idle", 
+      renpy.show(self.pic_name + " idle", 
                  at_list = [slide(ANIMATION_DURATION["slide"], self.x, self.y)], 
                  zorder=self.zorder)
       renpy.pause(ANIMATION_DURATION["slide"])      
        
-       
+  # Player class
   class Player(Fighter):
-    def __init__(self, id, health, mana):
-      # TODO: set proper melee and magic damage values
-      super(Player, self).__init__(id, id, health, mana, PLAYER_MELEE, PLAYER_MAGIC, PLAYER_X, PLAYER_Y, 1)
+    def __init__(self, name, health, mana):
+      super(Player, self).__init__(name, health, mana, PLAYER_MELEE, PLAYER_MAGIC, name, PLAYER_ZORDER, PLAYER_X, PLAYER_Y)
         
     def attack(self, target, action):
-      attack_offset = 0
       if action == "melee":
         damage = self.damage_melee
-        if target.name == "Carniflora":
-          attack_offset = CARNIFLORA_TARGET_OFFSET
       elif action == "magic":
         damage = self.damage_magic
-        if target.name == "Carniflora":
-          attack_offset = CARNIFLORA_TARGET_OFFSET
-        elif self.name == "Roman":
-          attack_offset = ROMAN_MAGIC_OFFSET
-        
-        # TODO: add any (magic cost reducing) bonuses that items give
-        self.mana -= MAGIC_COST 
-        
-      # Player's crit chance may vary, using hard-coded values for now, TODO
+        self.dec_mana(MAGIC_COST)
+      
+      # See if the player's lucky enough to do a critical hit.
       if random.randint(1,20) == 20:
         critical = True
         damage *= 2
       else:
         critical = False
-          
-      Fighter.show_attack(self, target, action, damage, critical, -ATTACK_DISTANCE - attack_offset)
-       
-       
+        
+      # Pick an offset from ATTACK_OFFSETS dict, if any. Carniflora has a huge 
+      # sprite, so a custom offset must be used for that one.
+      if target.name == "Carniflora":
+        offset_key = "Carniflora target"
+      else:
+        offset_key = self.get_name() + " " + action
+      
+      attack_offset = get_offset(offset_key)
+      
+      # Finally, start the animation.
+      Fighter.show_attack(self, target, action, damage, critical, -ATTACK_DISTANCE - attack_offset)       
+
+  # Mob class
   class Mob(Fighter):
-    def __init__(self, name, id, health, mana, damage_melee, damage_magic, x, y, zorder):
-      super(Mob, self).__init__(name, id, health, mana, damage_melee, damage_magic, x, y, zorder)
+    def __init__(self, name, health, mana, damage_melee, damage_magic, pic_name, zorder, x, y):
+      super(Mob, self).__init__(name, health, mana, damage_melee, damage_magic, pic_name, zorder, x, y)
         
     def attack(self, target):
-      attack_offset = 0
-      if self.mana > 0:
-        # TODO: use proper mana cost values
-        self.mana -= MAGIC_COST
+      if self.can_afford_magic():
+        self.dec_mana(MAGIC_COST)
         
-        # See if the attack should be melee or a magical one
-        # "randomize two numbers, then multiply them with each other. If  the 
-        # number comes out to be odd, it' a magic attack. Even, it's a regular 
+        # See if the attack should be melee or a magical one:
+        # "randomize two numbers, then multiply them with each other. If the 
+        # number comes out to be odd, it's a magic attack. Even, it's a regular 
         # attack"
         value1 = random.randint(1,10)
         value2 = random.randint(1,10)
         value3 = value1 * value2
 
-        # decide attack type
         if value3 % 2 == 0:
           action = "magic"
           damage = self.damage_magic
-          if self.name == "Naomi":
-            attack_offset = NAOMI_MAGIC_OFFSET
-          elif self.name == "Carniflora":
-            attack_offset = CARNIFLORA_MAGIC_OFFSET
         else:
           action = "melee"
           damage = self.damage_melee
-          if self.name == "Carniflora":
-            attack_offset = CARNIFLORA_MELEE_OFFSET
       else:
         action = "melee"
         damage = self.damage_melee
-        if self.name == "Carniflora":
-          attack_offset = CARNIFLORA_MELEE_OFFSET
-          
+      
+      # See if it's a critical hit.          
       if random.randint(1,MOB_CRIT_CHANCE) == MOB_CRIT_CHANCE:
         critical = True
         damage *= MOB_CRIT_MULTIPLIER
       else:
         critical = False
-          
+      
+      # Pick an offset from ATTACK_OFFSETS dict, if any.  
+      attack_offset = get_offset(self.get_name() + " " + action)
+      
+      # Finally, start the animation.
       Fighter.show_attack(self, target, action, damage, critical, ATTACK_DISTANCE + attack_offset)
-       
-        
+  
+  # Returns offset values defined in dict ATTACK_OFFSETS. Offsets are used to
+  # prevent attackers from sliding too far and overlapping their targets when
+  # attacking.
+  def get_offset(offset_key):
+    if offset_key in ATTACK_OFFSETS:
+      return ATTACK_OFFSETS[offset_key]
+    return 0
+  
+  # Creates a list of mobs and returns that list after populating it.
   def create_mobs(mob_name, mob_count):
+    mob_stats = MOB_VARIABLES[mob_name]
+    health       = mob_stats["health"]
+    mana         = mob_stats["mana"]
+    damage_melee = mob_stats["melee"]
+    damage_magic = mob_stats["magic"]
+    zorder       = mob_stats["zorder"]
+    pic_name     = mob_stats["picture"]
+    
     mobs = []
-    zorder = 4
-    if mob_name == "Demon hunter":
-      create_normal_mobs(mob_name, "DemonHunter",
-                         DEMON_HUNTER_HEALTH, DEMON_HUNTER_MANA,
-                         DEMON_HUNTER_MELEE, DEMON_HUNTER_MAGIC,
-                         mobs, mob_count, zorder)
-    elif mob_name == "Demon thug":
-      create_normal_mobs(mob_name, "DemonThug", 
-                         DEMON_THUG_HEALTH, DEMON_THUG_MANA,
-                         DEMON_THUG_MELEE, DEMON_THUG_MAGIC,
-                         mobs, mob_count, zorder)
-    elif mob_name == "Carniflora":
-      health       = CARNIFLORA_HEALTH
-      mana         = CARNIFLORA_MANA
-      damage_melee = CARNIFLORA_MELEE
-      damage_magic = CARNIFLORA_MAGIC
-      x            = MOB_POSITIONS[1][0]
-      y            = MOB_POSITIONS[1][1]
-      zorder       = 0
-      mobs.append(Mob(mob_name, "Carniflora", health, mana, damage_melee, damage_magic, x, y, zorder))
-    elif mob_name == "Mamoru":
-      health       = MAMORU_HEALTH
-      mana         = MAMORU_MANA
-      damage_melee = MAMORU_MELEE
-      damage_magic = MAMORU_MAGIC
+    
+    if mob_count > 1:
+      create_several_mobs(mob_name, health, mana, damage_melee, damage_magic, pic_name, zorder, mob_count, mobs)
+    else:
       x = MOB_POSITIONS[1][0]
       y = MOB_POSITIONS[1][1]
-      mobs.append(Mob(mob_name, "Mamoru", health, mana, damage_melee, damage_magic, x, y, zorder))
-    elif mob_name == "Naomi":
-      health       = NAOMI_HEALTH
-      mana         = NAOMI_MANA
-      damage_melee = NAOMI_MELEE
-      damage_magic = NAOMI_MAGIC
-      x = MOB_POSITIONS[1][0]
-      y = MOB_POSITIONS[1][1]
-      mobs.append(Mob(mob_name, "Naomi", health, mana, damage_melee, damage_magic, x, y, zorder))
+      mobs.append(Mob(mob_name, health, mana, damage_melee, damage_magic, pic_name, zorder, x, y))
       
     return mobs
       
-      
-  def create_normal_mobs(real_name, pic_name, health, mana, damage_melee, damage_magic, mobs, mob_count, zorder):
+  # Creates mob_count amount of duplicates from the given mob, copying its
+  # original pictures (pic_name + action, e.g. "Mamoru melee") as new Renpy 
+  # displayables for each copy of the mob to allow separate animations for each
+  # one.
+  def create_several_mobs(real_name, health, mana, damage_melee, damage_magic, pic_name, zorder, mob_count, mobs):
     for i in range(0, mob_count):
-      id = pic_name + "_" + str(i)
+      new_pic_name = pic_name + "_" + str(i)
          
-      renpy.copy_images(pic_name + " idle",     id + " idle")
-      renpy.copy_images(pic_name + " hit",      id + " hit")
-      renpy.copy_images(pic_name + " hit_crit", id + " hit_crit")
-      renpy.copy_images(pic_name + " dead",     id + " dead")
-      renpy.copy_images(pic_name + " melee",    id + " melee")
+      renpy.copy_images(pic_name + " idle",  new_pic_name + " idle")
+      renpy.copy_images(pic_name + " hit",   new_pic_name + " hit")
+      renpy.copy_images(pic_name + " melee", new_pic_name + " melee")
+      
+      if not real_name.startswith("Demon"):
+        renpy.copy_images(pic_name + " slide", new_pic_name + " slide")
+        renpy.copy_images(pic_name + " magic", new_pic_name + " magic")
           
       x = MOB_POSITIONS[i][0]
       y = MOB_POSITIONS[i][1]
-      mobs.append(Mob(real_name, id, health, mana, damage_melee, damage_magic, x, y, zorder))
+      
+      mobs.append(Mob(real_name, health, mana, damage_melee, damage_magic, new_pic_name, zorder, x, y))
           
       zorder += 1
   
-  
+  # Creates a list of clickable targets on the parchment area, displaying their 
+  # name and their current health. 
   def show_target_list(mobs):
     ui.frame(xpos=65, ypos=100, xmaximum=230, background=None)
     ui.vbox()
@@ -337,7 +310,8 @@ init python:
      
     return
   
-  
+  # Displays available combat actions on the parchment area. Melee option is
+  # always available, magic option also if the player has enough mana for it.
   def show_action_list(player, target):
     ui.frame(xpos=65, ypos=100, xmaximum=230, background=None)
     ui.text("{size=-3}" + target.get_name() + ", " + str(target.get_health()) + " HP\n{/size}")
@@ -352,21 +326,26 @@ init python:
     ui.textbutton("{size=-3}Cancel{/size}", clicked=ui.returns("cancel"), xfill=True) 
       
     return
-      
-      
-  def show_battle_messages():
+
+  # Displays an invisible button with "click to continue" message added to the
+  # battle messages list. Ending a turn clears all the previous messages added
+  # to the list.
+  def end_turn():
     BATTLE_MESSAGES.append("Click to continue...")
 
-    # full screen click-to-continue    
+    # Full screen click-to-continue.
     ui.frame(xpos=0, ypos=0, background=None)
     ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
     ui.interact()
     
     del BATTLE_MESSAGES[:]
-      
+    
     return
-    
-    
+  
+  # Adds a "message box" to the parchment area. This method is added to Renpy's
+  # UI stack in the beginning of the battle() method, so that different messages
+  # added to BATTLE_MESSAGES list are displayed automatically after every UI 
+  # interaction.
   def battle_message_area():
     ui.frame(xpos=65, ypos=100, xmaximum=240, background=None)
     ui.vbox()
@@ -376,13 +355,16 @@ init python:
     
     return
     
-    
+  # Battle "constructor". Creates the combatants and initializes UI elements
+  # before starting the actual battle loop. Boolean to_bitter_end controls
+  # whether the player should be able to quit the battle before it ends by using
+  # the minigame ui's exit button.
   def battle(player_name, mob_name, mob_count, background, to_bitter_end):
     config.overlay_functions.append(battle_message_area)
     config.rollback_enabled = False
     
     # Create the combatants
-    player = Player(player_name, HP + BONUS_HP, MP + BONUS_MP)
+    player = Player(player_name, 500 + BONUS_HP, 500 + BONUS_MP)
     
     mobs = create_mobs(mob_name, mob_count)
     mobs_alive = len(mobs)
@@ -439,7 +421,7 @@ init python:
             # Update HP and MP bars
             update_minigame_ui(player.get_health(), player.get_mana())
             # Update battle messages list
-            show_battle_messages()
+            end_turn()
         
             # Loop through the mobs, displaying their attack animations
             mobs_alive = 0
@@ -454,16 +436,17 @@ init python:
                   state = BATTLE_STATE_END
                   break
         
+            # Prepare for a new round if any mobs are alive, else quit.
             if mobs_alive > 0:
               update_minigame_ui(player.get_health(), player.get_mana())
-              show_battle_messages()
+              end_turn()
             else:
               post_battle_message = MESSAGE_VICTORY
               state = BATTLE_STATE_END
 
     # Display post battle messages
     BATTLE_MESSAGES.append(post_battle_message + "\n")
-    show_battle_messages()
+    end_turn()
     
     battle_result = player.get_health() > 0
     
