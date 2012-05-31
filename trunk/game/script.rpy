@@ -313,9 +313,11 @@ image bg ngro = "gfx/backgrounds/nightgrass.jpg"
 image bg nsky = "gfx/backgrounds/nightsky.jpg"
 image bg dgro = "gfx/backgrounds/daygrass.jpg"
 image bg dsky = "gfx/backgrounds/daysky.jpg"
-#image bg shrfr = "shrinefront.png"
-#image bg train1 = ""
-#image bg train2 = ""
+image bg shrfr = "gfx/backgrounds/templetop.png"
+image bg shrbot = "gfx/backgrounds/templebottom.png"
+image bg train1 = "gfx/backgrounds/train1.png"
+image bg train2 = "gfx/backgrounds/train2.png"
+image bg trainwhole = "gfx/backgrounds/trainwhole.png"
 
 image bg blackscr = "gfx/backgrounds/blackscr.png"
 image bg redscr = "gfx/backgrounds/redscr.jpg"
@@ -331,22 +333,45 @@ image pda_button = "gfx/buttons/button_palm_pilot_hover.png"
 #DECLARE CG IMAGES
 #--------------------------------
 image bg dream = "gfx/backgrounds/dream.jpg"
+image bg dungeon = "gfx/backgrounds/dungeon.png"
+image bg bath = "gfx/backgrounds/bath.png"
+image bg firstview = "gfx/backgrounds/firstview.png"
+image bg kazulie = "gfx/backgrounds/kazulie.png"
+image bg ldead = "gfx/backgrounds/ldead.png"
+image bg lscamp = "gfx/backgrounds/lscamp.png"
+image bg mall = "gfx/backgrounds/mall.png"
+image bg mameat = "gfx/backgrounds/mamdeadbody.png"
+image bg mnroof = "gfx/backgrounds/manaroof.png"
+image bg noreat = "gfx/backgrounds/noreat.png"
+image bg rcrib = "gfx/backgrounds/rcrib.png"
+image bg rikubar = "gfx/backgrounds/rikubar.png"
+image bg rikumom = "gfx/backgrounds/rikumom.png"
+image bg rrplot = "gfx/backgrounds/rrplot.png"
+image bg rsgarden = "gfx/backgrounds/rsgarden.png"
+image bg run = "gfx/backgrounds/run.png"
+image bg rvfood = "gfx/backgrounds/rvfood.png"
+image bg scaryou = "gfx/backgrounds/scaryouko.png"
+image bg slkid = "gfx/backgrounds/slkid.png"
+image bg souheal = "gfx/backgrounds/soumeheal.png"
+image bg souplant = "gfx/backgrounds/souplant.png"
+image bg suhit = "gfx/backgrounds/susahit.png"
+
 
 #-----------------------------------------------
 #DECLARE RIKU SPRITE IMAGES
 #-----------------------------------------------
-image r blush = "gfx/sprites/riku_8.png"
-#image r confu = ""
-#image r excite = ""
+image r blush = "gfx/sprites/rflush.png"
+image r smirk = "gfx/sprites/rsmirk.png"
+image r think = "gfx/sprites/rthink.png"
 #image r fight = ""
-image r grin = "gfx/sprites/riku_6.png"
-image r happy = "gfx/sprites/riku_2.png"
-image r mad = "gfx/sprites/riku_7.png"
-image r neu = "gfx/sprites/riku_1.png"
-image r sad = "gfx/sprites/riku_4.png"
-image r scare = "gfx/sprites/riku_3.png"
-#image r surp = ""
-#image r upset = ""
+image r grin = "gfx/sprites/rdkgrin.png"
+image r happy = "gfx/sprites/rhappy.png"
+image r mad = "gfx/sprites/rmad.png"
+image r neu = "gfx/sprites/rneu.png"
+image r sad = "gfx/sprites/rhurt.png"
+image r scare = "gfx/sprites/rscared.png"
+image r nerve = "gfx/sprites/rnerve.png"
+image r upset = "gfx/sprites/rno.png"
 
 #---------------------------------------------------
 #DECLARE ROMAN SPRITE IMAGES
@@ -406,43 +431,45 @@ image you bore = "gfx/sprites/youbored.png"
 #----------------------------------------------
 #DECLARE LIZA SPRITE IMAGES
 #----------------------------------------------
-#image l neu = ""
-#image l upset = ""
-#image l frown = ""
+image l neu = "gfx/sprites/lneu.png"
+image l upset = "gfx/sprites/lpissy.png"
+image l frown = "gfx/sprites/lsmirk.png"
 #image l smirk = ""
-#image l fight = ""
+image l shock = "gfx/sprites/lshock.png"
 
 #-----------------------------------------------------
 #DECLARE MAMORU SPRITE IMAGES
 #-----------------------------------------------------
 #image m neu = ""
-#image m grin = ""
+image m grin = "gfx/sprites/magrin.png"
 #image m mad = ""
 #image m fight = ""
 #image m gentle = ""
-#image m unhappy = ""
+image m unhappy = "gfx/sprites/mathink.png"
 
 #-------------------------------------------------------
 #DECLARE KAZUTAKA SPRITE IMAGES
 #-------------------------------------------------------
-#image k neu = ""
-#image k think = ""
-#image k freak = ""
-#image k frown = ""
+image k neu = "gfx/sprites/kazno.png"
+image k think = "gfx/sprites/kazthink.png"
+image k freak = "gfx/sprites/kazscare.png"
+image k frown = "gfx/sprites/kazuh.png"
+image k smirk = "gfx/sprites/kazsmirk.png"
+image k grin = "gfx/sprites/kazdkgrin.png"
 
 #--------------------------------------------------
 #DECLARE NORAH SPRITE IMAGES
 #--------------------------------------------------
-#image n neutral = ""
-#image n worry = ""
+image n neutral = "gfx/sprites/nneu.png"
+image n grin = "gfx/sprites/nsmirk.png"
 
 #----------------------------------------------------------------
 #DECLARE DEMON HUNTER SPRITE IMAGES
 #----------------------------------------------------------------
-image dg neu = "gfx/sprites/huntergirl_serious.png"
-image dg grin = "gfx/sprites/huntergirl_smile.png"
-image db neu = "gfx/sprites/hunterboy_serious.png"
-image db grin = "gfx/sprites/hunterboy_smile.png"
+image dg neu = "gfx/sprites/dgneu.png"
+image dg grin = "gfx/sprites/dgsmirk.png"
+image db neu = "gfx/sprites/dbneu.png"
+#image db grin = "gfx/sprites/hunterboy_smile.png"
 
 #-----------------------------------------------------
 #DECLARE STUDENT SPRITE IMAGES
@@ -457,8 +484,8 @@ image st bmad = "gfx/sprites/boystumad.png"
 #------------------------------------------------
 #image rg neu = ""
 #image rg scare = ""
-#image rb neu = ""
-#image rb scare = ""
+image rb neu = "gfx/sprites/sgneu.png"
+image rb scare = "gfx/sprites/sgsmile.png"
 
 #-----------------------------------------------
 #DECLARE MISC SPRITE IMAGES
@@ -642,7 +669,7 @@ label Scene0:
 
     #play music "music/mitsumata1.mp3"
     #show bg rikureading
-    show bg riroom
+    show bg rikumom
     "Once upon a time, there was a prince who was not in any way different from other fairy tale princes."
     
     "He was rich, handsome, popular, destined to marry a princess, spoiled---"
@@ -732,7 +759,7 @@ label Scene0:
     
 label Scene1:  
         #scene bg mameat1
-        scene bg nfor1 
+        scene bg dungeon 
         $show_main_ui()
         with slow_dissolve
         
@@ -837,6 +864,8 @@ label Scene1:
         pr "No...spare me...I don’t want to---"
 
         boy "Think of this as fate. That sounds kind of nice, doesn’t it?"
+        $hide_main_ui()
+        show bg mameat
         
         $hide_main_ui()
         scene bg blackscr 
