@@ -34,6 +34,10 @@
   <item id="salve">
     <name>Fire Salve</name>
     <description> A protective salve that helps heal burns and protect from fire abilities.</description>
+    <bonuses>
+        <hp>30</hp>
+        <mp>10</mp>
+    </bonuses>
   </item>
 
   <item id="ice">
@@ -43,12 +47,19 @@
 
   <item id="rose">
     <name>Makai Rose</name>
-    <description>A special breed of rose created by Soume. It mixes the DNA of several different roses from the human world, and roses from the demon world. It has no thorns and smells like heaven.</description>
+    <description>A special breed of rose created by Soume. It mixes the DNA of several different roses from the human world, and roses from the demon world. It has no thorns and smells like heaven. It allows you 1 extra search during your evening choices.</description>
+    <bonuses>
+        <search>1</search>
+    </bonuses>
   </item>
 
   <item id="cake">
     <name>Strawberry Shortcake</name>
-    <description>A cake from Riku's favorite bakery. It has thick, luscious strawberries and perfectly crafted cream.</description>
+    <description>A cake from Riku's favorite bakery. It has thick, luscious strawberries and perfectly crafted cream. It adds 50 HP, and 10 MP.</description>
+    <bonuses>
+        <hp>50</hp>
+        <mp>10</mp>
+    </bonuses>
   </item>
 
   <item id="goodice">
@@ -58,7 +69,10 @@
 
   <item id="trackseed">
     <name>Tracking Seeds</name>
-    <description>These seeds embed themselves under the skin and work like a homing beacon to allow Soume to track anyone for several thousand kilometers. </description>
+    <description>These seeds embed themselves under the skin and work like a homing beacon to allow Soume to track anyone for several thousand kilometers. It allows you to do 2 extra searches during your evening choices. </description>
+    <bonuses>
+        <search>2</search>
+    </bonuses>
   </item>
 
   <item id="memo">
@@ -78,7 +92,11 @@
 
   <item id="spice">
     <name>Cooking Spice</name>
-    <description>A medley of spices made by Roman, crafted from his years of experience as an assistant chef in a kitchen. It smells strong and spicy.</description>   
+    <description>A medley of spices made by Roman, crafted from his years of experience as an assistant chef in a kitchen. It smells strong and spicy. It adds 30 HP and 5 MP.</description>
+    <bonuses>
+        <hp>30</hp>
+        <mp>5</mp>
+    </bonuses>   
   </item>
 
   <item id="meat">
@@ -98,12 +116,18 @@
 
   <item id="key">
     <name>Temple Keys</name>
-    <description>Keys for every nook and cranny in the temple.</description>
+    <description>Keys for every nook and cranny in the temple. It allows you to do 2 extra searches during your evening choices. </description>
+    <bonuses>
+        <search>2</search>
+    </bonuses>
   </item>
 
   <item id="pollen">
     <name>Pungent Pollen</name>
-    <description>A crushed blend of plants, made specially by Soume. The smell is calming...it makes one want to forget all of his troubles. Soume seems to use this pollen a lot...but all of its effects are not known.</description>
+    <description>A crushed blend of plants, made specially by Soume. The smell is calming...it makes one want to forget all of his troubles. Soume seems to use this pollen a lot...but all of its effects are not known. It allows you to do 1 extra search during your evening choices.</description>
+    <bonuses>
+        <search>1</search>
+    </bonuses>
   </item>
 
   <item id="radio">
@@ -143,7 +167,7 @@
 
   <item id="ios">
     <name>Io Seed</name>
-    <description>Planting Item.</description>   
+    <description>Planting Item. Use this in your garden.</description>   
   </item>
 
   <item id="signet">
@@ -170,7 +194,11 @@
 
   <item id="amethyst">
     <name>Amethyst</name>
-    <description>A purple stone.</description>
+    <description>A purple stone with a soothing aura. It adds 10 HP and 10 MP.</description>
+    <bonuses>
+        <hp>10</hp>
+        <mp>10</mp>
+    </bonuses>
     <locations>
       <map decision="3" room="any" stash="any"/>
       <store decision="8" />
@@ -181,7 +209,11 @@
 
   <item id="candle">
     <name>Makai Candles</name>
-    <description>Candles from Makai with special properties.</description>
+    <description>Candles from Makai with special properties. It adds 30 MP and allows you 1 extra search during your evening choices.</description>
+    <bonuses>
+        <mp>30</mp>
+        <search>1</search>
+    </bonuses>
     <locations>
       <map decision="11" room="any" stash="any" />
       <store decision="26" />
@@ -203,7 +235,10 @@
 
   <item id="veg">
     <name>Garden Vegetables</name>
-    <description>Some vegetables collected from Soume's garden. They have a strong smell, which is odd for vegetables...it is possible that they will grow teeth. Better not eat these.</description>
+    <description>Some vegetables collected from Soume's garden. They have a strong smell, which is odd for vegetables...it is possible that they will grow teeth. Better not eat these. It allows you 1 extra search during your evening choices.</description>
+    <bonuses>
+        <search>1</search>
+    </bonuses>
     <locations>
       <map decision="24" room="any" stash="any" />
       <store decision="14" />
@@ -214,7 +249,10 @@
 
   <item id="herb">
     <name>Herbs</name>
-    <description>Herbs that Soume grows in his garden. Like everything Soume grows, it has a very strong, lovely scent. These herbs may be edible, but Soume usually crushes them into powders for pollens.</description>
+    <description>Herbs that Soume grows in his garden. Like everything Soume grows, it has a very strong, lovely scent. These herbs may be edible, but Soume usually crushes them into powders for pollens. It adds 75 HP.</description>
+    <bonuses>
+        <hp>75</hp>
+    </bonuses>
     <locations>
       <map decision="27" room="any" stash="any" />
       <store decision="15" />
@@ -225,7 +263,11 @@
 
   <item id="clara">
     <name>Aqua Clara</name>
-    <description>A potion that replenishes the mind.</description>
+    <description>A potion that replenishes the mind. It adds 50 MP. It also allows you 1 extra search during your evening choices.</description>
+    <bonuses>
+        <mp>50</mp>
+        <search>1</search>
+    </bonuses>
     <locations>
       <map decision="28" room="any" stash="any" />
       <store decision="21" />
@@ -236,7 +278,10 @@
 
   <item id="terra">
     <name>Aqua Terra</name>
-    <description>A potion that replenishes the body.</description>    
+    <description>A potion that replenishes the body. It adds 100 HP.</description>
+    <bonuses>
+        <hp>100</hp>
+    </bonuses>    
     <locations>
       <map decision="17" room="any" stash="any" />
       <store decision="25" />
@@ -247,7 +292,12 @@
 
   <item id="vita">
     <name>Aqua Vita</name>
-    <description>A potion that replenishes the soul.</description>
+    <description>A potion that replenishes the soul. It adds 50 HP and 30 MP. It also allows you to do 1 extra search during your evening choices.</description>
+    <bonuses>
+        <hp>50</hp>
+        <mp>30</mp>
+        <search>1</search>
+    </bonuses>
     <locations>
       <map decision="29" room="any" stash="any" />
       <store decision="18" />
@@ -258,7 +308,12 @@
 
   <item id="mitsumata">
     <name>Mitsumata Flower</name>
-    <description>A flower that grows in Japan. It means "unsuspecting love" and is used to make Japanese paper.</description>
+    <description>A flower that grows in Japan. It means "unsuspecting love" and is used to make Japanese paper. It adds 25 HP and 25 MP. It also allows you to do 2 extra searches during your evening choices.</description>
+    <bonuses>
+        <hp>25</hp>
+        <mp>25</mp>
+        <search>2</search>
+    </bonuses>
     <locations>
       <map decision="9" room="any" stash="any" />
       <store decision="6" />
@@ -280,7 +335,11 @@
 
   <item id="bone">
     <name>Dried Majin Bone</name>
-    <description>Old dried majin bone.</description>
+    <description>Old dried majin bone. It's not good for much. It adds 5 HP and 5 MP.</description>
+    <bonuses>
+        <hp>5</hp>
+        <mp>5</mp>
+    </bonuses>
     <locations>
       <map decision="18" room="any" stash="any" />
       <store decision="29" />
@@ -302,7 +361,10 @@
 
   <item id="book1">
     <name>Intro to Majin Biological Processes</name>
-    <description>A medical book written by Doctor Osamu, to help others learn about Majin biology. This is the first book in the series.</description>
+    <description>A medical book written by Doctor Osamu, to help others learn about Majin biology. This is the first book in the series. It adds 5 MP.</description>
+    <bonuses>
+        <mp>5</mp>
+    </bonuses>
     <locations>
       <map decision="8" room="any" stash="any" />
       <store decision="11" />
@@ -313,7 +375,10 @@
 
   <item id="book2">
     <name>Adv. Majin Biological Processes</name>
-    <description>A medical book written by Doctor Osamu to help others learn about Majin biology. This is the second book in the series.</description>
+    <description>A medical book written by Doctor Osamu to help others learn about Majin biology. This is the second book in the series. It adds 5 MP.</description>
+    <bonuses>
+        <mp>5</mp>
+    </bonuses>
     <locations>
       <map decision="17" room="any" stash="any" />
       <store decision="29" />
@@ -324,7 +389,10 @@
 
   <item id="book3">
     <name>Majin Organ Systemic Function</name>
-    <description>An advanced textbox written by Doctor Osamu to help new Majin doctors learn about Majin biology. It focuses on organs and systemic functions.</description>   
+    <description>An advanced textbox written by Doctor Osamu to help new Majin doctors learn about Majin biology. It focuses on organs and systemic functions. It adds 5 MP.</description>
+    <bonuses>
+        <mp>5</mp>
+    </bonuses>   
     <locations>
       <map decision="11" room="any" stash="any" />
       <store decision="27" />
@@ -335,7 +403,10 @@
 
   <item id="book4">
     <name>Prophesies and Falsehoods</name>
-    <description>A historical textbook written by Doctor Osamu about prophesies amongst the underground Majin world.</description>
+    <description>A historical textbook written by Doctor Osamu about prophesies amongst the underground Majin world. It adds 5 MP.</description>
+    <bonuses>
+        <mp>5</mp>
+    </bonuses>
     <locations>
       <map decision="28" room="any" stash="any" />
       <store decision="12" />
@@ -346,7 +417,10 @@
 
   <item id="book5">
     <name>I Can't Believe It's Vegan!</name>
-    <description>One of Roman's many vegan cookbooks. The stuff in here actually tastes pretty darn good!</description>
+    <description>One of Roman's many vegan cookbooks. The stuff in here actually tastes pretty darn good! It adds 10 HP.</description>
+    <bonuses>
+        <hp>10</hp>
+    </bonuses>
     <locations>
       <map decision="11" room="any" stash="any" />
       <store decision="31" />
@@ -357,7 +431,10 @@
 
   <item id="book6">
     <name>Book6</name>
-    <description>This is book 6's desc.</description>
+    <description>This is book 6's desc. It adds 5 MP.</description>
+    <bonuses>
+        <mp>5</mp>
+    </bonuses>
     <locations>
       <map decision="3" room="any" stash="any" />
       <store decision="22" />
@@ -368,7 +445,10 @@
 
   <item id="book7">
     <name>Book7</name>
-    <description>This is book 7's desc.</description>
+    <description>This is book 7's desc. It adds 5 MP.</description>
+    <bonuses>
+        <mp>5</mp>
+    </bonuses>
     <locations>
       <map decision="23" room="any" stash="any" />
       <store decision="5" />
@@ -379,7 +459,10 @@
 
   <item id="book8">
     <name>Book8</name>
-    <description>This is book 8's desc.</description>
+    <description>This is book 8's desc. It adds 5 MP.</description>
+    <bonuses>
+        <mp>5</mp>
+    </bonuses>
     <locations>
       <map decision="4" room="any" stash="any" />
       <store decision="21" />
@@ -423,7 +506,10 @@
 
   <item id="strpotion">
     <name>Hyper Strength Potion</name>
-    <description>A potion drafted by the owner of the little Majin shop. No clue what's in it, but it seems to invigorate you when you hold it.</description>
+    <description>A potion drafted by the owner of the little Majin shop. No clue what's in it, but it seems to invigorate you when you hold it. It adds 100 HP.</description>
+    <bonuses>
+        <hp>100</hp>
+    </bonuses>
     <locations>
       <map decision="7" room="any" stash="any" />
       <store decision="24" />
@@ -434,7 +520,10 @@
 
   <item id="magpotion">
     <name>Hyper Elemental Potion</name>
-    <description>A potion drafted by the owner of the little Majin shop. No clue what's in it, but it seems to invigorate you when you hold it.</description>   
+    <description>A potion drafted by the owner of the little Majin shop. No clue what's in it, but it seems to invigorate you when you hold it. It adds 80 MP.</description>
+    <bonuses>
+        <mp>80</mp>
+    </bonuses>   
     <locations>
       <map decision="22" room="any" stash="any" />
       <store decision="15" />
@@ -445,7 +534,7 @@
 
   <item id="aos">
     <name>Ao Seed</name>
-    <description>Planting Item.</description>
+    <description>Planting Item. Use this in your garden.</description>
     <locations>
       <map decision="24" room="any" stash="any" />
       <store decision="16" />
@@ -456,7 +545,7 @@
 
   <item id="bos">
     <name>Bo Seed</name>
-    <description>Planting Item.</description>
+    <description>Planting Item. Use this in your garden.</description>
     <locations>
       <map decision="10" room="any" stash="any" />
       <store decision="31" />
@@ -467,7 +556,7 @@
 
   <item id="cos">
     <name>Co Seed</name>
-    <description>Planting Item.</description>   
+    <description>Planting Item. Use this in your garden.</description>   
     <locations>
       <map decision="13" room="any" stash="any" />
       <store decision="6" />
@@ -478,7 +567,7 @@
 
   <item id="dos">
     <name>Do Seed</name>
-    <description>Planting Item.</description>
+    <description>Planting Item. Use this in your garden.</description>
     <locations>
       <map decision="10" room="any" stash="any" />
       <store decision="20" />
@@ -489,7 +578,7 @@
 
   <item id="eos">
     <name>Eo Seed</name>
-    <description>Planting Item.</description>
+    <description>Planting Item. Use this in your garden.</description>
     <locations>
       <map decision="17" room="any" stash="any" />
       <store decision="27" />
@@ -500,7 +589,7 @@
 
   <item id="fos">
     <name>Fo Seed</name>
-    <description>Planting Item.</description>   
+    <description>Planting Item. Use this in your garden.</description>   
     <locations>
       <map decision="5" room="any" stash="any" />
       <store decision="10" />
@@ -511,7 +600,7 @@
 
   <item id="gos">
     <name>Go Seed</name>
-    <description>Planting Item.</description>
+    <description>Planting Item. Use this in your garden.</description>
     <locations>
       <map decision="20" room="any" stash="any" />
       <store decision="5" />
@@ -522,7 +611,7 @@
 
   <item id="mos">
     <name>Mo Seed</name>
-    <description>Planting Item.</description>
+    <description>Planting Item. Use this in your garden.</description>
     <locations>
       <map decision="3" room="any" stash="any" />
       <store decision="8" />
@@ -533,7 +622,7 @@
 
   <item id="jos">
     <name>Jo Seed</name>
-    <description>Planting Item.</description>   
+    <description>Planting Item. Use this in your garden.</description>   
     <locations>
       <map decision="24" room="any" stash="any" />
       <store decision="11" />
@@ -544,7 +633,11 @@
 
   <item id="aop">
     <name>Ao Plant</name>
-    <description>A plant grown from the Ao seed. It adds __HP and __MP.</description>
+    <description>A plant grown from the Ao seed. It adds 10 HP and 5 MP.</description>
+    <bonuses>
+        <hp>10</hp>
+        <mp>5</mp>
+    </bonuses>
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -553,7 +646,11 @@
 
   <item id="bop">
     <name>Bo Plant</name>
-    <description>A plant grown from the Bo seed. It adds __HP and __MP.</description>
+    <description>A plant grown from the Bo seed. It adds 10 HP and 5 MP.</description>
+    <bonuses>
+        <hp>10</hp>
+        <mp>5</mp>
+    </bonuses>
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -562,7 +659,11 @@
 
   <item id="cop">
     <name>Co Plant</name>
-    <description>A plant grown from the Co seed. It adds __HP and __MP.</description>   
+    <description>A plant grown from the Co seed. It adds 10 HP and 5 MP.</description>
+    <bonuses>
+        <hp>10</hp>
+        <mp>5</mp>
+    </bonuses>   
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -571,7 +672,11 @@
 
   <item id="dop">
     <name>Do Plant</name>
-    <description>A plant grown from the Do seed. It adds __HP and __MP.</description>
+    <description>A plant grown from the Do seed. It adds 10 HP and 5 MP.</description>
+    <bonuses>
+        <hp>10</hp>
+        <mp>5</mp>
+    </bonuses>
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -580,7 +685,11 @@
 
   <item id="eop">
     <name>Eo Plant</name>
-    <description>A plant grown from the Eo seed. It adds __HP and __MP.</description>
+    <description>A plant grown from the Eo seed. It adds 10 HP and 5 MP.</description>
+    <bonuses>
+        <hp>10</hp>
+        <mp>5</mp>
+    </bonuses>
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -589,7 +698,11 @@
 
   <item id="fop">
     <name>Fo Plant</name>
-    <description>A plant grown from the Fo seed. It adds __HP and __MP.</description>   
+    <description>A plant grown from the Fo seed. It adds 10 HP and 5 MP.</description>
+    <bonuses>
+        <hp>10</hp>
+        <mp>5</mp>
+    </bonuses>   
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -598,7 +711,11 @@
 
   <item id="gop">
     <name>Go Plant</name>
-    <description>A plant grown from the Go seed. It adds __HP and __MP.</description>
+    <description>A plant grown from the Go seed. It adds 10 HP and 5 MP.</description>
+    <bonuses>
+        <hp>10</hp>
+        <mp>5</mp>
+    </bonuses>
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -607,7 +724,11 @@
 
   <item id="mop">
     <name>Mo Plant</name>
-    <description>A plant grown from the Mo seed. It adds __HP and __MP.</description>
+    <description>A plant grown from the Mo seed. It adds 10 HP and 5 MP.</description>
+    <bonuses>
+        <hp>10</hp>
+        <mp>5</mp>
+    </bonuses>
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -616,7 +737,11 @@
 
   <item id="iop">
     <name>Io Plant</name>
-    <description>A plant grown from the Io seed. It adds __HP and __MP.</description>   
+    <description>A plant grown from the Io seed. It adds 20 HP and 10 MP.</description>
+    <bonuses>
+        <hp>20</hp>
+        <mp>10</mp>
+    </bonuses>   
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -625,7 +750,11 @@
 
   <item id="jop">
     <name>Jo Plant</name>
-    <description>A plant grown from the Jo seed. It adds __HP and __MP.</description>   
+    <description>A plant grown from the Jo seed. It adds 10 HP and 5 MP.</description>
+    <bonuses>
+        <hp>10</hp>
+        <mp>5</mp>
+    </bonuses>   
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -634,7 +763,11 @@
 
   <item id="aom">
     <name>Monster Ao Plant</name>
-    <description>A plant grown from the Ao seed. Mutations caused it to look like this. It adds __HP and __MP.</description>
+    <description>A plant grown from the Ao seed. Mutations caused it to look like this. It adds 30 HP and 15 MP.</description>
+    <bonuses>
+        <hp>30</hp>
+        <mp>15</mp>
+    </bonuses>
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -643,7 +776,11 @@
 
   <item id="bom">
     <name>Monster Bo Plant</name>
-    <description>A plant grown from the Bo seed. Mutations caused it to look like this. It adds __HP and __MP.</description>
+    <description>A plant grown from the Bo seed. Mutations caused it to look like this. It adds 30 HP and 15 MP.</description>
+    <bonuses>
+        <hp>30</hp>
+        <mp>15</mp>
+    </bonuses>
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -652,7 +789,11 @@
 
   <item id="com">
     <name>Monster Co Plant</name>
-    <description>A plant grown from the Co seed. Mutations caused it to look like this. It adds __HP and __MP.</description>   
+    <description>A plant grown from the Co seed. Mutations caused it to look like this. It adds 30 HP and 15 MP.</description>
+    <bonuses>
+        <hp>30</hp>
+        <mp>15</mp>
+    </bonuses>   
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -661,7 +802,11 @@
 
   <item id="dom">
     <name>Monster Do Plant</name>
-    <description>A plant grown from the Do seed. Mutations caused it to look like this. It adds __HP and __MP.</description>
+    <description>A plant grown from the Do seed. Mutations caused it to look like this. It adds 30 HP and 15 MP.</description>
+    <bonuses>
+        <hp>30</hp>
+        <mp>15</mp>
+    </bonuses>
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -670,7 +815,11 @@
 
   <item id="eom">
     <name>Monster Eo Plant</name>
-    <description>A plant grown from the Eo seed. Mutations caused it to look like this. It adds __HP and __MP.</description>
+    <description>A plant grown from the Eo seed. Mutations caused it to look like this. It adds 30 HP and 15 MP.</description>
+    <bonuses>
+        <hp>30</hp>
+        <mp>15</mp>
+    </bonuses>
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -679,7 +828,11 @@
 
   <item id="fom">
     <name>Monster Fo Plant</name>
-    <description>A plant grown from the Fo seed. Mutations caused it to look like this. It adds __HP and __MP.</description>   
+    <description>A plant grown from the Fo seed. Mutations caused it to look like this. It adds 30 HP and 15 MP.</description>
+    <bonuses>
+        <hp>30</hp>
+        <mp>15</mp>
+    </bonuses>   
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -688,7 +841,11 @@
 
   <item id="gom">
     <name>Monster Go Plant</name>
-    <description>A plant grown from the Go seed. Mutations caused it to look like this. It adds __HP and __MP.</description>
+    <description>A plant grown from the Go seed. Mutations caused it to look like this. It adds 30 HP and 15 MP.</description>
+    <bonuses>
+        <hp>30</hp>
+        <mp>15</mp>
+    </bonuses>
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -697,7 +854,11 @@
 
   <item id="mom">
     <name>Monster Mo Plant</name>
-    <description>A plant grown from the Mo seed. Mutations caused it to look like this. It adds __HP and __MP.</description>
+    <description>A plant grown from the Mo seed. Mutations caused it to look like this. It adds 30 HP and 15 MP.</description>
+    <bonuses>
+        <hp>30</hp>
+        <mp>15</mp>
+    </bonuses>
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -706,7 +867,11 @@
 
   <item id="iom">
     <name>Monster Io Plant</name>
-    <description>A plant grown from the Io seed. It adds __HP and __MP.</description>   
+    <description>A plant grown from the Io seed. Mutations caused it to look like this. It adds 30 HP and 15 MP.</description>
+    <bonuses>
+        <hp>50</hp>
+        <mp>20</mp>
+    </bonuses>   
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
@@ -715,7 +880,11 @@
 
   <item id="jom">
     <name>Monster Jo Plant</name>
-    <description>A plant grown from the Jo seed. Mutations caused it to look like this. It adds __HP and __MP.</description>   
+    <description>A plant grown from the Jo seed. Mutations caused it to look like this. It adds 30 HP and 15 MP.</description>
+    <bonuses>
+        <hp>30</hp>
+        <mp>15</mp>
+    </bonuses>   
     <locations>
       <map decision="any" room="any" stash="any" />
       <store decision="any" />
