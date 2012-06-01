@@ -360,7 +360,7 @@ image bg suhit = "gfx/backgrounds/susahit.png"
 #-----------------------------------------------
 #DECLARE RIKU SPRITE IMAGES
 #-----------------------------------------------
-image r blush = "gfx/sprites/rflush.png"
+image r flush = "gfx/sprites/rflush.png"
 image r smirk = "gfx/sprites/rsmirk.png"
 image r think = "gfx/sprites/rthink.png"
 #image r fight = ""
@@ -371,7 +371,7 @@ image r neu = "gfx/sprites/rneu.png"
 image r sad = "gfx/sprites/rhurt.png"
 image r scare = "gfx/sprites/rscared.png"
 image r nerve = "gfx/sprites/rnerve.png"
-image r upset = "gfx/sprites/rno.png"
+image r no = "gfx/sprites/rno.png"
 
 #---------------------------------------------------
 #DECLARE ROMAN SPRITE IMAGES
@@ -623,8 +623,8 @@ label start:
                 jump Scene37
         "Jump to Scene40a to test Platformer.":
                 jump Scene40a
-        "Jump to Scene41 to test Gear puzzle.":
-                jump Scene41
+        "Jump to Scene 1 to test the characters":
+                jump Scene1
         "Jump to Scene46a to test another battle.":
                 jump Scene46a
         "Jump to Scene47 to test a third battle.":
@@ -637,9 +637,10 @@ label start:
 label test_stuff:
     pass
                 
-label Scene0:    
+label Scene0:
+    play music "sfx/mitsumata_bgm06_soft.ogg" fadeout 2.0
     scene bg blackscr
-    $show_main_ui()
+    
     
     # All of the below commented out effects have proven to work.     
     #show bg riroom at shaky with dissolve 
@@ -670,6 +671,7 @@ label Scene0:
     #play music "music/mitsumata1.mp3"
     #show bg rikureading
     show bg rikumom
+    $show_main_ui()
     "Once upon a time, there was a prince who was not in any way different from other fairy tale princes."
     
     "He was rich, handsome, popular, destined to marry a princess, spoiled---"
@@ -757,7 +759,9 @@ label Scene0:
     $hide_main_ui()
     with slow_fade    
     
+    
 label Scene1:  
+        play music "sfx/mitsumata_bgm01.ogg" 
         #scene bg mameat1
         scene bg dungeon 
         $show_main_ui()
@@ -866,14 +870,14 @@ label Scene1:
         boy "Think of this as fate. That sounds kind of nice, doesn’t it?"
         $hide_main_ui()
         show bg mameat
-        
-        $hide_main_ui()
+        play music "sfx/sad_theme.ogg" fadeout 2.0
+        $ renpy.pause (5.0)
         scene bg blackscr 
         with slow_dissolve
 # play sound Screaming, crunching, grinding, all sorts of unholy noises.
         $ renpy.pause(3.0)
         #show some kind of splash page here
-
+        stop music
 label Scene2:
         scene bg street
         $show_main_ui()
@@ -889,23 +893,24 @@ label Scene2:
         show bg street at shaky with dissolve
         sg "...HEY, Riku, wake the hell up!"
         #shake effect here
-        play music "mitsumata_rikus_theme.mp3" fadeout 1.0
+        play music "sfx/mitsumata_rikus_theme.mp3" fadeout 1.0
         
-        show r happy at left:
+        show r think at left:
             alpha 0.0
             time 0.75
             linear 1.0 alpha 1.0
         with dissolve
         r "Huh? Oh."
-        
+        show r neu at left
+        with dissolve
         "If you haven't figured it out yet, I'm Riku. Midorikawa Riku, age 17, third year in high school."
         "I don't believe in silly crap like blood-type personalities, and even if I did, I dunno mine. I don't believe in horoscopes, either. Superstition is for kids."
 
-        show r happy at left
         show st bneu at right
         with dissolve
         sb "You've been out of it lately, man...you okay?"
-        
+        show r think at left
+        with dissolve
         r "Yeah, just thinkin' too hard on school starting again, I guess."
 
         sb "Pff, yeah. No more free time at all. Even school breaks are gonna get eaten by studying."
@@ -916,12 +921,14 @@ label Scene2:
         sg "{size=17}What if I don't make it into Keio either, and I have to go to CRAM SCHOOL for a year before I can reapply? And then what if I fail AGAIN and my parents disown me for being so stupid?! I can't HANDLE THIS---{/size}"
 
         $renpy.pause(1.0)
-        show st gneu at right with dissolve
+        show st gneu at right 
+        show r no at left
+        with dissolve
         "What else do you expect 17 year olds to talk about?"
         "This year in high school is the worst. Once the second half of the year rolls around, no more free time, no more club activities, no more sports---no more fun, period. College exams will own our lives." 
         "Our high school has a pretty good reputation for getting kids into top-level schools, and they're hard-asses about that reputation."
         "Whatever. Bores the shit out of me."
-
+        show r grin at left with dissolve
         r "Heh. I heard that this one time, when the school’s practice grades weren't high enough, the principal expelled a bunch of people to raise the marks."
 
         show st gwor at right with dissolve
@@ -931,7 +938,7 @@ label Scene2:
 
         show st bmad at right with dissolve
         sb "Riku, don't be a jerk. Not everyone can fly by on sports scholarships like you."
-
+        show r nerve at left with dissolve
         r "Hey now, don't make it more than it is."
 
         show st gneu at right with dissolve
@@ -940,16 +947,16 @@ label Scene2:
         r "Yeah, yeah, maybe, but I'm not going to get into any top schools on just sports, and my grades aren't exactly amazing."
 
         sg "That's because you cut class to go drinking!"
-
+        show r grin at left with dissolve
         r "A man's gotta have priorities!"
 
         "{size=17}I guess it’s true. I don't have to worry much about grades since I'm kind of a sports legend around here, and even if our school did kick crappy third years out every exam time, I'd get to stay, cause, well...{/size}"
 
         show st bneu at right with dissolve
         sb "Now that I think about it, Riku, you never told us what you got on the first practice exam."
-
+        show r nerve at left with dissolve
         r "Pfft. Who cares. It was like the bottom quarter."
-
+        show st gwor at right with dissolve
         "Everyone winces. People with grades that low had better have a hook-up somewhere."
         "Yuck. I don't even want to think about...jobs." 
         "Having to sign my soul away to some company?" 
@@ -962,7 +969,7 @@ label Scene2:
         sg "Well, serves you right for cutting and refusing to study. That’s okay. When I’m a doctor, you can always be my personal cleaning boy."
 
         #play sound Laughter.
-
+        show r no at left with dissolve
         #Riku grumbles to himself.
         r "Grr."
 
@@ -976,12 +983,12 @@ label Scene2:
 
         "My watch beeps."
         #play sound beep
-
+        show r flush at left with dissolve
         r "...shit."
         
         show st bneu at right with dissolve
         sb "Aw, you gotta head home?"
-        
+        show r neu at left with dissolve
         "I grab my bag and stand, yawning. Just one more day of vacation left, and then it's 48 hours a week of the worst school hell ever."
         "Fuuuuuck. The principal might as well just castrate me now and get it over with."
 
@@ -995,7 +1002,7 @@ label Scene2:
 
         "Those people barking loudly into the phone? My parents. People say I’m lucky, adopted into a rich family of doctors, but they don’t have to live with ‘em."
 
-        show r upset:
+        show r no:
             alpha 0.0
             time 2.0
             alpha 1.0
@@ -1006,12 +1013,13 @@ label Scene2:
         #play sound Mumbled speaking.
 
         r "I was already on my way home! Honest! I'm like a minute away!"
+        show r neu at left with dissolve
 
         "I wave quickly to my friends, mouthing a good-bye. Ugh. No other seventeen year old in the universe has to be home this early. So fucking unfair."
         
 label Scene3:
         #---Flashback---
-        play music "comical.mp3" fadeout 1.0
+        play music "sfx/comical.mp3" fadeout 1.0
         scene bg blackscr with fade
         
         #scene bg rikuyouth
@@ -1053,11 +1061,11 @@ label Scene3:
 # --------
 
 label Scene4:
-        play music "shop_theme.mp3" fadeout 1.0
+        play music "sfx/shop_theme.mp3" fadeout 1.0
         scene bg blackscr
         
         scene bg street 
-        show r happy
+        show r think with dissolve
         $show_main_ui()
         with fade
         
@@ -1067,26 +1075,24 @@ label Scene4:
 
         "I make it back to my street pretty fast, running full speed from the beach. My parents won't get on my ass too much for it. They'll actually believe that I was close to home."
 
-        show r happy with dissolve
-        play music "mitsumata_bgm04.ogg" fadeout 1.5
+        play music "sfx/mitsumata_bgm04.ogg" fadeout 1.5
         r "Mm. Kind of cold for spring..."
         #play sound wind
-
+        show r no with dissolve
         "Someone's following me. They're being unnaturally discreet about it, too...usually the idiots who want to—well, try to—pick on me don't make much of a show of hiding very well." 
         "Guess they figure it'd be like hiding from the fishbowl when you're trying to catch one of the fish."
 
         "Heh. My stalkers getting smarter? That'll be the day. Still, if I start a fight at this time of evening on my own street, my parents will flip a nut."
-
-        hide r happy with dissolve
+        
         #play sound Door unlocking.
         #put some kind of door opening effect here to lead into bg rhouse
-        show bg riroom with dissolve
-        show r happy with dissolve
-        play music "library.mp3" fadeout 1.0
+        show bg blackscr with dissolve
+        play music "sfx/library.mp3" fadeout 2.0
+        show r neu with dissolve
         r "I’m home."
 
         pa "Riku—in here, please."
-
+        show r upset with dissolve
         #show r upset with dissolve
         "Aw fuck."
 
@@ -1094,7 +1100,7 @@ label Scene4:
 
         # show pa
         pa "Do you understand why we give you a curfew?"
-
+        show r no with dissolve
         r "Yeah, Pop."
 
         "There's no point arguing about it anymore. They set it when I was like six and have never looked back."
@@ -1104,7 +1110,7 @@ label Scene4:
         r "Night is when the rapists and murderers come out."
 
         pa "Riku."
-
+        show r nerve with dissolve
         #Riku makes a nasty, rude, scoffing sound.
         r "...More violent crimes happen at night."
 
@@ -1119,7 +1125,7 @@ label Scene4:
         "It's a damn form letter by this point."
 
         pa "{size=17}One day, when I get you a job at the company, you're going to see the benefits of going to bed early and waking up early. Life isn't all about friends, Riku. You’ll have a wife and children who rely on you.{/size}"
-
+        show r no with dissolve
         r "Sorry again, Pop. Am I free to go?"
 
         "He sighs, but that means I'm free."
@@ -1130,6 +1136,7 @@ label Scene4:
         
         
 label flashback:
+    play music "sfx/mitsumata_musicbox.ogg" fadeout 2.0
     scene bg blackscr with fade
     show bg dream with slow_fade
     #put some kind of wispy cloudy effect here
@@ -1163,8 +1170,6 @@ label Scene5:
     #Shaking screen effect here
     r "AAAAAAAAAAAAAAAAAAAAAGH!"
     
-    show bg riroom with slow_dissolve
-    
     "My hand goes out and smashes the alarm clock to bits. Literal bits—it’s scrap metal now. Serves the fucking thing right for scaring the shit out of me."
     
     "I check my watch. Eleven in the AM. Barely slept and woke up late at the same time. Fuckin' great day this is gonna be."
@@ -1188,8 +1193,9 @@ label Scene5:
     "Alcohol’s just what I need."
     
     show bg street with dissolve
-    #show bg bar with dissolve
-    $ renpy.pause(1.5)
+    play music "sfx/shop_theme.mp3"
+    $ renpy.pause (1.5)
+    
     "I like this place, for a few reasons. One, it’s always got idiots willing to make a bet with me, and two, it’s off the main road, so there aren’t any annoying people nagging at me for underage drinking."
     
     "I wave to my friends. They’re crowded around a table with some large guys, shot glasses already set up."
@@ -1206,7 +1212,7 @@ label Scene5:
     
     "I take a seat and order a burger, rare. The food here's not great, but there's only so many ways you can do a rare burger wrong, mostly by actually trying to cook it."
     
-    show r happy with dissolve
+    show r grin with dissolve
     r "Are you here for laughs, or to lose a bet? If you're not a bunch of princesses, why don't we go straight for the good stuff? Onigoroshi sound good?"
     
     "{size=17}Onigoroshi is practically like drinking rubbing alcohol. They don't call it “the demon killer” for nothing; you make it through a few shots and that shit'll put hair on your chest or make your nuts drop, or some other manly shit.{/size}"
@@ -1218,10 +1224,10 @@ label Scene5:
     "Ha ha ha. I totally haven’t heard that one before. The big fucking assholes are high-fiving each other like they fucking won a Pulitzer for that cheap line."
     
     "Taking their money will be a pleasure."
-    
+    hide r grin with dissolve
     $hide_main_ui()
-    #scene bg barcg with fade
-    $renpy.pause(1.0)
+    show bg rikubar with dissolve
+    $ renpy.pause(1.5)
     $show_main_ui()
     with dissolve
     
@@ -1269,7 +1275,7 @@ label Scene5:
     
     "I give my friend his share of the money and stuff the rest in my pocket. Didn’t even get a hangover after nine shots."
     
-    show bg riroom with slow_dissolve
+    show bg blackscr with slow_dissolve
     "Annoyed. I’m so annoyed I don’t even realize I’ve headed home early."
     
     pa "Hey, Riku, can you come here for a moment?"
@@ -1309,17 +1315,18 @@ label Scene5:
     r "Whoa, this is the latest tech! It’s awesome! Thanks!"
     
     "I guess it’s not always bad to be the kid of two doctors."
-
+    stop music
 label Scene6:
     scene bg blackscr
-    scene bg dream 
     with slow_fade
+    show bg dream
+    with slow_fade
+    $ renpy.pause (1.0)
     #play sound laughter
     #time 4.0
     #stop sound
     show bg blackscr with slow_dissolve
     
-    show bg riroom
     $show_main_ui()
     with dissolve
     
@@ -1331,7 +1338,7 @@ label Scene6:
     "I know I can run fast, but I like to walk with friends sometimes. Now I have something to do on the way there~"
     
     show bg street with dissolve
-    $renpy.pause(1.5)
+    $renpy.pause(2.0)
     
     show dg neu at left
     show db neu at right
@@ -1349,26 +1356,29 @@ label Scene6:
     
     "They’re following me. I don’t want them to know where my friend lives."
     
-    show bg backalley
+    show bg backalley with dissolve
     "I walk down an alley that’s on the way, instead. I’ll probably be late for school at this rate."
     
-    show r happy:
+    show r grin:
         alpha 0.0
         time 0.75
         linear 0.75
         alpha 1.0
     with dissolve    
     "I turn around and grin."
+    hide r grin with dissolve
     
     show dg neu at left
     show db neu at right
     with dissolve
+    
     db "Heh. Just like they said, yeah?"
     
     dg "HQ’s information is top-notch, after all."
     
     "Huh."
-    
+    hide dg neu with dissolve
+    show r no with dissolve
     r "If you guys have some business with me, let’s get it over with. I have class."
     
     #play sound Knives clicking
