@@ -95,7 +95,7 @@ init python:
       if button == "exit":
         break
       else:
-        renpy.hide("bg_mini")
+        #renpy.hide("bg_mini")
         
         set_description(GAME_DESCRIPTIONS[button])
         
@@ -212,7 +212,8 @@ init python:
           ui.text("{size=-2}    +" + str(bonus_row[i][1]) + " " + bonus_row[i][0] + "{/size}") 
         ui.close()
         
-        show_invisible_button("full")
+        show_invisible_button("mini")
+        renpy.pause(0.5)
       
         update_stats()
         update_minigame_ui(HP, MP)
