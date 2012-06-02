@@ -174,9 +174,9 @@
     <name>Church of the Acts Signet</name>
     <description>A signet that represents the Church of the Acts, the major religion across the world, with headquarters stationed in rural Japan. Though it is most popular in America and Europe, it is rapidly picking up speed in Asia.</description>
     <locations>
-      <map decision="10" room="any" stash="any" />
+      <map decision="10" room="suroom" stash="tv" />
       <store decision="28" />
-      <map decision="21" room="any" stash="any" />
+      <map decision="21" room="suroom" stash="drawer" />
       <store decision="31" />
     </locations>
   </item>
@@ -185,9 +185,9 @@
     <name>Gold Coin</name>
     <description>A coin from the Makai. It's greened from its age, and it looks to have some sort of jewel in the center of the gold.</description>
     <locations>
-      <map decision="4" room="any" stash="any" />
+      <map decision="4" room="soroom" stash="paperbag" />
       <store decision="13" />
-      <map decision="20" room="any" stash="any" />
+      <map decision="20" room="roroom" stash="plant2" />
       <store decision="5" />
     </locations>
   </item>
@@ -226,9 +226,9 @@
     <name>Anti-Majin Seals</name>
     <description>These seals were crafted 2000 years ago as a way to prevent Majin energy from penetrating an area. It severely weakens any Majin who manages to be surrounded by them, and it also prevents things like Tracking Seeds from working. The protective seals the Japanese use today are less effective versions of these ancient seals.</description>
     <locations>
-      <map decision="7" room="any" stash="any" />
+      <map decision="7" room="library" stash="books3" />
       <store decision="27" />
-      <map decision="8" room="any" stash="any" />
+      <map decision="8" room="library" stash="any" />
       <store decision="23" />
     </locations>
   </item>
@@ -240,9 +240,9 @@
         <search>1</search>
     </bonuses>
     <locations>
-      <map decision="24" room="any" stash="any" />
+      <map decision="24" room="soroom" stash="flower_cactus" />
       <store decision="14" />
-      <map decision="22" room="any" stash="any" />
+      <map decision="22" room="soroom" stash="flower_white" />
       <store decision="10" />
     </locations>
   </item>
@@ -254,9 +254,9 @@
         <hp>75</hp>
     </bonuses>
     <locations>
-      <map decision="27" room="any" stash="any" />
+      <map decision="27" room="soroom" stash="vines" />
       <store decision="15" />
-      <map decision="9" room="any" stash="any" />
+      <map decision="9" room="roroom" stash="blanket" />
       <store decision="22" />
     </locations>
   </item>
@@ -269,9 +269,9 @@
         <search>1</search>
     </bonuses>
     <locations>
-      <map decision="28" room="any" stash="any" />
+      <map decision="28" room="hall1" stash="any" />
       <store decision="21" />
-      <map decision="15" room="any" stash="any" />
+      <map decision="15" room="hall2" stash="any" />
       <store decision="16" />
     </locations>
   </item>
@@ -283,9 +283,9 @@
         <hp>100</hp>
     </bonuses>    
     <locations>
-      <map decision="17" room="any" stash="any" />
+      <map decision="17" room="kitchen" stash="any" />
       <store decision="25" />
-      <map decision="26" room="any" stash="any" />
+      <map decision="26" room="library" stash="any" />
       <store decision="9" />
     </locations>
   </item>
@@ -299,9 +299,9 @@
         <search>1</search>
     </bonuses>
     <locations>
-      <map decision="29" room="any" stash="any" />
+      <map decision="29" room="kitchen" stash="any" />
       <store decision="18" />
-      <map decision="5" room="any" stash="any" />
+      <map decision="5" room="hall1" stash="any" />
       <store decision="11" />
     </locations>
   </item>
@@ -352,9 +352,9 @@
     <name>Brand New Kimono</name>
     <description>Bought for Soume at the store.</description>
     <locations>
-      <map decision="29" room="any" stash="any" />
+      <map decision="29" room="soroom" stash="clothes" />
       <store decision="7" />
-      <map decision="13" room="any" stash="any" />
+      <map decision="13" room="soroom" stash="clothes" />
       <store decision="17" />
     </locations>
   </item>
@@ -366,9 +366,9 @@
         <mp>5</mp>
     </bonuses>
     <locations>
-      <map decision="8" room="any" stash="any" />
+      <map decision="8" room="library" stash="any" />
       <store decision="11" />
-      <map decision="31" room="any" stash="any" />
+      <map decision="31" room="kitchen" stash="any" />
       <store decision="9" />
     </locations>
   </item>
@@ -380,9 +380,9 @@
         <mp>5</mp>
     </bonuses>
     <locations>
-      <map decision="17" room="any" stash="any" />
+      <map decision="17" room="riroom" stash="any" />
       <store decision="29" />
-      <map decision="4" room="any" stash="any" />
+      <map decision="4" room="roroom" stash="any" />
       <store decision="17" />
     </locations>
   </item>
@@ -394,9 +394,9 @@
         <mp>5</mp>
     </bonuses>   
     <locations>
-      <map decision="11" room="any" stash="any" />
+      <map decision="11" room="soroom" stash="any" />
       <store decision="27" />
-      <map decision="21" room="any" stash="any" />
+      <map decision="21" room="suroom" stash="any" />
       <store decision="10" />
     </locations>
   </item>
@@ -408,9 +408,9 @@
         <mp>5</mp>
     </bonuses>
     <locations>
-      <map decision="28" room="any" stash="any" />
+      <map decision="28" room="hall2" stash="any" />
       <store decision="12" />
-      <map decision="24" room="any" stash="any" />
+      <map decision="24" room="hall1" stash="any" />
       <store decision="8" />
     </locations>
   </item>
@@ -422,9 +422,9 @@
         <hp>10</hp>
     </bonuses>
     <locations>
-      <map decision="11" room="any" stash="any" />
+      <map decision="11" room="riroom" stash="any" />
       <store decision="31" />
-      <map decision="27" room="any" stash="any" />
+      <map decision="27" room="roroom" stash="any" />
       <store decision="26" />
     </locations>
   </item>
@@ -436,9 +436,9 @@
         <mp>5</mp>
     </bonuses>
     <locations>
-      <map decision="3" room="any" stash="any" />
+      <map decision="3" room="soroom" stash="any" />
       <store decision="22" />
-      <map decision="10" room="any" stash="any" />
+      <map decision="10" room="suroom" stash="any" />
       <store decision="20" />
     </locations>
   </item>
@@ -450,9 +450,9 @@
         <mp>5</mp>
     </bonuses>
     <locations>
-      <map decision="23" room="any" stash="any" />
+      <map decision="23" room="library" stash="any" />
       <store decision="5" />
-      <map decision="17" room="any" stash="any" />
+      <map decision="17" room="kitchen" stash="any" />
       <store decision="30" />
     </locations>
   </item>
@@ -464,9 +464,9 @@
         <mp>5</mp>
     </bonuses>
     <locations>
-      <map decision="4" room="any" stash="any" />
+      <map decision="4" room="hall1" stash="any" />
       <store decision="21" />
-      <map decision="31" room="any" stash="any" />
+      <map decision="31" room="hall2" stash="any" />
       <store decision="13" />
     </locations>
   </item>
@@ -475,9 +475,9 @@
     <name>Gardening Set</name>
     <description>A set of gardening tools put together by Soume. There's some soil, a small shovel, a pot and some seeds.</description>
     <locations>
-      <map decision="20" room="any" stash="any" />
+      <map decision="20" room="roroom" stash="hat" />
       <store decision="25" />
-      <map decision="15" room="any" stash="any" />
+      <map decision="15" room="suroom" stash="poster1" />
       <store decision="14" />
     </locations>
   </item>
@@ -486,9 +486,9 @@
     <name>Cellular Phone</name>
     <description>A state of the art cellular phone with all the bells and whistles.</description>
     <locations>
-      <map decision="5" room="any" stash="any" />
+      <map decision="5" room="riroom" stash="blanket" />
       <store decision="18" />
-      <map decision="13" room="any" stash="any" />
+      <map decision="13" room="riroom" stash="trophy3" />
       <store decision="28" />
     </locations>
   </item>
@@ -497,9 +497,9 @@
     <name>State of the Art Video Game</name>
     <description>The new video game system that recently came out in Japan. Susa doesn't like it at all, and sticks with the old video game system.</description>
     <locations>
-      <map decision="29" room="any" stash="any" />
+      <map decision="29" room="suroom" stash="console" />
       <store decision="19" />
-      <map decision="26" room="any" stash="any" />
+      <map decision="26" room="suroom" stash="blanket" />
       <store decision="7" />
     </locations>
   </item>
@@ -511,9 +511,9 @@
         <hp>100</hp>
     </bonuses>
     <locations>
-      <map decision="7" room="any" stash="any" />
+      <map decision="7" room="riroom" stash="any" />
       <store decision="24" />
-      <map decision="27" room="any" stash="any" />
+      <map decision="27" room="soroom" stash="any" />
       <store decision="6" />
     </locations>
   </item>
@@ -525,9 +525,9 @@
         <mp>80</mp>
     </bonuses>   
     <locations>
-      <map decision="22" room="any" stash="any" />
+      <map decision="22" room="suroom" stash="any" />
       <store decision="15" />
-      <map decision="4" room="any" stash="any" />
+      <map decision="4" room="roroom" stash="any" />
       <store decision="23" />
     </locations>
   </item>
@@ -638,10 +638,7 @@
         <hp>10</hp>
         <mp>5</mp>
     </bonuses>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
+
   </item>
 
   <item id="bop">
@@ -651,10 +648,7 @@
         <hp>10</hp>
         <mp>5</mp>
     </bonuses>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
+
   </item>
 
   <item id="cop">
@@ -664,10 +658,7 @@
         <hp>10</hp>
         <mp>5</mp>
     </bonuses>   
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
+    
   </item>
 
   <item id="dop">
@@ -677,10 +668,7 @@
         <hp>10</hp>
         <mp>5</mp>
     </bonuses>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
+    
   </item>
 
   <item id="eop">
@@ -690,10 +678,7 @@
         <hp>10</hp>
         <mp>5</mp>
     </bonuses>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
+   
   </item>
 
   <item id="fop">
@@ -703,10 +688,6 @@
         <hp>10</hp>
         <mp>5</mp>
     </bonuses>   
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
   </item>
 
   <item id="gop">
@@ -716,10 +697,6 @@
         <hp>10</hp>
         <mp>5</mp>
     </bonuses>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
   </item>
 
   <item id="mop">
@@ -729,10 +706,6 @@
         <hp>10</hp>
         <mp>5</mp>
     </bonuses>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
   </item>
 
   <item id="iop">
@@ -742,10 +715,6 @@
         <hp>20</hp>
         <mp>10</mp>
     </bonuses>   
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
   </item>
 
   <item id="jop">
@@ -755,10 +724,7 @@
         <hp>10</hp>
         <mp>5</mp>
     </bonuses>   
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
+    
   </item>
 
   <item id="aom">
@@ -768,10 +734,6 @@
         <hp>30</hp>
         <mp>15</mp>
     </bonuses>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
   </item>
 
   <item id="bom">
@@ -781,10 +743,6 @@
         <hp>30</hp>
         <mp>15</mp>
     </bonuses>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
   </item>
 
   <item id="com">
@@ -794,10 +752,7 @@
         <hp>30</hp>
         <mp>15</mp>
     </bonuses>   
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
+    
   </item>
 
   <item id="dom">
@@ -807,10 +762,7 @@
         <hp>30</hp>
         <mp>15</mp>
     </bonuses>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
+    
   </item>
 
   <item id="eom">
@@ -820,10 +772,6 @@
         <hp>30</hp>
         <mp>15</mp>
     </bonuses>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
   </item>
 
   <item id="fom">
@@ -833,10 +781,6 @@
         <hp>30</hp>
         <mp>15</mp>
     </bonuses>   
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
   </item>
 
   <item id="gom">
@@ -846,10 +790,7 @@
         <hp>30</hp>
         <mp>15</mp>
     </bonuses>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
+    
   </item>
 
   <item id="mom">
@@ -859,10 +800,6 @@
         <hp>30</hp>
         <mp>15</mp>
     </bonuses>
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
   </item>
 
   <item id="iom">
@@ -872,10 +809,6 @@
         <hp>50</hp>
         <mp>20</mp>
     </bonuses>   
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
   </item>
 
   <item id="jom">
@@ -885,10 +818,6 @@
         <hp>30</hp>
         <mp>15</mp>
     </bonuses>   
-    <locations>
-      <map decision="any" room="any" stash="any" />
-      <store decision="any" />
-    </locations>
   </item>
   
 </items>
