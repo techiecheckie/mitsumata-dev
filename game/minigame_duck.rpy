@@ -63,6 +63,7 @@ init python:
     HUNT_GAME_STATE_COUNTDOWN = "hunt_countdown"
     HUNT_GAME_STATE_PLAY      = "hunt_play"
     HUNT_GAME_STATE_END       = "hunt_end"
+    HUNT_GAME_STATE_PAUSE     = "hunt_pause"
 
     # bird states.
     BIRD_STATE_DEAD   = "dead"
@@ -181,7 +182,7 @@ init python:
 
 
             # set up entities.
-            #self.background         = None
+#            self.background         = None
             self.player             = None
             self.booms              = []
             self.easy_birds         = []
@@ -191,8 +192,9 @@ init python:
             self.start_screen_hud   = None
             self.stop_screen_hud    = None
             self.time_remaining_hud = None
+            self.instructions_hud   = None
 
-            #self.create_background()
+#            self.create_background()
             self.create_player()
             self.create_birds()
             self.create_boom()
@@ -202,9 +204,9 @@ init python:
             super( DuckHunt, self ).quit()
             show_mouse()
 
-        def create_background( self ):
-            self.background             = GameObject()
-            self.background["renderer"] = GameRenderer( GameImage( "gfx/duck_hunt/background.png" ) )
+#        def create_background( self ):
+#            self.background             = GameObject()
+#            self.background["renderer"] = GameRenderer( GameImage( "gfx/duck_hunt/background.png" ) )
 
         def create_player( self ):
             self.player             = GameObject( "player" )
@@ -331,6 +333,10 @@ init python:
             self.stop_screen_hud             = GameObject()
             self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/duck_hunt/stop_screen.png" ) )
             self.stop_screen_hud["transform"].set_position( 148, 50 )
+            
+            self.instructions_hud = GameObject()
+            self.instructions_hud["renderer"] = GameRenderer( GameImage( "gfx/duck_hunt/instructions.png" ) )
+            self.instructions_hud["transform"].set_position( 148, 50 )
 
             base_score             = GameObject()
             base_score["renderer"] = GameRenderer( GameText( self.get_base_score, Color( 255, 255, 255, 255 ) ) )
@@ -495,11 +501,15 @@ init python:
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
-            #self.background["renderer"].render( blitter, clip_rect, world_transform )
+#            self.background["renderer"].render( blitter, clip_rect, world_transform )
 
             if self.state == HUNT_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
-            elif self.state == HUNT_GAME_STATE_PLAY:
+            elif self.state == HUNT_GAME_STATE_END:
+                self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
+            elif self.state == HUNT_GAME_STATE_PAUSE:
+                self.instructions_hud["renderer"].render( blitter, clip_rect, world_transform )
+            else:
                 for bird in itertools.chain( self.easy_birds,
                                              self.medium_birds,
                                              self.hard_birds ):
@@ -511,16 +521,14 @@ init python:
                 self.time_remaining_hud["renderer"].render( blitter, clip_rect, world_transform )
                 self.score_hud["renderer"].render( blitter, clip_rect, world_transform )
 
-            elif self.state == HUNT_GAME_STATE_END:
-                self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
-
             self.player["renderer"].render( blitter, clip_rect, world_transform )
-
             self.top_border["renderer"].render( blitter, clip_rect, world_transform )
             self.bottom_border["renderer"].render( blitter, clip_rect, world_transform )
 
         def update( self, delta_sec ):
             if self.state == HUNT_GAME_STATE_COUNTDOWN:
+                pass
+            elif self.state == HUNT_GAME_STATE_PAUSE:
                 pass
             elif self.state == HUNT_GAME_STATE_PLAY:
                 # update automated parameters.
@@ -609,7 +617,12 @@ init python:
                     self.compute_accuracy_bonus()
                     self.total_score = self.base_score + self.accuracy_bonus
 
-#        def on_key_down( self, key ):
+        def on_key_down( self, key ):
+            if self.state == HUNT_GAME_STATE_PLAY or self.state == HUNT_GAME_STATE_BEGIN:
+                if key == pygame.K_h:
+                    self.state = HUNT_GAME_STATE_PAUSE
+            elif self.state == HUNT_GAME_STATE_PAUSE:
+                self.state = HUNT_GAME_STATE_PLAY
 #            if key == pygame.K_ESCAPE:
 #                self.quit()
 
@@ -644,7 +657,7 @@ init python:
 
         def on_mouse_up( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
-                if self.state == HUNT_GAME_STATE_BEGIN:
+                if self.state == HUNT_GAME_STATE_BEGIN or self.state == HUNT_GAME_STATE_PAUSE:
                     self.state = HUNT_GAME_STATE_PLAY
                 elif self.state == HUNT_GAME_STATE_END:
                     self.quit()
