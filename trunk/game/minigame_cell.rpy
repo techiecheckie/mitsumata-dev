@@ -54,6 +54,7 @@ init python:
     CELLS_GAME_STATE_BEGIN = "cells_begin"
     CELLS_GAME_STATE_PLAY  = "cells_play"
     CELLS_GAME_STATE_END   = "cells_end"
+    CELLS_GAME_STATE_PAUSE = "cells_pause"
 
     # random chance a healthy cell will become infected.
     RANDOM_INFECTION_RATE      = 0.001
@@ -362,6 +363,8 @@ init python:
             self.start_screen_hud = None
             self.stop_screen_hud  = None
             self.elapsed_time_hud = None
+            self.instructions     = None
+            self.instructions_index = 0
 
             #self.create_dish()
             self.create_cells()
@@ -433,6 +436,14 @@ init python:
             self.stop_screen_hud             = GameObject()
             self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/cells/stop_screen.png" ) )
             self.stop_screen_hud["transform"].set_position( 148, 50 )
+            
+            instructions_1 = GameObject()
+            instructions_1["renderer"] = GameRenderer( GameImage( "gfx/cells/instructions_1.png" ) )
+            instructions_1["transform"].set_position( 148, 50 )
+            instructions_2 = GameObject()
+            instructions_2["renderer"] = GameRenderer( GameImage( "gfx/cells/instructions_2.png" ) )
+            instructions_2["transform"].set_position( 148, 50 )
+            self.instructions = [instructions_1, instructions_2]
 
             base_score             = GameObject()
             base_score["renderer"] = GameRenderer( GameText( self.get_base_score, Color( 255, 255, 255, 255 ) ) )
@@ -576,7 +587,11 @@ init python:
 
             if self.state == CELLS_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
-            elif self.state == CELLS_GAME_STATE_PLAY:
+            elif self.state == CELLS_GAME_STATE_END:
+                self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
+            elif self.state == CELLS_GAME_STATE_PAUSE:
+                self.instructions[self.instructions_index]["renderer"].render( blitter, clip_rect, world_transform )
+            else:
                 cell_transform = GameTransform( world_transform.x +
                                                 #self.dish["transform"].x +
                                                 GRID_OFFSET_X,
@@ -587,9 +602,6 @@ init python:
                     cell["renderer"].render( blitter, clip_rect, cell_transform )
 
                 self.elapsed_time_hud["renderer"].render( blitter, clip_rect, world_transform )
-
-            elif self.state == CELLS_GAME_STATE_END:
-                self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
 
         def update( self, delta_sec ):
             if self.state == CELLS_GAME_STATE_PLAY:
@@ -627,7 +639,9 @@ init python:
                         self.compute_scores()
                         self.state = CELLS_GAME_STATE_END
 
-#        def on_key_down( self, key ):
+        def on_key_down( self, key ):
+            if key == pygame.K_h:
+                self.state = CELLS_GAME_STATE_PAUSE
 #            if key == pygame.K_ESCAPE:
 #                self.quit()
 
@@ -637,6 +651,12 @@ init python:
                     self.state = CELLS_GAME_STATE_PLAY
                 elif self.state == CELLS_GAME_STATE_END:
                     self.quit()
+                elif self.state == CELLS_GAME_STATE_PAUSE:
+                    if self.instructions_index < len(self.instructions)-1:
+                        self.instructions_index += 1
+                    else:
+                        self.instructions_index = 0
+                        self.state = CELLS_GAME_STATE_PLAY
 
         def on_mouse_down( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
