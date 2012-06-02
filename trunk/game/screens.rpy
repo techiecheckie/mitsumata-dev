@@ -354,11 +354,11 @@ screen preferences:
     tag menu
 
     imagemap:
-        ground         "gfx/menus/options.jpg"
-        idle           "gfx/menus/options.jpg"
-        hover          "gfx/menus/options_hover.jpg"
-        selected_idle  "gfx/menus/options_selected_idle.jpg"
-        selected_hover "gfx/menus/options_selected_hover.jpg"
+        ground         "gfx/menus/options_selected_idle.jpg"
+        idle           "gfx/menus/options_selected_idle.jpg"
+        hover          "gfx/menus/options_selected_hover.jpg"
+        selected_idle  "gfx/menus/options.jpg"
+        selected_hover "gfx/menus/options_hover.jpg"
        
         hotspot (830,  70,  55, 55) action Return()   
         hotspot (274, 250, 355, 60) action Preference("music mute", "toggle")
@@ -505,19 +505,19 @@ init -2 python:
 #        hotspot (522, 506, 722, 554) action Quit(confirm=False)   
 
 # A very simple placeholder for the bonus menu.
-screen bonus:
-    # This ensures that any other menu screen is replaced.
-    tag menu
-    
-    add "gfx/menus/quit.jpg"
-    
-    frame:
-        has vbox
-        
-        if persistent.bonus["cg_gallery"][0] == True:
-          textbutton _("CG Gallery") action ShowMenu("bonus")
-        if persistent.bonus["music_gallery"][0] == True:
-          textbutton _("Music Gallery") action ShowMenu("bonus")
-        if persistent.bonus["trophy_room"][0] == True:
-          textbutton _("Trophy Room") action ShowMenu("bonus")
-        textbutton _("Return") action Return()
+#screen bonus:
+#    # This ensures that any other menu screen is replaced.
+#    tag menu
+#    
+#    add "gfx/menus/quit.jpg"
+#    
+#    frame:
+#        has vbox
+#        
+#        if persistent.bonus["cg_gallery"][0] == True:
+#          textbutton _("CG Gallery") action ShowMenu("bonus")
+#        if persistent.bonus["music_gallery"][0] == True:
+#          textbutton _("Music Gallery") action ShowMenu("bonus")
+#        if persistent.bonus["trophy_room"][0] == True:
+#          textbutton _("Trophy Room") action ShowMenu("bonus")
+#        textbutton _("Return") action Return()
