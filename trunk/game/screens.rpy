@@ -63,9 +63,11 @@ screen say:
 # http://www.renpy.org/doc/html/screen_special.html#choice
 
 screen choice:
+    frame:
+        background "gfx/transparentblack.png"
 
     window: 
-        style "menu_window"        
+        style "menu_window"
         xalign 0.5
         yalign 0.5
         
