@@ -1002,10 +1002,7 @@ label Scene2:
 
         "Those people barking loudly into the phone? My parents. People say I’m lucky, adopted into a rich family of doctors, but they don’t have to live with ‘em."
 
-        show r no:
-            alpha 0.0
-            time 2.0
-            alpha 1.0
+        show r no at left with dissolve
         r "No, I get it---"
         
         r "Awww, not the TV..."
@@ -1024,7 +1021,7 @@ label Scene3:
         
         #scene bg rikuyouth
         $show_main_ui()
-        with slow_fade
+        with slow_dissolve
 
         $ renpy.pause(2.0)
         r "How come I can't do sports this year? I'm good at them, the teacher SAYS!"
@@ -1067,7 +1064,7 @@ label Scene4:
         scene bg street 
         show r think with dissolve
         $show_main_ui()
-        with fade
+        with dissolve
         
         "My parents didn't let me have a new door for three whole months cause of that."
 
@@ -1138,10 +1135,10 @@ label Scene4:
 label flashback:
     play music "sfx/mitsumata_musicbox.ogg" fadeout 2.0
     scene bg blackscr with fade
-    show bg dream with slow_fade
+    show bg dream with slow_dissolve
     #put some kind of wispy cloudy effect here
     $show_main_ui()
-    with fade
+    with dissolve
     
     "She's there, again, in my dreams."
     #play sound wind
@@ -1377,22 +1374,23 @@ label Scene6:
     dg "HQ’s information is top-notch, after all."
     
     "Huh."
-    hide dg neu with dissolve
-    show r no with dissolve
+    hide db neu with dissolve
+    show r no at right with dissolve
     r "If you guys have some business with me, let’s get it over with. I have class."
     
     #play sound Knives clicking
     dg "Yeah kid, I'd say we had some business withya."
-    
+    show r flush at right with dissolve
     #show r surp
     r "Whoa, is all that really necessary? I’m just one small kid..."
     
     "Gotta play up your strengths, right?"
     
     dg "Midorikawa Riku, right? It’s easy to get your guard down around a short thing like you. I woulda been fooled if I didn’t already know what we were dealing with."
-    
+    hide dg neu with dissolve
+    show db neu with dissolve
     db "We came extra prepared cause of the special information we got on you, kiddo."
-    
+    show r grin with dissolve
     r "Oh, really."
     
     "Who are these people? They’re a little smarter than the usual punk. A new gang, maybe."
@@ -1400,9 +1398,10 @@ label Scene6:
     db "You should come with us quietly if you want this to go easy."
     
     r "Yeah, or you could just go fuck yourselves."
-    
+    hide db neu with dissolve
+    show dg grin with dissolve
     dg "Nasty mouth, just like they said."
-    
+    show r no with dissolve
     "I really hate them talking like I’m some top-secret science experiment. It’s creepy."
     
     "They’re coming, splitting up to take me from both sides."
@@ -1428,19 +1427,19 @@ label Scene6:
     "I kick the knife away from one and get the other in the gut at the same time. Usually that’s enough to discourage people, but these guys are dedicated."
     
     "I’d appreciate the effort if I had the spare time."
-    
+    show r mad with dissolve
     r "HAAAAA!"
     
     "The one who still has a knife goes down hard. He’s not getting up."
     
     dg "Shit! You were still this tough..."
-    
+    show r grin with dissolve
     r "You wanna end up like your friend?"
     
     dg "N-no! I’m outta here!"
     
     "Slightly more brains, way less guts."
-    
+    show r think with dissolve
     "One of the dropped knives is by my feet. It’s pretty fancy; looks like there’s actual gold and silver laced into the handle in some sort of emblem shape..."
 
     menu:
@@ -1453,13 +1452,16 @@ label Scene6:
 label getknife:
         #Message box should go here, too...
         $show_message("You picked up the knife.", "medium")
+        $renpy.show("pda_button", at_list=[blink(2.0, 0.0), Position(xpos=842, ypos=651), Transform(anchor=(0.0,0.0))], zorder=8)
         $unlock_item("knife", True)
         
         #This goes in the regular textbox.
+        show r neu with dissolve
         "Might as well keep it. If I can’t use it, I can pawn it."
         jump Scene7
    
 label leaveknife:
+        show r smile with dissolve
         "You decided to leave the knife."
         jump Scene7
       
@@ -1484,8 +1486,9 @@ label Scene7:
     #with fade
     #$renpy.pause(1.0)
     #$show_main_ui()
+    show m grin with dissolve
     m "Ahh, are you all right?"
-    
+   
     r "---uh---"
     
     "I look up and see a strange...oddly compelling man."
@@ -1527,6 +1530,7 @@ label Scene7:
     #play sound Sound of a backpack dropping
     #stop sound
     #play sound running sounds.
+    show bg run with dissolve
     
     "I gotta get out of here. This guy’s insane, and something’s telling me that I shouldn’t even try to fuck with him."
     
@@ -1553,10 +1557,12 @@ label Scene7:
             jump dontrust
         
 label trustsoume:
+    show r scare with dissolve
     "I know I probably shouldn’t trust him, but I’m shaking so bad that I’ll take anyone who isn’t eating me. I sit down."
     jump Scene8
    
 label dontrust:
+        show r mad with dissolve
         "There's no way in hell I can trust any of these people..."
         "I should just try to find my own damn way out!"
         jump badend1    
@@ -1566,7 +1572,7 @@ label Scene8:
     show m grin at left with dissolve
     m "Look what I found~"
     
-    #show r scare at right with dissolve
+    show r scare at right with dissolve
     r "AAANGH!"
     
     m "Well, look at what we have here."
@@ -1576,11 +1582,13 @@ label Scene8:
     #Put a yank through vines effect.
     #play sound hissing of acid burned skin
     #Mamoru makes a sound of pain.
-    show m mad at left with dissolve
+    #show m mad at left with dissolve
     m "Nngh." 
     #stop sound
+    show m unhappy at left with dissolve
     m "Oi. Chemical burns? How positively droll."
     $unlock_entry("Mamoru", "021", True)
+    $renpy.show("pda_button", at_list=[blink(2.0, 0.0), Position(xpos=842, ypos=651), Transform(anchor=(0.0,0.0))], zorder=8)
     
     $ Roman = "Awkward Kid"
     #hide r scare
