@@ -112,6 +112,7 @@ init python:
     MOLE_GAME_STATE_BEGIN = "mole_begin"
     MOLE_GAME_STATE_PLAY  = "mole_play"
     MOLE_GAME_STATE_END   = "mole_end"
+    MOLE_GAME_STATE_PAUSE = "mole_pause"
 
     # mole states.
     MOLE_STATE_DEAD       = "dead"
@@ -232,7 +233,6 @@ init python:
             self.occupied_cells = []
 
             # set up entities.
-            #self.background         = None
             self.dirt_piles         = []
             self.easy_moles         = []
             self.medium_moles       = []
@@ -241,15 +241,12 @@ init python:
             self.start_screen_hud   = None
             self.stop_screen_hud    = None
             self.time_remaining_hud = None
+            self.instructions_hud   = None
+            self.instructions_index = 0
 
-            #self.create_background()
             self.create_moles()
             self.create_dirt()
             self.create_huds()
-
-        def create_background( self ):
-            self.background = GameObject()
-            self.background["renderer"] = GameRenderer( GameImage( "gfx/whack_a_mole/background.jpg" ) )
 
         def create_moles( self ):
             # easy moles.
@@ -334,6 +331,14 @@ init python:
             self.stop_screen_hud             = GameObject()
             self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/whack_a_mole/stop_screen.png" ) )
             self.stop_screen_hud["transform"].set_position( 148, 50 )
+            
+            instructions_1 = GameObject()
+            instructions_1["renderer"] = GameRenderer( GameImage ( "gfx/whack_a_mole/instructions_1.png" ) )
+            instructions_1["transform"].set_position( 148, 50 )
+            instructions_2 = GameObject()
+            instructions_2["renderer"] = GameRenderer( GameImage ( "gfx/whack_a_mole/instructions_2.png" ) )
+            instructions_2["transform"].set_position( 148, 50 )
+            self.instructions = [instructions_1, instructions_2]
 
             base_score             = GameObject()
             base_score["renderer"] = GameRenderer( GameText( self.get_base_score, Color( 255, 255, 255, 255 ) ) )
@@ -470,7 +475,6 @@ init python:
 
         def get_displayables( self ):
             displayables = []
-            #displayables.extend( self.background["renderer"].get_displayables() )
 
             for dirt in self.dirt_piles:
                 displayables.extend( dirt["renderer"].get_displayables() )
@@ -550,14 +554,15 @@ init python:
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
-            #self.background["renderer"].render( blitter, clip_rect, world_transform )
 
             for dirt_pile in self.dirt_piles:
                 dirt_pile["renderer"].render( blitter, clip_rect, world_transform )
 
             if self.state == MOLE_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
-            elif self.state == MOLE_GAME_STATE_PLAY:
+            elif self.state == MOLE_GAME_STATE_PAUSE:
+              self.instructions[self.instructions_index]["renderer"].render( blitter, clip_rect, world_transform )
+            else:
                 moles = itertools.chain( self.easy_moles,
                                          self.medium_moles,
                                          self.hard_moles )
@@ -565,43 +570,45 @@ init python:
                 for mole in moles:
                     mole["renderer"].render( blitter, clip_rect, world_transform )
 
-                self.time_remaining_hud["renderer"].render( blitter, clip_rect, world_transform )
-                self.score_hud["renderer"].render( blitter, clip_rect, world_transform )
-
-            elif self.state == MOLE_GAME_STATE_END:
-                self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
+                if self.state == MOLE_GAME_STATE_PLAY:
+                    self.time_remaining_hud["renderer"].render( blitter, clip_rect, world_transform )
+                    self.score_hud["renderer"].render( blitter, clip_rect, world_transform )
+                elif self.state == MOLE_GAME_STATE_END:
+                    self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
 
         def on_key_down( self, key ):
-#            if key == pygame.K_ESCAPE:
-#                self.quit()
+            if self.state == MOLE_GAME_STATE_PLAY or self.state == MOLE_GAME_STATE_BEGIN:
+                if key == pygame.K_h:
+                    self.state = MOLE_GAME_STATE_PAUSE
+                else:
+                    mole = None
 
-            if self.state == MOLE_GAME_STATE_PLAY:
-                mole = None
+                    if key == pygame.K_KP1 or key == pygame.K_z:
+                        mole = self.get_mole_at_cell( (2,0) )
+                    elif key == pygame.K_KP2 or key == pygame.K_x:
+                        mole = self.get_mole_at_cell( (2,1) )
+                    elif key == pygame.K_KP3 or key == pygame.K_c:
+                        mole = self.get_mole_at_cell( (2,2) )
+                    elif key == pygame.K_KP4 or key == pygame.K_a:
+                        mole = self.get_mole_at_cell( (1,0) )
+                    elif key == pygame.K_KP5 or key == pygame.K_s:
+                        mole = self.get_mole_at_cell( (1,1) )
+                    elif key == pygame.K_KP6 or key == pygame.K_d:
+                        mole = self.get_mole_at_cell( (1,2) )
+                    elif key == pygame.K_KP7 or key == pygame.K_q:
+                        mole = self.get_mole_at_cell( (0,0) )
+                    elif key == pygame.K_KP8 or key == pygame.K_w:
+                        mole = self.get_mole_at_cell( (0,1) )
+                    elif key == pygame.K_KP9 or key == pygame.K_e:
+                        mole = self.get_mole_at_cell( (0,2) )
 
-                if key == pygame.K_KP1 or key == pygame.K_z:
-                    mole = self.get_mole_at_cell( (2,0) )
-                elif key == pygame.K_KP2 or key == pygame.K_x:
-                    mole = self.get_mole_at_cell( (2,1) )
-                elif key == pygame.K_KP3 or key == pygame.K_c:
-                    mole = self.get_mole_at_cell( (2,2) )
-                elif key == pygame.K_KP4 or key == pygame.K_a:
-                    mole = self.get_mole_at_cell( (1,0) )
-                elif key == pygame.K_KP5 or key == pygame.K_s:
-                    mole = self.get_mole_at_cell( (1,1) )
-                elif key == pygame.K_KP6 or key == pygame.K_d:
-                    mole = self.get_mole_at_cell( (1,2) )
-                elif key == pygame.K_KP7 or key == pygame.K_q:
-                    mole = self.get_mole_at_cell( (0,0) )
-                elif key == pygame.K_KP8 or key == pygame.K_w:
-                    mole = self.get_mole_at_cell( (0,1) )
-                elif key == pygame.K_KP9 or key == pygame.K_e:
-                    mole = self.get_mole_at_cell( (0,2) )
+                    self.number_clicks += 1
 
-                self.number_clicks += 1
-
-                if mole and not mole["behavior"].is_whacked():
-                    mole["behavior"].hit()
-                    self.number_hits += 1
+                    if mole and not mole["behavior"].is_whacked():
+                        mole["behavior"].hit()
+                        self.number_hits += 1
+            elif self.state == MOLE_GAME_STATE_PAUSE:
+                self.show_next_instruction()
 
         def on_mouse_down( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
@@ -612,6 +619,8 @@ init python:
                     if mole and not mole["behavior"].is_whacked():
                         mole["behavior"].hit()
                         self.number_hits += 1
+                elif self.state == MOLE_GAME_STATE_PAUSE:
+                    self.show_next_instruction()
 
         def on_mouse_up( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
@@ -619,6 +628,13 @@ init python:
                     self.state = MOLE_GAME_STATE_PLAY
                 elif self.state == MOLE_GAME_STATE_END:
                     self.quit()
+                    
+        def show_next_instruction( self ):
+            if self.instructions_index < len(self.instructions)-1:
+                self.instructions_index += 1
+            else:
+                self.instructions_index = 0
+                self.state = MOLE_GAME_STATE_PLAY
 
     class MoleBehavior( GameComponent ):
         def __init__( self, number_hit_points, duration, score_value,
