@@ -27,6 +27,7 @@ init python:
     MAGIC_POWER_GAME_STATE_BEGIN = "power_begin"
     MAGIC_POWER_GAME_STATE_PLAY  = "power_play"
     MAGIC_POWER_GAME_STATE_END   = "power_end"
+    MAGIC_POWER_GAME_STATE_PAUSE = "power_pause"
 
     MESSAGE_CHARGING_FRAMESET  = "message_charging"
     MESSAGE_FIRING_FRAMESET    = "message_firing"
@@ -200,7 +201,6 @@ init python:
             self.total_score         = 0
 
             # setup the entities.
-            #self.background         = None
             self.start_screen_hud   = None
             self.stop_screen_hud    = None
             self.score_hud          = None
@@ -212,8 +212,9 @@ init python:
             self.power_marker       = None
             self.target             = None
             self.fireball           = None
+            self.instructions_hud   = None
+            self.instructions_index = 0
 
-            #self.create_background()
             self.create_huds()
             self.create_bars( level )
             self.create_target()
@@ -221,15 +222,28 @@ init python:
 
             self.spawn_target()
 
-        def create_background( self ):
-            self.background             = GameObject()
-            self.background["renderer"] = GameRenderer( GameImage( "gfx/magic_power/background.jpg" ) )
-
         def create_huds( self ):
             self.start_screen_hud             = GameObject()
             self.start_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/magic_power/start_screen.png" ) )
             self.start_screen_hud["transform"].set_position( 148, 50 )
 
+            instructions_1 = GameObject()
+            instructions_1["renderer"] = GameRenderer( GameImage ( "gfx/magic_power/instructions_1.png" ) )
+            instructions_1["transform"].set_position( 148, 50 )
+            instructions_2 = GameObject()
+            instructions_2["renderer"] = GameRenderer( GameImage ( "gfx/magic_power/instructions_2.png" ) )
+            instructions_2["transform"].set_position( 148, 50 )
+            instructions_3 = GameObject()
+            instructions_3["renderer"] = GameRenderer( GameImage ( "gfx/magic_power/instructions_3.png" ) )
+            instructions_3["transform"].set_position( 148, 50 )
+            instructions_4 = GameObject()
+            instructions_4["renderer"] = GameRenderer( GameImage ( "gfx/magic_power/instructions_4.png" ) )
+            instructions_4["transform"].set_position( 148, 50 )
+            instructions_5 = GameObject()
+            instructions_5["renderer"] = GameRenderer( GameImage ( "gfx/magic_power/instructions_5.png" ) )
+            instructions_5["transform"].set_position( 148, 50 )
+            self.instructions = [instructions_1, instructions_2, instructions_3, instructions_4, instructions_5]
+            
             self.stop_screen_hud             = GameObject()
             self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/magic_power/stop_screen.png" ) )
             self.stop_screen_hud["transform"].set_position( 148, 50 )
@@ -393,16 +407,17 @@ init python:
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
-            #self.background["renderer"].render( blitter, clip_rect, world_transform )
-
-            self.force_bar["renderer"].render( blitter, clip_rect, world_transform )
-            self.force_marker["renderer"].render( blitter, clip_rect, world_transform )
-            self.power_bar["renderer"].render( blitter, clip_rect, world_transform )
-            self.power_marker["renderer"].render( blitter, clip_rect, world_transform )
 
             if self.state == MAGIC_POWER_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
+            elif self.state == MAGIC_POWER_GAME_STATE_PAUSE:
+                self.instructions[self.instructions_index]["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == MAGIC_POWER_GAME_STATE_PLAY:
+                self.force_bar["renderer"].render( blitter, clip_rect, world_transform )
+                self.force_marker["renderer"].render( blitter, clip_rect, world_transform )
+                self.power_bar["renderer"].render( blitter, clip_rect, world_transform )
+                self.power_marker["renderer"].render( blitter, clip_rect, world_transform )
+            
                 self.message_hud["renderer"].render( blitter, clip_rect, world_transform )
                 self.time_remaining_hud["renderer"].render( blitter, clip_rect, world_transform )
                 self.score_hud["renderer"].render( blitter, clip_rect, world_transform )
@@ -462,9 +477,12 @@ init python:
                     self.state = MAGIC_POWER_GAME_STATE_END
                     self.total_score = self.base_score
 
-#        def on_key_down( self, key ):
-#            if key == pygame.K_ESCAPE:
-#                self.quit()
+        def on_key_down( self, key ):
+            if self.state == MAGIC_POWER_GAME_STATE_PAUSE:
+                self.show_next_instruction()
+            elif self.state == MAGIC_POWER_GAME_STATE_BEGIN or self.state == MAGIC_POWER_GAME_STATE_PLAY:
+                if key == pygame.K_h:
+                    self.state = MAGIC_POWER_GAME_STATE_PAUSE
 
         def on_mouse_up( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
@@ -486,8 +504,15 @@ init python:
                         self.power_marker["behavior"].activate()
                     elif self.power_marker["behavior"].state == MARKER_STATE_MOVING:
                         self.power_marker["behavior"].freeze()
-                        
-                    
+                elif self.state == MAGIC_POWER_GAME_STATE_PAUSE:
+                    self.show_next_instruction()
+
+        def show_next_instruction( self ):
+            if self.instructions_index < len(self.instructions)-1:
+                self.instructions_index += 1
+            else:
+                self.instructions_index = 0
+                self.state = MAGIC_POWER_GAME_STATE_PLAY
 
     class MagicPowerMarkerBehavior( GameComponent ):
         def __init__( self, min_value, max_value, speed ):
