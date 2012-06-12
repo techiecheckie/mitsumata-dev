@@ -56,6 +56,7 @@ init python:
     SQUATS_GAME_STATE_BEGIN = "power_begin"
     SQUATS_GAME_STATE_PLAY  = "power_play"
     SQUATS_GAME_STATE_END   = "power_end"
+    SQUATS_GAME_STATE_PAUSE = "power_pause"
 
     RIKU_ANIMATION_LIFTING = "riku_lifting"
     RIKU_ANIMATION_TIRED   = "riku_tired"
@@ -138,7 +139,6 @@ init python:
             self.number_bonus3_reps = level.number_bonus3_reps
 
             # setup the entities.
-            #self.background           = None
             self.start_screen_hud     = None
             self.stop_screen_hud      = None
             self.score_hud            = None
@@ -147,15 +147,12 @@ init python:
             self.bar_segments         = []
             self.active_segment_index = None
             self.riku                 = None
+            self.instructions_hud     = None
+            self.instructions_index   = 0
 
-            #self.create_background()
             self.create_huds()
             self.create_bar( level )
             self.create_riku( level )
-
-        def create_background( self ):
-            self.background             = GameObject()
-            self.background["renderer"] = GameRenderer( GameImage( "gfx/squats/background.jpg" ) )
 
         def create_huds( self ):
             self.start_screen_hud             = GameObject()
@@ -165,6 +162,14 @@ init python:
             self.stop_screen_hud             = GameObject()
             self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/squats/stop_screen.png" ) )
             self.stop_screen_hud["transform"].set_position( 148, 50 )
+            
+            instructions_1 = GameObject()
+            instructions_1["renderer"] = GameRenderer( GameImage ( "gfx/squats/instructions_1.png" ) )
+            instructions_1["transform"].set_position( 148, 50 )
+            instructions_2 = GameObject()
+            instructions_2["renderer"] = GameRenderer( GameImage ( "gfx/squats/instructions_2.png" ) )
+            instructions_2["transform"].set_position( 148, 50 )
+            self.instructions = [instructions_1, instructions_2]
 
             base_score             = GameObject()
             base_score["renderer"] = GameRenderer( GameText( self.get_base_score, Color( 255, 255, 255, 255 ) ) )
@@ -301,18 +306,19 @@ init python:
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
-            #self.background["renderer"].render( blitter, clip_rect, world_transform )
-
-            self.riku["renderer"].render( blitter, clip_rect, world_transform )
-
-            self.bar["renderer"].render( blitter, clip_rect, world_transform )
-            for bar_segment in self.bar_segments:
-                bar_segment["renderer"].render( blitter, clip_rect, world_transform )
-            self.marker["renderer"].render( blitter, clip_rect, world_transform )
 
             if self.state == SQUATS_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
+            elif self.state == SQUATS_GAME_STATE_PAUSE:
+                self.instructions[self.instructions_index]["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == SQUATS_GAME_STATE_PLAY:
+                self.riku["renderer"].render( blitter, clip_rect, world_transform )
+            
+                self.bar["renderer"].render( blitter, clip_rect, world_transform )
+                for bar_segment in self.bar_segments:
+                    bar_segment["renderer"].render( blitter, clip_rect, world_transform )
+                self.marker["renderer"].render( blitter, clip_rect, world_transform )
+            
                 self.time_remaining_hud["renderer"].render( blitter, clip_rect, world_transform )
                 self.score_hud["renderer"].render( blitter, clip_rect, world_transform )
 
@@ -334,10 +340,12 @@ init python:
                     self.compute_scores()
 
         def on_key_down( self, key ):
-#            if key == pygame.K_ESCAPE:
-#                self.quit()
-
-            if self.state == SQUATS_GAME_STATE_PLAY:
+            if self.state == SQUATS_GAME_STATE_BEGIN:
+                if key == pygame.K_h:
+                    self.state = SQUATS_GAME_STATE_PAUSE
+                else:
+                    self.state = SQUATS_GAME_STATE_PLAY
+            elif self.state == SQUATS_GAME_STATE_PLAY:
                 if (key in (pygame.K_UP, pygame.K_LEFT, pygame.K_DOWN) and
                     not self.riku["behavior"].is_tired()):
                     active_segment = self.bar_segments[self.active_segment_index]
@@ -357,6 +365,10 @@ init python:
                         active_segment["behavior"].deactivate()
                         self.bar_segments[SQUATS_SEGMENT_INDEX_BOTTOM]["behavior"].activate()
                         self.active_segment_index = SQUATS_SEGMENT_INDEX_BOTTOM
+                elif key == pygame.K_h:
+                    self.state = SQUATS_GAME_STATE_PAUSE
+            elif self.state == SQUATS_GAME_STATE_PAUSE:
+                self.show_next_instruction()
 
         def on_mouse_up( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
@@ -366,6 +378,15 @@ init python:
                                                           loop_animation=True )
                 elif self.state == SQUATS_GAME_STATE_END:
                     self.quit()
+                elif self.state == SQUATS_GAME_STATE_PAUSE:
+                    self.show_next_instruction()
+                    
+        def show_next_instruction( self ):
+            if self.instructions_index < len(self.instructions)-1:
+                self.instructions_index += 1
+            else:
+                self.instructions_index = 0
+                self.state = SQUATS_GAME_STATE_PLAY
 
     class MarkerBehavior( GameComponent ):
         def __init__( self, min_value, max_value, initial_speed, max_speed ):
