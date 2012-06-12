@@ -133,6 +133,7 @@ init python:
     GEARS_GAME_STATE_BEGIN = "begin"
     GEARS_GAME_STATE_PLAY  = "play"
     GEARS_GAME_STATE_END   = "end"
+    GEARS_GAME_STATE_PAUSE = "pause"
     
     class Axle(GameObject):
       def __init__(self, x, y, required_size):
@@ -213,17 +214,15 @@ init python:
             level = LEVELS[self.level_number-1]
             
             self.state = GEARS_GAME_STATE_BEGIN
+            
+            self.start_screen_hud   = None
+            self.stop_screen_hud    = None
+            self.instructions_hud   = None
+            self.instructions_index = 0
 
-            #self.create_background()
             self.create_huds()            
             self.create_axles(level)
             self.create_gears(level)
-
-
-        def create_background( self ):
-            self.background = GameObject()
-            self.background["renderer"] = GameRenderer(GameImage("gfx/gears/background.jpg"))
-            self.background["transform"].set_position( 0, 0 )
             
             
         def create_huds( self ):
@@ -231,6 +230,14 @@ init python:
             self.start_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/gears/start_screen.png" ) )
             self.start_screen_hud["transform"].set_position( 138, 50 )
 
+            instructions_1 = GameObject()
+            instructions_1["renderer"] = GameRenderer( GameImage ( "gfx/gears/instructions_1.png" ) )
+            instructions_1["transform"].set_position( 148, 50 )
+            instructions_2 = GameObject()
+            instructions_2["renderer"] = GameRenderer( GameImage ( "gfx/gears/instructions_2.png" ) )
+            instructions_2["transform"].set_position( 148, 50 )
+            self.instructions = [instructions_1, instructions_2]
+            
             self.stop_screen_hud             = GameObject()
             self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/gears/stop_screen.png" ) )
             self.stop_screen_hud["transform"].set_position( 138, 50 )
@@ -301,20 +308,20 @@ init python:
                     
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
-
-            #self.background["renderer"].render( blitter, clip_rect, world_transform )
-
-            for axle in self.axles:
-              axle["renderer"].render(blitter, clip_rect, world_transform)
-            
-            for gear in self.gears:
-              gear["renderer"].render(blitter, clip_rect, world_transform)
             
             if self.state == GEARS_GAME_STATE_BEGIN:
               self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )                
-            elif self.state == GEARS_GAME_STATE_END:
-              self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
+            elif self.state == GEARS_GAME_STATE_PAUSE:
+              self.instructions[self.instructions_index]["renderer"].render( blitter, clip_rect, world_transform )
+            else:
+              for axle in self.axles:
+                axle["renderer"].render(blitter, clip_rect, world_transform)
             
+              for gear in self.gears:
+                gear["renderer"].render(blitter, clip_rect, world_transform)
+                
+              if self.state == GEARS_GAME_STATE_END:
+                  self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
             
         def get_gear_at_position( self, x, y ):
             for gear in self.gears:
@@ -322,9 +329,12 @@ init python:
                 return gear
             
             
-#        def on_key_down( self, key ):
-#            if key == pygame.K_ESCAPE:
-#              self.quit()
+        def on_key_down( self, key ):
+            if self.state == GEARS_GAME_STATE_PLAY or self.state == GEARS_GAME_STATE_BEGIN:
+                if key == pygame.K_h:
+                    self.state = GEARS_GAME_STATE_PAUSE
+            elif self.state == GEARS_GAME_STATE_PAUSE:
+                self.show_next_instruction()
 
 
         def on_mouse_down( self, mx, my, button ):
@@ -336,8 +346,16 @@ init python:
                 gear = self.get_gear_at_position(mx,my)
                 if gear and not gear.get_locked():
                   self.selected_gear = gear
-              elif self.state == GEARS_GAME_STATE_END:
-                self.quit()
+              elif self.state == GEARS_GAME_STATE_PAUSE:
+                self.show_next_instruction()
+                
+                
+        def show_next_instruction( self ):
+            if self.instructions_index < len(self.instructions)-1:
+                self.instructions_index += 1
+            else:
+                self.instructions_index = 0
+                self.state = GEARS_GAME_STATE_PLAY
                 
 
         def on_mouse_up( self, mx, my, button ):
@@ -417,6 +435,8 @@ init python:
                 self.selected_gear["transform"].set_position(x, y)
                 self.selected_gear.clear_axle()                
                 self.selected_gear = None
+            elif self.state == GEARS_GAME_STATE_END:
+                self.quit()
 
             
         def on_mouse_move( self, mx, my ):
