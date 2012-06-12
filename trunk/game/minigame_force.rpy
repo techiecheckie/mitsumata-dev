@@ -117,7 +117,6 @@ init python:
             self.number_correct       = 0
 
             # setup the entities.
-#            self.background         = None
             self.current_numbers    = []
             self.riku               = None
             self.start_screen_hud   = None
@@ -127,18 +126,12 @@ init python:
             self.instructions_hud   = None
             self.instructions_index = 0
             
-
-#            self.create_background()
             self.create_numbers()
             self.create_riku()
             self.create_huds()
 
             # get the first number.
             self.pick_numbers()
-
-#        def create_background( self ):
-#            self.background             = GameObject()
-#            self.background["renderer"] = GameRenderer( GameImage( "gfx/magic_force/background.jpg" ) )
 
         def create_numbers( self ):
             for digit in xrange( 10 ):
@@ -295,7 +288,6 @@ init python:
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
-#            self.background["renderer"].render( blitter, clip_rect, world_transform )
 
             if self.state == MAGIC_FORCE_GAME_STATE_BEGIN:
                 self.riku["renderer"].render( blitter, clip_rect, world_transform )
@@ -305,7 +297,7 @@ init python:
                 self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == MAGIC_FORCE_GAME_STATE_PAUSE:
                 self.instructions[self.instructions_index]["renderer"].render( blitter, clip_rect, world_transform )
-            else:
+            elif self.state == MAGIC_FORCE_GAME_STATE_PLAY:
                 self.riku["renderer"].render( blitter, clip_rect, world_transform )
                 for number in self.current_numbers:
                     number["renderer"].render( blitter, clip_rect, world_transform )
@@ -334,10 +326,13 @@ init python:
                     self.total_score = self.base_score + self.completion_bonus
 
         def on_key_down( self, key ):
-#            if key == pygame.K_ESCAPE:
-#                self.quit()
-
-            if (self.state == MAGIC_FORCE_GAME_STATE_PLAY and
+            if self.state == MAGIC_FORCE_GAME_STATE_BEGIN:
+                if key == pygame.K_h:
+                    self.state = MAGIC_FORCE_GAME_STATE_PAUSE
+                else:
+                    self.state = MAGIC_FORCE_GAME_STATE_PLAY
+                    self.riku["behavior"].channel_magic()
+            elif (self.state == MAGIC_FORCE_GAME_STATE_PLAY and
                 self.number_countdown <= 0):
                 if key in (pygame.K_KP0, pygame.K_0,
                            pygame.K_KP1, pygame.K_1,
@@ -371,17 +366,8 @@ init python:
                         self.riku["behavior"].backfire()
                 elif key == pygame.K_h:
                     self.state = MAGIC_FORCE_GAME_STATE_PAUSE
-            elif self.state == MAGIC_FORCE_GAME_STATE_BEGIN:
-                if key == pygame.K_h:
-                    self.state = MAGIC_FORCE_GAME_STATE_PAUSE
-                else:
-                    self.state = MAGIC_FORCE_GAME_STATE_PLAY
             elif self.state == MAGIC_FORCE_GAME_STATE_PAUSE:
-                if self.instructions_index < len(self.instructions)-1:
-                    self.instructions_index += 1
-                else:
-                    self.instructions_index = 0
-                    self.state = MAGIC_FORCE_GAME_STATE_PLAY
+                self.show_next_instruction()
 
         def on_mouse_up( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
@@ -389,14 +375,17 @@ init python:
                     self.state = MAGIC_FORCE_GAME_STATE_PLAY
                     self.riku["behavior"].channel_magic()
                 elif self.state == MAGIC_FORCE_GAME_STATE_PAUSE:
-                    if self.instructions_index < len(self.instructions)-1:
-                        self.instructions_index += 1
-                    else:
-                        self.instructions_index = 0
-                        self.state = MAGIC_FORCE_GAME_STATE_PLAY
-                        self.riku["behavior"].channel_magic()
+                    self.show_next_instruction()
                 elif self.state == MAGIC_FORCE_GAME_STATE_END:
                     self.quit()
+                    
+        def show_next_instruction( self ):
+            if self.instructions_index < len(self.instructions)-1:
+                self.instructions_index += 1
+            else:
+                self.instructions_index = 0
+                self.state = MAGIC_FORCE_GAME_STATE_PLAY
+                self.riku["behavior"].channel_magic()
 
     class NumberBehavior( GameObject ):
         def __init__( self, digit ):
