@@ -229,6 +229,16 @@ init python:
             instructions_2["renderer"] = GameRenderer( GameImage ( "gfx/platformer/instructions_2.png" ) )
             instructions_2["transform"].set_position( 148, 50 )
             self.instructions = [instructions_1, instructions_2]
+            
+            high_score = GameObject()
+            high_score["renderer"] = GameRenderer( GameText( self.get_high_score, Color( 255, 255, 255, 255 ) ) )
+            high_score["transform"].set_position( 138, 313 )
+            self.start_screen_hud.add_child( high_score )
+
+            level = GameObject()
+            level["renderer"] = GameRenderer( GameText( self.get_level_number, Color( 255, 255, 255, 255 ) ) )
+            level["transform"].set_position( 138, 360 )
+            self.start_screen_hud.add_child( level )
 
             distance_run             = GameObject()
             distance_run["renderer"] = GameRenderer( GameText( self.get_distance_run, Color( 255, 255, 255, 255 ) ) )
@@ -239,16 +249,6 @@ init python:
             distance_to_pass["renderer"] = GameRenderer( GameText( self.get_distance, Color( 255, 255, 255, 255 ) ) )
             distance_to_pass["transform"].set_position( 120, 196 )
             self.stop_screen_hud.add_child( distance_to_pass )
-
-            distance_left             = GameObject()
-            distance_left["renderer"] = GameRenderer( GameText( self.get_distance, Color( 255, 255, 255, 255 ) ) )
-            distance_left["transform"].set_position( 120, 323 )
-            self.start_screen_hud.add_child( distance_left )
-            
-            time_left = GameObject()
-            time_left["renderer"] = GameRenderer( GameText( self.get_time, Color( 255, 255, 255, 255 ) ) )
-            time_left["transform"].set_position( 120, 353 )
-            self.start_screen_hud.add_child( time_left )
             
             self.distance_left_hud             = GameObject()
             self.distance_left_hud["renderer"] = GameRenderer( GameText( self.get_distance_left, Color( 255, 255, 255, 255 ) ) )
@@ -429,6 +429,9 @@ init python:
             
         def get_result( self ):
             return int(self.runner["behavior"].distance)
+            
+        def get_level_number( self ):
+            return "%20d" % self.level_number
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()

@@ -194,6 +194,8 @@ init python:
             self.time_remaining = AutomatedInterpolator( level.time_limit,
                                                          0,
                                                          level.time_limit )
+                                                         
+            self.level_number = level_number
 
             # setup the game state.
             self.state               = MAGIC_POWER_GAME_STATE_BEGIN
@@ -227,6 +229,10 @@ init python:
             self.start_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/magic_power/start_screen.png" ) )
             self.start_screen_hud["transform"].set_position( 148, 50 )
 
+            self.stop_screen_hud             = GameObject()
+            self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/magic_power/stop_screen.png" ) )
+            self.stop_screen_hud["transform"].set_position( 148, 50 )
+
             instructions_1 = GameObject()
             instructions_1["renderer"] = GameRenderer( GameImage ( "gfx/magic_power/instructions_1.png" ) )
             instructions_1["transform"].set_position( 148, 50 )
@@ -244,10 +250,16 @@ init python:
             instructions_5["transform"].set_position( 148, 50 )
             self.instructions = [instructions_1, instructions_2, instructions_3, instructions_4, instructions_5]
             
-            self.stop_screen_hud             = GameObject()
-            self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/magic_power/stop_screen.png" ) )
-            self.stop_screen_hud["transform"].set_position( 148, 50 )
+            high_score = GameObject()
+            high_score["renderer"] = GameRenderer( GameText( self.get_high_score, Color( 255, 255, 255, 255 ) ) )
+            high_score["transform"].set_position( 138, 313 )
+            self.start_screen_hud.add_child( high_score )
 
+            level = GameObject()
+            level["renderer"] = GameRenderer( GameText( self.get_level_number, Color( 255, 255, 255, 255 ) ) )
+            level["transform"].set_position( 138, 360 )
+            self.start_screen_hud.add_child( level )
+            
             base_score             = GameObject()
             base_score["renderer"] = GameRenderer( GameText( self.get_base_score, Color( 255, 255, 255, 255 ) ) )
             base_score["transform"].set_position( 185, 159 )
@@ -391,6 +403,9 @@ init python:
                 
         def get_result( self ):
             return self.total_score
+            
+        def get_level_number( self ):
+            return "%20d" % self.level_number
 
         def get_displayables( self ):
             displayables = []
@@ -403,6 +418,13 @@ init python:
             if self.target:
                 displayables.extend( self.target["renderer"].get_displayables() )
             displayables.extend( self.fireball["renderer"].get_displayables() )
+            
+            displayables.extend( self.start_screen_hud["renderer"].get_displayables() )
+            displayables.extend( self.stop_screen_hud["renderer"].get_displayables() )
+            
+            for instruction in self.instructions:
+                displayables.extend( instruction["renderer"].get_displayables() )
+            
             return displayables
 
         def render( self, blitter, clip_rect ):

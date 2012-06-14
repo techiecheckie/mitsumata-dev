@@ -221,6 +221,8 @@ init python:
                                                            level.mole_duration[1],
                                                            level.time_limit )
 
+            self.level_number = level_number
+
             # set up game state.
             self.state          = MOLE_GAME_STATE_BEGIN
             self.time_limit     = level.time_limit
@@ -339,6 +341,16 @@ init python:
             instructions_2["renderer"] = GameRenderer( GameImage ( "gfx/whack_a_mole/instructions_2.png" ) )
             instructions_2["transform"].set_position( 148, 50 )
             self.instructions = [instructions_1, instructions_2]
+            
+            high_score = GameObject()
+            high_score["renderer"] = GameRenderer( GameText( self.get_high_score, Color( 255, 255, 255, 255 ) ) )
+            high_score["transform"].set_position( 138, 313 )
+            self.start_screen_hud.add_child( high_score )
+
+            level = GameObject()
+            level["renderer"] = GameRenderer( GameText( self.get_level_number, Color( 255, 255, 255, 255 ) ) )
+            level["transform"].set_position( 138, 360 )
+            self.start_screen_hud.add_child( level )
 
             base_score             = GameObject()
             base_score["renderer"] = GameRenderer( GameText( self.get_base_score, Color( 255, 255, 255, 255 ) ) )
@@ -440,6 +452,9 @@ init python:
 
         def get_time_remaining( self ):
             return "Time Remaining: %d" %  self.time_remaining.get_ceil_value()
+            
+        def get_level_number( self ):
+            return "%20d" % self.level_number
 
         def on_mole_death( self, score_value ):
             self.base_score += score_value
@@ -489,6 +504,9 @@ init python:
             displayables.extend( self.start_screen_hud["renderer"].get_displayables() )
             displayables.extend( self.stop_screen_hud["renderer"].get_displayables() )
             displayables.extend( self.time_remaining_hud["renderer"].get_displayables() )
+            
+            for instruction in self.instructions:
+                displayables.extend( instruction["renderer"].get_displayables() )
 
             return displayables
 
@@ -555,26 +573,25 @@ init python:
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
 
-            for dirt_pile in self.dirt_piles:
-                dirt_pile["renderer"].render( blitter, clip_rect, world_transform )
-
             if self.state == MOLE_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
+            elif self.state == MOLE_GAME_STATE_END:
+                self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == MOLE_GAME_STATE_PAUSE:
               self.instructions[self.instructions_index]["renderer"].render( blitter, clip_rect, world_transform )
             else:
+                for dirt_pile in self.dirt_piles:
+                    dirt_pile["renderer"].render( blitter, clip_rect, world_transform )        
+                
                 moles = itertools.chain( self.easy_moles,
                                          self.medium_moles,
                                          self.hard_moles )
-
+                
                 for mole in moles:
                     mole["renderer"].render( blitter, clip_rect, world_transform )
 
-                if self.state == MOLE_GAME_STATE_PLAY:
-                    self.time_remaining_hud["renderer"].render( blitter, clip_rect, world_transform )
-                    self.score_hud["renderer"].render( blitter, clip_rect, world_transform )
-                elif self.state == MOLE_GAME_STATE_END:
-                    self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
+                self.time_remaining_hud["renderer"].render( blitter, clip_rect, world_transform )
+                self.score_hud["renderer"].render( blitter, clip_rect, world_transform )
 
         def on_key_down( self, key ):
             if self.state == MOLE_GAME_STATE_PLAY or self.state == MOLE_GAME_STATE_BEGIN:

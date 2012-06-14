@@ -128,6 +128,8 @@ init python:
             self.time_remaining = AutomatedInterpolator( level.time_limit,
                                                          0,
                                                          level.time_limit )
+                                                         
+            self.level_number = level_number
 
             # setup the game state.
             self.state              = SQUATS_GAME_STATE_BEGIN
@@ -170,6 +172,16 @@ init python:
             instructions_2["renderer"] = GameRenderer( GameImage ( "gfx/squats/instructions_2.png" ) )
             instructions_2["transform"].set_position( 148, 50 )
             self.instructions = [instructions_1, instructions_2]
+            
+            high_score = GameObject()
+            high_score["renderer"] = GameRenderer( GameText( self.get_high_score, Color( 255, 255, 255, 255 ) ) )
+            high_score["transform"].set_position( 138, 313 )
+            self.start_screen_hud.add_child( high_score )
+
+            level = GameObject()
+            level["renderer"] = GameRenderer( GameText( self.get_level_number, Color( 255, 255, 255, 255 ) ) )
+            level["transform"].set_position( 138, 360 )
+            self.start_screen_hud.add_child( level )
 
             base_score             = GameObject()
             base_score["renderer"] = GameRenderer( GameText( self.get_base_score, Color( 255, 255, 255, 255 ) ) )
@@ -294,6 +306,9 @@ init python:
                 
         def get_result( self ):
             return self.total_score
+            
+        def get_level_number( self ):
+            return "%20d" % self.level_number
 
         def get_displayables( self ):
             displayables = []
@@ -302,6 +317,12 @@ init python:
             displayables.extend( self.marker["renderer"].get_displayables() )
             displayables.extend( self.score_hud["renderer"].get_displayables() )
             displayables.extend( self.time_remaining_hud["renderer"].get_displayables() )
+            displayables.extend( self.start_screen_hud["renderer"].get_displayables() )
+            displayables.extend( self.stop_screen_hud["renderer"].get_displayables() )
+            
+            for instruction in self.instructions:
+                displayables.extend( instruction["renderer"].get_displayables() )
+            
             return displayables
 
         def render( self, blitter, clip_rect ):
@@ -345,6 +366,8 @@ init python:
                     self.state = SQUATS_GAME_STATE_PAUSE
                 else:
                     self.state = SQUATS_GAME_STATE_PLAY
+                    self.riku["renderer"].play_animation( RIKU_ANIMATION_LIFTING,
+                                                          loop_animation=True )
             elif self.state == SQUATS_GAME_STATE_PLAY:
                 if (key in (pygame.K_UP, pygame.K_LEFT, pygame.K_DOWN) and
                     not self.riku["behavior"].is_tired()):
@@ -387,6 +410,8 @@ init python:
             else:
                 self.instructions_index = 0
                 self.state = SQUATS_GAME_STATE_PLAY
+                self.riku["renderer"].play_animation( RIKU_ANIMATION_LIFTING,
+                                                          loop_animation=True )
 
     class MarkerBehavior( GameComponent ):
         def __init__( self, min_value, max_value, initial_speed, max_speed ):

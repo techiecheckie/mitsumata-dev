@@ -170,6 +170,8 @@ init python:
                                                            level.max_hard_birds[1],
                                                            level.time_limit )
 
+            self.level_number = level_number
+
             # setup game state.
             self.state          = HUNT_GAME_STATE_BEGIN
             self.time_limit     = level.time_limit
@@ -337,6 +339,16 @@ init python:
             self.instructions_hud = GameObject()
             self.instructions_hud["renderer"] = GameRenderer( GameImage( "gfx/duck_hunt/instructions.png" ) )
             self.instructions_hud["transform"].set_position( 148, 50 )
+            
+            high_score = GameObject()
+            high_score["renderer"] = GameRenderer( GameText( self.get_high_score, Color( 255, 255, 255, 255 ) ) )
+            high_score["transform"].set_position( 138, 313 )
+            self.start_screen_hud.add_child( high_score )
+
+            level = GameObject()
+            level["renderer"] = GameRenderer( GameText( self.get_level_number, Color( 255, 255, 255, 255 ) ) )
+            level["transform"].set_position( 138, 360 )
+            self.start_screen_hud.add_child( level )
 
             base_score             = GameObject()
             base_score["renderer"] = GameRenderer( GameText( self.get_base_score, Color( 255, 255, 255, 255 ) ) )
@@ -417,6 +429,9 @@ init python:
                 
         def get_result( self ):
             return self.total_score
+            
+        def get_level_number( self ):
+            return "%20d" % self.level_number
 
         def is_out_of_bounds( self, bird ):
             bird_bounds    = bird["collider"].get_bounds()
@@ -482,7 +497,6 @@ init python:
 
         def get_displayables( self ):
             displayables = []
-            #displayables.extend( self.background["renderer"].get_displayables() )
             displayables.extend( self.player["renderer"].get_displayables() )
 
             for bird in itertools.chain( self.easy_birds,
@@ -496,12 +510,12 @@ init python:
             displayables.extend( self.start_screen_hud["renderer"].get_displayables() )
             displayables.extend( self.stop_screen_hud["renderer"].get_displayables() )
             displayables.extend( self.time_remaining_hud["renderer"].get_displayables() )
+            displayables.extend( self.instructions_hud["renderer"].get_displayables() )
 
             return displayables
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
-#            self.background["renderer"].render( blitter, clip_rect, world_transform )
 
             if self.state == HUNT_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
