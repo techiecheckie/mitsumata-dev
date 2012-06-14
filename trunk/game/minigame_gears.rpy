@@ -130,10 +130,10 @@ init python:
         ]
     ]
     
-    GEARS_GAME_STATE_BEGIN = "begin"
-    GEARS_GAME_STATE_PLAY  = "play"
-    GEARS_GAME_STATE_END   = "end"
-    GEARS_GAME_STATE_PAUSE = "pause"
+    GEARS_GAME_STATE_BEGIN = "gears_begin"
+    GEARS_GAME_STATE_PLAY  = "gears_play"
+    GEARS_GAME_STATE_END   = "gears_end"
+    GEARS_GAME_STATE_PAUSE = "gears_pause"
     
     class Axle(GameObject):
       def __init__(self, x, y, required_size):
@@ -206,6 +206,7 @@ init python:
             self.level_number = level_number
             self.create_game()
 
+
         def create_game(self):
             self.selected_gear = None
             self.axles = []
@@ -229,6 +230,10 @@ init python:
             self.start_screen_hud             = GameObject()
             self.start_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/gears/start_screen.png" ) )
             self.start_screen_hud["transform"].set_position( 138, 50 )
+            
+            self.stop_screen_hud             = GameObject()
+            self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/gears/stop_screen.png" ) )
+            self.stop_screen_hud["transform"].set_position( 138, 50 )
 
             instructions_1 = GameObject()
             instructions_1["renderer"] = GameRenderer( GameImage ( "gfx/gears/instructions_1.png" ) )
@@ -238,9 +243,15 @@ init python:
             instructions_2["transform"].set_position( 148, 50 )
             self.instructions = [instructions_1, instructions_2]
             
-            self.stop_screen_hud             = GameObject()
-            self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/gears/stop_screen.png" ) )
-            self.stop_screen_hud["transform"].set_position( 138, 50 )
+            high_score = GameObject()
+            high_score["renderer"] = GameRenderer( GameText( self.get_high_score, Color( 255, 255, 255, 255 ) ) )
+            high_score["transform"].set_position( 138, 313 )
+            self.start_screen_hud.add_child( high_score )
+
+            level = GameObject()
+            level["renderer"] = GameRenderer( GameText( self.get_level_number, Color( 255, 255, 255, 255 ) ) )
+            level["transform"].set_position( 138, 360 )
+            self.start_screen_hud.add_child( level )
 
 
         def create_axles(self, level):
@@ -304,7 +315,25 @@ init python:
                     gear["transform"].set_position(x, y)
                     gear["collider"] = GameBoxCollider(data[2])
                     self.gears.append(gear)
-                    
+        
+        
+        def get_displayables( self ):
+            displayables = []
+            
+            for axle in self.axles:
+                displayables.extend( axle["renderer"].get_displayables() )
+            
+            for gear in self.gears:
+                displayables.extend( gear["renderer"].get_displayables() )
+            
+            displayables.extend( self.start_screen_hud["renderer"].get_displayables() )
+            displayables.extend( self.stop_screen_hud["renderer"].get_displayables() )
+            
+            for instruction in self.instructions:
+                displayables.extend( instruction["renderer"].get_displayables() )
+            
+            return displayables
+            
                     
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
@@ -460,3 +489,6 @@ init python:
               return self.level_number * 1000
             else:
               return 0
+              
+        def get_level_number( self ):
+            return "%20d" % self.level_number

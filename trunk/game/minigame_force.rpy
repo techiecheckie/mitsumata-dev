@@ -11,7 +11,7 @@ init python:
         MagicForceLevel( number_digits     = (1,4),
                          correct_timeout   = 0.15,
                          incorrect_timeout = 0.9,
-                         time_limit        = 10 ),
+                         time_limit        = 60 ),
 
         MagicForceLevel( number_digits     = (1,5),
                          correct_timeout   = 0.12,
@@ -107,6 +107,8 @@ init python:
                                                             0,
                                                             level.time_limit )
 
+            self.level_number = level_number
+
             # setup the game state.
             self.state                = MAGIC_FORCE_GAME_STATE_BEGIN
             self.base_score           = 0
@@ -171,6 +173,10 @@ init python:
             self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/magic_force/stop_screen.png" ) )
             self.stop_screen_hud["transform"].set_position( 148, 50 )
             
+            self.score_hud             = GameObject()
+            self.score_hud["renderer"] = GameRenderer( GameText( self.get_score, Color( 255, 255, 255, 255 ) ) )
+            self.score_hud["transform"].set_position( 400, 30 )
+            
             instructions_1 = GameObject()
             instructions_1["renderer"] = GameRenderer( GameImage ( "gfx/magic_force/instructions_1.png" ) )
             instructions_1["transform"].set_position( 148, 50 )
@@ -181,10 +187,16 @@ init python:
             instructions_3["renderer"] = GameRenderer( GameImage ( "gfx/magic_force/instructions_3.png" ) )
             instructions_3["transform"].set_position( 148, 50 )
             self.instructions = [instructions_1, instructions_2, instructions_3]
+            
+            high_score = GameObject()
+            high_score["renderer"] = GameRenderer( GameText( self.get_high_score, Color( 255, 255, 255, 255 ) ) )
+            high_score["transform"].set_position( 138, 313 )
+            self.start_screen_hud.add_child( high_score )
 
-            self.score_hud             = GameObject()
-            self.score_hud["renderer"] = GameRenderer( GameText( self.get_score, Color( 255, 255, 255, 255 ) ) )
-            self.score_hud["transform"].set_position( 400, 30 )
+            level = GameObject()
+            level["renderer"] = GameRenderer( GameText( self.get_level_number, Color( 255, 255, 255, 255 ) ) )
+            level["transform"].set_position( 138, 360 )
+            self.start_screen_hud.add_child( level )
 
             base_score             = GameObject()
             base_score["renderer"] = GameRenderer( GameText( self.get_base_score, Color( 255, 255, 255, 255 ) ) )
@@ -276,24 +288,32 @@ init python:
 
         def get_result( self ):
             return self.total_score
+            
+        def get_level_number( self ):
+            return "%20d" % self.level_number
 
         def get_displayables( self ):
             displayables = []
             displayables.extend( self.riku["renderer"].get_displayables() )
             for number in self.current_numbers:
                 displayables.extend( number["renderer"].get_displayables() )
+            
+            displayables.extend( self.start_screen_hud["renderer"].get_displayables() )
+            displayables.extend( self.stop_screen_hud["renderer"].get_displayables() )
             displayables.extend( self.score_hud["renderer"].get_displayables() )
             displayables.extend( self.time_remaining_hud["renderer"].get_displayables() )
+            
+            for instruction in self.instructions:
+                displayables.extend( instruction["renderer"].get_displayables() )
+            
             return displayables
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
 
             if self.state == MAGIC_FORCE_GAME_STATE_BEGIN:
-                self.riku["renderer"].render( blitter, clip_rect, world_transform )
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == MAGIC_FORCE_GAME_STATE_END:
-                self.riku["renderer"].render( blitter, clip_rect, world_transform )
                 self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == MAGIC_FORCE_GAME_STATE_PAUSE:
                 self.instructions[self.instructions_index]["renderer"].render( blitter, clip_rect, world_transform )

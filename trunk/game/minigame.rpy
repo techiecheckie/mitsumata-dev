@@ -101,6 +101,10 @@ init python:
         
         if button == "garden":
           show_garden()
+        elif button == "lock":
+          show_lock()
+        elif button == "bottles":
+          show_bottles()
         else:
           score = run(button)
           update_high_score(button, score)
@@ -153,12 +157,13 @@ init python:
                             Transform(anchor=(0.0,0.0))])
     config.overlay_functions.remove(minigame_ui_buttons)
     
-    score = run_minigame( game_type = game,
+    score = run_minigame( game_type=game,
                           x=MINIGAME_POS_X, 
                           y=MINIGAME_POS_Y,
                           game_width=MINIGAME_WIDTH,
                           game_height=MINIGAME_HEIGHT,
-                          level_number = persistent.unlocked_minigames[name][1] )
+                          game_high_score=persistent.unlocked_minigames[name][0],
+                          level_number=persistent.unlocked_minigames[name][1] )
                           
     config.overlay_functions.append(minigame_ui_buttons)
     renpy.hide(bg)
@@ -166,7 +171,7 @@ init python:
     return score
   
   # Updates highscores stored in persistent.unlocked_minigames[game]. If the
-  # vallue returned by the minigame as parameter 'score' is higher than the
+  # value returned by the minigame as parameter 'score' is higher than the
   # current value stored in the persistent dictionary, this method loops through
   # the game's bonuses (MINIGAME_BONUSES[game], above), looking for new (stat)
   # bonuses to unlock. 
@@ -240,12 +245,13 @@ init python:
       show_bottles()
       score = 0
     else:
-      score = run_minigame(game_type = game, 
+      score = run_minigame(game_type=game, 
                            x=MINIGAME_POS_X, 
                            y=MINIGAME_POS_Y,
                            game_width=MINIGAME_WIDTH,
                            game_height=MINIGAME_HEIGHT,
-                           level_number = level)
+                           game_high_score=persistent.unlocked_minigames[name][0],
+                           level_number=level)
       update_high_score(name, score)
     
     config.overlay_functions.append(minigame_ui_buttons)

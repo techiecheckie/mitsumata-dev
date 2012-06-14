@@ -100,6 +100,7 @@ init -50 python:
             self.origin      = (0, 0)
             self.width       = 0
             self.height      = 0
+            self.high_score  = 0
 
         def get_displayables( self ):
             return []
@@ -136,6 +137,9 @@ init -50 python:
 
         def set_game_height( self, height ):
             self.height = height
+            
+        def set_high_score( self, score ):
+            self.high_score = score
 
         def set_origin( self, x, y ):
             self.origin = (x, y )
@@ -164,6 +168,9 @@ init -50 python:
 
         def get_result( self ):
             return 0
+            
+        def get_high_score( self ):
+            return "%20d" % self.high_score
 
         def on_key_down( self, key ):
             pass
@@ -184,6 +191,7 @@ init -50 python:
                       x=0, y=0,
                       game_width=renpy.config.screen_width,
                       game_height=renpy.config.screen_height,
+                      game_high_score=0,
                       *args, **kwds ):
         try:
             game   = game_type( *args, **kwds )
@@ -191,6 +199,7 @@ init -50 python:
             game.set_origin( x, y )
             game.set_game_width( game_width )
             game.set_game_height( game_height )
+            game.set_high_score( game_high_score )
             ui.add( driver )
             ui.interact( suppress_underlay=True )
             return driver.get_game_result()

@@ -347,6 +347,8 @@ init python:
                                                        (INFECTED_STAGE2_GROWTH_RATE_DURATION, INFECTED_STAGE3_GROWTH_RATE) ] )
             self.healthy_growth_rate  = StagedValue( [ (0, HEALTHY_GROWTH_RATE) ] )
 
+            self.level_number = level_number
+
             # setup game state.
             self.state            = CELLS_GAME_STATE_BEGIN
             self.elapsed_time     = 0
@@ -356,7 +358,6 @@ init python:
             self.end_countdown    = CELLS_END_GAME_COUNTDOWN
 
             # setup entities.
-            #self.dish             = None
             self.healthy_cells    = []
             self.infected_cells   = []
             self.grid             = Grid()
@@ -366,7 +367,6 @@ init python:
             self.instructions     = None
             self.instructions_index = 0
 
-            #self.create_dish()
             self.create_cells()
             self.create_huds()
 
@@ -382,11 +382,6 @@ init python:
 
             for i in xrange( level.initial_hard_infected ):
                 self.spawn_cell( HARD_INFECTED_CELL_TYPE )
-
-        def create_dish( self ):
-            self.dish             = GameObject()
-            self.dish["renderer"] = GameRenderer( GameImage( "gfx/cells/petri_dish.png" ) )
-            self.dish["transform"].set_position( PETRI_DISH_X, PETRI_DISH_Y )
 
         def create_cells( self ):
             pulse_animation = GameAnimation( frame_rate=(NUMBER_CELL_PULSE_FRAMES /
@@ -444,6 +439,16 @@ init python:
             instructions_2["renderer"] = GameRenderer( GameImage( "gfx/cells/instructions_2.png" ) )
             instructions_2["transform"].set_position( 148, 50 )
             self.instructions = [instructions_1, instructions_2]
+            
+            high_score = GameObject()
+            high_score["renderer"] = GameRenderer( GameText( self.get_high_score, Color( 255, 255, 255, 255 ) ) )
+            high_score["transform"].set_position( 138, 313 )
+            self.start_screen_hud.add_child( high_score )
+
+            level = GameObject()
+            level["renderer"] = GameRenderer( GameText( self.get_level_number, Color( 255, 255, 255, 255 ) ) )
+            level["transform"].set_position( 138, 360 )
+            self.start_screen_hud.add_child( level )
 
             base_score             = GameObject()
             base_score["renderer"] = GameRenderer( GameText( self.get_base_score, Color( 255, 255, 255, 255 ) ) )
@@ -507,6 +512,9 @@ init python:
             minutes = math.floor( self.elapsed_time / 60 )
             seconds = math.floor( self.elapsed_time - minutes * 60 )
             return "Elapsed Time: %d:%02d" % (minutes, seconds)
+            
+        def get_level_number( self ):
+            return "%20d" % self.level_number
 
         def spawn_cell( self, cell_type, slot=None, state=None ):
             # if a slot wasn't given, get a random available one.  return
@@ -578,12 +586,18 @@ init python:
             displayables = []
             for cell in itertools.chain( self.healthy_cells, self.infected_cells ):
                 displayables.extend( cell["renderer"].get_displayables() )
-            #displayables.extend( self.dish["renderer"].get_displayables() )
+            
+            displayables.extend( self.start_screen_hud["renderer"].get_displayables() )
+            displayables.extend( self.stop_screen_hud["renderer"].get_displayables() )
+            displayables.extend( self.elapsed_time_hud["renderer"].get_displayables() )
+            
+            for instruction in self.instructions:
+                displayables.extend( instruction["renderer"].get_displayables() )
+            
             return displayables
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
-            #self.dish["renderer"].render( blitter, clip_rect, world_transform )
 
             if self.state == CELLS_GAME_STATE_BEGIN:
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
@@ -593,10 +607,8 @@ init python:
                 self.instructions[self.instructions_index]["renderer"].render( blitter, clip_rect, world_transform )
             else:
                 cell_transform = GameTransform( world_transform.x +
-                                                #self.dish["transform"].x +
                                                 GRID_OFFSET_X,
                                                 world_transform.y +
-                                                #self.dish["transform"].y +
                                                 GRID_OFFSET_Y )
                 for cell in itertools.chain( self.infected_cells, self.healthy_cells ):
                     cell["renderer"].render( blitter, clip_rect, cell_transform )
@@ -642,8 +654,6 @@ init python:
         def on_key_down( self, key ):
             if key == pygame.K_h:
                 self.state = CELLS_GAME_STATE_PAUSE
-#            if key == pygame.K_ESCAPE:
-#                self.quit()
 
         def on_mouse_up( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
