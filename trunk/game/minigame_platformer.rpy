@@ -94,6 +94,7 @@ init python:
     PLATFORMER_GAME_STATE_COUNTDOWN = "platf_countdown"
     PLATFORMER_GAME_STATE_PLAY      = "platf_play"
     PLATFORMER_GAME_STATE_END       = "platf_end"
+    PLATFORMER_GAME_STATE_PAUSE     = "platf_pause"
     
     # runner states.
     RUNNER_STATE_RUNNING    = "running"
@@ -181,6 +182,8 @@ init python:
             self.stop_screen_hud    = None
             self.score_hud          = None
             self.time_remaining_hud = None
+            self.instructions_hud   = None
+            self.instructions_index = 0
             
             self.map    = None
             self.tiles  = None
@@ -218,6 +221,14 @@ init python:
             self.stop_screen_hud             = GameObject()
             self.stop_screen_hud["renderer"] = GameRenderer( GameImage( "gfx/platformer/stop_screen.png" ) )
             self.stop_screen_hud["transform"].set_position( 148, 50 )
+            
+            instructions_1 = GameObject()
+            instructions_1["renderer"] = GameRenderer( GameImage ( "gfx/platformer/instructions_1.png" ) )
+            instructions_1["transform"].set_position( 148, 50 )
+            instructions_2 = GameObject()
+            instructions_2["renderer"] = GameRenderer( GameImage ( "gfx/platformer/instructions_2.png" ) )
+            instructions_2["transform"].set_position( 148, 50 )
+            self.instructions = [instructions_1, instructions_2]
 
             distance_run             = GameObject()
             distance_run["renderer"] = GameRenderer( GameText( self.get_distance_run, Color( 255, 255, 255, 255 ) ) )
@@ -250,10 +261,6 @@ init python:
             self.top_border = GameObject()
             self.top_border["renderer"] = GameRenderer( GameImage( "gfx/backgrounds/minigame_bg_top_border.png" ) )
             self.top_border["transform"].set_position( 0, 0 )
-            
-        def create_background( self ):
-            self.background = GameObject()
-            self.background["renderer"] = GameRenderer( GameImage( "gfx/platformer/background.jpg" ) )
 
         def create_tiles( self ):                
             self.tiles = []
@@ -425,7 +432,6 @@ init python:
 
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
-            #self.background["renderer"].render( blitter, clip_rect, world_transform )
 
             for layer in self.backgrounds:
               layer["renderer"].render( blitter, clip_rect, world_transform )
@@ -457,7 +463,7 @@ init python:
             elif self.state == PLATFORMER_GAME_STATE_END:
                 self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == PLATFORMER_GAME_STATE_PAUSE:
-                self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
+                self.instructions[self.instructions_index]["renderer"].render( blitter, clip_rect, world_transform )
 
             self.runner["renderer"].render( blitter, clip_rect, world_transform )
 
@@ -477,14 +483,19 @@ init python:
                   or self.runner["behavior"].distance >= self.level.distance:
                 self.state = PLATFORMER_GAME_STATE_END
                 
-
         def on_key_down( self, key ):
-#            if key == pygame.K_ESCAPE:
-#                self.quit()
-        
-            if self.state == PLATFORMER_GAME_STATE_PLAY:
+            if self.state == PLATFORMER_GAME_STATE_BEGIN:
+              if key == pygame.K_h:
+                self.state = PLATFORMER_GAME_STATE_PAUSE
+              else:
+                self.state = PLATFORMER_GAME_STATE_PLAY
+            elif self.state == PLATFORMER_GAME_STATE_PAUSE:
+              self.show_next_instruction()
+            elif self.state == PLATFORMER_GAME_STATE_PLAY:
               if key == pygame.K_SPACE:
                 self.runner["behavior"].jump()
+              elif key == pygame.K_h:
+                self.state = PLATFORMER_GAME_STATE_PAUSE
 
         def on_mouse_up( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
@@ -492,6 +503,15 @@ init python:
                 self.state = PLATFORMER_GAME_STATE_PLAY
               elif self.state == PLATFORMER_GAME_STATE_END:
                 self.quit()
+              elif self.state == PLATFORMER_GAME_STATE_PAUSE:
+                self.show_next_instruction()
+                
+        def show_next_instruction( self ):
+            if self.instructions_index < len(self.instructions)-1:
+                self.instructions_index += 1
+            else:
+                self.instructions_index = 0
+                self.state = PLATFORMER_GAME_STATE_PLAY
 
     class RunnerBehavior( GameComponent ):
         def __init__( self, platformer ):
