@@ -78,8 +78,6 @@ init python:
     WALKABLE_TILES  = [2,3,4,5,6]
     # those that can have an obstacle (no edge tiles or anything like that here)
     OBSTACLE_TILES  = [3,4,5]
-    # those that can make you drown
-    DROWNABLE_TILES = [8,9]
     
     RUN_SPEED      = 110
     JUMP_SPEED     = 150
@@ -90,33 +88,33 @@ init python:
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####
 
     # different states the game can be in.
-    PLATFORMER_GAME_STATE_BEGIN     = "platf_begin"
-    PLATFORMER_GAME_STATE_COUNTDOWN = "platf_countdown"
-    PLATFORMER_GAME_STATE_PLAY      = "platf_play"
-    PLATFORMER_GAME_STATE_END       = "platf_end"
+    PLATFORMER_GAME_STATE_BEGIN     = 1
+    PLATFORMER_GAME_STATE_COUNTDOWN = 2
+    PLATFORMER_GAME_STATE_PLAY      = 3
+    PLATFORMER_GAME_STATE_END       = 4
     PLATFORMER_GAME_STATE_PAUSE     = "platf_pause"
     
     # runner states.
-    RUNNER_STATE_RUNNING    = "running"
-    RUNNER_STATE_JUMPING    = "jumping"
-    RUNNER_STATE_ASCENDING  = "ascending"
-    RUNNER_STATE_HOVERING   = "hovering"
-    RUNNER_STATE_DESCENDING = "descending"
-    RUNNER_STATE_LANDING    = "landing"
-    RUNNER_STATE_DROWNING   = "drowning"
-    RUNNER_STATE_FALLING    = "falling"
+    RUNNER_STATE_RUNNING    = 1
+    RUNNER_STATE_JUMPING    = 2
+    RUNNER_STATE_ASCENDING  = 3
+    RUNNER_STATE_HOVERING   = 4
+    RUNNER_STATE_DESCENDING = 5
+    RUNNER_STATE_LANDING    = 6
+    RUNNER_STATE_DROWNING   = 7
+    RUNNER_STATE_FALLING    = 8
     
     # animation names.
-    RUNNER_ANIMATION_RUN     = "run"
-    RUNNER_ANIMATION_JUMP    = "jump"
-    RUNNER_ANIMATION_ASCEND  = "ascend"
-    RUNNER_ANIMATION_HOVER   = "hover"
-    RUNNER_ANIMATION_DESCEND = "descend"
-    RUNNER_ANIMATION_LAND    = "land"
-    RUNNER_ANIMATION_DROWN   = "drown"
-    RUNNER_ANIMATION_FALL    = "fall"
+    RUNNER_ANIMATION_RUN     = 1
+    RUNNER_ANIMATION_JUMP    = 2
+    RUNNER_ANIMATION_ASCEND  = 3
+    RUNNER_ANIMATION_HOVER   = 4
+    RUNNER_ANIMATION_DESCEND = 5
+    RUNNER_ANIMATION_LAND    = 6
+    RUNNER_ANIMATION_DROWN   = 7
+    RUNNER_ANIMATION_FALL    = 8
 
-    # animation durations.  these divided into the number of frames that are
+    # Animation durations. These divided into the number of frames that are
     # in the corresponding animation are the frames per second value passed to
     # the GameAnimation constructor.
     RUN_ANIMATION_DURATION     = 1.0
@@ -128,7 +126,7 @@ init python:
     DROWN_ANIMATION_DURATION   = 1.0
     FALL_ANIMATION_DURATION    = 1.5
 
-    # number of animation frames.
+    # Number of animation frames.
     NUMBER_RUN_FRAMES     = 6
     NUMBER_JUMP_FRAMES    = 2
     NUMBER_ASCEND_FRAMES  = 2
@@ -141,14 +139,14 @@ init python:
     VIEW_WIDTH = 12
     VIEW_HEIGHT = 3
 
-    # From the top of the minigame area
+    # Distance from the top of the minigame area to the ground level
     GROUND_LEVEL = 415
    
     TILE_WIDTH  = 64
     TILE_HEIGHT = 64
     TILE_SIZE = Size( TILE_WIDTH, TILE_HEIGHT )
     
-    # runner initial cell position
+    # Runner initial cell position.
     CELL_X = 2
     CELL_Y = len(MAP_SEGMENTS[0])-3
 
@@ -168,7 +166,6 @@ init python:
         self.obstacle = None
 
         self.walkable  = False
-        self.drownable = False
         self.cleared   = False
     
     class Platformer( Minigame ):
@@ -343,13 +340,11 @@ init python:
                   tile      = None
                   obstacle  = None
                   walkable  = False
-                  drownable = False
+                  
                   if tile_type > 0:
                     tile = self.tiles[ tile_type - 1 ]
                     if tile_type in WALKABLE_TILES:
                       walkable = True
-                    if tile_type in DROWNABLE_TILES:
-                      drownable = True
 
                   if tile_type in OBSTACLE_TILES and x > 3:
                     if random.randint( 0, 100 ) <= self.level.obstacle_density:
@@ -367,7 +362,6 @@ init python:
                   cell.tile      = tile
                   cell.obstacle  = obstacle
                   cell.walkable  = walkable
-                  cell.drownable = drownable
                 
                   self.map[y].append( cell )
                   
@@ -377,38 +371,38 @@ init python:
             self.backgrounds = []
 
             mountains = GameObject()
-            mountains["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/6-bg.png" ) )
+            mountains["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/6-bg_1.png" ) )
             mountains["transform"].set_position( 0, 0 )
             mountains["behavior"] = BackgroundBehavior( self.runner, 1, True )
             self.backgrounds.append( mountains )
 
             low_clouds = GameObject()
-            low_clouds["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/5-clouds.png" ) )
+            low_clouds["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/5-clouds_1.png" ) )
             low_clouds["transform"].set_position( 0, 0 )
             low_clouds["behavior"] = BackgroundBehavior( self.runner, 5, False )
             self.backgrounds.append( low_clouds )
 
             high_clouds = GameObject()
-            high_clouds["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/4-clouds.png" ) )
+            high_clouds["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/4-clouds_1.png" ) )
             high_clouds["transform"].set_position( 0, 0 )
             high_clouds["behavior"] = BackgroundBehavior( self.runner, 15, False )
             self.backgrounds.append( high_clouds )
 
             hills = GameObject()
-            hills["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/3-hills.png" ) )
-            hills["transform"].set_position( 0, 0 )
+            hills["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/3-hills_1.png" ) )
+            hills["transform"].set_position( 0, 180 )
             hills["behavior"] = BackgroundBehavior( self.runner, 6, True )
             self.backgrounds.append( hills )
 
             forest = GameObject()
-            forest["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/2-trees.png" ) )
-            forest["transform"].set_position( 0, 0 )
+            forest["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/2-trees_1.png" ) )
+            forest["transform"].set_position( 0, 189 )
             forest["behavior"] = BackgroundBehavior( self.runner, 10, True )
             self.backgrounds.append( forest )
 
             foreground = GameObject()
-            foreground["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/1-foreground.png" ) )
-            foreground["transform"].set_position( 0, 0 )
+            foreground["renderer"] = GameRenderer( GameImage( "gfx/platformer/backgrounds/1-foreground_1.png" ) )
+            foreground["transform"].set_position( 0, 86 )
             foreground["behavior"] = BackgroundBehavior( self.runner, 20, True )
             self.backgrounds.append( foreground )
 
@@ -436,15 +430,17 @@ init python:
         def render( self, blitter, clip_rect ):
             world_transform = self.get_world_transform()
 
+            # Render the background layers.
             for layer in self.backgrounds:
               layer["renderer"].render( blitter, clip_rect, world_transform )
             
+            # Grab the coordinate behind the runner for tile drawing.
             cell_x = self.runner["behavior"].cell_x-3
             
             for y in range(0, VIEW_HEIGHT):
               for x in range(cell_x, cell_x + VIEW_WIDTH + 1):
-                # Dirty +1 increase added to have the new, bigger obstacles drawn
-                # off screen.
+                # Note: dirty +1 increase added to have the new, bigger obstacles
+                # drawn a bit off screen.
                   
                 cell = self.map[y][x]
                 if cell.tile != None:
@@ -527,6 +523,7 @@ init python:
             self.cell_y = CELL_Y
             self.cell = self.platformer.map[CELL_Y][CELL_X]
             
+
             self.x_velocity = RUN_SPEED
             self.y_velocity = 0
             self.y_offset   = 0
@@ -547,44 +544,19 @@ init python:
               self.jump_requested = True
         
         def update( self, delta_sec ):
-            distance = self.x_velocity * delta_sec
-            self.sub_distance += distance
-            self.distance     += distance
+            x_distance = self.x_velocity * delta_sec
+            self.sub_distance += x_distance
+            self.distance     += x_distance
             
-            update_cell = False
-            
-            # Running to the next tile yet?
+            # Check if its time to change the tile we're on.
             if self.sub_distance + BUMPER >= TILE_WIDTH:
               self.sub_distance -= TILE_WIDTH
               self.cell_x += 1
-              update_cell = True
-            
-            self.y_offset += self.y_velocity * delta_sec
-            
-            # Vertical stuff was used in the old version where it was possible
-            # to move verticaly too rather than running straight all the time.
-            # Now it merely checks if you've fallen down and there's water in
-            # the current tile. Most likely all of the stuff below could (should)
-            # be rewritten/simplified now that there's no need for any vertical
-            # tile changing anymore. --> TODO?
-            if self.y_offset >= TILE_HEIGHT:
-              self.y_offset = 0
-              self.cell_y += 1
-              update_cell = True
-            elif self.y_offset <= -TILE_HEIGHT:
-              self.y_offset = 0
-              self.cell_y -= 1
-              update_cell = True
-            
-            self.game_object["transform"].y += self.y_velocity * delta_sec
-            
-            if update_cell and self.cell_y < VIEW_HEIGHT:
               self.cell = self.platformer.map[self.cell_y][self.cell_x]
                 
-            # state checks follow
-                
+            # State checks follow.
             if self.state == RUNNER_STATE_RUNNING:
-              if self.cell.tile == None or not self.cell.walkable:
+              if self.cell.walkable == False:
                 self.state = RUNNER_STATE_DESCENDING
                 self.game_object["renderer"].play_animation( RUNNER_ANIMATION_DESCEND )
               else:
@@ -593,7 +565,7 @@ init python:
                   self.game_object["renderer"].play_animation( RUNNER_ANIMATION_FALL )
                   self.cell.cleared = True
                   self.x_velocity = 0
-                elif self.jump_requested:
+                elif self.jump_requested:                  
                   self.delay_counter += delta_sec
                   if self.delay_counter >= JUMP_DELAY:
                     self.state = RUNNER_STATE_JUMPING
@@ -609,54 +581,8 @@ init python:
                 self.game_object["renderer"].play_animation( RUNNER_ANIMATION_ASCEND )
                 self.x_velocity = RUN_SPEED
                 self.y_velocity = -JUMP_SPEED
+                self.delay_counter = 0
                 
-            elif self.state == RUNNER_STATE_ASCENDING:
-              self.y_velocity += GRAVITY * delta_sec
-              # show hover animation when climbing slowly enough
-              if self.y_velocity > -50:
-                self.state = RUNNER_STATE_HOVERING
-                self.game_object["renderer"].play_animation( RUNNER_ANIMATION_HOVER )
-                
-            elif self.state == RUNNER_STATE_HOVERING:
-              self.y_velocity += GRAVITY * delta_sec
-              # show descending animation when falling fast enough (if hovering)
-              if self.y_velocity > 50:
-                self.state = RUNNER_STATE_DESCENDING
-                self.game_object["renderer"].play_animation( RUNNER_ANIMATION_DESCEND )
-                
-            elif self.state == RUNNER_STATE_DESCENDING:
-              # TODO: clean this mess
-              
-              # free fall
-              #if self.cell.tile == None:
-              if self.y_velocity < MAX_FALL_SPEED:
-                self.y_velocity += GRAVITY * delta_sec
-              
-              # more free fall
-              if not self.cell.walkable:
-                # drown if the tile is water and the player has fallen down enough
-                if self.cell.drownable and self.y_offset >= TILE_HEIGHT/4:
-                  self.state = RUNNER_STATE_DROWNING
-                  self.game_object["renderer"].play_animation( RUNNER_ANIMATION_DROWN )
-                  self.x_velocity = 0
-                  self.y_velocity = 0
-                
-                else:
-                  if self.y_velocity < MAX_FALL_SPEED:
-                    self.y_velocity += GRAVITY * delta_sec
-              else:
-                # 
-                if self.y_offset >= 0:
-                  self.state = RUNNER_STATE_LANDING
-                  self.game_object["renderer"].play_animation( RUNNER_ANIMATION_LAND )
-                  self.game_object["transform"].y = GROUND_LEVEL + self.cell_y*TILE_HEIGHT
-                  self.x_velocity = 0
-                  self.y_velocity = 0
-                  
-              # the runner has fallen off the screen
-              if self.cell_y > VIEW_HEIGHT:
-                self.dead = True
-              
             elif self.state == RUNNER_STATE_LANDING:
               self.delay_counter += delta_sec
               if self.delay_counter >= LAND_ANIMATION_DURATION:
@@ -678,6 +604,41 @@ init python:
                 self.game_object["renderer"].play_animation( RUNNER_ANIMATION_RUN )
                 self.x_velocity = RUN_SPEED                
                 self.delay_counter = 0
+                
+            else:
+              # (de)Accelerate as long as the speed is less than the max falling speed.
+              if self.y_velocity < MAX_FALL_SPEED:
+                self.y_velocity += GRAVITY * delta_sec
+              
+              y_distance = self.y_velocity * delta_sec
+              self.y_offset += y_distance
+              self.game_object["transform"].y += y_distance
+            
+              if self.state == RUNNER_STATE_ASCENDING:
+                # Switch to hover animation when climbing slow enough.
+                if self.y_velocity > -50:
+                  self.state = RUNNER_STATE_HOVERING
+                  self.game_object["renderer"].play_animation( RUNNER_ANIMATION_HOVER )
+                  
+              elif self.state == RUNNER_STATE_HOVERING:
+                # Switch to descending animation when falling fast enough.
+                if self.y_velocity > 50:
+                  self.state = RUNNER_STATE_DESCENDING
+                  self.game_object["renderer"].play_animation( RUNNER_ANIMATION_DESCEND )
+                  
+              elif self.state == RUNNER_STATE_DESCENDING:
+                if self.y_offset >= 0:
+                  if self.cell.walkable == True:
+                    self.state = RUNNER_STATE_LANDING
+                    self.game_object["renderer"].play_animation( RUNNER_ANIMATION_LAND )
+                    self.game_object["transform"].y = GROUND_LEVEL + self.cell_y*TILE_HEIGHT
+                    self.x_velocity = 0
+                    self.y_velocity = 0
+                  elif self.y_offset > 20:
+                    self.state = RUNNER_STATE_DROWNING
+                    self.game_object["renderer"].play_animation( RUNNER_ANIMATION_DROWN )
+                    self.x_velocity = 0
+                    self.y_velocity = 0
 
     class BackgroundBehavior( GameComponent ):
         def __init__( self, runner, pps, follow_runner ):
