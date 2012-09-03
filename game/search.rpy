@@ -1,5 +1,5 @@
 label show_map:
-  # Grab the current max click amount the player can use.
+  # Grab the current max click amount the player can spend.
   $clicks_left = CLICKS + BONUS_CLICKS
   # A list of items that match the decision value.
   $items = inventory.get_items(decision, "map")
@@ -9,7 +9,7 @@ label show_map:
   $renpy.transition(dissolve)
   $renpy.show("map")
   $hide_main_ui()
-
+  
   # Start the map screen loop.
   while (clicks_left > 0):
     $show_clicks(clicks_left)
@@ -60,7 +60,7 @@ init python:
   NO  = "No"
   SEARCH_FOUND_NOTHING = "You found nothing of interest."
   SEARCH_FOUND_ITEM = "You found an item: "
-  SEARCH_END = "'0 clicks left' message)"
+  SEARCH_END = "('0 clicks left' message)"
 
   # Populates the CLICKABLES dict with clickables listed in rooms.xml. The elements in the
   # CLICKABLES dict are sub-dicts containing lists of all the clickables specified for that room.
@@ -87,6 +87,9 @@ init python:
 
       CLICKABLES[room_node.get("id")] = room_clickables_list
 
+  # Resets the rooms by looping through all the room clickables listed in CLICKABLES, 
+  # setting their click counters to 0 and nulling any items (only if the clickable
+  # can contain one).
   def reset_clickables():
     room_keys = CLICKABLES.keys()
     for room_key in room_keys:
@@ -98,16 +101,17 @@ init python:
           clickable_data["item"] = None
     return
 
-  # Places items in different stashes all around the house based on what location values
-  # they have been given in items.xml matching the current decision (nightly choice).
-  # Possible values for attributes "room" and "stash" are listed in rooms.xml, but they
-  # can also be given "any" values. Any items with "any" values in either "room" or "stash"
-  # are randomly placed, either randomizing the room AND stash, or only the stash. Currently
-  # randomization is being tried for a maximum of three times, after which the item will be
+  # Places items in different stashes all around the house, based on the location values
+  # given in items.xml matching the current decision (nightly choice). Possible values for 
+  # attributes "room" and "stash" are listed in rooms.xml, but they can also be given the 
+  # value "any", too. Any items with the value "any" in either "room" or "stash" are 
+  # randomly placed, either randomizing the room AND stash, or only the stash. Currently
+  # randomization happens for a maximum of three times, after which the item will be
   # ignored for the current search session (= not placed anywhere because all the stashes
   # were occupied). This could be easily remedied by re-randomizing the room, too, but nah,
   # that'll have to wait for later.
   def hide_items(items):
+    # Reset the already existing clickables, or create a brand new set if needed.
     if len(CLICKABLES.keys()) == 0:
       create_clickables()
     else:
@@ -117,7 +121,7 @@ init python:
     room_keys = CLICKABLES.keys()
 
     for item in items:
-      # Get the item's location information set in items.xml
+      # Get the item's location information (as defined in items.xml).
       location = item.get_map_location(decision)
 
       # Randomize the room if the location is set to "any", else don't.
@@ -127,11 +131,11 @@ init python:
         # If the item is set to some specific stash, place it there, else randomize the stash
         if location["stash"] != "any":
           room[location["stash"]]["item"] = item
-          print "Placed", item.get_name(), "to", location["room"], location["stash"]
+          renpy.log("Placed item %s to %s, %s" % (item.get_name(), location["room"], location["stash"]))
         else:
           # Randomize the stash and grab the key for debugging purposes
           clickable_key = randomize_clickable(room, item)
-          print "Randomly placed", item.get_name(), "to", location["room"], clickable_key
+          renpy.log("Randomly placed item %s to %s, %s" % (item.get_name(), location["room"], clickable_key))
 
       else:
         # Randomize the room
@@ -140,7 +144,7 @@ init python:
 
         # Randomize the stash and grab the key for debugging purposes
         clickable_key = randomize_clickable(room, item)
-        print "Completely randomly placed", item.get_name(), "to", room_keys[room_number], clickable_key
+        renpy.log("Completely randomly placed %s to %s, %s" % (item.get_name(), room_keys[room_number], clickable_key))
 
     return
 
@@ -161,9 +165,10 @@ init python:
         room[clickable_keys[clickable_number]]["item"] = item
         return clickable_keys[clickable_number]
 
-      print "  Clickable", clickable_keys[clickable_number], "occupied, trying again..."
+      renpy.log("Clickable %s occupied, trying again..." % clickable_keys[clickable_number])
       rand_attempts -= 1
 
+    # Return value for debugging only.
     return "None, randomization failed"
 
   # Displays the amount of tries/clicks the player has.
@@ -172,6 +177,7 @@ init python:
     ui.text('%d' % clicks_left, xfill=True, yfill=True)
     return
 
+  # Creates the room icons for the map view.
   def show_room_icons(decision):
     # Riku's room
     ui.frame(xpos=262, ypos=202, xmaximum=98, ymaximum=73, xpadding=0, ypadding=0, background=None)
@@ -201,7 +207,7 @@ init python:
     ui.frame(xpos=686, ypos=383, xmaximum=17, ymaximum=158, xpadding=0, ypadding=0, background=None)
     ui.imagebutton("gfx/map/room_hall2.png", "gfx/map/room_hall2_hover.png", clicked=ui.returns("hall2"))
 
-    # Bathroom, TODO-note --> decision == "0" ??
+    # Bathroom
     if decision == "7":
       ui.frame(xpos=566, ypos=382, xmaximum=91, ymaximum=115, xpadding=0, ypadding=0, background=None)
       ui.imagebutton("gfx/map/room_bathroom.png", "gfx/map/room_bathroom_hover.png", clicked=ui.returns("bathroom"))
@@ -216,7 +222,10 @@ init python:
   # with clickables.
   def show_room(room, clicks_left):
     renpy.transition(dissolve)
-    # Room background names are defined in script.rpy.
+    # Room background names are defined in script.rpy, "bg riroom" etc.
+    # NOTE: calling "bg riroom" replaces the current bg image, causing the main
+    # game view (the story view, or whatever you call it) to be blank. Fix this
+    # by changing the room names from "bg room" to just "room". --> FIXME
     renpy.show("bg " + room, zorder=1)
 
     # Grab all the room's item nodes for clickables creation.
@@ -247,7 +256,7 @@ init python:
 
   # Creates clickables to the room using the info read from rooms.xml. There can be two
   # different kind of clickables: ones that can be searched (stashes) and ones that just
-  # display maybe not-so-relevant information about the world. The information clickables
+  # display maybe not so relevant information about the world. The information clickables
   # are invisible clickables, while stashes are the ones that highlight on mouse hover.
   def show_room_clickables(room, item_nodes):
     for item_node in item_nodes:
@@ -293,7 +302,7 @@ init python:
 
     # Select the right description for the clickable. Two types: stashes have just the default one,
     # misc ones have several. The one that's supposed to be displayed depends on how many clicks
-    # the misc clickable has already received.
+    # the misc clickable has already received (see rooms.xml).
     description = None
     if clickable_type == "stash":
       description = selected_item_node.text
@@ -315,7 +324,8 @@ init python:
     ui.vbox()
     ui.text("{size=-2}" + description + "{/size}")
 
-    print "Clickable data:", clickable_data
+    renpy.log("Clickable data: %s" % clickable_data)
+    #print "Clickable data:", clickable_data
 
     # Don't bother displaying search prompts if the clickable was a misc clickable or if the player
     # has already taken a look at the stash clickable.
