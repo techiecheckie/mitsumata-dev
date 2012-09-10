@@ -1,6 +1,7 @@
 init python:
   renpy.image("shop_background", "gfx/backgrounds/Store.png")
 
+  # Shop grid settings
   SHOP_ICON_X = 500
   SHOP_ICON_Y = 200
   SHOP_ROWS   = 3
@@ -27,51 +28,27 @@ init python:
 
 label shop_loop: 
   python: 
-    button = ""
     items = inventory.get_items(decision, "store") 
     
     hide_main_ui()
-    renpy.transition(dissolve)
     show_minigame_ui("shop_background", False)
     
-    while (True):
-      create_grid(items)
-      button = ui.interact(clear=False)
-
-      if button == "exit":
-        break
-      elif button != "":
-        # Display item information and confirmation buttons in a box
-        renpy.transition(dissolve)
-        ui.frame(xpos=MINIGAME_POS_X+50, 
-                 ypos=MINIGAME_POS_Y+150, 
-                 background="gfx/textbox.png",
-                 xpadding=40,
-                 ypadding=40,
-                 xmaximum=530)
+    if len(items) == 0:
+      show_message("DEBUG: No shop items for decision value %s. Press any key to continue." % decision, "large")
+    else:    
+      while True:
+        create_grid(items)
         
-        ui.hbox(spacing=20)
-        ui.image(im.Scale("gfx/items/" + button.get_id() + ".png", 100, 100))
-        ui.text("{size=-3}" + button.get_name() + "\n\n" + button.get_description() + "\n\n{/size}")
-        ui.close()
+        # Shop text
+        ui.frame(xpos=DESCRIPTION_POS_X, ypos=DESCRIPTION_POS_Y, background=None)
+        ui.text("Shop message")
         
-        ui.frame(xpos=MINIGAME_POS_X + 50,
-                 ypos=MINIGAME_POS_Y + 300,
-                 background=None,
-                 xpadding=40,
-                 ypadding=40,
-                 xmaximum=530)
-        ui.vbox()
-        ui.text("\n\n{size=-3}Are you sure you want to buy this item?{/size}")
-        ui.textbutton("Ok", clicked=ui.returns(True), xfill=True)
-        ui.textbutton("Cancel", clicked=ui.returns(False), xfill=True)
-        ui.close()
-        
-        accepted = ui.interact()
-        renpy.transition(dissolve)
-        
-        if accepted:
-          create_grid(items)
+        button = ui.interact(clear=False)
+  
+        if button == "exit":
+          break
+        elif button != "":
+          # Display item information and confirmation buttons in a box
           renpy.transition(dissolve)
           ui.frame(xpos=MINIGAME_POS_X+50, 
                    ypos=MINIGAME_POS_Y+150, 
@@ -79,21 +56,50 @@ label shop_loop:
                    xpadding=40,
                    ypadding=40,
                    xmaximum=530)
+          
           ui.hbox(spacing=20)
           ui.image(im.Scale("gfx/items/" + button.get_id() + ".png", 100, 100))
-          ui.text("{size=-3}Item bought: " + button.get_name() + ".\n\nThe shopkeeper waves you goodbye as you leave the store.{/size}")
+          ui.text("{size=-3}" + button.get_name() + "\n\n" + button.get_description() + "\n\n{/size}")
           ui.close()
           
-          show_invisible_button("full")
-        
-          unlock_item(button.get_id(), False)
-          update_stats()
-          update_minigame_ui(HP, MP)
+          ui.frame(xpos=MINIGAME_POS_X + 50,
+                   ypos=MINIGAME_POS_Y + 300,
+                   background=None,
+                   xpadding=40,
+                   ypadding=40,
+                   xmaximum=530)
+          ui.vbox()
+          ui.text("\n\n{size=-3}Are you sure you want to buy this item?{/size}")
+          ui.textbutton("Ok", clicked=ui.returns(True), xfill=True)
+          ui.textbutton("Cancel", clicked=ui.returns(False), xfill=True)
+          ui.close()
           
-          break
+          accepted = ui.interact()
+          renpy.transition(dissolve)
+          
+          if accepted:
+            create_grid(items)
+            renpy.transition(dissolve)
+            ui.frame(xpos=MINIGAME_POS_X+50, 
+                     ypos=MINIGAME_POS_Y+150, 
+                     background="gfx/textbox.png",
+                     xpadding=40,
+                     ypadding=40,
+                     xmaximum=530)
+            ui.hbox(spacing=20)
+            ui.image(im.Scale("gfx/items/" + button.get_id() + ".png", 100, 100))
+            ui.text("{size=-3}Item bought: " + button.get_name() + ".\n\nThe shopkeeper waves you goodbye as you leave the store.{/size}")
+            ui.close()
+          
+            show_invisible_button("full")
+        
+            unlock_item(button.get_id(), False)
+            update_stats()
+            update_minigame_ui(HP, MP)
+          
+            break
     
     ui.clear()
-    renpy.transition(dissolve)
     hide_minigame_ui("shop_background")
     show_main_ui()
   
