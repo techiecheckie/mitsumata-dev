@@ -199,6 +199,7 @@ screen main_menu:
         hotspot (365, 450, 105, 220) action ShowMenu("load")
         hotspot (555, 450, 105, 220) action ShowMenu("preferences")
         hotspot (740, 450, 105, 220) action Quit(confirm=False)
+        hotspot (  0,   0,  40,  40) action ShowMenu("gallery")
     
     if (persistent.bonus["unlocked"] == True):
       frame:
@@ -505,21 +506,3 @@ init -2 python:
 #        hotspot (522, 378, 722, 426) action ShowMenu('preferences')
 #        hotspot (522, 443, 722, 492) action Help()
 #        hotspot (522, 506, 722, 554) action Quit(confirm=False)   
-
-# A very simple placeholder for the bonus menu.
-#screen bonus:
-#    # This ensures that any other menu screen is replaced.
-#    tag menu
-#    
-#    add "gfx/menus/quit.jpg"
-#    
-#    frame:
-#        has vbox
-#        
-#        if persistent.bonus["cg_gallery"][0] == True:
-#          textbutton _("CG Gallery") action ShowMenu("bonus")
-#        if persistent.bonus["music_gallery"][0] == True:
-#          textbutton _("Music Gallery") action ShowMenu("bonus")
-#        if persistent.bonus["trophy_room"][0] == True:
-#          textbutton _("Trophy Room") action ShowMenu("bonus")
-#        textbutton _("Return") action Return()
