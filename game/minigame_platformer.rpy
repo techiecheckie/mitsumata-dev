@@ -8,19 +8,19 @@ init python:
     PLATFORMER_LEVELS = [
       # Level 1
       PlatformerLevel( time_limit       = 60,
-                       distance         = 3000, 
+                       distance         = 300, # about 800 is the max until the background starts running out (takes about 90 sec to get there, though)
                        obstacle_density = 50), # density: 0-100
       # Level 2
       PlatformerLevel( time_limit       = 60,
-                       distance         = 4000, 
+                       distance         = 400, 
                        obstacle_density = 60),
       # Level 3
       PlatformerLevel( time_limit       = 60,
-                       distance         = 4500, 
+                       distance         = 450, 
                        obstacle_density = 75),
       # Level 4
       PlatformerLevel( time_limit       = 60,
-                       distance         = 5000, 
+                       distance         = 500, 
                        obstacle_density = 90)
     ]
     
@@ -81,7 +81,7 @@ init python:
     
     RUN_SPEED      = 110
     JUMP_SPEED     = 150
-    JUMP_DELAY     = 0.2
+    JUMP_DELAY     = 0.15
     MAX_FALL_SPEED = 200
     GRAVITY        = 200
     
@@ -155,6 +155,11 @@ init python:
     # this number affects how soon the player bumps into objects or falls off 
     # cliffs.
     BUMPER = 5
+    
+    # Quick 'n dirty, this one handles the conversion between the displayed values
+    # and the real distance values (eg. 300 -> 3000 -> 300). Just a little fix
+    # to make the goal and currently run distances a little more believable.
+    DISTANCE_MULTIPLIER = 10
     
     class Cell( GameObject ):
       def __init__( self, x, y ):
@@ -323,7 +328,7 @@ init python:
             
             # Calculate how many map segments are needed to cover the run distance
             map_length = 0
-            while map_length < self.level.distance:
+            while map_length < self.level.distance * DISTANCE_MULTIPLIER:
               index = random.randint(0,len(MAP_SEGMENTS)-1)
               segments.append(MAP_SEGMENTS[index])
               map_length += len(MAP_SEGMENTS[index][0]) * TILE_WIDTH
@@ -410,7 +415,7 @@ init python:
             return "Time remaining: %d" % self.time_remaining.get_ceil_value()
 
         def get_distance_left( self ):
-            return "Distance left: %d" % ( self.level.distance - self.runner["behavior"].distance )
+            return "Distance left: %d" % ( self.level.distance - self.runner["behavior"].distance/DISTANCE_MULTIPLIER )
                 
         def get_distance( self ):
             return "%20d" % self.level.distance
@@ -419,10 +424,10 @@ init python:
             return "%20d" % self.level.time_limit
                 
         def get_distance_run( self ):
-            return "%20d" % self.runner["behavior"].distance
+            return "%20d" % ( self.runner["behavior"].distance/DISTANCE_MULTIPLIER )
             
         def get_result( self ):
-            return int(self.runner["behavior"].distance)
+            return int( self.runner["behavior"].distance/DISTANCE_MULTIPLIER )
             
         def get_level_number( self ):
             return "%20d" % self.level_number
@@ -479,7 +484,7 @@ init python:
               
               if self.time_remaining.get_value() <= 0 \
                   or self.runner["behavior"].dead \
-                  or self.runner["behavior"].distance >= self.level.distance:
+                  or self.runner["behavior"].distance >= self.level.distance * DISTANCE_MULTIPLIER:
                 self.state = PLATFORMER_GAME_STATE_END
                 
         def on_key_down( self, key ):
@@ -523,7 +528,6 @@ init python:
             self.cell_y = CELL_Y
             self.cell = self.platformer.map[CELL_Y][CELL_X]
             
-
             self.x_velocity = RUN_SPEED
             self.y_velocity = 0
             self.y_offset   = 0
