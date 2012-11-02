@@ -11,22 +11,22 @@ init python:
         MagicForceLevel( number_digits     = (1,4),
                          correct_timeout   = 0.15,
                          incorrect_timeout = 0.9,
-                         time_limit        = 60 ),
+                         time_limit        = 30 ),
 
         MagicForceLevel( number_digits     = (1,5),
                          correct_timeout   = 0.12,
                          incorrect_timeout = 0.7,
-                         time_limit        = 60),
+                         time_limit        = 30),
 
         MagicForceLevel( number_digits     = (1,6),
                          correct_timeout   = 0.12,
                          incorrect_timeout = 0.7,
-                         time_limit        = 60),
+                         time_limit        = 30),
 
         MagicForceLevel( number_digits     = (1,7),
                          correct_timeout   = 0.12,
                          incorrect_timeout = 0.7,
-                         time_limit        = 60)
+                         time_limit        = 30)
         ]
 
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####

@@ -92,7 +92,7 @@ init python:
     PLATFORMER_GAME_STATE_COUNTDOWN = 2
     PLATFORMER_GAME_STATE_PLAY      = 3
     PLATFORMER_GAME_STATE_END       = 4
-    PLATFORMER_GAME_STATE_PAUSE     = "platf_pause"
+    PLATFORMER_GAME_STATE_PAUSE     = 5
     
     # runner states.
     RUNNER_STATE_RUNNING    = 1

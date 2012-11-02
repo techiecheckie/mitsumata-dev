@@ -19,7 +19,7 @@ init python:
             self.bird_scale       = bird_scale
 
     HUNT_LEVELS = [
-        HuntLevel( time_limit       = 60,
+        HuntLevel( time_limit       = 30,
                    max_birds        = (4, 10),
                    max_easy_birds   = (3, 7),
                    max_medium_birds = (0, 4),
@@ -28,7 +28,7 @@ init python:
                    bird_speed       = (80, 140),
                    bird_scale       = (1.0, 1.5) ),
         
-        HuntLevel( time_limit       = 60,
+        HuntLevel( time_limit       = 30,
                    max_birds        = (4, 10),
                    max_easy_birds   = (3, 7),
                    max_medium_birds = (0, 4),
@@ -37,7 +37,7 @@ init python:
                    bird_speed       = (80, 140),
                    bird_scale       = (1.0, 1.5) ),
         
-        HuntLevel( time_limit       = 60,
+        HuntLevel( time_limit       = 30,
                    max_birds        = (4, 10),
                    max_easy_birds   = (3, 7),
                    max_medium_birds = (0, 4),
@@ -46,7 +46,7 @@ init python:
                    bird_speed       = (80, 140),
                    bird_scale       = (1.0, 1.5) ),
                    
-        HuntLevel( time_limit       = 60,
+        HuntLevel( time_limit       = 30,
                    max_birds        = (4, 10),
                    max_easy_birds   = (3, 7),
                    max_medium_birds = (0, 4),

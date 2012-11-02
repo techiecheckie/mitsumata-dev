@@ -5,25 +5,25 @@ init python:
             self.marker_speed        = marker_speed
 
     MAGIC_POWER_LEVELS = [
-        MagicPowerLevel( time_limit          = 60,
+        MagicPowerLevel( time_limit          = 30,
                          marker_speed        = 300 ),
 
-        MagicPowerLevel( time_limit          = 60,
+        MagicPowerLevel( time_limit          = 30,
                          marker_speed        = 325 ),
                          
-        MagicPowerLevel( time_limit          = 60,
+        MagicPowerLevel( time_limit          = 30,
                          marker_speed        = 350 ),
                          
-        MagicPowerLevel( time_limit          = 60,
+        MagicPowerLevel( time_limit          = 30,
                          marker_speed        = 375 ),
                          
-        MagicPowerLevel( time_limit          = 60,
+        MagicPowerLevel( time_limit          = 30,
                          marker_speed        = 400 )
         ]
 
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####
 
-    # different states the Hunt Duck game can be in.
+    # different states the Magic Power game can be in.
     MAGIC_POWER_GAME_STATE_BEGIN = "power_begin"
     MAGIC_POWER_GAME_STATE_PLAY  = "power_play"
     MAGIC_POWER_GAME_STATE_END   = "power_end"
