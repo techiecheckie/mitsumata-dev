@@ -19,11 +19,11 @@ init python:
   GAME_DESCRIPTIONS = {
     "mole" : "Agility:\n\nUse the keypad or mouse to hit the moles.",
     "cell" : "Cells:\n\nUse the mouse to click on the infected cells.",
-    "platformer" : "Use spacebar to jump over obstacles and pits.",
+    "platformer" : "Use the spacebar to jump over obstacles and pits.",
     "duck" : "Hunting:\n\nUse the mouse to shoot the birds.",
     "force" : "Magic force:\n\nUse the keypad or keys 0-9 to type the numbers as they appear.",
     "power" : "Magic control:\n\nClick the mouse to aim and set the amount of power while the arrows are moving.",
-    "squats" : "Strength:\n\nAs the marker passes over each lit section, hit the correct arrow key (down, left, or up).",
+    "squats" : "Strength:\n\nWait for the marker to move over the green area and press the spacebar to help Riku time his efforts.",
     "gears" : "Gears:\n\nUse the mouse to drag cogs and lock them on axles.",
     "garden" : "Gardening:\n\nInsert description here..",
     # Lock and bottles have their own level-based descriptions, no need to fill.
@@ -43,7 +43,9 @@ init python:
   MINIGAME_GRID_ROWS = 3 
   
   # TODO fill in the rest
-  # Bonus format: (points_to_unlock, (stat, amount) (, ...))
+  # Bonus format: (required points, (stat, amount), (stat, amount), ...),
+  # eg. with two bonuses: (5000, ("hp", 300), ("mp", 200))
+  #     with one bonus:   (3000, ("hp", 150))
   MINIGAME_BONUSES = {
     "mole" : [
       (5000, ("hp", 300), ("mp", 200)),
@@ -58,7 +60,10 @@ init python:
     "duck" : [],
     "force" : [],
     "power" : [],
-    "squats" : [],
+    "squats" : [
+      (1000, ("hp", 100)),
+      (500, ("hp", 50))
+    ],
     "gears" : [],
     "garden" : [],
     "lock" : [],
