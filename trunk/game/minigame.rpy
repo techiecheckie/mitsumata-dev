@@ -181,7 +181,8 @@ init python:
   # the game's bonuses (MINIGAME_BONUSES[game], above), looking for new (stat)
   # bonuses to unlock. 
   def update_high_score(game, score):
-    print "Got", score, "points, old score", persistent.unlocked_minigames[game][0]
+    renpy.log("Got %s points, old score %s" % (score, persistent.unlocked_minigames[game][0]))
+    #print "Got", score, "points, old score", persistent.unlocked_minigames[game][0]
     
     if score > persistent.unlocked_minigames[game][0]:
       old_score = persistent.unlocked_minigames[game][0]
