@@ -3,81 +3,159 @@ init python:
     import math
 
     class CellLevel( object ):
-        def __init__( self, initial_healthy, initial_easy_infected,
-                      initial_medium_infected, initial_hard_infected,
-                      infected_idle_time, healthy_idle_time ):
+        def __init__( self, initial_healthy, mutation_probability, 
+                            duplication_probability, mutation_cooldown, 
+                            mutation_duration, cell_action_timeout, 
+                            post_mutation_timeout, level_number ):
             self.initial_healthy         = initial_healthy
-            self.initial_easy_infected   = initial_easy_infected
-            self.initial_medium_infected = initial_medium_infected
-            self.initial_hard_infected   = initial_hard_infected
-            self.infected_idle_time      = infected_idle_time
-            self.healthy_idle_time       = healthy_idle_time
+            self.mutation_probability    = mutation_probability
+            self.duplication_probability = duplication_probability
+            self.mutation_cooldown      = mutation_cooldown
+            self.mutation_duration       = mutation_duration
+            self.cell_action_timeout     = cell_action_timeout
+            self.post_mutation_timeout   = post_mutation_timeout
+            self.level_number            = level_number
 
+    # Level settings definitions for the Cells minigame:
+    #
+    #    initial_healthy         - Number of cells in the beginning.
+    #
+    #    mutation_probability    - How likely it is for a cell to start mutating.
+    #                              Mutation happens spontaneously, but only if 
+    #                              the amount of healthy cells is more than
+    #                              MIN_HEALTHY_CELLS. This is to prevent the few
+    #                              existing cells from mutating right in the 
+    #                              beginning of the game.
+    #
+    #    duplication_propability - How likely it is for a cell to start creating
+    #                              duplicates of itself. The created duplicates
+    #                              are always of the same level as the one being
+    #                              duplicated.
+    #
+    #    mutation_cooldown       - The amount of time in seconds that must pass 
+    #                              before the next spontaneous mutation can happen. 
+    #                              Setting this too low results in blood and tears
+    #                              as the dish fills with infected cells faster
+    #                              than you can kill them.
+    #
+    #    mutation_duration       - How long the mutation phase lasts (in seconds).
+    #
+    #    cell_action_timeout     - How long the cell stays idle after performing
+    #                              an action such as moving or infecting.
+    #
+    #    post_mutation_timeout   - How long the cell stays idle after the mutation
+    #                              completes. Settings this to zero results in
+    #                              wild, highly uncontrollable mutation waves.
     CELL_LEVELS = [
         CellLevel( initial_healthy         = 2,
-                   initial_easy_infected   = 2,
-                   initial_medium_infected = 0,
-                   initial_hard_infected   = 0,
-                   infected_idle_time      = (0.6, 0.85),
-                   healthy_idle_time       = (0.7, 0.9) ),
+                   mutation_probability    = 10,
+                   duplication_probability = 50,
+                   mutation_cooldown       = 2,
+                   mutation_duration       = 2,
+                   cell_action_timeout     = 2,
+                   post_mutation_timeout   = 0.5,
+                   level_number            = 1 ),
                    
-        CellLevel( initial_healthy         = 2,
-                   initial_easy_infected   = 1,
-                   initial_medium_infected = 1,
-                   initial_hard_infected   = 0,
-                   infected_idle_time      = (0.6, 0.85),
-                   healthy_idle_time       = (0.7, 0.9) ),
-
-        CellLevel( initial_healthy         = 2,
-                   initial_easy_infected   = 1,
-                   initial_medium_infected = 1,
-                   initial_hard_infected   = 1,
-                   infected_idle_time      = (0.6, 0.85),
-                   healthy_idle_time       = (0.7, 0.9) ),
-
-        CellLevel( initial_healthy         = 2,
-                   initial_easy_infected   = 1,
-                   initial_medium_infected = 2,
-                   initial_hard_infected   = 1,
-                   infected_idle_time      = (0.6, 0.85),
-                   healthy_idle_time       = (0.7, 0.9) )
+        CellLevel( initial_healthy         = 3,
+                   mutation_probability    = 20,
+                   duplication_probability = 50,
+                   mutation_cooldown       = 2,
+                   mutation_duration       = 2,
+                   cell_action_timeout     = 2,
+                   post_mutation_timeout   = 0.5,
+                   level_number            = 2 ),
+        
+        CellLevel( initial_healthy         = 4,
+                   mutation_probability    = 30,
+                   duplication_probability = 50,
+                   mutation_cooldown       = 2,
+                   mutation_duration       = 2,
+                   cell_action_timeout     = 2,
+                   post_mutation_timeout   = 0.5,
+                   level_number            = 3 ),
+                   
+        CellLevel( initial_healthy         = 4,
+                   mutation_probability    = 30,
+                   duplication_probability = 50,
+                   mutation_cooldown       = 1,
+                   mutation_duration       = 2,
+                   cell_action_timeout     = 2,
+                   post_mutation_timeout   = 0.2,
+                   level_number            = 4 ),
         ]
+        
+    CELLS_HIT_POINTS_HEALTHY = 1
+    CELLS_HIT_POINTS_EASY    = 1
+    CELLS_HIT_POINTS_MEDIUM  = 3
+    CELLS_HIT_POINTS_HARD    = 5
+    
+    CELLS_SCORE_HEALTHY = -100
+    CELLS_SCORE_EASY    = 100
+    CELLS_SCORE_MEDIUM  = 250
+    CELLS_SCORE_HARD    = 500
+    
+    CELLS_COMPLETION_BONUS = 300
 
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####
-
-    # points.
-    CELLS_TIME_BLOCK_SIZE       = 5
-    CELLS_POINTS_PER_TIME_BLOCK = 500
-    CELLS_COMPLETION_BONUS      = 300
+    
+    # prefab names.
+    CELL_TYPE = "cell"
+    
+    # cell types.
+    CELLS_TYPE_HEALTHY = 1
+    CELLS_TYPE_EASY    = 2
+    CELLS_TYPE_MEDIUM  = 3
+    CELLS_TYPE_HARD    = 4
+    
+    # property dict keys
+    CELLS_PROP_HIT_POINTS = 1
+    CELLS_PROP_FRAMESET   = 2
+    CELLS_PROP_SCORE      = 3
+    CELLS_PROP_MUTATES_TO = 4
+        
+    CELLS_PROPERTIES = {
+        CELLS_TYPE_HEALTHY : {
+            CELLS_PROP_HIT_POINTS : CELLS_HIT_POINTS_HEALTHY,
+            CELLS_PROP_SCORE      : CELLS_SCORE_HEALTHY,
+            CELLS_PROP_FRAMESET   : 1,
+            CELLS_PROP_MUTATES_TO : CELLS_TYPE_EASY
+        },
+        
+        CELLS_TYPE_EASY : {
+            CELLS_PROP_HIT_POINTS : CELLS_HIT_POINTS_EASY,
+            CELLS_PROP_SCORE      : CELLS_SCORE_EASY,
+            CELLS_PROP_FRAMESET   : 2,
+            CELLS_PROP_MUTATES_TO : CELLS_TYPE_MEDIUM
+        },
+        
+        CELLS_TYPE_MEDIUM : {
+            CELLS_PROP_HIT_POINTS : CELLS_HIT_POINTS_MEDIUM,
+            CELLS_PROP_SCORE      : CELLS_SCORE_MEDIUM,
+            CELLS_PROP_FRAMESET   : 3,
+            CELLS_PROP_MUTATES_TO : CELLS_TYPE_HARD
+        },
+        
+        CELLS_TYPE_HARD : {
+            CELLS_PROP_HIT_POINTS : CELLS_HIT_POINTS_HARD,
+            CELLS_PROP_SCORE      : CELLS_SCORE_HARD,
+            CELLS_PROP_FRAMESET   : 4,
+            CELLS_PROP_MUTATES_TO : None
+        }
+    }
 
     # different states the Cells game can be in.
-    CELLS_GAME_STATE_BEGIN = "cells_begin"
-    CELLS_GAME_STATE_PLAY  = "cells_play"
-    CELLS_GAME_STATE_END   = "cells_end"
-    CELLS_GAME_STATE_PAUSE = "cells_pause"
+    CELLS_GAME_STATE_BEGIN = 1
+    CELLS_GAME_STATE_PLAY  = 2
+    CELLS_GAME_STATE_WAIT  = 3
+    CELLS_GAME_STATE_END   = 4
+    CELLS_GAME_STATE_PAUSE = 5
 
-    # random chance a healthy cell will become infected.
-    RANDOM_INFECTION_RATE      = 0.001
-    RANDOM_INFECTION_THRESHOLD = 3
-
-    # timing stuff.
+    # how long the game waits before the end screen is shown
     CELLS_END_GAME_COUNTDOWN = 2.75
 
-    # hit points.
-    NUMBER_HEALTHY_HIT_POINTS         = 1
-    NUMBER_EASY_INFECTED_HIT_POINTS   = 1
-    NUMBER_MEDIUM_INFECTED_HIT_POINTS = 3
-    NUMBER_HARD_INFECTED_HIT_POINTS   = 5
-
-    # frameset names.
-    HEALTHY_FRAMESET         = "healthy"
-    EASY_INFECTED_FRAMESET   = "easy_infected"
-    MEDIUM_INFECTED_FRAMESET = "medium_infected"
-    HARD_INFECTED_FRAMESET   = "hard_infected"
-
     # animation names.
-    CELL_ANIMATION_PULSE  = "pulse"
-    CELL_ANIMATION_ATTACK = "attack"
+    CELL_ANIMATION_PULSE  = 1
+    CELL_ANIMATION_ATTACK = 2
 
     # animation durations.  these divided into the number of frames that are
     # in the corresponding animation are the frames per second value passed to
@@ -89,48 +167,22 @@ init python:
     NUMBER_CELL_PULSE_FRAMES  = 3
     NUMBER_CELL_ATTACK_FRAMES = 12
 
-    # prefab names.
-    CELL_TYPE = "cell"
-
-    # cell types.
-    HEALTHY_CELL_TYPE         = "healthy"
-    EASY_INFECTED_CELL_TYPE   = "easy_infected"
-    MEDIUM_INFECTED_CELL_TYPE = "medium_infected"
-    HARD_INFECTED_CELL_TYPE   = "hard_infected"
-
-    # how fast cells multiply.
-    HEALTHY_GROWTH_RATE         = 0.7
-    INFECTED_STAGE1_GROWTH_RATE = 0.5
-    INFECTED_STAGE2_GROWTH_RATE = 0.3
-    INFECTED_STAGE3_GROWTH_RATE = 0.1
-
-    INFECTED_STAGE1_GROWTH_RATE_DURATION = 20
-    INFECTED_STAGE2_GROWTH_RATE_DURATION = 40
-
-    # how long an infection takes
-    INFECT_DURATION        = 1.0
-    NUMBER_INFECT_TOGGLES  = 15
-    INFECT_TOGGLE_DURATION = INFECT_DURATION / NUMBER_INFECT_TOGGLES
-
-    # how fast a cell moves on either axis in pixels per second.
-    CELL_SPEED = 70
+    # how long an infection animation flash phase takes
+    INFECT_TOGGLE_DURATION = 0.1
 
     # cell states.
-    CELL_STATE_IDLE           = "idle"
-    CELL_STATE_MOVING         = "moving"
-    CELL_STATE_PARENT_GROWING = "parent_growing"
-    CELL_STATE_CHILD_GROWING  = "child_growing"
-    CELL_STATE_INFECTED       = "infected"
-    CELL_STATE_INFECTING      = "infecting"
-    CELL_STATE_RETRACTING     = "retracting"
-    CELL_STATE_DYING          = "dying"
+    CELL_STATE_IDLE           = 1
+    CELL_STATE_MOVING         = 2
+    CELL_STATE_INFECTING      = 3
+    CELL_STATE_DYING          = 4
+    CELL_STATE_MUTATING       = 5
 
     # static locations and dimensions.
     PETRI_DISH_X = 17
     PETRI_DISH_Y = 0
 
     GRID_OFFSET_X = 82
-    GRID_OFFSET_Y = 104 #64
+    GRID_OFFSET_Y = 104
 
     GRID_CELL_WIDTH  = 48
     GRID_CELL_HEIGHT = 48
@@ -138,28 +190,35 @@ init python:
     CELL_COLLIDER_WIDTH  = 45
     CELL_COLLIDER_HEIGHT = 45
 
-    NUMBER_GRID_ROWS = 9
-    NUMBER_GRID_COLS = 10
+    CELLS_GRID_ROWS = 9
+    CELLS_GRID_COLS = 10
 
-    MAX_VALID_SLOTS = 68
+    CELLS_MAX_VALID_SLOTS = 67
+    
+    # The minimum amount of healthy cells before spontaneous mutation can happen
+    MIN_HEALTHY_CELLS = 3
 
-    def get_slot_position( row, col ):
-        x = col * GRID_CELL_WIDTH + GRID_CELL_WIDTH / 2
-        y = row * GRID_CELL_HEIGHT + GRID_CELL_HEIGHT / 2
-        return (x, y)
 
     class GridSlot( object ):
-        def __init__( self ):
+        def __init__( self, x, y ):
+            self.x = x
+            self.y = y
             self.is_valid = True
             self.cells    = []
+            
+        def get_position( self ):
+            return self.x, self.y
+
 
     class Grid( object ):
         def __init__( self ):
-            self.slots = [ GridSlot() for index in xrange( NUMBER_GRID_ROWS *
-                                                           NUMBER_GRID_COLS ) ]
+            self.slots = []
+            for y in xrange(CELLS_GRID_ROWS):
+                for x in range(CELLS_GRID_COLS):
+                    self.slots.append(GridSlot(x,y))
 
             invalid_locations = [ (0,0), (0,1), (0,2), (0,7), (0,8), (0,9),
-                                  (1,0), (1,1), (1,9),
+                                  (1,0), (1,1), (1,8), (1,9),
                                   (2,0), (2,9),
                                   (3,0),
                                   (6,0), (6,9),
@@ -167,164 +226,117 @@ init python:
                                   (8,0), (8,1), (8,2), (8,8), (8,9) ]
 
             for row, col in invalid_locations:
-                index = col + row * NUMBER_GRID_COLS
+                index = col + row * CELLS_GRID_COLS
                 self.slots[index].is_valid = False
+                self.slots[index].cells = None
 
-            self.free_slots = [ (row, col)
-                                for row in xrange( NUMBER_GRID_ROWS )
-                                for col in xrange( NUMBER_GRID_COLS )
-                                if (row, col) not in invalid_locations ]
-
-#            renpy.log( "%s" % self.free_slots )
-
-        def get_infected_count( self ):
-            count = 0
-            for slot in self.slots:
-                if slot.cells and slot.cells[0].type in (EASY_INFECTED_CELL_TYPE,
-                                                         MEDIUM_INFECTED_CELL_TYPE,
-                                                         HARD_INFECTED_CELL_TYPE):
-                    count += 1
-            return count
-
-        def get_free_count( self ):
-            return len( self.free_slots )
-
-        def add_cell( self, cell, row, col ):
-            index = col + row * NUMBER_GRID_COLS
-#            renpy.log( "Adding (%s, %s)" % (row, col) )
-#            renpy.log( "Slot cells: %s" % self.slots[index].cells )
-#            renpy.log( "Free slots: %s" % self.free_slots )
-            self.slots[index].cells.append( cell )
-            self.free_slots.remove( (row, col) )
-
-        def remove_cell( self, cell, row, col ):
-            index = col + row * NUMBER_GRID_COLS
-#            renpy.log( "Removing (%s, %s)" % (row, col) )
-#            renpy.log( "Slot cells: %s" % self.slots[index].cells )
-#            renpy.log( "Free slots: %s" % self.free_slots )
-            self.slots[index].cells.remove( cell )
-            self.free_slots.append( (row, col) )
-
-        def get_cells( self, row, col ):
-            index = col + row * NUMBER_GRID_COLS
-            return self.slots[index].cells
-
-        def get_free_neighbors( self, row, col ):
+        def get_free_neighbors( self, slot ):
             neighbors = []
             slots     = self.slots
+            col, row  = slot.get_position()
 
             # up.
             if row > 0:
                 up_row   = row - 1
                 up_col   = col
-                up_index = up_col + up_row * NUMBER_GRID_COLS
+                up_index = up_col + up_row * CELLS_GRID_COLS
                 if slots[up_index].is_valid and not slots[up_index].cells:
-                    neighbors.append( (up_row, up_col) )
+                    neighbors.append( slots[up_index] )
 
             # right.
-            if col < (NUMBER_GRID_COLS - 1):
+            if col < (CELLS_GRID_COLS - 1):
                 right_row   = row
                 right_col   = col + 1
-                right_index = right_col + right_row * NUMBER_GRID_COLS
+                right_index = right_col + right_row * CELLS_GRID_COLS
                 if slots[right_index].is_valid and not slots[right_index].cells:
-                    neighbors.append( (right_row, right_col) )
+                    neighbors.append( slots[right_index] )
 
             # down.
-            if row < (NUMBER_GRID_ROWS - 1):
+            if row < (CELLS_GRID_ROWS - 1):
                 down_row   = row + 1
                 down_col   = col
-                down_index = down_col + down_row * NUMBER_GRID_COLS
+                down_index = down_col + down_row * CELLS_GRID_COLS
                 if slots[down_index].is_valid and not slots[down_index].cells:
-                    neighbors.append( (down_row, down_col) )
+                    neighbors.append( slots[down_index] )
 
             # left.
             if col > 0:
                 left_row   = row
                 left_col   = col - 1
-                left_index = left_col + left_row * NUMBER_GRID_COLS
+                left_index = left_col + left_row * CELLS_GRID_COLS
                 if slots[left_index].is_valid and not slots[left_index].cells:
-                    neighbors.append( (left_row, left_col) )
+                    neighbors.append( slots[left_index] )
 
-#            renpy.log( "Free neighbords for (%s, %s): %s" % (row, col, neighbors) )
             return neighbors
 
         # non-infected neighbors are either free slots or slots that have
         # healthy cells in the idle state that are either to the left or right
         # of the given coordinate.  we make the rule that you can't infect
         # something that's currently completing an action (growing or moving).
-        def get_noninfected_neighbors( self, row, col ):
+        def get_noninfected_neighbors( self, slot ):
             neighbors = []
             slots     = self.slots
+            col, row  = slot.get_position()
 
             # up.
             if row > 0:
                 up_row   = row - 1
                 up_col   = col
-                up_index = up_col + up_row * NUMBER_GRID_COLS
+                up_index = up_col + up_row * CELLS_GRID_COLS
                 if slots[up_index].is_valid:
                     for cell in slots[up_index].cells:
-                        if (cell.type in (EASY_INFECTED_CELL_TYPE,
-                                          MEDIUM_INFECTED_CELL_TYPE,
-                                          HARD_INFECTED_CELL_TYPE) or
-                            cell.state != CELL_STATE_IDLE):
+                        if not cell.is_infectable():
                             break
                     else:
-                        neighbors.append( (up_row, up_col) )
-#                if slots[up_index].is_valid and not slots[up_index].cells:
-#                    neighbors.append( (up_row, up_col) )
+                        neighbors.append( slots[up_index] )
 
             # right.
-            if col < (NUMBER_GRID_COLS - 1):
+            if col < (CELLS_GRID_COLS - 1):
                 right_row   = row
                 right_col   = col + 1
-                right_index = right_col + right_row * NUMBER_GRID_COLS
+                right_index = right_col + right_row * CELLS_GRID_COLS
                 if slots[right_index].is_valid:
                     for cell in slots[right_index].cells:
-                        if (cell.type in (EASY_INFECTED_CELL_TYPE,
-                                          MEDIUM_INFECTED_CELL_TYPE,
-                                          HARD_INFECTED_CELL_TYPE) or
-                            cell.state != CELL_STATE_IDLE):
+                        if not cell.is_infectable():
                             break
                     else:
-                        neighbors.append( (right_row, right_col) )
+                        neighbors.append( slots[right_index] )
 
             # down.
-            if row < (NUMBER_GRID_ROWS - 1):
+            if row < (CELLS_GRID_ROWS - 1):
                 down_row   = row + 1
                 down_col   = col
-                down_index = down_col + down_row * NUMBER_GRID_COLS
+                down_index = down_col + down_row * CELLS_GRID_COLS
                 if slots[down_index].is_valid:
                     for cell in slots[down_index].cells:
-                        if (cell.type in (EASY_INFECTED_CELL_TYPE,
-                                          MEDIUM_INFECTED_CELL_TYPE,
-                                          HARD_INFECTED_CELL_TYPE) or
-                            cell.state != CELL_STATE_IDLE):
+                        if not cell.is_infectable():
                             break
                     else:
-                        neighbors.append( (down_row, down_col) )
-#                if slots[down_index].is_valid and not slots[down_index].cells:
-#                    neighbors.append( (down_row, down_col) )
+                        neighbors.append( slots[down_index] )
 
             # left.
             if col > 0:
                 left_row   = row
                 left_col   = col - 1
-                left_index = left_col + left_row * NUMBER_GRID_COLS
+                left_index = left_col + left_row * CELLS_GRID_COLS
                 if slots[left_index].is_valid:
                     for cell in slots[left_index].cells:
-                        if (cell.type in (EASY_INFECTED_CELL_TYPE,
-                                          MEDIUM_INFECTED_CELL_TYPE,
-                                          HARD_INFECTED_CELL_TYPE) or
-                            cell.state != CELL_STATE_IDLE):
+                        if not cell.is_infectable():
                             break
                     else:
-                        neighbors.append( (left_row, left_col) )
+                        neighbors.append( slots[left_index] )
 
             return neighbors
 
-
         def get_free_slot( self ):
-            return renpy.random.choice( self.free_slots ) if self.free_slots else None
+            # "Try x times, then..." <-- not nice, but it usually does the trick here.
+            for i in xrange(0, 10):
+                slot = random.choice( self.slots )
+                if slot.is_valid and (slot.cells == None or len(slot.cells) == 0):
+                    return slot
+            renpy.log("Cells warning: couldn't find a free slot!")
+            return None
+
 
     class Cells( Minigame ):
         def __init__( self, level_number=1 ):
@@ -336,18 +348,7 @@ init python:
                                   (level_number, len( CELL_LEVELS )) )
 
             # set up automated level difficulty parameters.
-            level = CELL_LEVELS[level_number - 1]
-
-            self.infected_idle_time   = Randomizer( level.infected_idle_time[0],
-                                                    level.infected_idle_time[1] )
-            self.healthy_idle_time    = Randomizer( level.healthy_idle_time[0],
-                                                    level.healthy_idle_time[1] )
-            self.infected_growth_rate = StagedValue( [ (0,                                    INFECTED_STAGE1_GROWTH_RATE),
-                                                       (INFECTED_STAGE1_GROWTH_RATE_DURATION, INFECTED_STAGE2_GROWTH_RATE),
-                                                       (INFECTED_STAGE2_GROWTH_RATE_DURATION, INFECTED_STAGE3_GROWTH_RATE) ] )
-            self.healthy_growth_rate  = StagedValue( [ (0, HEALTHY_GROWTH_RATE) ] )
-
-            self.level_number = level_number
+            self.level = CELL_LEVELS[level_number - 1]
 
             # setup game state.
             self.state            = CELLS_GAME_STATE_BEGIN
@@ -358,58 +359,56 @@ init python:
             self.end_countdown    = CELLS_END_GAME_COUNTDOWN
 
             # setup entities.
-            self.healthy_cells    = []
-            self.infected_cells   = []
-            self.grid             = Grid()
-            self.start_screen_hud = None
-            self.stop_screen_hud  = None
-            self.elapsed_time_hud = None
-            self.instructions     = None
+            self.active_cells       = []
+            self.removables         = []
+            self.healthy_cells      = 0
+            self.mutating_cells     = 0
+            self.mutation_cooldown  = 0
+            self.grid               = Grid()
+            self.start_screen_hud   = None
+            self.stop_screen_hud    = None
+            self.elapsed_time_hud   = None
+            self.instructions       = None
             self.instructions_index = 0
 
             self.create_cells()
             self.create_huds()
+            
+            self.mouse_click_x = -1
+            self.mouse_click_y = -1
+            self.mouse_clicked = False
 
             # spawn the initial cells.
-            for i in xrange( level.initial_healthy ):
-                self.spawn_cell( HEALTHY_CELL_TYPE )
-
-            for i in xrange( level.initial_easy_infected ):
-                self.spawn_cell( EASY_INFECTED_CELL_TYPE )
-
-            for i in xrange( level.initial_medium_infected ):
-                self.spawn_cell( MEDIUM_INFECTED_CELL_TYPE )
-
-            for i in xrange( level.initial_hard_infected ):
-                self.spawn_cell( HARD_INFECTED_CELL_TYPE )
+            for i in xrange( self.level.initial_healthy ):
+                self.spawn_cell( CELLS_TYPE_HEALTHY )
 
         def create_cells( self ):
             pulse_animation = GameAnimation( frame_rate=(NUMBER_CELL_PULSE_FRAMES /
                                                          CELL_ANIMATION_PULSE_DURATION) )
 
-            pulse_animation.set_frames( HEALTHY_FRAMESET,
+            pulse_animation.set_frames( CELLS_PROPERTIES[CELLS_TYPE_HEALTHY][CELLS_PROP_FRAMESET],
                                         [ GameImage( "gfx/cells/human/cell-human-%d.png" % frame_index, Anchor.CENTER )
                                           for frame_index in xrange( NUMBER_CELL_PULSE_FRAMES ) ] )
-            pulse_animation.set_frames( EASY_INFECTED_FRAMESET,
+            pulse_animation.set_frames( CELLS_PROPERTIES[CELLS_TYPE_EASY][CELLS_PROP_FRAMESET],
                                         [ GameImage( "gfx/cells/ai/cell-ai-%d-easy.png" % frame_index, Anchor.CENTER )
                                           for frame_index in xrange( NUMBER_CELL_PULSE_FRAMES ) ] )
-            pulse_animation.set_frames( MEDIUM_INFECTED_FRAMESET,
+            pulse_animation.set_frames( CELLS_PROPERTIES[CELLS_TYPE_MEDIUM][CELLS_PROP_FRAMESET],
                                         [ GameImage( "gfx/cells/ai/cell-ai-%d-medium.png" % frame_index, Anchor.CENTER )
                                           for frame_index in xrange( NUMBER_CELL_PULSE_FRAMES ) ] )
-            pulse_animation.set_frames( HARD_INFECTED_FRAMESET,
+            pulse_animation.set_frames( CELLS_PROPERTIES[CELLS_TYPE_HARD][CELLS_PROP_FRAMESET],
                                         [ GameImage( "gfx/cells/ai/cell-ai-%d-hard.png" % frame_index, Anchor.CENTER )
                                           for frame_index in xrange( NUMBER_CELL_PULSE_FRAMES ) ] )
 
             attack_animation = GameAnimation( frame_rate=(NUMBER_CELL_ATTACK_FRAMES /
                                                           CELL_ANIMATION_ATTACK_DURATION) )
 
-            attack_animation.set_frames( EASY_INFECTED_FRAMESET,
+            attack_animation.set_frames( CELLS_PROPERTIES[CELLS_TYPE_EASY][CELLS_PROP_FRAMESET],
                                          [ GameImage( "gfx/cells/ai/cell-ai-attack-%d-easy.png" % frame_index, Anchor( 79, 77 ) )
                                            for frame_index in xrange( NUMBER_CELL_ATTACK_FRAMES ) ] )
-            attack_animation.set_frames( MEDIUM_INFECTED_FRAMESET,
+            attack_animation.set_frames( CELLS_PROPERTIES[CELLS_TYPE_MEDIUM][CELLS_PROP_FRAMESET],
                                          [ GameImage( "gfx/cells/ai/cell-ai-attack-%d-medium.png" % frame_index, Anchor( 79, 77 ) )
                                            for frame_index in xrange( NUMBER_CELL_ATTACK_FRAMES ) ] )
-            attack_animation.set_frames( HARD_INFECTED_FRAMESET,
+            attack_animation.set_frames( CELLS_PROPERTIES[CELLS_TYPE_HARD][CELLS_PROP_FRAMESET],
                                          [ GameImage( "gfx/cells/ai/cell-ai-attack-%d-hard.png" % frame_index, Anchor( 79, 77 ) )
                                            for frame_index in xrange( NUMBER_CELL_ATTACK_FRAMES ) ] )
 
@@ -470,15 +469,10 @@ init python:
             self.elapsed_time_hud["transform"].set_position( 30, 30 )
 
         def compute_scores( self ):
-            self.base_score = (math.floor( self.elapsed_time /
-                                           CELLS_TIME_BLOCK_SIZE ) *
-                               CELLS_POINTS_PER_TIME_BLOCK)
-
-            if len( self.healthy_cells ) == MAX_VALID_SLOTS:
+            if self.healthy_cells > 0:
                 self.completion_bonus = CELLS_COMPLETION_BONUS
             else:
                 self.completion_bonus = 0
-
             self.total_score = self.base_score + self.completion_bonus
 
         def get_base_score( self ):
@@ -514,78 +508,43 @@ init python:
             return "Elapsed Time: %d:%02d" % (minutes, seconds)
             
         def get_level_number( self ):
-            return "%20d" % self.level_number
+            return "%20d" % self.level.level_number
 
-        def spawn_cell( self, cell_type, slot=None, state=None ):
+        def spawn_cell( self, cell_type, slot=None):
             # if a slot wasn't given, get a random available one.  return
             # early if we can't get one.
-            if not slot:
+            if slot == None:
                 slot = self.grid.get_free_slot()
                 if not slot:
                     return
 
             # create the new cell.
-            cell = PrefabFactory.instantiate( CELL_TYPE )
+            cell = PrefabFactory.instantiate( CELL_TYPE )                    
 
             # set the appropriate behavior depending on whether this is a
             # healthy or infected cell.
-            if cell_type == HEALTHY_CELL_TYPE:
-                cell["behavior"] = CellBehavior( cell_type,
-                                                 self.grid,
-                                                 self.healthy_idle_time,
-                                                 self.healthy_growth_rate,
-                                                 self.infected_idle_time,
-                                                 self.infected_growth_rate,
-                                                 self.spawn_cell,
-                                                 NUMBER_HEALTHY_HIT_POINTS,
-                                                 state )
-                cell["renderer"].play_animation( CELL_ANIMATION_PULSE,
-                                                 frameset=HEALTHY_FRAMESET )
-                self.healthy_cells.append( cell )
-            else:
-                if cell_type == EASY_INFECTED_CELL_TYPE:
-                    frameset          = EASY_INFECTED_FRAMESET
-                    number_hit_points = NUMBER_EASY_INFECTED_HIT_POINTS
-                elif cell_type == MEDIUM_INFECTED_CELL_TYPE:
-                    frameset          = MEDIUM_INFECTED_FRAMESET
-                    number_hit_points = NUMBER_MEDIUM_INFECTED_HIT_POINTS
-                elif cell_type == HARD_INFECTED_CELL_TYPE:
-                    frameset          = HARD_INFECTED_FRAMESET
-                    number_hit_points = NUMBER_HARD_INFECTED_HIT_POINTS
+            cell_properties = CELLS_PROPERTIES[cell_type]
+            hit_points      = cell_properties[CELLS_PROP_HIT_POINTS]
+            frameset        = cell_properties[CELLS_PROP_FRAMESET]
+            
+            if cell_type == CELLS_TYPE_HEALTHY:
+                self.inc_healthy_cell_count(1)
+            
+            cell["behavior"] = CellBehavior( self, cell_type, hit_points, CELL_STATE_IDLE)
+            cell["behavior"].slot = slot
+            cell["transform"].set_position(
+                slot.x * GRID_CELL_WIDTH + GRID_CELL_WIDTH / 2,
+                slot.y * GRID_CELL_HEIGHT + GRID_CELL_HEIGHT / 2)
+            cell["renderer"].play_animation( CELL_ANIMATION_PULSE, frameset=frameset )
 
-                cell["behavior"] = CellBehavior( cell_type,
-                                                 self.grid,
-                                                 self.healthy_idle_time,
-                                                 self.healthy_growth_rate,
-                                                 self.infected_idle_time,
-                                                 self.infected_growth_rate,
-                                                 self.spawn_cell,
-                                                 number_hit_points,
-                                                 state )
+            slot.cells.append( cell["behavior"] )
 
-                cell["renderer"].play_animation( CELL_ANIMATION_PULSE,
-                                                 frameset=frameset )
-                self.infected_cells.append( cell )
-
-            # if the state of the cell being created is the child growing
-            # state, then we don't want to call set_slot() because that will
-            # attempt to modify the grid's set of free cells, which could
-            # possibly cause corrupted grid state or (even worse) crash.
-            # instead, we use the slot to derive the initial position of the
-            # cell and simply set that.
-            if state == CELL_STATE_CHILD_GROWING:
-                row, col = slot
-                x, y     = get_slot_position( row, col )
-                cell["transform"].set_position( x,y )
-            else:
-                cell["behavior"].set_slot( slot )
+            self.active_cells.append( cell )
 
             return cell
 
         def get_displayables( self ):
             displayables = []
-            for cell in itertools.chain( self.healthy_cells, self.infected_cells ):
-                displayables.extend( cell["renderer"].get_displayables() )
             
             displayables.extend( self.start_screen_hud["renderer"].get_displayables() )
             displayables.extend( self.stop_screen_hud["renderer"].get_displayables() )
@@ -603,49 +562,51 @@ init python:
                 self.start_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
             elif self.state == CELLS_GAME_STATE_END:
                 self.stop_screen_hud["renderer"].render( blitter, clip_rect, world_transform )
-            elif self.state == CELLS_GAME_STATE_PAUSE:
-                self.instructions[self.instructions_index]["renderer"].render( blitter, clip_rect, world_transform )
             else:
                 cell_transform = GameTransform( world_transform.x +
                                                 GRID_OFFSET_X,
                                                 world_transform.y +
                                                 GRID_OFFSET_Y )
-                for cell in itertools.chain( self.infected_cells, self.healthy_cells ):
+                for cell in self.active_cells:
                     cell["renderer"].render( blitter, clip_rect, cell_transform )
 
-                self.elapsed_time_hud["renderer"].render( blitter, clip_rect, world_transform )
+                if self.state == CELLS_GAME_STATE_PAUSE:
+                    self.instructions[self.instructions_index]["renderer"].render( blitter, clip_rect, world_transform )
+                else:
+                    self.elapsed_time_hud["renderer"].render( blitter, clip_rect, world_transform )
 
         def update( self, delta_sec ):
             if self.state == CELLS_GAME_STATE_PLAY:
                 self.elapsed_time += delta_sec
-
-                # update the growth rate.
-                self.infected_growth_rate.update( delta_sec )
-
+                
+                if self.mutation_cooldown > 0:
+                    self.mutation_cooldown -= delta_sec
+                
                 # update all cells.
-                for cell in itertools.chain( self.infected_cells, self.healthy_cells ):
+                for cell in self.active_cells:
+                    # Perform appropriate collision checks if necessary.
+                    if self.mouse_clicked and cell["collider"].is_point_inside(self.mouse_click_x, self.mouse_click_y):
+                        if cell["behavior"].hit():
+                            self.count_score( cell["behavior"] )
+                            self.removables.append( cell )
+                        self.mouse_clicked = False
+                    
                     cell.update( delta_sec )
-
-                # remove dead cells.
-                self.healthy_cells[:]  = [ cell for cell in self.healthy_cells if cell.is_alive() ]
-                self.infected_cells[:] = [ cell for cell in self.infected_cells if cell.is_alive() ]
-
-                # healthy cells that have become infected need to be removed
-                # from the healthy list and moved to the infected list.
-                for cell in self.healthy_cells:
-                    if cell["behavior"].type in (EASY_INFECTED_CELL_TYPE,
-                                                 MEDIUM_INFECTED_CELL_TYPE,
-                                                 HARD_INFECTED_CELL_TYPE):
-                        self.infected_cells.append( cell )
-
-                self.healthy_cells[:] = [ cell for cell in self.healthy_cells
-                                          if cell["behavior"].type == HEALTHY_CELL_TYPE ]
+                
+                # Remove any dead cells.
+                if len(self.removables) > 0:
+                    for removable in self.removables:
+                        self.active_cells.remove(removable)
+                        
+                    del self.removables[:]
+                    
+                # Reset mouse to make sure the event is consumed during this update.
+                self.mouse_clicked = False
 
                 # see if it's game over.  add a little delay between detecting
                 # the end game condition and the actual display of the final
-                # score screen.
-                if (len( self.healthy_cells ) == MAX_VALID_SLOTS or
-                    len( self.healthy_cells ) == 0):
+                # score screen.                
+                if self.healthy_cells == CELLS_MAX_VALID_SLOTS or self.healthy_cells == 0:
                     self.end_countdown -= delta_sec
                     if self.end_countdown <= 0:
                         self.compute_scores()
@@ -674,312 +635,225 @@ init python:
                     # translate the mouse position to something that can be
                     # used to determine if the mouse is over a grid cell.
                     world_transform = self.get_world_transform()
-                    x = mx - world_transform.x - GRID_OFFSET_X
-                    y = my - world_transform.y - GRID_OFFSET_Y
+                    self.mouse_click_x = mx - world_transform.x - GRID_OFFSET_X
+                    self.mouse_click_y = my - world_transform.y - GRID_OFFSET_Y
+                    self.mouse_clicked = True
+            
+        def inc_healthy_cell_count( self, value ):
+            self.healthy_cells += value
+            
+        def inc_mutating_cell_count( self, value ):
+            self.mutating_cells += value
+            self.mutation_cooldown = self.level.mutation_cooldown
+        
+        def can_mutate( self ):
+            # Allow spontaneous mutation only if there are more than MIN_HEALTHY_CELLS
+            # (to make sure the few starting cells won't mutate right in the beginning)
+            # and if enough time has passed since the previous mutation (prevents
+            # simultaneos mutation waves from happening). The last part makes sure
+            # no mutations happen once the end conditions have been met and the 
+            # counter has started to run.
+            return (self.healthy_cells > MIN_HEALTHY_CELLS and 
+                    self.mutation_cooldown <= 0 and 
+                    self.end_countdown == CELLS_END_GAME_COUNTDOWN)
+        
+        def count_score( self, cell ):
+            # Grab the score from the mutation result rather than the current form.
+            if cell.state == CELL_STATE_MUTATING:
+                score = CELLS_PROPERTIES[CELLS_PROPERTIES[cell.type][CELLS_PROP_MUTATES_TO]][CELLS_PROP_SCORE]
+            else:
+                score = CELLS_PROPERTIES[cell.type][CELLS_PROP_SCORE]
+            self.base_score += score
 
-                    for cell in itertools.chain( self.healthy_cells, self.infected_cells ):
-                        if cell["collider"].is_point_inside( x, y ):
-                            cell["behavior"].hit()
-                            break
 
     class CellBehavior( GameComponent ):
-        def __init__( self, cell_type, grid, healthy_idle_time,
-                      healthy_growth_rate, infected_idle_time,
-                      infected_growth_rate, spawn_cell, number_hit_points,
-                      state=None ):
+        def __init__( self, main, cell_type, number_hit_points, state=None):
             super( CellBehavior, self ).__init__()
             self.state                = state or CELL_STATE_IDLE
             self.type                 = cell_type
-            self.grid                 = grid
+            self.hit_points           = number_hit_points
             self.slot                 = None
             self.target_slot          = None
-            self.parent               = None
-            self.spawn_cell           = spawn_cell
-            self.healthy_idle_time    = healthy_idle_time
-            self.healthy_growth_rate  = healthy_growth_rate
-            self.infected_idle_time   = infected_idle_time
-            self.infected_growth_rate = infected_growth_rate
-            self.infect_timeout       = 0
-            self.number_hit_points    = number_hit_points
-            self.reset_move_timeout()
-            self.reset_grow_timeout()
+            self.grid                 = main.grid
+            self.spawn_cell           = main.spawn_cell
+            self.can_mutate           = main.can_mutate
+            self.level                = main.level
+            self.inc_mutating_cell_count = main.inc_mutating_cell_count
+            self.inc_healthy_cell_count  = main.inc_healthy_cell_count
 
-        def reset_grow_timeout( self ):
-            if self.type == HEALTHY_CELL_TYPE:
-                self.grow_timeout = self.healthy_growth_rate.get_value()
-            else:
-                self.grow_timeout = self.infected_growth_rate.get_value()
+            self.timeout_counter = 0
+            self.reset_timeout_counter( self.level.cell_action_timeout )
+            
+            # Sprite transformation variables
+            self.vx = 0
+            self.vy = 0
+            self.dx = 0
+            self.dy = 0
 
-        def reset_move_timeout( self ):
-            if self.type == HEALTHY_CELL_TYPE:
-                self.move_timeout = self.healthy_idle_time.get_value()
-            else:
-                self.move_timeout = self.infected_idle_time.get_value()
-
-        def set_slot( self, slot ):
-            row, col = slot
-
-            # update the grid.
-            if self.slot:
-                old_row, old_col = self.slot
-                self.grid.remove_cell( self, old_row, old_col )
-            self.grid.add_cell( self, row, col )
-
-            # update the internal slot state and set this cell's new position.
-            self.slot = slot
-            x, y      = get_slot_position( row, col )
-            self.game_object["transform"].set_position( x, y )
-
-        def set_parent( self, parent ):
-            self.parent = parent
+        def reset_timeout_counter( self, timeout ):
+            self.timeout_counter = timeout
 
         def set_target_slot( self, target_slot ):
-            row, col = target_slot
-
             # target slots get flagged as occupied in the grid so that no
             # other cell tries to move into it.
-            if self.target_slot:
-                old_row, old_col = self.target_slot
-                self.grid.remove_cell( self, old_row, old_col )
-            self.grid.add_cell( self, row, col )
-
-            # update the internal target state.
             self.target_slot = target_slot
+            self.target_slot.cells.append( self )
+            
+            x1, y1 = self.slot.get_position()
+            x2, y2 = self.target_slot.get_position()
+            
+            self.vx = x2 - x1
+            self.vy = y2 - y1
+            self.dx = 0
+            self.dy = 0
+                            
+            self.state  = CELL_STATE_MOVING
 
-        def move_towards_target( self, delta_sec ):
-            at_target = False
-
-            # get the appropriate target depending on whether we're retracting
-            # or just moving/infecting.  if we're retracting, we're moving
-            # back towards our original slot.
-            if self.state == CELL_STATE_RETRACTING:
-                target_row, target_col = self.slot
-            else:
-                target_row, target_col = self.target_slot
-
-            # figure out which we have to go to reach our target and update
-            # our position.
-            tx, ty  = get_slot_position( target_row, target_col )
-            sx      = self.game_object["transform"].x
-            sy      = self.game_object["transform"].y
-
-            # adjust our target if we're infecting.  in this case, we're
-            # moving only halfway towards the target slot.
-            if self.state == CELL_STATE_INFECTING:
-                tx = (tx + sx) / 2
-                ty = (ty + sy) / 2
-
-            dx  = tx - sx
-            dy  = ty - sy
-            sx += sign( dx ) * delta_sec * CELL_SPEED
-            sy += sign( dy ) * delta_sec * CELL_SPEED
-
-            if almost_equal( sx, tx ) and almost_equal( sy, ty ):
-                # we're pretty much on our target destination.  set the new
-                # position to be exactly equal to our target's position in
-                # order to avoid drift due to floating point errors
-                # accumulated over time.
-                sx        = tx
-                sy        = ty
-                at_target = True
-
-            # set the new position and return whether we reached our target.
-            self.game_object["transform"].set_position( sx, sy )
-            return at_target
-
-        def infect( self, cell_type ):
-            if cell_type == EASY_INFECTED_CELL_TYPE:
-                number_hit_points = NUMBER_EASY_INFECTED_HIT_POINTS
-            elif cell_type == MEDIUM_INFECTED_CELL_TYPE:
-                number_hit_points = NUMBER_MEDIUM_INFECTED_HIT_POINTS
-            elif cell_type == HARD_INFECTED_CELL_TYPE:
-                number_hit_points = NUMBER_HARD_INFECTED_HIT_POINTS
-
-            self.state             = CELL_STATE_INFECTED
-            self.type              = cell_type
-            self.number_hit_points = number_hit_points
-            self.infect_timeout    = INFECT_DURATION
-
-        def on_grow_complete( self ):
-            self.state = CELL_STATE_IDLE
-            self.reset_grow_timeout()
-
+        # A cell can
+        #     1) mutate spontaneously (if type is below CELL_TYPE_HARD),
+        #     2) create a duplicate of itself,
+        #     3) infect neighbors, or
+        #     4) move (if any space).
+        # The selected action depends on what the probabilities are and what the
+        # randomizer spits out in the beginning of each idle state update.
         def update( self, delta_sec ):
-            self.move_timeout -= delta_sec
-            self.grow_timeout -= delta_sec
-
-#            renpy.log( "Updating %s (state=%s, slot=%s, target=%s)" %
-#                       (self, self.state, self.slot, self.target_slot) )
-
-            # perform actions in this order of importance:
-            #
-            #   * moving
-            #   * infecting
-            #   * growing
-            #   * chilling
-            if self.state == CELL_STATE_DYING:
-                if self.slot:
-                    row, col = self.slot
-                    self.grid.remove_cell( self, row, col )
-                if self.target_slot:
-                    row, col = self.target_slot
-                    self.grid.remove_cell( self, row, col )
-                self.game_object.kill()
-            elif self.state == CELL_STATE_MOVING:
-                # move towards the target.
-                if self.move_towards_target( delta_sec ):
-                    # we reached the target.  tell the grid our previous slot
-                    # is now free and unset our target.  then go back to the
-                    # idle state.
-                    row, col         = self.slot
-                    self.slot        = self.target_slot
-                    self.target_slot = None
-                    self.state       = CELL_STATE_IDLE
-                    self.grid.remove_cell( self, row, col )
-                    self.reset_move_timeout()
-            elif self.state == CELL_STATE_INFECTING:
-                pass
-            elif self.state == CELL_STATE_RETRACTING:
-                pass
-            elif self.state == CELL_STATE_INFECTED:
-                self.infect_timeout -= delta_sec
-
-                # do a cheesy flash effect while we're being infected.
-                toggle_number = math.trunc( self.infect_timeout / INFECT_TOGGLE_DURATION )
-
-                if self.type == EASY_INFECTED_CELL_TYPE:
-                    frameset = EASY_INFECTED_FRAMESET
-                elif self.type == MEDIUM_INFECTED_CELL_TYPE:
-                    frameset = MEDIUM_INFECTED_FRAMESET
-                elif self.type == HARD_INFECTED_CELL_TYPE:
-                    frameset = HARD_INFECTED_FRAMESET
-
-                if toggle_number % 2 == 0:
-                    self.game_object["renderer"].set_animation_frameset( frameset )
-                else:
-                    self.game_object["renderer"].set_animation_frameset( HEALTHY_FRAMESET )
-
-                if self.infect_timeout <= 0:
-                    self.game_object["renderer"].set_animation_frameset( frameset )
-                    self.state = CELL_STATE_IDLE
-                    self.reset_move_timeout()
-                    self.reset_grow_timeout()
-            elif self.state == CELL_STATE_CHILD_GROWING:
-                # move towards the target.
-                if self.move_towards_target( delta_sec ):
-                    # we reached the target.  set our slot to be our target,
-                    # unset our target and then go back to the idle state.
-                    self.slot        = self.target_slot
-                    self.target_slot = None
-                    self.state       = CELL_STATE_IDLE
-                    self.reset_grow_timeout()
-
-                    # tell our parent that we are done growing.
-                    self.parent.on_grow_complete()
-                    self.parent = None
-            elif self.state == CELL_STATE_IDLE:
-                # see if it's time to grow.  if it isn't, see if it's time to
-                # move.  otherwise just continue waiting until it's time to do
-                # something.
-                if self.grow_timeout <= 0:
+            if self.state == CELL_STATE_IDLE:
+                if self.timeout_counter > 0:
+                    self.timeout_counter -= delta_sec
+                    return
+                
+                rand_value = random.randint(0, 100)
+                
+                if rand_value <= self.level.mutation_probability and self.can_mutate():
+                    if self.type != CELLS_TYPE_HARD:
+                        self.state = CELL_STATE_MUTATING
+                        self.timeout_counter = self.level.mutation_duration
+                        self.inc_mutating_cell_count(1)
+                        
+                elif rand_value <= self.level.duplication_probability:
                     # figure out which slots we can grow into.
-                    row, col  = self.slot
-                    neighbors = self.grid.get_free_neighbors( row, col )
+                    neighbors = self.grid.get_free_neighbors( self.slot )
+
+                    # Duplicate only if we have a free slot.
+                    if neighbors:
+                        target_slot = renpy.random.choice( neighbors )
+
+                        child_cell = self.spawn_cell( self.type, self.slot )
+                        child_cell["behavior"].set_target_slot( target_slot )
+                        self.reset_timeout_counter( self.level.cell_action_timeout )
+                        
+                else:
+                    # Infected cells try to infect their neighbors by default, but
+                    # if none available they just move around like healthy cells do.
+                    if self.type != CELLS_TYPE_HEALTHY:
+                        neighbors = self.grid.get_noninfected_neighbors( self.slot )
+                        if neighbors:
+                            target_slot = renpy.random.choice( neighbors )
+                            target_cells = target_slot.cells
+                            if len(target_cells) > 0:
+                                target_cells[0].state = CELL_STATE_MUTATING
+                                target_cells[0].timeout_counter = self.level.mutation_duration
+                                
+                                self.game_object["renderer"].play_animation( CELL_ANIMATION_ATTACK,
+                                                                             loop_animation=False,
+                                                                             on_animation_end=self.finish_infecting,
+                                                                             frameset=CELLS_PROPERTIES[self.type][CELLS_PROP_FRAMESET] )
+                                self.state = CELL_STATE_INFECTING
+                                return
+
+                    # healthy cells simply move to a free cell near them.
+                    neighbors = self.grid.get_free_neighbors( self.slot )
 
                     # do something only if we have a free slot.
                     if neighbors:
                         target_slot = renpy.random.choice( neighbors )
-                        self.state  = CELL_STATE_PARENT_GROWING
-
-                        child_cell = self.spawn_cell( self.type, self.slot,
-                                                      CELL_STATE_CHILD_GROWING )
-                        child_cell["behavior"].set_target_slot( target_slot )
-                        child_cell["behavior"].set_parent( self )
+                        self.set_target_slot( target_slot )
                     else:
-                        # we couldn't grow because all neighbor slots are
-                        # occupied.  reset the grow timeout and try to grow
-                        # again later.
-                        self.reset_grow_timeout()
-                elif self.move_timeout <= 0:
-                    # we do different things depending on whether we are a
-                    # healthy or infected cell.
-                    row, col  = self.slot
+                        # we can't move because all neighbor slots are
+                        # occupied.  reset the move timeout and try to
+                        # move again later.
+                        self.reset_timeout_counter( self.level.cell_action_timeout ) 
+                        
+            elif self.state == CELL_STATE_MOVING:
+                self.dx += self.vx * delta_sec 
+                self.dy += self.vy * delta_sec 
+                
+                if abs(self.dx) >= 1 or abs(self.dy) >= 1:
+                    # Stop movement & update state if moved the width/height of a grid cell.
+                    self.dx = 0
+                    self.dy = 0
+                    
+                    self.slot.cells.remove( self )
+                    self.slot = self.target_slot
+                    
+                    self.target_slot = None
+                    
+                    self.state = CELL_STATE_IDLE
+                    self.reset_timeout_counter( self.level.cell_action_timeout )
+                    
+                x = (self.slot.x + self.dx) * GRID_CELL_WIDTH + GRID_CELL_WIDTH / 2
+                y = (self.slot.y + self.dy) * GRID_CELL_HEIGHT + GRID_CELL_HEIGHT / 2
+                self.game_object["transform"].set_position( x, y )
+                
+            elif self.state == CELL_STATE_MUTATING:
+                self.timeout_counter -= delta_sec
 
-                    if self.type == HEALTHY_CELL_TYPE:
-                        # healthy cells simply move to a free cell near them.
-                        neighbors = self.grid.get_free_neighbors( row, col )
+                # do a cheesy flash effect while we're being infected.
+                toggle_number = math.trunc( self.timeout_counter / INFECT_TOGGLE_DURATION )
 
-                        # do something only if we have a free slot.
-                        if neighbors:
-                            target_slot = renpy.random.choice( neighbors )
-                            self.state  = CELL_STATE_MOVING
-                            self.set_target_slot( target_slot )
-                        else:
-                            # we can't move because all neighbor slots are
-                            # occupied.  reset the move timeout and try to
-                            # move again later.
-                            self.reset_move_timeout()
-                    else:
-                        # infected cells will either try to move to a free
-                        # cell or infect a neighboring healthy cell.
-                        neighbors = self.grid.get_noninfected_neighbors( row, col )
+                current_properties  = CELLS_PROPERTIES[self.type]
+                mutation_properties = CELLS_PROPERTIES[current_properties[CELLS_PROP_MUTATES_TO]]
+                frameset_from       = current_properties[CELLS_PROP_FRAMESET]
+                frameset_to         = mutation_properties[CELLS_PROP_FRAMESET]
 
-                        # do something only if we can move or infect.
-                        if neighbors:
-                            trow, tcol = renpy.random.choice( neighbors )
-                            cells      = self.grid.get_cells( trow, tcol )
-
-                            if cells:
-                                if self.type == EASY_INFECTED_CELL_TYPE:
-                                    frameset = EASY_INFECTED_FRAMESET
-                                elif self.type == MEDIUM_INFECTED_CELL_TYPE:
-                                    frameset = MEDIUM_INFECTED_FRAMESET
-                                elif self.type == HARD_INFECTED_CELL_TYPE:
-                                    frameset = HARD_INFECTED_FRAMESET
-
-                                # there should be EXACTLY one healthy cell in
-                                # the target we picked.
-                                cells[0].infect( self.type )
-                                cells[0].set_parent( self )
-                                self.state = CELL_STATE_INFECTING
-                                self.game_object["renderer"].play_animation( CELL_ANIMATION_ATTACK,
-                                                                             loop_animation=False,
-                                                                             on_animation_end=self.finish_infecting,
-                                                                             frameset=frameset )
-                            else:
-                                # we picked an empty slot.  just move to it
-                                # like we would if we were healthy.
-                                self.state = CELL_STATE_MOVING
-                                self.set_target_slot( (trow, tcol) )
-                        else:
-                            # we can't move or infect because all neighbor
-                            # slots are occupied by our friends.  reset the
-                            # move timeout and try to move again later.
-                            self.reset_move_timeout()
+                if toggle_number % 2 == 0:
+                    self.game_object["renderer"].set_animation_frameset( frameset_to )
                 else:
-                    # if we're a healthy cell, there's a SMALL chance we can
-                    # become spontaneously infected if there are only healthy
-                    # cells on the grid and all the grid cells have not been
-                    # taken up.
-                    if (self.grid.get_infected_count() < RANDOM_INFECTION_THRESHOLD and
-                        self.grid.get_free_count() > 0 and
-                        renpy.random.uniform( 0, 1 ) <= RANDOM_INFECTION_RATE):
-                        self.infect( EASY_INFECTED_CELL_TYPE )
+                    self.game_object["renderer"].set_animation_frameset( frameset_from )
 
-        def hit( self ):
-            self.number_hit_points -= 1
-            if self.number_hit_points <= 0:
-                self.state = CELL_STATE_DYING
-
+                if self.timeout_counter <= 0:
+                    self.game_object["renderer"].set_animation_frameset( frameset_to )
+                    
+                    if self.type == CELLS_TYPE_HEALTHY:
+                        self.inc_healthy_cell_count(-1)
+                    
+                    self.type       = current_properties[CELLS_PROP_MUTATES_TO]
+                    self.hit_points = mutation_properties[CELLS_PROP_HIT_POINTS]
+                    
+                    self.state = CELL_STATE_IDLE
+                    self.reset_timeout_counter( self.level.post_mutation_timeout )
+                    self.inc_mutating_cell_count(-1)
+                    
+            elif self.state == CELL_STATE_DYING:
+                # Free any slots occupied by this cell before killing the object.
+                if self.slot and self in self.slot.cells:
+                    self.slot.cells.remove( self )
+                if self.target_slot and self in self.target_slot.cells:
+                    self.target_slot.cells.remove( self )
+            
+                if self.type == CELLS_TYPE_HEALTHY:
+                    self.inc_healthy_cell_count(-1)
+                if self.state == CELL_STATE_MUTATING:
+                    self.inc_mutating_cell_count(-1)
+                self.game_object.kill()
+            
+            elif self.state == CELL_STATE_INFECTING:
+                # Wait for the attack animation to finish.
+                pass
+                
         def finish_infecting( self ):
-            if self.type == EASY_INFECTED_CELL_TYPE:
-                frameset = EASY_INFECTED_FRAMESET
-            elif self.type == MEDIUM_INFECTED_CELL_TYPE:
-                frameset = MEDIUM_INFECTED_FRAMESET
-            elif self.type == HARD_INFECTED_CELL_TYPE:
-                frameset = HARD_INFECTED_FRAMESET
-
             self.state = CELL_STATE_IDLE
             self.game_object["renderer"].play_animation( CELL_ANIMATION_PULSE,
-                                                         frameset=frameset )
-            self.reset_move_timeout()
+                                                         frameset=CELLS_PROPERTIES[self.type][CELLS_PROP_FRAMESET] )
+            self.reset_timeout_counter( self.level.cell_action_timeout )
+            
+        def hit( self ):
+            self.hit_points -= 1
+            if self.hit_points <= 0:
+                self.state = CELL_STATE_DYING
+                return True
+            return False
+        
+        def is_infectable( self ):
+            # How about letting higher level cells infect/upgrade their lower level neighbors...?
+            return self.type == CELLS_TYPE_HEALTHY and self.state == CELL_STATE_IDLE
