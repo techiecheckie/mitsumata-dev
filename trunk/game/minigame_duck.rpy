@@ -184,19 +184,22 @@ init python:
 
 
             # set up entities.
-#            self.background         = None
             self.player             = None
             self.booms              = []
             self.easy_birds         = []
             self.medium_birds       = []
             self.hard_birds         = []
+            self.removables         = []
             self.score_hud          = None
             self.start_screen_hud   = None
             self.stop_screen_hud    = None
             self.time_remaining_hud = None
             self.instructions_hud   = None
+            
+            self.click_x = -1
+            self.click_y = -1
+            self.mouse_clicked = False
 
-#            self.create_background()
             self.create_player()
             self.create_birds()
             self.create_boom()
@@ -205,10 +208,6 @@ init python:
         def quit( self ):
             super( DuckHunt, self ).quit()
             show_mouse()
-
-#        def create_background( self ):
-#            self.background             = GameObject()
-#            self.background["renderer"] = GameRenderer( GameImage( "gfx/duck_hunt/background.png" ) )
 
         def create_player( self ):
             self.player             = GameObject( "player" )
@@ -466,7 +465,8 @@ init python:
             bird["behavior"] = BirdBehavior( direction, speed,
                                              BIRD_HIT_POINTS[bird_type],
                                              BIRD_SCORE_VALUES[bird_type],
-                                             self.on_bird_death )
+                                             self.on_bird_death,
+                                             bird_type )
 
             half_width  = BIRD_ALIVE_SIZE.width / 2
             half_height = BIRD_ALIVE_SIZE.height / 2
@@ -556,54 +556,62 @@ init python:
                 # update all gunshots.
                 for boom in self.booms:
                     boom.update( delta_sec )
+                    
+                number_easy_birds   = 0
+                number_medium_birds = 0
+                number_hard_birds   = 0
 
                 # update all birds.
                 for bird in itertools.chain( self.easy_birds,
                                              self.medium_birds,
                                              self.hard_birds ):
                     bird.update( delta_sec )
+                    
+                    if bird["behavior"].number_hit_points > 0:
+                        if bird["behavior"].bird_type == EASY_BIRD_TYPE:
+                            number_easy_birds   += 1
+                        elif bird["behavior"].bird_type == MEDIUM_BIRD_TYPE:
+                            number_medium_birds += 1
+                        else:
+                            number_hard_birds   += 1
 
-                # kill those birds that are outside the game screen.
-                for bird in itertools.chain( self.easy_birds,
-                                             self.medium_birds,
-                                             self.hard_birds ):
-                    if self.is_out_of_bounds( bird ):
-                        bird.kill()
+                        if self.mouse_clicked and bird["collider"].is_point_inside( self.click_x, self.click_y ):
+                            bird["behavior"].shoot()
+                            self.number_hits += 1
+                            self.mouse_clicked = False
+                    elif self.is_out_of_bounds( bird ):
+                        self.removables.append( bird )
+                
+                if len(self.removables) > 0:                
+                    for removable in self.removables:
+                        if removable in self.easy_birds:
+                            self.easy_birds.remove( removable )
+                        elif removable in self.medium_birds:
+                            self.medium_birds.remove( removable )
+                        elif removable in self.hard_birds:
+                            self.hard_birds.remove( removable )
+
+                        removable.kill()
+                    
+                    del self.removables[:]
+                    
+                self.mouse_clicked = False
 
                 # see if it's time to add a bird.
                 self.bird_countdown -= delta_sec
 
-                if (self.bird_countdown <= 0 and
-                    self.time_remaining.get_value() > 0):
+                if (self.bird_countdown <= 0 and self.time_remaining.get_value() > 0):
                     # get new countdown for next time.
                     self.bird_countdown = self.spawn_time.get_value()
 
                     # get which bird types are available.
                     bird_types          = []
-                    number_easy_birds   = 0
-                    number_medium_birds = 0
-                    number_hard_birds   = 0
-
-                    # check easy birds.
-                    for bird in self.easy_birds:
-                        if not bird["behavior"].is_shot_down():
-                            number_easy_birds += 1
 
                     if number_easy_birds < self.max_easy_birds.get_truncated_value():
                         bird_types.append( EASY_BIRD_TYPE )
 
-                    # check medium birds.
-                    for bird in self.medium_birds:
-                        if not bird["behavior"].is_shot_down():
-                            number_medium_birds += 1
-
                     if number_medium_birds < self.max_medium_birds.get_truncated_value():
                         bird_types.append( MEDIUM_BIRD_TYPE )
-
-                    # check hard birds.
-                    for bird in self.hard_birds:
-                        if not bird["behavior"].is_shot_down():
-                            number_hard_birds += 1
 
                     if number_hard_birds < self.max_hard_birds.get_truncated_value():
                         bird_types.append( HARD_BIRD_TYPE )
@@ -616,11 +624,6 @@ init python:
                     # particular type that we can add.
                     if bird_types and number_birds < self.max_birds.get_truncated_value():
                         self.spawn_bird( renpy.random.choice( bird_types ) )
-
-                # remove birds that have died.
-                self.easy_birds[:]   = [ bird for bird in self.easy_birds if bird.is_alive() ]
-                self.medium_birds[:] = [ bird for bird in self.medium_birds if bird.is_alive() ]
-                self.hard_birds[:]   = [ bird for bird in self.hard_birds if bird.is_alive() ]
 
                 # remove gunshots that have died.
                 self.booms[:] = [ boom for boom in self.booms if boom.is_alive() ]
@@ -637,8 +640,6 @@ init python:
                     self.state = HUNT_GAME_STATE_PAUSE
             elif self.state == HUNT_GAME_STATE_PAUSE:
                 self.state = HUNT_GAME_STATE_PLAY
-#            if key == pygame.K_ESCAPE:
-#                self.quit()
 
         def on_mouse_move( self, mx, my ):
             # for whatever reason, Ren'Py sometimes gives (-1,-1) for the mouse
@@ -657,17 +658,11 @@ init python:
         def on_mouse_down( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
                 if self.state == HUNT_GAME_STATE_PLAY:
-                    mx, my = self.transform_screen_to_world( mx, my )
-                    self.spawn_boom( mx, my )
+                    self.click_x, self.click_y = self.transform_screen_to_world( mx, my )
+                    self.mouse_clicked = True
                     self.number_clicks += 1
-
-                    for bird in itertools.chain( self.easy_birds,
-                                                 self.medium_birds,
-                                                 self.hard_birds ):
-                        if (bird["collider"].is_point_inside( mx, my ) and
-                            not bird["behavior"].is_shot_down()):
-                            bird["behavior"].shoot()
-                            self.number_hits += 1
+                    
+                    self.spawn_boom( self.click_x, self.click_y )
 
         def on_mouse_up( self, mx, my, button ):
             if button == Minigame.LEFT_MOUSE_BUTTON:
@@ -678,7 +673,7 @@ init python:
 
     class BirdBehavior( GameComponent ):
         def __init__( self, direction, speed, number_hit_points, score_value,
-                      on_death_callback ):
+                      on_death_callback, bird_type ):
             self.direction         = direction
             self.speed             = speed
             self.x_velocity        = 0
@@ -686,6 +681,7 @@ init python:
             self.number_hit_points = number_hit_points
             self.on_death_callback = on_death_callback
             self.score_value       = score_value
+            self.bird_type         = bird_type
 
         def die( self ):
             self.state      = BIRD_STATE_DEAD
