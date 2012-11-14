@@ -272,18 +272,18 @@ init python:
             for bar_segment in self.bar_segments:
                 hits += bar_segment["behavior"].get_hits()
             return "%4d" % hits
+            
+        def get_hits_string( self, bar_segment ):
+            return "%4d  (%2d pts)" % ( bar_segment["behavior"].get_hits(), bar_segment["behavior"].get_score() )
         
         def get_green_hits( self ):
-            bar_segment = self.bar_segments[0]
-            return "%4d  (%2d pts)" % (bar_segment["behavior"].get_hits(), bar_segment["behavior"].get_score())
+            return self.get_hits_string( self.bar_segments[0] )
         
         def get_orange_hits( self ):
-            bar_segment = self.bar_segments[1]
-            return "%4d  (%2d pts)" % (bar_segment["behavior"].get_hits(), bar_segment["behavior"].get_score())
+            return self.get_hits_string( self.bar_segments[1] )
         
         def get_red_hits( self ):
-            bar_segment = self.bar_segments[2]
-            return "%4d  (%2d pts)" % (bar_segment["behavior"].get_hits(), bar_segment["behavior"].get_score())
+            return self.get_hits_string( self.bar_segments[2] )
             
         def get_level_number( self ):
             return "%20d" % self.level.level_number
