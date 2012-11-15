@@ -47,7 +47,7 @@ init python:
     #                              completes. Settings this to zero results in
     #                              wild, highly uncontrollable mutation waves.
     CELL_LEVELS = [
-        CellLevel( initial_healthy         = 2,
+        CellLevel( initial_healthy         = 50,
                    mutation_probability    = 10,
                    duplication_probability = 50,
                    mutation_cooldown       = 2,
@@ -94,7 +94,7 @@ init python:
     CELLS_SCORE_MEDIUM  = 250
     CELLS_SCORE_HARD    = 500
     
-    CELLS_COMPLETION_BONUS = 300
+    CELLS_COMPLETION_BONUS = 1000
 
     #### DESIGNERS: DO NOT CHANGE ANYTHING BEYOND THIS LINE ####
     
@@ -353,7 +353,6 @@ init python:
             # setup game state.
             self.state            = CELLS_GAME_STATE_BEGIN
             self.elapsed_time     = 0
-            self.base_score       = 0
             self.completion_bonus = 0
             self.total_score      = 0
             self.end_countdown    = CELLS_END_GAME_COUNTDOWN
@@ -377,6 +376,14 @@ init python:
             self.mouse_click_x = -1
             self.mouse_click_y = -1
             self.mouse_clicked = False
+            
+            self.cell_hits = {
+                CELLS_TYPE_HEALTHY : 0,
+                CELLS_TYPE_EASY    : 0,
+                CELLS_TYPE_MEDIUM  : 0,
+                CELLS_TYPE_HARD    : 0
+            }
+            self.cell_hits_count = 0
 
             # spawn the initial cells.
             for i in xrange( self.level.initial_healthy ):
@@ -448,20 +455,40 @@ init python:
             level["renderer"] = GameRenderer( GameText( self.get_level_number, Color( 255, 255, 255, 255 ) ) )
             level["transform"].set_position( 138, 360 )
             self.start_screen_hud.add_child( level )
-
-            base_score             = GameObject()
-            base_score["renderer"] = GameRenderer( GameText( self.get_base_score, Color( 255, 255, 255, 255 ) ) )
-            base_score["transform"].set_position( 185, 159 )
-            self.stop_screen_hud.add_child( base_score )
+            
+            cell_hits = GameObject()
+            cell_hits["renderer"] = GameRenderer( GameText( self.get_cell_hit_count, Color( 255, 255, 255, 255 ) ) )
+            cell_hits["transform"].set_position( 135, 114 )
+            self.stop_screen_hud.add_child( cell_hits )
+            
+            easy_cell_hits = GameObject()
+            easy_cell_hits["renderer"] = GameRenderer( GameText( self.get_easy_cell_hit_count, Color( 255, 255, 255, 255 ) ) )
+            easy_cell_hits["transform"].set_position( 195, 161 )
+            self.stop_screen_hud.add_child( easy_cell_hits )
+            
+            medium_cell_hits = GameObject()
+            medium_cell_hits["renderer"] = GameRenderer( GameText( self.get_medium_cell_hit_count, Color( 255, 255, 255, 255 ) ) )
+            medium_cell_hits["transform"].set_position( 195, 184 )
+            self.stop_screen_hud.add_child( medium_cell_hits )
+            
+            hard_cell_hits = GameObject()
+            hard_cell_hits["renderer"] = GameRenderer( GameText( self.get_hard_cell_hit_count, Color( 255, 255, 255, 255 ) ) )
+            hard_cell_hits["transform"].set_position( 195, 207 )
+            self.stop_screen_hud.add_child( hard_cell_hits )
+            
+            healthy_cell_hits = GameObject()
+            healthy_cell_hits["renderer"] = GameRenderer( GameText( self.get_healthy_cell_hit_count, Color( 255, 255, 255, 255 ) ) )
+            healthy_cell_hits["transform"].set_position( 195, 230 )
+            self.stop_screen_hud.add_child( healthy_cell_hits )
 
             completion_bonus             = GameObject()
             completion_bonus["renderer"] = GameRenderer( GameText( self.get_completion_bonus, Color( 255, 255, 255, 255 ) ) )
-            completion_bonus["transform"].set_position( 185, 251 )
+            completion_bonus["transform"].set_position( 135, 323 )
             self.stop_screen_hud.add_child( completion_bonus )
 
             total_score             = GameObject()
             total_score["renderer"] = GameRenderer( GameText( self.get_total_score, Color( 255, 255, 255, 255 ) ) )
-            total_score["transform"].set_position( 185, 320 )
+            total_score["transform"].set_position( 135, 369 )
             self.stop_screen_hud.add_child( total_score )
 
             self.elapsed_time_hud             = GameObject()
@@ -473,34 +500,38 @@ init python:
                 self.completion_bonus = CELLS_COMPLETION_BONUS
             else:
                 self.completion_bonus = 0
-            self.total_score = self.base_score + self.completion_bonus
-
-        def get_base_score( self ):
-            if self.base_score < 1000:
-                return "%20d" % self.base_score
-            elif self.base_score < 10000:
-                return "%18d" % self.base_score
-            else:
-                return "%16d" % self.base_score
+                
+            base_score = 0
+            base_score += self.cell_hits[CELLS_TYPE_EASY]    * CELLS_SCORE_EASY
+            base_score += self.cell_hits[CELLS_TYPE_MEDIUM]  * CELLS_SCORE_MEDIUM
+            base_score += self.cell_hits[CELLS_TYPE_HARD]    * CELLS_SCORE_HARD
+            base_score += self.cell_hits[CELLS_TYPE_HEALTHY] * CELLS_SCORE_HEALTHY
+                
+            self.total_score = base_score + self.completion_bonus
+            
+        def get_cell_hit_count( self ):
+            return "%20d" % self.cell_hits_count
+            
+        def get_hits_string( self, cell_type, score ):
+            return "%2d  (%4d pts)" % ( self.cell_hits[cell_type], score )
+            
+        def get_easy_cell_hit_count( self ):
+            return self.get_hits_string( CELLS_TYPE_EASY, CELLS_SCORE_EASY )
+             
+        def get_medium_cell_hit_count( self ):
+            return self.get_hits_string( CELLS_TYPE_MEDIUM, CELLS_SCORE_MEDIUM )
+            
+        def get_hard_cell_hit_count( self ):
+            return self.get_hits_string( CELLS_TYPE_HARD, CELLS_SCORE_HARD )
+            
+        def get_healthy_cell_hit_count( self ):
+            return self.get_hits_string( CELLS_TYPE_HEALTHY, CELLS_SCORE_HEALTHY )
 
         def get_completion_bonus( self ):
-            if self.completion_bonus == 0:
-                return "%20d" % self.completion_bonus
-            elif self.completion_bonus < 1000:
-                return "%18d" % self.completion_bonus
-            else:
-                return "%16d" % self.completion_bonus
+            return "%20d" % self.completion_bonus
 
         def get_total_score( self ):
-            if self.total_score < 1000:
-                return "%20d" % self.total_score
-            elif self.total_score < 10000:
-                return "%18d" % self.total_score
-            else:
-                return "%16d" % self.total_score
-                
-        def get_result( self ):
-            return self.total_score
+            return "%20d" % self.total_score
 
         def get_elapsed_time( self ):
             minutes = math.floor( self.elapsed_time / 60 )
@@ -586,9 +617,11 @@ init python:
                 for cell in self.active_cells:
                     # Perform appropriate collision checks if necessary.
                     if self.mouse_clicked and cell["collider"].is_point_inside(self.mouse_click_x, self.mouse_click_y):
-                        if cell["behavior"].hit():
-                            self.count_score( cell["behavior"] )
+                        cell["behavior"].hit()
+                        if cell["behavior"].hit_points <= 0:
+                            self.inc_hits( cell["behavior"] )
                             self.removables.append( cell )
+                            cell["behavior"].die()
                         self.mouse_clicked = False
                     
                     cell.update( delta_sec )
@@ -657,13 +690,14 @@ init python:
                     self.mutation_cooldown <= 0 and 
                     self.end_countdown == CELLS_END_GAME_COUNTDOWN)
         
-        def count_score( self, cell ):
-            # Grab the score from the mutation result rather than the current form.
+        def inc_hits( self, cell ):
             if cell.state == CELL_STATE_MUTATING:
-                score = CELLS_PROPERTIES[CELLS_PROPERTIES[cell.type][CELLS_PROP_MUTATES_TO]][CELLS_PROP_SCORE]
+                cell_type = CELLS_PROPERTIES[cell.type][CELLS_PROP_MUTATES_TO]
             else:
-                score = CELLS_PROPERTIES[cell.type][CELLS_PROP_SCORE]
-            self.base_score += score
+                cell_type = cell.type
+
+            self.cell_hits[cell_type] += 1
+            self.cell_hits_count      += 1
 
 
     class CellBehavior( GameComponent ):
@@ -849,10 +883,9 @@ init python:
             
         def hit( self ):
             self.hit_points -= 1
-            if self.hit_points <= 0:
-                self.state = CELL_STATE_DYING
-                return True
-            return False
+            
+        def die( self ):
+            self.state = CELL_STATE_DYING
         
         def is_infectable( self ):
             # How about letting higher level cells infect/upgrade their lower level neighbors...?
