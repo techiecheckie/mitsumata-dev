@@ -169,11 +169,12 @@ init python:
     renpy.transition(dissolve)
     if background:
       renpy.show(background, at_list=[Position(xpos=MINIGAME_POS_X, ypos=MINIGAME_POS_Y), Transform(anchor=(0.0,0.0))])
-    renpy.show("minigame_mp_bg",  at_list = [Position(xpos=579,       ypos=16), Transform(anchor=(0.0, 0.0))], zorder=1)
+    renpy.show("minigame_mp_bg",  at_list = [Position(xpos=579,       ypos=16), Transform(anchor=(0.0, 0.0))], zorder=0)
     renpy.show("minigame_mp_bar", at_list = [Position(xpos=MINI_MP_X, ypos=18), Transform(anchor=(1.0, 0.0))], zorder=1)
     renpy.show("minigame_hp_bg",  at_list = [Position(xpos=105,       ypos=16), Transform(anchor=(0.0, 0.0))], zorder=1)
-    renpy.show("minigame_hp_bar", at_list = [Position(xpos=MINI_HP_X, ypos=16), Transform(anchor=(1.0, 0.0))], zorder=1)
-    renpy.show("minigame_ui", zorder=1)
+    renpy.show("minigame_hp_bar", at_list = [Position(xpos=MINI_HP_X, ypos=16), Transform(anchor=(1.0, 0.0))], zorder=2)
+
+    renpy.show("minigame_ui", zorder=2)
 
     config.overlay_functions.append(minigame_ui_buttons)
     if (exit_enabled):
@@ -187,8 +188,8 @@ init python:
     (MINI_HP_X, MINI_MP_X) = calculate_new_minigame_ui_positions(hp, mp)
 
     renpy.transition(MoveTransition(1.0))
-    renpy.show("minigame_hp_bar", at_list = [Position(xpos=MINI_HP_X, ypos=16)])
-    renpy.show("minigame_mp_bar", at_list = [Position(xpos=MINI_MP_X, ypos=18)])
+    renpy.show("minigame_hp_bar", at_list = [Position(xpos=MINI_HP_X, ypos=16)], zorder=1)
+    renpy.show("minigame_mp_bar", at_list = [Position(xpos=MINI_MP_X, ypos=18)], zorder=1)
 
     return
 
