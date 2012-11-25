@@ -1,4 +1,5 @@
- #*******************************
+init: 
+  #*******************************
   # EFFECT COMMANDS
   #*******************************
   $ slow_dissolve = Dissolve(3.0)
@@ -405,10 +406,6 @@ label splashscreen:
     #show text "Part I" with dissolve
     #$ renpy.pause(1.0)
     #hide text with dissolve
-     
-    #$print persistent.unlocked_items
-    #$print persistent.unlocked_journals
-    #$print persistent.unlocked_minigames
 
     return
 
@@ -437,13 +434,8 @@ label start:
     menu:
         "Jump to Scene 1 to test the characters":
                 jump Scene1
-        "Start from beginning.":
-                jump test_stuff
         "Test PDA functions.":
-                jump pdatest       
-                
-label test_stuff:
-    pass
+                jump pdatest
     
 label Scene1:  
         play music "sfx/mitsumata_bgm01.ogg" 
@@ -555,11 +547,11 @@ label Scene1:
         boy "Think of this as fate. That sounds kind of nice, doesn’t it?"
         $hide_main_ui()
         show bg mameat
-        play music "sfx/sad_theme.ogg" fadeout 2.0
+        play music "sfx/sad_theme.mp3" fadeout 2.0
         $ renpy.pause (5.0)
         scene bg blackscr 
         with slow_dissolve
-# play sound Screaming, crunching, grinding, all sorts of unholy noises.
+        # play sound Screaming, crunching, grinding, all sorts of unholy noises.
         $ renpy.pause(3.0)
         #show some kind of splash page here
         stop music
@@ -769,7 +761,7 @@ label Scene4:
         #play sound Door unlocking.
         #put some kind of door opening effect here to lead into bg rhouse
         show bg blackscr with dissolve
-        play music "sfx/library.mp3" fadeout 2.0
+        play music "sfx/Library.mp3" fadeout 2.0
         show r neu with dissolve
         r "I’m home."
 
@@ -999,6 +991,8 @@ label pdatest:
     
     "I guess it’s not always bad to be the kid of two doctors."
     stop music
+    $hide_main_ui()
+    
 label Scene6:
     scene bg blackscr
     with slow_fade
@@ -1009,6 +1003,9 @@ label Scene6:
     #time 4.0
     #stop sound
     show bg blackscr with slow_dissolve
+    
+    $HP += 100
+    $MP += 50
     
     $show_main_ui()
     with dissolve
@@ -1138,7 +1135,7 @@ label Scene6:
 label getknife:
         #Message box should go here, too...
         $show_message("You picked up the knife.", "medium")
-        $renpy.show("pda_button", at_list=[blink(2.0, 0.0), Position(xpos=842, ypos=651), Transform(anchor=(0.0,0.0))], zorder=8)
+        #$renpy.show("pda_button", at_list=[blink(2.0, 0.0), Position(xpos=842, ypos=651), Transform(anchor=(0.0,0.0))], zorder=8)
         $unlock_item("knife", True)
         
         #This goes in the regular textbox.
@@ -1212,16 +1209,19 @@ label Scene7:
     
     m "You’re going to run, aren’t you? Feel free; I’ll give you a small head start..."
     
-    r "I'm dead. {size = 20} I'm dead!"
+    r "I'm dead. I'm dead!"
+    hide m
+    
+    $battle("Riku", "Mamoru", 1, "bg backalley", False)
     $hide_main_ui()
+    with dissolve
     
 label SceneDemoEnding:    
     scene bg blackscr with dissolve
     
     $ show_message("This is the end of the Mitsumata demo!", "medium")
     $ show_message("You can now test the minigames!", "medium")
+        
+    call pda_loop
+    
     $ show_message("Thanks so much for playing this demo and please wait for the final release!", "medium")
-    
-    $ show_message("You can quit from the PDA menu!", "medium")
-    
-    call pda_loop   
