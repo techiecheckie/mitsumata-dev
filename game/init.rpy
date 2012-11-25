@@ -2,7 +2,27 @@ init python:
   from mitsugame.inventory import Inventory
   from mitsugame.journal_manager import Journal_manager
   import time
-
+  
+  # Persistent values stored in the special persistent object:
+  #
+  # Unlocked items
+  #   Enabling PDA icon highlight (False for items that haven't been checked yet):
+  #     persistent.unlocked_items["knife"] = False
+  #   See the correct item names in items.xml.
+  #
+  # Unlocked journals
+  #   Same as items, but the dict item contains info about the unlocked journal
+  #   entries, too.
+  #     persistent.unlocked_journals["Susa"] = [False, "019", "017"]
+  #   See the correct journal & entry values in journal.xml.
+  #
+  # Unlocked minigames
+  #   Same as before, but without icon blink flags for checked status. Each 
+  #   minigame dict item contains the current high score and level values.
+  #     persistent.unlocked_minigames["mole"] = [0, 1]
+  #   See the correct minigame names in minigames.rpy.
+  
+  # Create new persistent dicts if they don't already exist.
   if persistent.unlocked_items == None:
     persistent.unlocked_items = {}
   if persistent.unlocked_journals == None:
@@ -11,65 +31,50 @@ init python:
     persistent.unlocked_minigames = {}
   if persistent.garden == None:
     persistent.garden = [None]*9 #[None]*len(GARDEN_GRID)
-  if persistent.bonus == None:
-    # This is actually done in screens.rpy already to make sure Renpy doesn't 
-    # vomit a bunch of exceptions when creating the menus on startup. Will
-    # probably remove this some time later.
-    #persistent.bonus = {}
-    #persistent.bonus["unlocked"]      = True
-    #persistent.bonus["cg_gallery"]    = [False]
-    #persistent.bonus["music_gallery"] = [False]
-    #persistent.bonus["trophy_room"]   = [False]
-    pass
   
   inventory = Inventory(persistent)
   journal_manager = Journal_manager(persistent)
   
-  # To simplify the usage of inventory.item_unlocked(id).
+  # To simplify the usage of inventory.item_unlocked(id). 
+  # (Is this necessary anymore?)
   item_unlocked = inventory.item_unlocked
   
-  # New game default values
-  HP       = 0
-  MP       = 0
-  CLICKS   = 5
+  # New game default values. Main stat values should only be modified through the
+  # script file ($HP+=50 etc.) and the bonus values left untouched. Stat bonuses
+  # are item and minigame rewards.
+  HP           = 0
+  MP           = 0
+  CLICKS       = 5
   BONUS_HP     = 0
   BONUS_MP     = 0
   BONUS_CLICKS = 0
+  
+  # Nightly decision value. Determines the items and random encounters used in
+  # the map screen.
   decision = "0"
-  pda      = False
+  
+  # The UI's PDA button lock status. Disabled by default until unlocked in the script.
+  pda = False
   
   # Used in counting the phases of the plants/seeds growing in the garden
   START_TIME = time.time()
   
-  # testing stuff begins
-  print ""
-  
-  # Unlocking some minigames for now (best score = 100, level = 1)
+  # Unlocking some minigames for testing purposes. Remove once done.
   persistent.unlocked_minigames = {}
-  persistent.unlocked_minigames["mole"]       = [100, 1]
-  persistent.unlocked_minigames["cell"]       = [100, 1]
-  persistent.unlocked_minigames["platformer"] = [100, 1]
-  persistent.unlocked_minigames["duck"]       = [100, 1]
-  persistent.unlocked_minigames["force"]      = [100, 1]
-  persistent.unlocked_minigames["power"]      = [100, 1]
-  persistent.unlocked_minigames["squats"]     = [100, 1]
-  persistent.unlocked_minigames["gears"]      = [100, 1]
-  persistent.unlocked_minigames["garden"]     = [100, 1]
-  #persistent.unlocked_minigames["lock"]       = [100, 1]
-  #persistent.unlocked_minigames["bottles"]    = [100, 1]
+  persistent.unlocked_minigames["cell"]       = [0, 1]
+  persistent.unlocked_minigames["duck"]       = [0, 1]
+  persistent.unlocked_minigames["squats"]     = [0, 1]
+  #persistent.unlocked_minigames["mole"]       = [0, 1]
+  #persistent.unlocked_minigames["platformer"] = [0, 1]
+  #persistent.unlocked_minigames["force"]      = [0, 1]
+  #persistent.unlocked_minigames["power"]      = [0, 1]
+  #persistent.unlocked_minigames["gears"]      = [0, 1]
+  #persistent.unlocked_minigames["garden"]     = [0, 1]
+  #persistent.unlocked_minigames["lock"]       = [0, 1]
+  #persistent.unlocked_minigames["bottles"]    = [0, 1]
   
-  # current unlocked items
-  persistent.unlocked_items = {}
-  persistent.unlocked_items["knife"] = False
   
-  # current unlocked journals
-  persistent.unlocked_journals = {}
-  persistent.unlocked_journals["Riku"]  = [False, "001", "002", "004"]
-  persistent.unlocked_journals["Roman"] = [True, "005"]
-  persistent.unlocked_journals["Susa"]  = [False, "019", "017"]
-
-  # current plants growing in the garden
-  persistent.garden = [None]*9
+  # Methods
   
   # Appends the item id to the persistent unlocked_items list and displays 
   # information about the unlocked item by calling the function show_item_unlock
@@ -80,7 +85,9 @@ init python:
       if show_messages:
         show_item_unlock(item)
     else:
-      show_message("Warning: item \"" + entry_id + "\" not found.", "medium")
+      message = "Warning: item '%s' not found" % entry_id
+      show_message(message, "medium")
+      renpy.log(message)
     
     update_stats()
     
@@ -110,9 +117,13 @@ init python:
         if (show_messages):
           show_entry_unlock(journal, entry)
       else:
-        show_message("Warning: entry \"" + entry_id + "\" not found.", "medium")
+        message = "Warning: entry '%s' not found." % entry_id
+        show_message(message, "medium")
+        renpy.log(message)
     else:
-      show_message("Warning: journal \"" + journal_id + "\" not found.", "medium")
+      message = "Warning: journal '%s' not found" % journal_id
+      show_message(message, "medium")
+      renpy.log(message)
     
     return
     
@@ -124,7 +135,9 @@ init python:
     return
   
   # Main stat update function. Uses the variables returned by get_item_bonuses() 
-  # and get_minigame_bonuses() functions to count stat values. 
+  # and get_minigame_bonuses() functions to recount bonus stat values. The bonus
+  # values are usually added to the main stats (HP/MP/CLICKS) when, say, entering
+  # combat.
   def update_stats():
     global BONUS_HP
     global BONUS_MP
@@ -146,8 +159,8 @@ init python:
     BONUS_HP += mini_hp
     BONUS_MP += mini_mp
     
-    print "Base values: HP", HP, "MP", MP, "CLICKS", CLICKS
-    print "Bonuses: BONUS_HP", BONUS_HP, "BONUS_MP", BONUS_MP, "CLICKS", BONUS_CLICKS
+    renpy.log("Base values: HP %s, MP %s, CLICKS %s" % (HP, MP, CLICKS))
+    renpy.log("Recounted bonus values: BONUS_HP %s, BONUS_MP %s, BONUS_CLICKS %s" % (BONUS_HP, BONUS_MP, BONUS_CLICKS))
     
     return
   
@@ -193,8 +206,7 @@ init python:
                 mp += bonus_row[i][1]
             break
       else:
-        print "No game", key, "in MINIGAME_BONUSES"
-        pass
+        renpy.log("No game %s in MINIGAME_BONUSES" % key)
     
     return (hp,mp)
   
@@ -206,7 +218,7 @@ init python:
   # out.
   def unlock_bonus(bonus_area, bonus_id):
     if (bonus_area not in persistent.bonus.keys()):
-      print "No bonus area '", bonus_area, "' found."
+      renpy.log("No bonus area '%s' found." % bonus_area)
       return
       
     if (bonus_id not in persistent.bonus[bonus_area]):
