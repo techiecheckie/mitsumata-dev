@@ -47,7 +47,7 @@ init python:
     #                              completes. Settings this to zero results in
     #                              wild, highly uncontrollable mutation waves.
     CELL_LEVELS = [
-        CellLevel( initial_healthy         = 50,
+        CellLevel( initial_healthy         = 3,
                    mutation_probability    = 10,
                    duplication_probability = 50,
                    mutation_cooldown       = 2,
