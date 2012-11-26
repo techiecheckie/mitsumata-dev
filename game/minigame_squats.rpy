@@ -263,6 +263,9 @@ init python:
         
         def get_total_score( self ):
             return "%4d" % self.score
+            
+        def get_result( self ):
+            return self.score
 
         def get_time_remaining( self ):
             return "Time Remaining: %d" %  self.time_remaining.get_ceil_value()

@@ -532,6 +532,9 @@ init python:
 
         def get_total_score( self ):
             return "%20d" % self.total_score
+            
+        def get_result( self ):
+            return self.total_score
 
         def get_elapsed_time( self ):
             minutes = math.floor( self.elapsed_time / 60 )
