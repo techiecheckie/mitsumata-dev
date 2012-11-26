@@ -29,6 +29,10 @@ init python:
     persistent.unlocked_journals = {}
   if persistent.unlocked_minigames == None:
     persistent.unlocked_minigames = {}
+    # Unlock a few minigames for the demo. Remove when done.
+    persistent.unlocked_minigames["cell"]   = [0, 1]
+    persistent.unlocked_minigames["squats"] = [0, 1]
+    persistent.unlocked_minigames["duck"]   = [0, 1]
   if persistent.garden == None:
     persistent.garden = [None]*9 #[None]*len(GARDEN_GRID)
   
@@ -58,21 +62,6 @@ init python:
   
   # Used in counting the phases of the plants/seeds growing in the garden
   START_TIME = time.time()
-  
-  # Unlocking some minigames for testing purposes. Remove once done.
-  persistent.unlocked_minigames = {}
-  persistent.unlocked_minigames["cell"]       = [0, 1]
-  persistent.unlocked_minigames["duck"]       = [0, 1]
-  persistent.unlocked_minigames["squats"]     = [0, 1]
-  #persistent.unlocked_minigames["mole"]       = [0, 1]
-  #persistent.unlocked_minigames["platformer"] = [0, 1]
-  #persistent.unlocked_minigames["force"]      = [0, 1]
-  #persistent.unlocked_minigames["power"]      = [0, 1]
-  #persistent.unlocked_minigames["gears"]      = [0, 1]
-  #persistent.unlocked_minigames["garden"]     = [0, 1]
-  #persistent.unlocked_minigames["lock"]       = [0, 1]
-  #persistent.unlocked_minigames["bottles"]    = [0, 1]
-  
   
   # Methods
   
