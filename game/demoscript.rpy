@@ -130,7 +130,7 @@ image bg backalley = "gfx/backgrounds/streetalley2.png"
 #image bg kitchen = "gfx/backgrounds/kitchen.jpg"
 #image bg gar1 = "gfx/backgrounds/garden1.png"
 #image bg gar2 = "gfx/backgrounds/garden2.png"
-image bg street = "gfx/backgrounds/streetalley1.png"
+image bg street = "gfx/backgrounds/streetalley3.png"
 #image bg store = "gfx/backgrounds/store.png"
 #image bg ngro = "gfx/backgrounds/nightgrass.jpg"
 #image bg nsky = "gfx/backgrounds/nightsky.jpg"
@@ -178,7 +178,9 @@ image bg rikubar = "gfx/backgrounds/rikubar.png"
 #image bg souheal = "gfx/backgrounds/soumeheal.png"
 #image bg souplant = "gfx/backgrounds/souplant.png"
 #image bg suhit = "gfx/backgrounds/susahit.png"
-
+image bg run = "gfx/backgrounds/run.png"
+image bg rikusports = "gfx/backgrounds/rikusports.png"
+image bg sky = "gfx/backgrounds/BGSky.png"
 
 #-----------------------------------------------
 #DECLARE RIKU SPRITE IMAGES
@@ -432,9 +434,11 @@ label start:
     $hide_main_ui()
 
     menu:
-        "Jump to Scene 1 to test the characters":
+        "Jump to Scene 1 to run through the game":
                 jump Scene1
-        "Test PDA functions.":
+        "Jump to Scene 3 to play that part":
+                jump Scene3
+        "Test PDA functions":
                 jump pdatest
     
 label Scene1:  
@@ -695,9 +699,8 @@ label Scene2:
 label Scene3:
         #---Flashback---
         play music "sfx/comical.mp3" fadeout 1.0
-        scene bg blackscr with fade
+        scene bg rikusports with fade
         
-        #scene bg rikuyouth
         $show_main_ui()
         with slow_dissolve
 
