@@ -220,24 +220,27 @@ init python:
       bg = "gfx/textbox.png"
       x_anchor = 265
       y_anchor = 175
+      ypos_tweak = 0.01
       x_max    = 520
     elif size == "medium":
       bg = "gfx/textbox_2.png"
       x_anchor = 304
       y_anchor = 95
+      ypos_tweak = 0
       x_max    = 560
     elif size == "small":
       bg = "gfx/textbox_mini.png"
       x_anchor = 70
       y_anchor = 40
+      ypos_tweak = 0
       x_max    = 100
 
     renpy.transition(dissolve)
     ui.frame(xmaximum=x_max, xpadding=40, ypadding=40,
-                     xpos=0.5, ypos=0.5,
+                     xpos=0.5, ypos=0.5 - ypos_tweak,
                      xanchor=x_anchor, yanchor=y_anchor,
                      background=bg)
-    ui.text("{size=-2}" + message + "{/size}")
+    ui.text(message)
 
     show_invisible_button("full")
 
@@ -251,7 +254,7 @@ init python:
     # Box 1: e.g. "Knife recorded"
     renpy.transition(dissolve)
     ui.frame(xmaximum=560, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=304, yanchor=95, background="gfx/textbox_2.png")
-    ui.text("{size=-2}" + item.get_name() + " recorded{/size}")
+    ui.text(item.get_name() + " recorded")
 
     show_invisible_button("full")
 
@@ -260,7 +263,7 @@ init python:
     ui.frame(xmaximum=490, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=265, yanchor=175, background="gfx/textbox.png")
     ui.hbox(spacing=40)
     ui.image(im.Scale("gfx/items/" + item.get_id() + ".png", 75, 75))
-    ui.text("{size=-2}" + item.get_name() + "\n\n" + item.get_description() + "{/size}")
+    ui.text(item.get_name() + "\n\n" + item.get_description())
     ui.close()
 
     show_invisible_button("full")
@@ -280,7 +283,7 @@ init python:
     # Box 1
     renpy.transition(dissolve)
     ui.frame(xmaximum=560, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=304, yanchor=95, background="gfx/textbox_2.png")
-    ui.text("{size=-2}Entry " + entry.get_id() + " recorded{/size}")
+    ui.text("Entry " + entry.get_id() + " recorded")
 
     show_invisible_button("full")
 
@@ -288,7 +291,7 @@ init python:
     ui.frame(xmaximum=560, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=304, yanchor=95, background="gfx/textbox_2.png")
     ui.hbox(spacing=40)
     ui.image(im.Scale("gfx/journals/" + journal.get_id() + ".png", 75, 75))
-    ui.text("{size=-2}" + entry.get_title() + "{/size}")
+    ui.text(entry.get_title())
     ui.close()
 
     show_invisible_button("full")

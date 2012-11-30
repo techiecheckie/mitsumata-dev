@@ -158,7 +158,7 @@ init python:
                xpadding=0, ypadding=0, 
                xmaximum=520, xminimum=550,
                background=None)
-      ui.text("{color=#FFFFFF}{size=-2}" + item.get_name() + "\n\n" + item.get_description() + "{/size}{/color}")
+      ui.text("{color=#FFFFFF}" + item.get_name() + "\n\n" + item.get_description() + "{/color}")
       
       
   # Displays the journal manager. Just like the inventory part, this one uses 
@@ -249,7 +249,7 @@ init python:
                #xpadding=0, ypadding=0, 
                xmaximum=520, xminimum=520,
                background=None)
-      ui.text("{color=#FFFFFF}{size=-2}" + entry.get_title() + "\n\n" + entry.get_text() + "{/size}{/color}")
+      ui.text("{color=#FFFFFF}" + entry.get_title() + "\n\n" + entry.get_text() + "{/color}")
 
   def hide_inventory(items):
     if inventory.is_enabled() == False:
