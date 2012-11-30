@@ -23,10 +23,10 @@ init python:
   #   See the correct minigame names in minigames.rpy.
   
   # Create new persistent dicts if they don't already exist.
-  if persistent.unlocked_items == None:
-    persistent.unlocked_items = {}
-  if persistent.unlocked_journals == None:
-    persistent.unlocked_journals = {}
+  #if persistent.unlocked_items == None:
+  persistent.unlocked_items = {}
+  #if persistent.unlocked_journals == None:
+  persistent.unlocked_journals = {}
   if persistent.unlocked_minigames == None:
     persistent.unlocked_minigames = {}
     # Unlock a few minigames for the demo. Remove when done.
