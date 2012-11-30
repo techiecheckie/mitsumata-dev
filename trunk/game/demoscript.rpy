@@ -145,6 +145,7 @@ image bg street = "gfx/backgrounds/streetalley3.png"
 image bg blackscr = "gfx/backgrounds/blackscr.png"
 image bg redscr = "gfx/backgrounds/redscr.jpg"
 image bg whitescr = "gfx/backgrounds/whitescr.jpg"
+image bg bars = "gfx/backgrounds/bar.jpg"
 
 #image map = "gfx/backgrounds/map.png"
 image textbox_l = "gfx/textbox.png"
@@ -871,6 +872,8 @@ label Scene5:
     "Alcohol’s just what I need."
     
     show bg street with dissolve
+    $renpy.pause(1.5)
+    show bg bars with dissolve
     play music "sfx/shop_theme.mp3"
     $ renpy.pause (1.5)
     
@@ -893,13 +896,13 @@ label Scene5:
     show r grin with dissolve
     r "Are you here for laughs, or to lose a bet? If you're not a bunch of princesses, why don't we go straight for the good stuff? Onigoroshi sound good?"
     
-    "{size=17}Onigoroshi is practically like drinking rubbing alcohol. They don't call it “the demon killer” for nothing; you make it through a few shots and that shit'll put hair on your chest or make your nuts drop, or some other manly shit.{/size}"
+    "{size=17}Onigoroshi is practically like drinking rubbing alcohol. They don't call it “the demon killer” for nothing; if you live through a few shots, you'll come out with hair on your chest and a full beard.{/size}"
     
     "Hasn't worked for me yet."
     
     ob "Why don’t we just get you some milk and call it a day?"
     
-    "Ha ha ha. I totally haven’t heard that one before. The big fucking assholes are high-fiving each other like they fucking won a Pulitzer for that cheap line."
+    "Ha ha ha. I totally haven’t heard that one before. The assholes are high-fiving each other like they won a Pulitzer for that cheap line."
     
     "Taking their money will be a pleasure."
     hide r grin with dissolve
@@ -909,13 +912,13 @@ label Scene5:
     $show_main_ui()
     with dissolve
     
-    "My sake comes and I pour myself three glasses, setting the bottle down next to my dumbfuck opponent."
+    "My sake comes and I pour myself three glasses, setting the bottle down next to my idiot opponent."
     
-    r "How about we raise the stakes? Fifty-thousand yen."
+    r "How about we raise the stakes? Five hundred bucks."
     
     ob1 "Do you even have that kind of money, kiddo?"
     
-    "I pluck five crisp 10,000 yen bills from my pocket and set ‘em down. I’m not worried. I’ve got a good eye on where my money is."
+    "I pluck five crisp hundred dollar bills from my pocket and set ‘em down. I’m not worried about grabby hands. I’ve got a good eye on where my money is."
     
     "They rummage around and manage to match the money.  Again, not worried. I’ve got a good eye on where their money is, too."
     
@@ -925,16 +928,16 @@ label Scene5:
     
     "He matches the shots. I can’t help but grin when he starts choking on them."
     
-    r "Maybe you should just hand over your money, get some milk, and call it a day."
+    r "Maybe -you- should just hand over your money, get some milk, and call it a day."
     
-    "No more mocking looks from them now."
+    "They're real quiet now."
     
     "I pour the next three and take them. He matches, but he’s starting to look a little woozy."
     
     "I feel it myself, the sweet fuzz of powerful sake taking over my senses. I enjoy it as best I can...it won’t last long. I pour three more glasses slowly." 
     "I want to savor this and hold the contest up to make sure he’s really drunk."
     
-    r "You’re probably feeling fucking stupid right now. Too bad."
+    r "You’re probably feeling real stupid right now. Too bad."
     
     "I down all three shots and look at him."
     
@@ -944,12 +947,12 @@ label Scene5:
     
     "Someone has to pour his glass for him. Everyone in the bar’s staring at me. They don’t get how I can still be so clear-headed. What can I say...I’m a great drunk."
     
-    "When his head hits the table, I immediately snatch up all the money and head off to the bathroom. The poor dumbass." 
-    "He never had a chance. His friends are fawning all over him to make sure he’s not going to croak on ‘em."
+    "The moment his head hits the table, I snatch up the money and go before they can start something." 
+    "Poor guy never had a chance. His friends are fawning all over him to make sure he’s not going to croak."
     
-    show bg blackscr with dissolve
+    show bg backalley with dissolve
     $renpy.pause(1.0)
-    "This is the worst part about it, for me. Staring at the nasty bathroom ceiling, I do my business, and by the time I leave the bathroom, it’s like I haven’t had a drop. That’s it. Good-bye, sweet buzz."
+    "This is the worst part about it, for me. I don't stay drunk very long...once I go to the bathroom, that’s it. Good-bye, sweet buzz."
     
     "I give my friend his share of the money and stuff the rest in my pocket. Didn’t even get a hangover after nine shots."
     
@@ -1181,12 +1184,13 @@ label Scene7:
     r "---uh---"
     
     "I look up and see a strange...oddly compelling man."
-    "He seems perfectly normal, but for the first time I can remember...I’m uneasy. Afraid. I want to run. I back up slowly."
+    "He seems perfectly normal, but for the first time I can remember...I’m uneasy."
+    "I back up slowly."
     
     #Mamoru chuckles.
-    #show m grin at left with dissolve
     m "You look a bit pale, do you need a doctor? Some water? I don't live in the area, but I have friends--"
     
+    show r blush at right with dissolve
     r "I---no. I don't need any help."
     
     show r scare at right with dissolve
@@ -1222,6 +1226,10 @@ label Scene7:
     show r scare at right with dissolve
     r "W-what?!"
     
+    "That's it. I'm outta here."
+    hide r scare with dissolve
+    
+    #show m grin at left with dissolve
     m "You’re going to run, aren’t you? Feel free; I’ll give you a small head start..."
     
     $hide_main_ui()
