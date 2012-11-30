@@ -151,18 +151,24 @@ init -1 python hide:
 
     #########################################
     ## These let you customize the default font used for text in Ren'Py.
-
-    ## The file containing the default font.
-
     # style.default.font = "TimesNewRoman.ttf"
-
-    ## The default size of text.
-
     style.default.size = 19
-
-    ## Note that these only change the size of some of the text. Other
-    ## buttons have their own styles.
-
+    style.default.color = "#000"
+    
+    # Font settings for the PDA: item/journal information and journal entry buttons
+    style.pda = Style(style.default)
+    style.pda.color = "#000"
+    style.pda.size = 19
+    
+    # Font settings for the UI message box.
+    style.message = Style(style.default)
+    style.message.color = "#000"
+    style.message.size = 19
+    
+    # Font settings for the choice box.
+    style.menu_choice.color = "#000"
+    style.menu_choice.size = 19
+    
 
     #########################################
     ## These settings let you change some of the sounds that are used by
@@ -444,7 +450,6 @@ init python:
     build.classify('game/gfx/backgrounds/Room4.png', None)
     build.classify('game/gfx/backgrounds/rrplot.png', None)
     build.classify('game/gfx/backgrounds/rsgarden.png', None)
-    build.classify('game/gfx/backgrounds/run.png', None)
     build.classify('game/gfx/backgrounds/rvfood.png', None)
     build.classify('game/gfx/backgrounds/scaryouko.png', None)
     build.classify('game/gfx/backgrounds/shop.png', None)

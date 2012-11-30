@@ -158,7 +158,7 @@ init python:
                xpadding=0, ypadding=0, 
                xmaximum=520, xminimum=550,
                background=None)
-      ui.text("{color=#FFFFFF}" + item.get_name() + "\n\n" + item.get_description() + "{/color}")
+      ui.text("{=pda}" + item.get_name() + "\n\n" + item.get_description() + "{/}")
       
       
   # Displays the journal manager. Just like the inventory part, this one uses 
@@ -228,10 +228,10 @@ init python:
       
       ui.frame(xpos=PDA_CONTENT_X, ypos=PDA_CONTENT_Y, background=None, xmaximum=500)
       ui.vbox()
-      ui.text("{color=#FFFFFF}{size=-2}Available entries:{/size}{/color}\n")
+      ui.text("{=pda}Available entries:{/}\n")
       for entry in entries:
         if entry.get_id() in persistent.unlocked_journals[journal.get_id()]:
-          ui.textbutton("{color=#FFFFFF}{size=-2}" + entry.get_title() + "{/size}{/color}", 
+          ui.textbutton("{=pda}" + entry.get_title() + "{/}", 
                         clicked=ui.returns(("entry", journal, entry)), xfill=True)
       ui.close()
         
@@ -249,7 +249,7 @@ init python:
                #xpadding=0, ypadding=0, 
                xmaximum=520, xminimum=520,
                background=None)
-      ui.text("{color=#FFFFFF}" + entry.get_title() + "\n\n" + entry.get_text() + "{/color}")
+      ui.text("{=pda}" + entry.get_title() + "\n\n" + entry.get_text() + "{/}")
 
   def hide_inventory(items):
     if inventory.is_enabled() == False:
