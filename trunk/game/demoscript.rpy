@@ -700,10 +700,10 @@ label Scene2:
 label Scene3:
         #---Flashback---
         play music "sfx/comical.mp3" fadeout 1.0
-        scene bg rikusports with fade
+        scene bg rikusports with dissolve
         
         $show_main_ui()
-        with slow_dissolve
+        with dissolve
 
         $ renpy.pause(2.0)
         r "How come I can't do sports this year? I'm good at them, the teacher SAYS!"
@@ -728,9 +728,10 @@ label Scene3:
         ma "You can play whatever you'd like in your second year of junior high."
 
         #Riku: Makes a loud noise of child-like rage.
+        show bg rikusports at shaky with dissolve
         r "ARAAAAAAAAAAAGHAFLDSK!"
-        #Shaking screen effect goes here.
-        # play sound Sound of shit breaking all over the house.
+        
+        $renpy.pause(1.0)
 
         #Mom sighs.
         ma "…Oh, Riku."
