@@ -240,7 +240,7 @@ init python:
                      xpos=0.5, ypos=0.5 - ypos_tweak,
                      xanchor=x_anchor, yanchor=y_anchor,
                      background=bg)
-    ui.text(message)
+    ui.text("{=message}" + message + "{/}")
 
     show_invisible_button("full")
 
@@ -263,7 +263,7 @@ init python:
     ui.frame(xmaximum=490, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=265, yanchor=175, background="gfx/textbox.png")
     ui.hbox(spacing=40)
     ui.image(im.Scale("gfx/items/" + item.get_id() + ".png", 75, 75))
-    ui.text(item.get_name() + "\n\n" + item.get_description())
+    ui.text("{=message}" + item.get_name() + "\n\n" + item.get_description() + "{/}")
     ui.close()
 
     show_invisible_button("full")
@@ -291,7 +291,7 @@ init python:
     ui.frame(xmaximum=560, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=304, yanchor=95, background="gfx/textbox_2.png")
     ui.hbox(spacing=40)
     ui.image(im.Scale("gfx/journals/" + journal.get_id() + ".png", 75, 75))
-    ui.text(entry.get_title())
+    ui.text("{=message}" + entry.get_title() + "{/}")
     ui.close()
 
     show_invisible_button("full")
