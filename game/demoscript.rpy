@@ -961,8 +961,13 @@ label Scene5:
     "What do they want now?"
     
     r "Yeah?"
+    jump pdatest1
     
 label pdatest:
+    scene bg blackscr
+    $show_main_ui()
+    
+label pdatest1:    
     ma "You start school tomorrow, right? Well...your father and I wanted to give you something to inspire you a little this year. Here. A present."
     
     r "Hm---ahh!"
@@ -1167,38 +1172,43 @@ label Scene7:
     r "Oomph."
     
     $ Mamoru = "Dark Man"
-    
-    #$hide_main_ui()
-    #scene bg mamview
-    #with fade
-    #$renpy.pause(1.0)
-    #$show_main_ui()
-    show m grin with dissolve
+
+    #show m neu with dissolve
     m "Ahh, are you all right?"
    
+    show r think at right with dissolve
+    #show m neu at left with dissolve
     r "---uh---"
     
     "I look up and see a strange...oddly compelling man."
     "He seems perfectly normal, but for the first time I can remember...I’m uneasy. Afraid. I want to run. I back up slowly."
     
     #Mamoru chuckles.
+    #show m grin at left with dissolve
     m "You look a bit pale, do you need a doctor? Some water? I don't live in the area, but I have friends--"
     
     r "I---no. I don't need any help."
     
+    show r scare at right with dissolve
+
     "Why am I so afraid? Why is everything telling me to run?"
     
     "I start to fidget around."
     
+    #show m neu at left with dissolve
     m "...are you sure? You look so very nervous."
     
     "Damn it. I feel like my skin is crawling, which just makes me fidget worse."
     
+    show r hurt at right with dissolve
     r "No, I just need to get back to school--"
+    
+    #show m grin at left with dissolve
     m "Do...I make you nervous?"
     
+    show r scare at right with dissolve
     "........"
-    
+    #show m neu at left with dissolve
     m "It looks like you have a fair sense about your situation. That’s more than many of your kind, you know."
     
     r "My...kind?"
@@ -1209,19 +1219,41 @@ label Scene7:
     
     m "I’m afraid I don’t really have the time to explain. My stomach doesn’t like to be kept waiting."
     
+    show r scare at right with dissolve
     r "W-what?!"
     
     m "You’re going to run, aren’t you? Feel free; I’ll give you a small head start..."
     
-    r "I'm dead. I'm dead!"
+    $hide_main_ui()
+    scene bg run with dissolve
+    $show_main_ui()
+    "I'm dead. I'm {size = 20}dead!{/size}"
+    show bg run at shaky with dissolve
+    r "Aaah!!!!"
+    
+    m "Gotcha~"
+
     hide m
     
     $battle("Riku", "Mamoru", 1, "bg backalley", False)
     $hide_main_ui()
     with dissolve
-    
+        
 label SceneDemoEnding:    
-    scene bg blackscr with dissolve
+    scene bg street with dissolve
+    $show_main_ui()
+    r "It's too close. It's just too close."
+    
+    r "This is it for me..."
+    
+    $renpy.pause(1.0)
+    show bg street at shaky with dissolve
+
+    u "STOP RIGHT THERE!"
+    
+    scene bg blackscr
+    $hide_main_ui()
+    with dissolve
     
     $ show_message("This is the end of the Mitsumata demo!", "medium")
     $ show_message("You can now test the minigames!", "medium")
