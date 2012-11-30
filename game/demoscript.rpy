@@ -1140,7 +1140,7 @@ label Scene6:
         
         "Leave Knife.":
             jump leaveknife
-        
+$renpy.block_rollback()        
 label getknife:
         #Message box should go here, too...
         $show_message("You picked up the knife.", "medium")
