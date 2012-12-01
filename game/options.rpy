@@ -153,21 +153,21 @@ init -1 python hide:
     ## These let you customize the default font used for text in Ren'Py.
     # style.default.font = "TimesNewRoman.ttf"
     style.default.size = 19
-    style.default.color = "#000"
+    style.default.color = "#622a00"
     
     # Font settings for the PDA: item/journal information and journal entry buttons
     style.pda = Style(style.default)
-    style.pda.color = "#000"
-    style.pda.size = 19
+    style.pda.color = "#000605"
+    style.pda.size = 36
     
     # Font settings for the UI message box.
     style.message = Style(style.default)
-    style.message.color = "#000"
-    style.message.size = 19
+    style.message.color = "#622a00"
+    style.message.size = 21
     
     # Font settings for the choice box.
-    style.menu_choice.color = "#000"
-    style.menu_choice.size = 19
+    style.menu_choice.color = "#622a00"
+    style.menu_choice.size = 24
     
 
     #########################################
@@ -417,7 +417,7 @@ init -3 python:
 #        build.classify('game/gfx/items/v*', None)
     
     # Ignore everything but the few backgrounds used in the script.
-<<<<<<< .mine
+
 #        build.classify('game/gfx/backgrounds/bath.png', None)
 #        build.classify('game/gfx/backgrounds/DForest1.png', None)
 #        build.classify('game/gfx/backgrounds/DForest2.png', None)
@@ -463,53 +463,6 @@ init -3 python:
 #        build.classify('game/gfx/backgrounds/train1.png', None)
 #        build.classify('game/gfx/backgrounds/train2.png', None)
 #        build.classify('game/gfx/backgrounds/trainwhole.png', None)
-=======
-    build.classify('game/gfx/backgrounds/bath.png', None)
-    build.classify('game/gfx/backgrounds/DForest1.png', None)
-    build.classify('game/gfx/backgrounds/DForest2.png', None)
-    build.classify('game/gfx/backgrounds/DForest3.png', None)
-    build.classify('game/gfx/backgrounds/firstview.png', None)
-    build.classify('game/gfx/backgrounds/Garden1.png', None)
-    build.classify('game/gfx/backgrounds/Garden2.png', None)
-    build.classify('game/gfx/backgrounds/Hallway1.jpg', None)
-    build.classify('game/gfx/backgrounds/Hallway2.jpg', None)
-    build.classify('game/gfx/backgrounds/kazulie.png', None)
-    build.classify('game/gfx/backgrounds/Kitchen.jpg', None)
-    build.classify('game/gfx/backgrounds/ldead.png', None)
-    build.classify('game/gfx/backgrounds/Library.jpg', None)
-    build.classify('game/gfx/backgrounds/lizadead.png', None)
-    build.classify('game/gfx/backgrounds/lscamp.png', None)
-    build.classify('game/gfx/backgrounds/mall.png', None)
-    build.classify('game/gfx/backgrounds/manaroof.png', None)
-    build.classify('game/gfx/backgrounds/map.png', None)
-    build.classify('game/gfx/backgrounds/Nforest2.png', None)
-    build.classify('game/gfx/backgrounds/NForest1.png', None)
-    build.classify('game/gfx/backgrounds/NForest3.png', None)
-    build.classify('game/gfx/backgrounds/nightgrass.jpg', None)
-    build.classify('game/gfx/backgrounds/nightsky.jpg', None)
-    build.classify('game/gfx/backgrounds/noreat.png', None)
-    build.classify('game/gfx/backgrounds/rcrib.png', None)
-    build.classify('game/gfx/backgrounds/rikumom.png', None)
-    build.classify('game/gfx/backgrounds/Room1.png', None)
-    build.classify('game/gfx/backgrounds/Room2.png', None)
-    build.classify('game/gfx/backgrounds/Room3.png', None)
-    build.classify('game/gfx/backgrounds/Room4.png', None)
-    build.classify('game/gfx/backgrounds/rrplot.png', None)
-    build.classify('game/gfx/backgrounds/rsgarden.png', None)
-    build.classify('game/gfx/backgrounds/rvfood.png', None)
-    build.classify('game/gfx/backgrounds/scaryouko.png', None)
-    build.classify('game/gfx/backgrounds/shop.png', None)
-    build.classify('game/gfx/backgrounds/slkid.png', None)
-    build.classify('game/gfx/backgrounds/soumeheal.png', None)
-    build.classify('game/gfx/backgrounds/souplant.png', None)
-    build.classify('game/gfx/backgrounds/susahit.jpg', None)
-    build.classify('game/gfx/backgrounds/templebottom.png', None)
-    build.classify('game/gfx/backgrounds/templetop.png', None)
-    build.classify('game/gfx/backgrounds/templewhole.png', None)
-    build.classify('game/gfx/backgrounds/train1.png', None)
-    build.classify('game/gfx/backgrounds/train2.png', None)
-    build.classify('game/gfx/backgrounds/trainwhole.png', None)
->>>>>>> .r389
 
     # Ignore everything but the few sprites used in the script.
 #        build.classify('game/gfx/Sprites/ka*', None)
