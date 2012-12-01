@@ -20,7 +20,7 @@ init python:
   
   MESSAGE_VICTORY = "You won the fight!"
   MESSAGE_DEFEAT  = "You lost the fight."
-  MESSAGE_FLEE    = "You flee from the fight!"
+  MESSAGE_FLEE    = "You flee!"
   MESSAGE_TO_BITTER_END = "Don't be so weak-willed, you can't run from this battle!"
   
   # Don't touch any of the values listed below this point!
@@ -363,6 +363,9 @@ init python:
     config.overlay_functions.append(battle_message_area)
     config.rollback_enabled = False
     
+    currently_playing = renpy.music.get_playing()
+    renpy.music.play(BATTLE_MUSIC, fadein=1)
+    
     # Create the combatants
     player = Player(player_name, HP + BONUS_HP, MP + BONUS_MP)
     
@@ -459,6 +462,8 @@ init python:
     player = None
   
     update_stats()
+    
+    renpy.music.play(currently_playing, fadein=1)
   
     renpy.transition(dissolve)
     config.overlay_functions.remove(battle_message_area)

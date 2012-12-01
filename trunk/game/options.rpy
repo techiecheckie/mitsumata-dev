@@ -105,7 +105,7 @@ init -1 python hide:
     ## respectively.
 
     style.window.background = Frame("gfx/transparent.png", 1, 1)
-    style.default.color = "#604200"
+    #style.default.color = "#604200"
 
     ## Margin is space surrounding the window, where the background
     ## is not drawn.
@@ -168,7 +168,6 @@ init -1 python hide:
     # Font settings for the choice box.
     style.menu_choice.color = "#622a00"
     style.menu_choice.size = 24
-    
 
     #########################################
     ## These settings let you change some of the sounds that are used by
@@ -254,6 +253,9 @@ init -1 python hide:
     ## Used when the window is hidden.
     config.window_hide_transition = fade
 
+init python:
+    MINIGAME_MUSIC = "sfx/mitsumata_festival.ogg"
+    BATTLE_MUSIC = "sfx/shop_theme.mp3"
 
     #########################################
     ## This is the name of the directory where the game's data is
