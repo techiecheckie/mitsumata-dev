@@ -123,11 +123,11 @@ init python:
     (UI_HP_X, UI_MP_X) = calculate_new_main_ui_positions()
 
     renpy.transition(dissolve)
-    renpy.show("ui_mp_bg",  at_list = [Position(xpos=596,     ypos=573), Transform(anchor=(0.0, 0.0))], zorder=8)
-    renpy.show("ui_mp_bar", at_list = [Position(xpos=UI_MP_X, ypos=572), Transform(anchor=(1.0, 0.0))], zorder=8)
-    renpy.show("ui_hp_bg",  at_list = [Position(xpos=171,     ypos=572), Transform(anchor=(0.0, 0.0))], zorder=8)
-    renpy.show("ui_hp_bar", at_list = [Position(xpos=UI_HP_X, ypos=571), Transform(anchor=(1.0, 0.0))], zorder=8)
-    renpy.show("ui", zorder=8)
+    renpy.show("ui_mp_bg",  at_list = [Position(xpos=596,     ypos=573), Transform(anchor=(0.0, 0.0))], zorder=1)
+    renpy.show("ui_mp_bar", at_list = [Position(xpos=UI_MP_X, ypos=572), Transform(anchor=(1.0, 0.0))], zorder=1)
+    renpy.show("ui_hp_bg",  at_list = [Position(xpos=171,     ypos=572), Transform(anchor=(0.0, 0.0))], zorder=1)
+    renpy.show("ui_hp_bar", at_list = [Position(xpos=UI_HP_X, ypos=571), Transform(anchor=(1.0, 0.0))], zorder=1)
+    renpy.show("ui", zorder=1)
 
     if main_ui_buttons not in config.overlay_functions:
       config.overlay_functions.append(main_ui_buttons)
@@ -140,8 +140,8 @@ init python:
     (UI_HP_X, UI_MP_X) = calculate_new_main_ui_positions()
 
     renpy.transition(MoveTransition(1.0))
-    renpy.show("ui_mp_bar", at_list = [Position(xpos=UI_MP_X, ypos=572), Transform(anchor=(1.0, 0.0))], zorder=8)
-    renpy.show("ui_hp_bar", at_list = [Position(xpos=UI_HP_X, ypos=571), Transform(anchor=(1.0, 0.0))], zorder=8)
+    renpy.show("ui_mp_bar", at_list = [Position(xpos=UI_MP_X, ypos=572), Transform(anchor=(1.0, 0.0))], zorder=1)
+    renpy.show("ui_hp_bar", at_list = [Position(xpos=UI_HP_X, ypos=571), Transform(anchor=(1.0, 0.0))], zorder=1)
 
     renpy.pause(1.0)
 
@@ -251,6 +251,9 @@ init python:
   # and the second one displays the item's name, description and image in a large
   # window using a hbox.
   def show_item_unlock(item):
+    # Display PDA blink animation for every item unlock.
+    renpy.show("pda_button", at_list=[blink(2.0, 0.0), Position(xpos=842, ypos=651), Transform(anchor=(0.0,0.0))], zorder=1)
+  
     # Box 1: e.g. "Knife recorded"
     renpy.transition(dissolve)
     ui.frame(xmaximum=560, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=304, yanchor=180, background="gfx/textbox_2.png")
@@ -280,6 +283,9 @@ init python:
   # the first one being "Entry (entry_id) recorded", and the second displays
   # the entry's image and title.
   def show_entry_unlock(journal, entry):
+    # Display PDA blink animation for every journal unlock.
+    renpy.show("pda_button", at_list=[blink(2.0, 0.0), Position(xpos=842, ypos=651), Transform(anchor=(0.0,0.0))], zorder=1)
+    
     # Box 1
     renpy.transition(dissolve)
     ui.frame(xmaximum=560, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=304, yanchor=95, background="gfx/textbox_2.png")
