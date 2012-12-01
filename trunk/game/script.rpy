@@ -1307,7 +1307,7 @@ label Scene7:
     $hide_main_ui()
     scene bg run with dissolve
     $show_main_ui()
-    "I'm dead. I'm {size = 20}dead!{/size}"
+    "I'm dead. I'm {size=20}dead!{/size}"
     show bg run at shaky with dissolve
     r "Aaah!!!!"
     
