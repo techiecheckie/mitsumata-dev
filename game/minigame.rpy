@@ -13,7 +13,7 @@ init python:
   # default description displayed by the method show_description()
   MINIGAME_DESCRIPTION = ""
 
-  MINIGAME_MAIN_DESCRIPTION = "Insert main description here."
+  MINIGAME_MAIN_DESCRIPTION = "Here you can train Riku to get stronger. What sort of training would you like to do?"
   MINIGAME_STAT_BONUS_UNLOCKED = "Your new highscore unlocked new stat bonuses:"
   
   GAME_DESCRIPTIONS = {
