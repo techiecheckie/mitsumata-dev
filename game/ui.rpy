@@ -225,7 +225,7 @@ init python:
     elif size == "medium":
       bg = "gfx/textbox_2.png"
       x_anchor = 304
-      y_anchor = 95
+      y_anchor = 180
       ypos_tweak = 0
       x_max    = 560
     elif size == "small":
@@ -253,14 +253,14 @@ init python:
   def show_item_unlock(item):
     # Box 1: e.g. "Knife recorded"
     renpy.transition(dissolve)
-    ui.frame(xmaximum=560, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=304, yanchor=95, background="gfx/textbox_2.png")
+    ui.frame(xmaximum=560, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=304, yanchor=180, background="gfx/textbox_2.png")
     ui.text(item.get_name() + " recorded")
 
     show_invisible_button("full")
 
     # Box 2: displays item info + image
     renpy.transition(dissolve)
-    ui.frame(xmaximum=490, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=265, yanchor=175, background="gfx/textbox.png")
+    ui.frame(xmaximum=490, xpadding=40, ypadding=40, xpos=0.5, ypos=0.5, xanchor=265, yanchor=290, background="gfx/textbox.png")
     ui.hbox(spacing=40)
     ui.image(im.Scale("gfx/items/" + item.get_id() + ".png", 75, 75))
     ui.text("{=message}" + item.get_name() + "\n\n" + item.get_description() + "{/}")
