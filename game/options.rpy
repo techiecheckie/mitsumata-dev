@@ -105,7 +105,7 @@ init -1 python hide:
     ## respectively.
 
     style.window.background = Frame("gfx/transparent.png", 1, 1)
-    style.default.color = "#000000"
+    style.default.color = "#604200"
 
     ## Margin is space surrounding the window, where the background
     ## is not drawn.
@@ -297,21 +297,20 @@ init -3 python:
                          
 ## This section contains information about how to build your project into 
 ## distribution files.
-init python:
-    
+#init python:
     ## The name that's used for directories and archive files. For example, if
     ## this is 'mygame-1.0', the windows distribution will be in the
     ## directory 'mygame-1.0-win', in the 'mygame-1.0-win.zip' file.
-    build.directory_name = "mitsumata-dev-0.1"
+#        build.directory_name = "mitsumata-dev-0.1"
     
     ## The name that's uses for executables - the program that users will run
     ## to start the game. For example, if this is 'mygame', then on Windows,
     ## users can click 'mygame.exe' to start the game.
-    build.executable_name = "mitsumata-dev"
+#        build.executable_name = "mitsumata-dev"
     
     ## If True, Ren'Py will include update information into packages. This
     ## allows the updater to run.
-    build.include_update = False
+#        build.include_update = False
     
     ## File patterns:
     ## 
@@ -341,83 +340,130 @@ init python:
 
     ## Classify files as None to exclude them from the built distributions.
 
-    build.classify('**~', None)
-    build.classify('**.bak', None)
-    build.classify('**/.**', None)
-    build.classify('**/#**', None)
-    build.classify('**/thumbs.db', None)
-    #build.classify('**.rpy', None)
-    build.classify('**.txt', None)
-    build.classify('**.psd', None)
-    build.classify('**.xcf', None)
-    build.classify('game/cache/', None)
-    build.classify('game/gallery/', None)
-    build.classify('game/gallery.*', None)
+    #    build.classify('**~', None)
+    #    build.classify('**.bak', None)
+    #    build.classify('**/.**', None)
+    #    build.classify('**/#**', None)
+    #    build.classify('**/thumbs.db', None)
+    #    build.classify('**.rpy', None)
+    #    build.classify('**.txt', None)
+    #    build.classify('**.psd', None)
+    #    build.classify('**.xcf', None)
+    #    build.classify('game/cache/', None)
+    #    build.classify('game/gallery/', None)
+    #    build.classify('game/gallery.*', None)
     
-    build.archive("gfx", "all")
-    build.archive("sfx", "all")
+#        build.archive("gfx", "all")
+#        build.archive("sfx", "all")
     
     # Demo specific ignores
     
     # Ignore everything but Riku & Mamoru battle sprites, and cells, squats, and
     # duck hunt minigames.
-    build.classify('game/gfx/battle/carniflora/', None)
-    build.classify('game/gfx/battle/demonic_hunter/', None)
-    build.classify('game/gfx/battle/demonic_thug/', None)
-    build.classify('game/gfx/battle/naomi/', None)
-    build.classify('game/gfx/battle/roman/', None)
-    build.classify('game/gfx/bottles/', None)
-    build.classify('game/gfx/buttons/minigame_bottles*', None)
-    build.classify('game/gfx/buttons/minigame_force*', None)
-    build.classify('game/gfx/buttons/minigame_garden*', None)
-    build.classify('game/gfx/buttons/minigame_gears*', None)
-    build.classify('game/gfx/buttons/minigame_lock*', None)
-    build.classify('game/gfx/buttons/minigame_platformer*', None)
-    build.classify('game/gfx/buttons/minigame_power*', None)
-    build.classify('game/gfx/garden/', None)
-    build.classify('game/gfx/gears/', None)
-    build.classify('game/gfx/lock/', None)
-    build.classify('game/gfx/magic_force/', None)
-    build.classify('game/gfx/magic_power/', None)
-    build.classify('game/gfx/map/', None)
-    build.classify('game/gfx/platformer/', None)
-    build.classify('game/gfx/whack_a_mole/', None)
-    build.classify('game/minigame_bottle*', None)
-    build.classify('game/minigame_force*', None)
-    build.classify('game/minigame_garden*', None)
-    build.classify('game/minigame_gears*', None)
-    build.classify('game/minigame_lock*', None)
-    build.classify('game/minigame_mole*', None)
-    build.classify('game/minigame_platformer*', None)
-    build.classify('game/minigame_power*', None)
-    build.classify('game/shop*', None)
+#        build.classify('game/gfx/battle/carniflora/', None)
+#        build.classify('game/gfx/battle/demonic_hunter/', None)
+#        build.classify('game/gfx/battle/demonic_thug/', None)
+#        build.classify('game/gfx/battle/naomi/', None)
+#        build.classify('game/gfx/battle/roman/', None)
+#        build.classify('game/gfx/bottles/', None)
+#        build.classify('game/gfx/buttons/minigame_bottles*', None)
+#        build.classify('game/gfx/buttons/minigame_force*', None)
+#        build.classify('game/gfx/buttons/minigame_garden*', None)
+#        build.classify('game/gfx/buttons/minigame_gears*', None)
+#        build.classify('game/gfx/buttons/minigame_lock*', None)
+#        build.classify('game/gfx/buttons/minigame_platformer*', None)
+#        build.classify('game/gfx/buttons/minigame_power*', None)
+#       build.classify('game/gfx/garden/', None)
+#        build.classify('game/gfx/gears/', None)
+#        build.classify('game/gfx/lock/', None)
+#        build.classify('game/gfx/magic_force/', None)
+#        build.classify('game/gfx/magic_power/', None)
+#        build.classify('game/gfx/map/', None)
+#        build.classify('game/gfx/platformer/', None)
+#       build.classify('game/gfx/whack_a_mole/', None)
+#        build.classify('game/minigame_bottle*', None)
+#       build.classify('game/minigame_force*', None)
+#        build.classify('game/minigame_garden*', None)
+#        build.classify('game/minigame_gears*', None)
+#        build.classify('game/minigame_lock*', None)
+#        build.classify('game/minigame_mole*', None)
+#        build.classify('game/minigame_platformer*', None)
+#        build.classify('game/minigame_power*', None)
+#        build.classify('game/shop*', None)
     
     # Ignore everything but the knife, pda, and wallet
-    build.classify('game/gfx/items/a*', None)
-    build.classify('game/gfx/items/b*', None)
-    build.classify('game/gfx/items/c*', None)
-    build.classify('game/gfx/items/d*', None)
-    build.classify('game/gfx/items/e*', None)
-    build.classify('game/gfx/items/f*', None)
-    build.classify('game/gfx/items/g*', None)
-    build.classify('game/gfx/items/h*', None)
-    build.classify('game/gfx/items/i*', None)
-    build.classify('game/gfx/items/j*', None)
-    build.classify('game/gfx/items/key*', None)
-    build.classify('game/gfx/items/kimono*', None)
-    build.classify('game/gfx/items/l*', None)
-    build.classify('game/gfx/items/m*', None)
-    build.classify('game/gfx/items/parts*', None)
-    build.classify('game/gfx/items/phone*', None)
-    build.classify('game/gfx/items/pic*', None)
-    build.classify('game/gfx/items/pol*', None)
-    build.classify('game/gfx/items/r*', None)
-    build.classify('game/gfx/items/s*', None)
-    build.classify('game/gfx/items/t*', None)
-    build.classify('game/gfx/items/u*', None)
-    build.classify('game/gfx/items/v*', None)
+#        build.classify('game/gfx/items/a*', None)
+#        build.classify('game/gfx/items/b*', None)
+#        build.classify('game/gfx/items/c*', None)
+#        build.classify('game/gfx/items/d*', None)
+#        build.classify('game/gfx/items/e*', None)
+#        build.classify('game/gfx/items/f*', None)
+#        build.classify('game/gfx/items/g*', None)
+#        build.classify('game/gfx/items/h*', None)
+#        build.classify('game/gfx/items/i*', None)
+#        build.classify('game/gfx/items/j*', None)
+#        build.classify('game/gfx/items/key*', None)
+#        build.classify('game/gfx/items/kimono*', None)
+#        build.classify('game/gfx/items/l*', None)
+#        build.classify('game/gfx/items/m*', None)
+#        build.classify('game/gfx/items/parts*', None)
+#        build.classify('game/gfx/items/phone*', None)
+#        build.classify('game/gfx/items/pic*', None)
+#        build.classify('game/gfx/items/pol*', None)
+#        build.classify('game/gfx/items/r*', None)
+#        build.classify('game/gfx/items/s*', None)
+#        build.classify('game/gfx/items/t*', None)
+#        build.classify('game/gfx/items/u*', None)
+#        build.classify('game/gfx/items/v*', None)
     
     # Ignore everything but the few backgrounds used in the script.
+<<<<<<< .mine
+#        build.classify('game/gfx/backgrounds/bath.png', None)
+#        build.classify('game/gfx/backgrounds/DForest1.png', None)
+#        build.classify('game/gfx/backgrounds/DForest2.png', None)
+#        build.classify('game/gfx/backgrounds/DForest3.png', None)
+#        build.classify('game/gfx/backgrounds/firstview.png', None)
+#        build.classify('game/gfx/backgrounds/Garden1.png', None)
+#        build.classify('game/gfx/backgrounds/Garden2.png', None)
+#        build.classify('game/gfx/backgrounds/Hallway1.jpg', None)
+#        build.classify('game/gfx/backgrounds/Hallway2.jpg', None)
+#        build.classify('game/gfx/backgrounds/kazulie.png', None)
+#        build.classify('game/gfx/backgrounds/Kitchen.jpg', None)
+#        build.classify('game/gfx/backgrounds/ldead.png', None)
+#        build.classify('game/gfx/backgrounds/Library.jpg', None)
+#        build.classify('game/gfx/backgrounds/lizadead.png', None)
+#        build.classify('game/gfx/backgrounds/lscamp.png', None)
+#        build.classify('game/gfx/backgrounds/mall.png', None)
+#        build.classify('game/gfx/backgrounds/manaroof.png', None)
+#        build.classify('game/gfx/backgrounds/map.png', None)
+#        build.classify('game/gfx/backgrounds/Nforest2.png', None)
+#        build.classify('game/gfx/backgrounds/NForest1.png', None)
+#        build.classify('game/gfx/backgrounds/NForest3.png', None)
+#        build.classify('game/gfx/backgrounds/nightgrass.jpg', None)
+#        build.classify('game/gfx/backgrounds/nightsky.jpg', None)
+#        build.classify('game/gfx/backgrounds/noreat.png', None)
+#        build.classify('game/gfx/backgrounds/rcrib.png', None)
+#        build.classify('game/gfx/backgrounds/rikumom.png', None)
+#        build.classify('game/gfx/backgrounds/Room1.png', None)
+#        build.classify('game/gfx/backgrounds/Room2.png', None)
+#        build.classify('game/gfx/backgrounds/Room3.png', None)
+#        build.classify('game/gfx/backgrounds/Room4.png', None)
+#        build.classify('game/gfx/backgrounds/rrplot.png', None)
+#        build.classify('game/gfx/backgrounds/rsgarden.png', None)
+#        build.classify('game/gfx/backgrounds/rvfood.png', None)
+#        build.classify('game/gfx/backgrounds/scaryouko.png', None)
+#        build.classify('game/gfx/backgrounds/shop.png', None)
+#        build.classify('game/gfx/backgrounds/slkid.png', None)
+#        build.classify('game/gfx/backgrounds/soumeheal.png', None)
+#        build.classify('game/gfx/backgrounds/souplant.png', None)
+#        build.classify('game/gfx/backgrounds/susahit.jpg', None)
+#        build.classify('game/gfx/backgrounds/templebottom.png', None)
+#       build.classify('game/gfx/backgrounds/templetop.png', None)
+#        build.classify('game/gfx/backgrounds/templewhole.png', None)
+#        build.classify('game/gfx/backgrounds/train1.png', None)
+#        build.classify('game/gfx/backgrounds/train2.png', None)
+#        build.classify('game/gfx/backgrounds/trainwhole.png', None)
+=======
     build.classify('game/gfx/backgrounds/bath.png', None)
     build.classify('game/gfx/backgrounds/DForest1.png', None)
     build.classify('game/gfx/backgrounds/DForest2.png', None)
@@ -463,29 +509,30 @@ init python:
     build.classify('game/gfx/backgrounds/train1.png', None)
     build.classify('game/gfx/backgrounds/train2.png', None)
     build.classify('game/gfx/backgrounds/trainwhole.png', None)
+>>>>>>> .r389
 
     # Ignore everything but the few sprites used in the script.
-    build.classify('game/gfx/Sprites/ka*', None)
-    build.classify('game/gfx/Sprites/l*', None)
-    build.classify('game/gfx/Sprites/n*', None)
-    build.classify('game/gfx/Sprites/ro*', None)
-    build.classify('game/gfx/Sprites/s*', None)
-    build.classify('game/gfx/Sprites/you*', None)
+#        build.classify('game/gfx/Sprites/ka*', None)
+#        build.classify('game/gfx/Sprites/l*', None)
+#        build.classify('game/gfx/Sprites/n*', None)
+#        build.classify('game/gfx/Sprites/ro*', None)
+#        build.classify('game/gfx/Sprites/s*', None)
+#        build.classify('game/gfx/Sprites/you*', None)
 
     # Ignore everything but the few sound files used in the script.
-    build.classify('game/sfx/Battle*', None)
-    build.classify('game/sfx/Game*', None)
-    build.classify('game/sfx/Happy*', None)
-    build.classify('game/sfx/mitsumata_bgm05*', None)
-    build.classify('game/sfx/mitsumata_bgm06*', None)
-    build.classify('game/sfx/MITSUMATA_ED*', None)
-    build.classify('game/sfx/mitsumata_festival*', None)
-    build.classify('game/sfx/mitsumata_mamorus*', None)
-    build.classify('game/sfx/mitsumata_OPb*', None)
-    build.classify('game/sfx/mitsumata_piano*', None)
-    build.classify('game/sfx/mitsumata_romans*', None)
-    build.classify('game/sfx/mitsumata_soumes*', None)
-    build.classify('game/sfx/mitsumata_susas*', None)
+#        build.classify('game/sfx/Battle*', None)
+#        build.classify('game/sfx/Game*', None)
+#        build.classify('game/sfx/Happy*', None)
+#        build.classify('game/sfx/mitsumata_bgm05*', None)
+#        build.classify('game/sfx/mitsumata_bgm06*', None)
+#        build.classify('game/sfx/MITSUMATA_ED*', None)
+#        build.classify('game/sfx/mitsumata_festival*', None)
+#        build.classify('game/sfx/mitsumata_mamorus*', None)
+#        build.classify('game/sfx/mitsumata_OPb*', None)
+#        build.classify('game/sfx/mitsumata_piano*', None)
+#        build.classify('game/sfx/mitsumata_romans*', None)
+#        build.classify('game/sfx/mitsumata_soumes*', None)
+#        build.classify('game/sfx/mitsumata_susas*', None)
 
     ## To archive files, classify them as 'archive'.
     
@@ -497,6 +544,6 @@ init python:
     ## Files matching documentation patterns are duplicated in a mac app
     ## build, so they appear in both the app and the zip file.
 
-    build.documentation('*.html')
-    build.documentation('*.txt')
+#        build.documentation('*.html')
+#        build.documentation('*.txt')
     
