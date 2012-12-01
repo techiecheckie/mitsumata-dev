@@ -31,8 +31,10 @@ init python:
     persistent.unlocked_minigames = {}
     # Unlock a few minigames for the demo. Remove when done.
     persistent.unlocked_minigames["cell"]   = [0, 1]
-    persistent.unlocked_minigames["squats"] = [0, 1]
+    persistent.unlocked_minigames["force"] = [0, 1]
     persistent.unlocked_minigames["duck"]   = [0, 1]
+    persistent.unlocked_minigames["mole"]   = [0, 1]
+    persistent.unlocked_minigames["squats"]   = [0, 1]
   if persistent.garden == None:
     persistent.garden = [None]*9 #[None]*len(GARDEN_GRID)
   
