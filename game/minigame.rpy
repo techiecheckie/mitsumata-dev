@@ -162,6 +162,9 @@ init python:
                             Transform(anchor=(0.0,0.0))])
     config.overlay_functions.remove(minigame_ui_buttons)
     
+    currently_playing = renpy.music.get_playing()
+    renpy.music.play(MINIGAME_MUSIC, fadein=1)
+    
     score = run_minigame( game_type=game,
                           x=MINIGAME_POS_X, 
                           y=MINIGAME_POS_Y,
@@ -172,6 +175,8 @@ init python:
                           
     config.overlay_functions.append(minigame_ui_buttons)
     renpy.hide(bg)
+    
+    renpy.music.play(currently_playing, fadein=1)
     
     return score
   
