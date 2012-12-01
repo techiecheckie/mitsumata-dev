@@ -50,6 +50,7 @@ init python:
   
   # Something to hold the messages during the fight
   BATTLE_MESSAGES = []
+  BATTLE_MESSAGE_LIMIT = 18
   
   # Battle states
   BATTLE_STATE_TARGET      = "battle_state_target"
@@ -107,7 +108,7 @@ init python:
     # the only special ones, while the rest of the fighters use the same basic
     # stuff for different actions.
     def show_attack(self, target, action, damage, critical, attack_distance):
-      BATTLE_MESSAGES.append(self.get_name() + " attacks " + target.get_name() + ".\n")
+      push_message(self.get_name() + " attacks " + target.get_name())
       
       # Carniflora's custom grab-pull-pound-release attack.
       if self.pic_name.startswith("Carniflora") and action == "magic":
@@ -157,22 +158,25 @@ init python:
         renpy.show(target.get_id() + " idle", zorder=target.get_zorder())
       
       target.dec_health(damage)
-      
-      BATTLE_MESSAGES.append(target.get_name() + " is hit for " + str(damage) + " points.\n")
+
+      push_message("  " + target.get_name() + " is hit for " + str(damage) + " points.")
       if critical:
-        BATTLE_MESSAGES.append("Critical hit!\n")
-      
+        push_message("  Critical hit!")
+        
       if target.get_health() <= 0:
-        BATTLE_MESSAGES.append(target.get_name() + " is knocked out cold!\n")
+        push_message("  " + target.get_name() + " is knocked out cold!")
         renpy.transition(Dissolve(0.5))
         renpy.hide(target.get_id() + " idle")
         renpy.pause(0.5)
+      else:
+        push_message("  " + target.get_name() + " has " + str(target.get_health()) + " HP left.")
+      push_message("Click to continue...\n")
       
       # slide out
       renpy.show(self.pic_name + " idle", 
                  at_list = [slide(ANIMATION_DURATION["slide"], self.x, self.y)], 
                  zorder=self.zorder)
-      renpy.pause(ANIMATION_DURATION["slide"])      
+      renpy.pause(ANIMATION_DURATION["slide"])
        
   # Player class
   class Player(Fighter):
@@ -326,43 +330,46 @@ init python:
     ui.textbutton("{size=-3}Cancel{/size}", clicked=ui.returns("cancel"), xfill=True) 
       
     return
-
-  # Displays an invisible button with "click to continue" message added to the
-  # battle messages list. Ending a turn clears all the previous messages added
-  # to the list.
-  def end_turn():
-    BATTLE_MESSAGES.append("Click to continue...")
-
-    # Full screen click-to-continue.
-    ui.frame(xpos=0, ypos=0, background=None)
-    ui.textbutton("", xfill=True, yfill=True, clicked=ui.returns(0), background=None)
-    ui.interact()
-    
-    del BATTLE_MESSAGES[:]
-    
-    return
   
   # Adds a "message box" to the parchment area. This method is added to Renpy's
   # UI stack in the beginning of the battle() method, so that different messages
   # added to BATTLE_MESSAGES list are displayed automatically after every UI 
   # interaction.
   def battle_message_area():
-    ui.frame(xpos=65, ypos=100, xmaximum=240, background=None)
+    ui.frame(xpos=55, ypos=100, xmaximum=260, background=None)
     ui.vbox()
     for message in BATTLE_MESSAGES:
       ui.text("{size=-3}" + message + "{/size}")
     ui.close()
     
     return
+  
+  # Pushes a message to the battle messages list. The first one is removed if the
+  # size of the list exceeds BATTLE_MESSAGE_LIMIT.
+  def push_message(message):
+    BATTLE_MESSAGES.append(message)
+    if len(BATTLE_MESSAGES) >= BATTLE_MESSAGE_LIMIT:
+      item = BATTLE_MESSAGES.pop(0)
+
+  # Displays an invisible button the size of the minigame area. Acts as a "click
+  # to continue" button to create small pauses between the attacks.
+  def click_to_continue():
+    ui.frame(xpos=MINIGAME_POS_X,
+             ypos=MINIGAME_POS_Y,
+             background=None,
+             xmaximum=MINIGAME_WIDTH,
+             ymaximum=MINIGAME_HEIGHT)
+    ui.textbutton("", clicked=ui.returns(0), xfill=True, yfill=True, background=None)
+    ui.interact()
     
   # Battle "constructor". Creates the combatants and initializes UI elements
   # before starting the actual battle loop. Boolean to_bitter_end controls
   # whether the player should be able to quit the battle before it ends by using
   # the minigame ui's exit button.
   def battle(player_name, mob_name, mob_count, background, to_bitter_end):
-    config.overlay_functions.append(battle_message_area)
     config.rollback_enabled = False
     
+    # Save the currently playing song to a variable and start the battle music.
     currently_playing = renpy.music.get_playing()
     renpy.music.play(BATTLE_MUSIC, fadein=1)
     
@@ -395,8 +402,8 @@ init python:
     action = None
     post_battle_message = None
     
-    while state != BATTLE_STATE_END:
-      if state == BATTLE_STATE_TARGET:
+    while state != BATTLE_STATE_END:      
+      if state == BATTLE_STATE_TARGET:  
         show_target_list(mobs)
       elif state == BATTLE_STATE_ATTACK_TYPE:
         show_action_list(player, target)
@@ -419,12 +426,14 @@ init python:
           
           # Attack stuff begins
           if button != "cancel":
+            config.overlay_functions.append(battle_message_area)
+            
             # Display player attack animation
             player.attack(target, action)
             # Update HP and MP bars
             update_minigame_ui(player.get_health(), player.get_mana())
-            # Update battle messages list
-            end_turn()
+
+            click_to_continue()
         
             # Loop through the mobs, displaying their attack animations
             mobs_alive = 0
@@ -442,27 +451,28 @@ init python:
             # Prepare for a new round if any mobs are alive, else quit.
             if mobs_alive > 0:
               update_minigame_ui(player.get_health(), player.get_mana())
-              end_turn()
+              click_to_continue()
+              config.overlay_functions.remove(battle_message_area)
             else:
               post_battle_message = MESSAGE_VICTORY
               state = BATTLE_STATE_END
 
     # Display post battle messages
-    BATTLE_MESSAGES.append(post_battle_message + "\n")
-    end_turn()
-    
-    battle_result = player.get_health() > 0
+    push_message(post_battle_message)
+    click_to_continue()
     
     # When done, hide all the images and clear other resources
     renpy.hide(player.get_id())
     for mob in mobs:
       renpy.hide(mob.get_id())
-    
     del mobs[:]
+    # Though grab the score before clearing the player
+    result = player.get_health() > 0
     player = None
-  
+    
     update_stats()
     
+    # Start the previously played song.
     renpy.music.play(currently_playing, fadein=1)
   
     renpy.transition(dissolve)
@@ -471,4 +481,4 @@ init python:
     hide_minigame_ui(background)
     show_main_ui()
     
-    return battle_result
+    return result
