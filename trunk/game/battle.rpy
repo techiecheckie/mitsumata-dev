@@ -354,11 +354,7 @@ init python:
   # Displays an invisible button the size of the minigame area. Acts as a "click
   # to continue" button to create small pauses between the attacks.
   def click_to_continue():
-    ui.frame(xpos=MINIGAME_POS_X,
-             ypos=MINIGAME_POS_Y,
-             background=None,
-             xmaximum=MINIGAME_WIDTH,
-             ymaximum=MINIGAME_HEIGHT)
+    ui.frame(xpos=0, ypos=0, background=None)
     ui.textbutton("", clicked=ui.returns(0), xfill=True, yfill=True, background=None)
     ui.interact()
     
@@ -452,10 +448,13 @@ init python:
             if mobs_alive > 0:
               update_minigame_ui(player.get_health(), player.get_mana())
               click_to_continue()
-              config.overlay_functions.remove(battle_message_area)
             else:
               post_battle_message = MESSAGE_VICTORY
               state = BATTLE_STATE_END
+            
+            # Going for another round, so remove the message stuff to make some room.
+            if mobs_alive > 0 and player.get_health() > 0:
+              config.overlay_functions.remove(battle_message_area)
 
     # Display post battle messages
     push_message(post_battle_message)
