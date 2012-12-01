@@ -160,6 +160,11 @@ init -1 python hide:
     style.pda.color = "#000605"
     style.pda.size = 36
     
+    # Font settings for the minigame screen description.
+    style.minigame_description = Style(style.default)
+    style.minigame_description.color = "#000000"
+    style.minigame_description.size = 18
+    
     # Font settings for the UI message box.
     style.message = Style(style.default)
     style.message.color = "#622a00"

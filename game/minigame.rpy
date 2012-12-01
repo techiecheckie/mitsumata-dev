@@ -1,14 +1,15 @@
 init python:
+  # Background images used by the games or the minigame screen:
+  # Cogs
   renpy.image("bg_gears", "gfx/gears/background.jpg")
+  # Cells
   renpy.image("bg_cells", "gfx/cells/petri_dish.jpg")
+  # Mole, force, power, squats, minigame main
   renpy.image("bg_dgro", "gfx/backgrounds/daygrass.jpg")
+  # Duck hunt
   renpy.image("bg_dsky", "gfx/backgrounds/daysky.jpg")
-  renpy.image("bg_mini", "gfx/backgrounds/whitescr.jpg")
+  # Platformer
   renpy.image("bg_blackscr", "gfx/backgrounds/blackscr.png")
-
-  DESCRIPTION_POS_X = 60
-  DESCRIPTION_POS_Y = 110
-  DESCRIPTION_WIDTH = 250
   
   # default description displayed by the method show_description()
   MINIGAME_DESCRIPTION = ""
@@ -16,58 +17,79 @@ init python:
   MINIGAME_MAIN_DESCRIPTION = "Here you can train Riku to get stronger. What sort of training would you like to do?"
   MINIGAME_STAT_BONUS_UNLOCKED = "Your new highscore unlocked new stat bonuses:"
   
+  # Minigame game names.
+  MINIGAME_MOLE       = "mole"
+  MINIGAME_CELL       = "cell"
+  MINIGAME_PLATFORMER = "platformer"
+  MINIGAME_DUCK       = "duck"
+  MINIGAME_FORCE      = "force"
+  MINIGAME_POWER      = "power"
+  MINIGAME_SQUATS     = "squats"
+  MINIGAME_GEARS      = "gears"
+  MINIGAME_GARDEN     = "garden"
+  MINIGAME_LOCK       = "lock"
+  MINIGAME_BOTTLES    = "bottles"
+  
+  # Take time to combine descriptions, bonuses, backgrounds, etc. etc.
   GAME_DESCRIPTIONS = {
-    "mole" : "Agility:\n\nUse the keypad or mouse to hit the moles.",
-    "cell" : "Cells:\n\nUse the mouse to click on the infected cells.",
-    "platformer" : "Use the spacebar to jump over obstacles and pits.",
-    "duck" : "Hunting:\n\nUse the mouse to shoot the birds.",
-    "force" : "Magic force:\n\nUse the keypad or keys 0-9 to type the numbers as they appear.",
-    "power" : "Magic control:\n\nClick the mouse to aim and set the amount of power while the arrows are moving.",
-    "squats" : "Strength:\n\nWait for the marker to move over the green area and press the spacebar to help Riku time his efforts.",
-    "gears" : "Gears:\n\nUse the mouse to drag cogs and lock them on axles.",
-    "garden" : "Gardening:\n\nInsert description here..",
+    MINIGAME_MOLE : "Agility:\n\nUse the keypad or mouse to hit the moles.",
+    MINIGAME_CELL : "Cells:\n\nUse the mouse to click on the infected cells.",
+    MINIGAME_PLATFORMER : "Use the spacebar to jump over obstacles and pits.",
+    MINIGAME_DUCK : "Hunting:\n\nUse the mouse to shoot the birds.",
+    MINIGAME_FORCE : "Magic force:\n\nUse the keypad or keys 0-9 to type the numbers as they appear.",
+    MINIGAME_POWER : "Magic control:\n\nClick the mouse to aim and set the amount of power while the arrows are moving.",
+    MINIGAME_SQUATS : "Strength:\n\nWait for the marker to move over the green area and press the spacebar to help Riku time his efforts.",
+    MINIGAME_GEARS : "Gears:\n\nUse the mouse to drag cogs and lock them on axles.",
+    MINIGAME_GARDEN : "Gardening:\n\nInsert description here..",
     # Lock and bottles have their own level-based descriptions, no need to fill.
-    "lock" : "",
-    "bottles" : ""
+    MINIGAME_LOCK : "",
+    MINIGAME_BOTTLES : ""
   }
   
+  # The main description location on the left portion of the UI.
+  DESCRIPTION_POS_X = 60
+  DESCRIPTION_POS_Y = 110
+  DESCRIPTION_WIDTH = 250
+  
+  # Minigame screen position & size
   MINIGAME_POS_X  = 363
   MINIGAME_POS_Y  = 90
   MINIGAME_WIDTH  = 646
   MINIGAME_HEIGHT = 630
   
+  # Minigame list size & position values
   MINIGAME_GRID_X    = 380
   MINIGAME_GRID_Y    = 180
   MINIGAME_CELL_SIZE = 150
   MINIGAME_GRID_COLS = 4
   MINIGAME_GRID_ROWS = 3 
   
-  # TODO fill in the rest
+  # TODO fill in the rest (and combine with the other minigame data, see above).
   # Bonus format: (required points, (stat, amount), (stat, amount), ...),
   # eg. with two bonuses: (5000, ("hp", 300), ("mp", 200))
   #     with one bonus:   (3000, ("hp", 150))
   MINIGAME_BONUSES = {
-    "mole" : [
+    MINIGAME_MOLE : [
       (5000, ("hp", 300), ("mp", 200)),
       (3000, ("hp", 200), ("mp", 100)),
       (1000, ("hp", 100), ("mp", 100))
     ],
-    "cell" : [
+    MINIGAME_CELL : [
       (5000, ("hp", 200)),
       (3000, ("hp", 100))
     ],
-    "platformer" : [],
-    "duck" : [],
-    "force" : [],
-    "power" : [],
-    "squats" : [
+    MINIGAME_PLATFORMER : [],
+    MINIGAME_DUCK : [],
+    MINIGAME_FORCE : [],
+    MINIGAME_POWER : [],
+    MINIGAME_SQUATS : [
       (1000, ("hp", 100)),
       (500, ("hp", 50))
     ],
-    "gears" : [],
-    "garden" : [],
-    "lock" : [],
-    "bottles" : []
+    MINIGAME_GEARS : [],
+    MINIGAME_GARDEN : [],
+    MINIGAME_LOCK : [],
+    MINIGAME_BOTTLES : []
   }
 
   # Displays the minigame screen, filling the grid with available (unlocked)
@@ -76,7 +98,7 @@ init python:
     button       = ""
     button_value = ""
 
-    show_minigame_ui("bg_mini", True)
+    show_minigame_ui("bg_dgro", True)
     
     minigame_keys = persistent.unlocked_minigames.keys()
   
@@ -104,47 +126,47 @@ init python:
         
         set_description(GAME_DESCRIPTIONS[button])
         
-        if button == "garden":
+        if button == MINIGAME_GARDEN:
           show_garden()
-        elif button == "lock":
+        elif button == MINIGAME_LOCK:
           show_lock()
-        elif button == "bottles":
+        elif button == MINIGAME_BOTTLES:
           show_bottles()
         else:
           score = run(button)
           update_high_score(button, score)
           
-        renpy.show("bg_mini")
+        renpy.show("bg_dgro")
     
     config.overlay_functions.remove(minigame_description)
-    hide_minigame_ui("bg_mini")
+    hide_minigame_ui("bg_dgro")
      
     return
 
   # Returns a game instance and a background based on the name that was given.
   def get_game(name):
-    if name == "mole":
+    if name == MINIGAME_MOLE:
       game = WhackAMole
-      bg   = "bg_dgro"
-    elif name == "cell":
+      bg   = None
+    elif name == MINIGAME_CELL:
       game = Cells
       bg   = "bg_cells"
-    elif name == "platformer":
+    elif name == MINIGAME_PLATFORMER:
       game = Platformer
       bg   = "bg_blackscr"
-    elif name == "duck":
+    elif name == MINIGAME_DUCK:
       game = DuckHunt
       bg   = "bg_dsky"
-    elif name == "force":
+    elif name == MINIGAME_FORCE:
       game = MagicForce
-      bg   = "bg_dgro"
-    elif name == "power":
+      bg   = None
+    elif name == MINIGAME_POWER:
       game = MagicPower
-      bg   = "bg_dgro"
-    elif name == "squats":
+      bg   = None
+    elif name == MINIGAME_SQUATS:
       game = Squats
-      bg   = "bg_dgro"
-    elif name == "gears":
+      bg   = None
+    elif name == MINIGAME_GEARS:
       game = Gears
       bg   = "bg_gears"
     else:
@@ -157,14 +179,24 @@ init python:
   # Runs a minigame and returns its score. 
   def run(name):
     (game, bg) = get_game(name)
-    renpy.show(bg, at_list=[Position(xpos=MINIGAME_POS_X, 
-                                     ypos=MINIGAME_POS_Y), 
-                            Transform(anchor=(0.0,0.0))])
+
+    # Display a new background only if necessary. This prevents the minigame
+    # list screen background from being hidden when returning from a game.
+    if (bg != None):
+        renpy.show(bg, at_list=[Position(xpos=MINIGAME_POS_X, 
+                                         ypos=MINIGAME_POS_Y), 
+                                Transform(anchor=(0.0,0.0))])
+    
+    # Remove the minigame buttons from the UI to prevent the player from entering
+    # options/save/load screens during the minigame. Used to cause a crash in
+    # rendering heavy games like the cells minigame. (Is this still the case, though?)
     config.overlay_functions.remove(minigame_ui_buttons)
     
+    # Save the current song into a variable and start the default minigame song.
     currently_playing = renpy.music.get_playing()
     renpy.music.play(MINIGAME_MUSIC, fadein=1)
     
+    # Save the score returned by the selected minigame.
     score = run_minigame( game_type=game,
                           x=MINIGAME_POS_X, 
                           y=MINIGAME_POS_Y,
@@ -172,10 +204,15 @@ init python:
                           game_height=MINIGAME_HEIGHT,
                           game_high_score=persistent.unlocked_minigames[name][0],
                           level_number=persistent.unlocked_minigames[name][1] )
-                          
-    config.overlay_functions.append(minigame_ui_buttons)
-    renpy.hide(bg)
     
+    # Restore the minigame UI buttons when returning to the game list screen.
+    config.overlay_functions.append(minigame_ui_buttons)
+    
+    # Also, hide any extra backgrounds the game used.
+    if (bg != None):
+        renpy.hide(bg)
+    
+    # And start the previously played song with a small fade.
     renpy.music.play(currently_playing, fadein=1)
     
     return score
@@ -187,7 +224,6 @@ init python:
   # bonuses to unlock. 
   def update_high_score(game, score):
     renpy.log("Got %s points, old score %s" % (score, persistent.unlocked_minigames[game][0]))
-    #print "Got", score, "points, old score", persistent.unlocked_minigames[game][0]
     
     if score > persistent.unlocked_minigames[game][0]:
       old_score = persistent.unlocked_minigames[game][0]
@@ -216,16 +252,16 @@ init python:
         bonus_row = game_bonuses[new_score_row]
       
         renpy.transition(dissolve)
-        ui.frame(xpos=MINIGAME_POS_X+50, 
-                 ypos=MINIGAME_POS_Y+150, 
+        ui.frame(xpos=MINIGAME_POS_X+50,
+                 ypos=MINIGAME_POS_Y+150,
                  background="gfx/textbox.png",
                  xpadding=40,
                  ypadding=40,
                  xmaximum=530)
         ui.vbox()
-        ui.text("{size=-2}" + MINIGAME_STAT_BONUS_UNLOCKED + "{/size}")
+        ui.text("{=message}" + MINIGAME_STAT_BONUS_UNLOCKED + "{/}")
         for i in range(1, len(bonus_row)):
-          ui.text("{size=-2}    +" + str(bonus_row[i][1]) + " " + bonus_row[i][0] + "{/size}") 
+          ui.text("{=message}    +" + str(bonus_row[i][1]) + " " + bonus_row[i][0] + "{/}")
         ui.close()
         
         show_invisible_button("mini")
@@ -247,12 +283,12 @@ init python:
     
     config.overlay_functions.remove(minigame_ui_buttons)
     
-    if name == "garden":
+    if name == MINIGAME_GARDEN:
       show_garden()
       score = 0
-    elif name == "lock":
+    elif name == MINIGAME_LOCK:
       score = show_lock()
-    elif name == "bottles":
+    elif name == MINIGAME_BOTTLES:
       show_bottles()
       score = 0
     else:
@@ -294,6 +330,6 @@ init python:
              ypos=DESCRIPTION_POS_Y, 
              xmaximum=DESCRIPTION_WIDTH, 
              background=None)
-    ui.text("{size=-3}" + MINIGAME_DESCRIPTION + "{/size}")
+    ui.text("{=minigame_description}" + MINIGAME_DESCRIPTION + "{/}")
     
     return
