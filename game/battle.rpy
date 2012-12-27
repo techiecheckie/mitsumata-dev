@@ -1,4 +1,6 @@
 init python:
+  import sys
+
   # Mob stats, feel free to modify
   MOB_CRIT_CHANCE     = 20 # 5% chance, a random number between 1-MOB_CRIT_CHANCE
   MOB_CRIT_MULTIPLIER = 2
@@ -7,13 +9,13 @@ init python:
   MAGIC_COST = 50
   
   # Default damage values for Riku and Roman
-  PLAYER_MELEE = 30
-  PLAYER_MAGIC = 50
+  PLAYER_MELEE = 10
+  PLAYER_MAGIC = 20
   PLAYER_CRIT_MULTIPLIER = 2
   
   MOB_VARIABLES = {}
   MOB_VARIABLES["Mamoru"]       = { "health":300, "mana":100, "melee":10, "magic":30, "zorder":4, "picture":"Mamoru" }
-  MOB_VARIABLES["Naomi"]        = { "health":100, "mana":100, "melee":5,  "magic":10, "zorder":4, "picture":"Naomi" }
+  MOB_VARIABLES["Naomi"]        = { "health":100, "mana":100, "melee":15, "magic":10, "zorder":4, "picture":"Naomi" }
   MOB_VARIABLES["Demon thug"]   = { "health":50,  "mana":0,   "melee":20, "magic":0,  "zorder":4, "picture":"DemonThug" }
   MOB_VARIABLES["Demon hunter"] = { "health":50,  "mana":0,   "melee":30, "magic":0,  "zorder":4, "picture":"DemonHunter" }
   MOB_VARIABLES["Carniflora"]   = { "health":500, "mana":100, "melee":10, "magic":10, "zorder":0, "picture":"Carniflora" }
@@ -185,10 +187,12 @@ init python:
         
     def attack(self, target, action):
       if action == "melee":
-        damage = self.damage_melee
+        base_damage = self.damage_melee
       elif action == "magic":
-        damage = self.damage_magic
+        base_damage = self.damage_magic
         self.dec_mana(MAGIC_COST)
+      
+      damage = count_real_damage_value(base_damage)
       
       # See if the player's lucky enough to do a critical hit.
       if random.randint(1,20) == 20:
@@ -228,13 +232,15 @@ init python:
 
         if value3 % 2 == 0:
           action = "magic"
-          damage = self.damage_magic
+          base_damage = self.damage_magic
         else:
           action = "melee"
-          damage = self.damage_melee
+          base_damage = self.damage_melee
       else:
         action = "melee"
-        damage = self.damage_melee
+        base_damage = self.damage_melee
+      
+      damage = count_real_damage_value(base_damage)
       
       # See if it's a critical hit.          
       if random.randint(1,MOB_CRIT_CHANCE) == MOB_CRIT_CHANCE:
@@ -249,9 +255,24 @@ init python:
       # Finally, start the animation.
       Fighter.show_attack(self, target, action, damage, critical, ATTACK_DISTANCE + attack_offset)
   
+  # Counts the real damage value from the base damage given, adding some variance
+  # to it to make it seem less static. The final damage value is based on the 
+  # combined average of five random modulo base_damage, plus the increased attack
+  # value.
+  #
+  # Note: sys.maxsize >= Python v2.6
+  def count_real_damage_value(base_damage):
+    # Slightly increased value from the original for increased obscurity.
+    attack_value = int(math.sqrt(base_damage)) * int(base_damage/2)
+    
+    final_attack_value = 0;
+    for i in range(0, 5):
+      final_attack_value += (random.randint(0, sys.maxsize) % base_damage) + attack_value
+    
+    return final_attack_value/5
+  
   # Returns offset values defined in dict ATTACK_OFFSETS. Offsets are used to
-  # prevent attackers from sliding too far and overlapping their targets when
-  # attacking.
+  # prevent attackers from sliding too far and overlapping with their targets.
   def get_offset(offset_key):
     if offset_key in ATTACK_OFFSETS:
       return ATTACK_OFFSETS[offset_key]
